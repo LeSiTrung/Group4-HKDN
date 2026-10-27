@@ -44,6 +44,29 @@ Vite sẽ in địa chỉ website ra terminal.
 - `docs/`: tài liệu yêu cầu và thiết kế.
 - `tests/`: nơi đặt kiểm thử.
 
+## Tài liệu Học kỳ doanh nghiệp
+
+- [Kế hoạch thực hiện đề tài](docs/ke-hoach-d7-chatbot-thu-vien.md): phạm vi, lịch đến 28/12/2026 và tiêu chí đánh giá.
+- [Nguồn báo cáo LaTeX](docs/bao-cao-hkdn/main.tex): hiện có Chương 1, danh sách nhóm và tài liệu tham khảo.
+- [Bản PDF bàn giao](output/pdf/chuong-1-gioi-thieu-don-vi.pdf).
+
+Tài liệu báo cáo được soạn bằng LaTeX. Cần XeLaTeX hoặc Tectonic và phông Times New Roman. Từ thư mục `docs/bao-cao-hkdn`, chạy:
+
+```powershell
+tectonic main.tex
+```
+
+Nếu dùng XeLaTeX, chạy hai lần để cập nhật mục lục và trích dẫn:
+
+```powershell
+xelatex -interaction=nonstopmode -halt-on-error main.tex
+xelatex -interaction=nonstopmode -halt-on-error main.tex
+```
+
+Sau khi kiểm tra bố cục, cập nhật PDF trong `output/pdf/` từ bản `main.pdf` vừa biên dịch. Tệp build và ảnh kiểm tra tạm không đưa vào Git.
+
+Hình thức tham khảo mẫu TTTN do LIC công bố năm 2022; bố cục nội dung theo hướng dẫn HKDN nhóm được cung cấp. Lớp của các thành viên và các thông tin chưa xác nhận cần được hoàn thiện trước khi nộp. Ghi chú nguồn và biên tập nằm trong `docs/bao-cao-hkdn/ghi-chu-bien-tap.tex`, không đưa vào bản PDF nộp.
+
 ## Lưu ý
 - Không đưa API key, mật khẩu hoặc dữ liệu cá nhân lên GitHub.
 - Chưa tích hợp API AI, đăng nhập thư viện hoặc gia hạn sách thật.

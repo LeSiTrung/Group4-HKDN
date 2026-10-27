@@ -14,3 +14,15 @@ dist/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Temporary research files and LaTeX build artifacts
+/tmp/
+/docs/bao-cao-hkdn/*.aux
+/docs/bao-cao-hkdn/*.log
+/docs/bao-cao-hkdn/*.out
+/docs/bao-cao-hkdn/*.toc
+/docs/bao-cao-hkdn/*.xdv
+/docs/bao-cao-hkdn/*.synctex.gz
+/docs/bao-cao-hkdn/*.fls
+/docs/bao-cao-hkdn/*.fdb_latexmk
+/docs/bao-cao-hkdn/main.pdf

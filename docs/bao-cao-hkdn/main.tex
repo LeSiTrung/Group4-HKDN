@@ -1,0 +1,105 @@
+% !TeX program = xelatex
+% Hinh thuc tham khao BM-TN-05 va BM-TN-07 cua UTH, cong bo tren LIC 18/06/2022.
+% Noi dung theo Huong dan thuc hien HKDN do nhom cung cap.
+\documentclass[12pt,a4paper,oneside]{report}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage[vietnamese]{babel}
+\usepackage[left=3.5cm,right=2cm,top=3.5cm,bottom=3cm]{geometry}
+\makeatletter
+\renewcommand\normalsize{\@setfontsize\normalsize{13pt}{15.6pt}}
+\makeatother
+\usepackage{setspace}
+\setstretch{1.5}
+\usepackage{graphicx,booktabs,tabularx,array}
+\usepackage{titlesec}
+\titleformat{\chapter}[display]{\normalfont\normalsize\bfseries\centering}
+  {CHƯƠNG \thechapter}{6pt}{\MakeUppercase}
+\titlespacing*{\chapter}{0pt}{0pt}{18pt}
+\titleformat{\section}{\normalfont\normalsize\bfseries}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries\itshape}{\thesubsection}{0.7em}{}
+\pagestyle{plain}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdftitle={Báo cáo Học kỳ doanh nghiệp - Chatbot thư viện},
+  pdfauthor={Lê Sĩ Trung; Nguyễn Việt Dũng; Hoàng Lê Ngọc Huy; Hoàng Đặng Văn Kỳ}}
+\usepackage{xurl}
+\urlstyle{same}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\setlength{\parindent}{1cm}
+\setlength{\parskip}{0pt}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.15}
+\widowpenalty=10000
+\clubpenalty=10000
+\emergencystretch=1.5em
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\renewcommand{\contentsname}{MỤC LỤC}
+\renewcommand{\bibname}{TÀI LIỆU THAM KHẢO}
+\begin{document}
+\normalsize
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\centering
+{\fontsize{14}{18}\selectfont\bfseries
+TRƯỜNG ĐẠI HỌC GIAO THÔNG VẬN TẢI\\
+THÀNH PHỐ HỒ CHÍ MINH\par}
+\vspace{0.8cm}
+\parbox[c][3cm][c]{\textwidth}{\centering\includegraphics[width=10cm]{images/logo-uth-moi.png}}
+\vspace{0.8cm}
+
+{\fontsize{14}{18}\selectfont\bfseries
+BÁO CÁO HỌC KỲ DOANH NGHIỆP\par}
+\vspace{0.7cm}
+{\fontsize{14}{18}\selectfont\bfseries
+ĐỀ TÀI\\[0.2cm]
+CHATBOT THƯ VIỆN\par}
+\vspace{0.7cm}
+\begin{tabularx}{\textwidth}{@{}P{4.8cm}Y@{}}
+Ngành: & Công nghệ thông tin\\
+Đơn vị thực hiện: & Trung tâm Thông tin -- Thư viện UTH\\
+Giảng viên hướng dẫn: & TS. Đặng Nhân Cách\\
+\end{tabularx}
+\vspace{0.6cm}
+
+{\bfseries Nhóm sinh viên thực hiện\par}
+\vspace{0.15cm}
+\begin{tabularx}{\textwidth}{@{}cP{3.1cm}YP{1.4cm}@{}}
+\toprule
+\textbf{STT} & \textbf{MSSV} & \textbf{Họ và tên} & \textbf{Lớp}\\
+\midrule
+1 & 075205002473 & Lê Sĩ Trung & \dotfill\\
+2 & 070205005207 & Nguyễn Việt Dũng & \dotfill\\
+3 & 075205014655 & Hoàng Lê Ngọc Huy & \dotfill\\
+4 & 075205015362 & Hoàng Đặng Văn Kỳ & \dotfill\\
+\bottomrule
+\end{tabularx}
+\vfill
+{\normalsize TP. Hồ Chí Minh, năm 2026\par}
+\end{titlepage}
+\pagenumbering{roman}
+\hypersetup{pageanchor=true}
+\tableofcontents
+\clearpage
+\chapter*{DANH MỤC TỪ VIẾT TẮT}
+\addcontentsline{toc}{chapter}{DANH MỤC TỪ VIẾT TẮT}
+\begin{tabularx}{\textwidth}{@{}P{2.2cm}Y@{}}
+\toprule
+\textbf{Từ viết tắt} & \textbf{Diễn giải}\\
+\midrule
+AI & Trí tuệ nhân tạo (Artificial Intelligence).\\
+CNTT & Công nghệ thông tin.\\
+HKDN & Học kỳ doanh nghiệp.\\
+OPAC & Mục lục tra cứu trực tuyến (Online Public Access Catalog).\\
+\bottomrule
+\end{tabularx}
+\clearpage
+\pagenumbering{arabic}
+\input{chapters/chuong-1}
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{TÀI LIỆU THAM KHẢO}
+\input{references}
+\end{document}
