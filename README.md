@@ -3,7 +3,7 @@
 Bộ khung ban đầu cho đề tài D7 – Chatbot thư viện. Đây là scaffold để nhóm phát triển tiếp, chưa phải sản phẩm hoàn chỉnh.
 
 ## Công nghệ dự kiến
-- Frontend: React + Vite
+- Frontend: React 
 - Backend: Python + FastAPI
 - AI: tích hợp LLM qua API ở giai đoạn tiếp theo
 - Dữ liệu: PostgreSQL/pgvector có thể bổ sung sau
