@@ -129,3 +129,15 @@ Không gọi bản đầu hoàn chỉnh nếu không có kiểm tra luồng web 
 Người triển khai quyết định số FAQ thực tế theo nguồn đủ căn cứ; công thức điểm/ngưỡng; cách tổ chức component; cấu hình kiểm thử và những chi tiết trình bày nhỏ. Không được tự mở rộng thành LLM, crawler, tài khoản hoặc giao dịch thật.
 
 Giới hạn đã biết: từ khóa không hiểu ngữ nghĩa sâu; bản chụp FAQ cần cập nhật thủ công; rà soát website không thay thế xác nhận nghiệp vụ của thư viện. Khi bộ câu hỏi cho thấy truy xuất từ khóa không đủ, dùng kết quả bản đầu để quyết định bổ sung RAG sau.
+
+## 11. Bổ sung nguồn OPAC sau khảo sát
+
+Người dùng cung cấp `D:/Download/HDSD_TRACUU_OPAC.v1.1.pdf` và yêu cầu tìm hiểu thêm OPAC. Kết quả đối chiếu tài liệu 13 trang và website hiện hành nằm trong `docs/khao-sat-opac-2026-10-28.md`.
+
+- Bổ sung FAQ có dẫn trang về tìm toàn bộ, lọc loại, tìm theo trường, đọc chi tiết/xếp giá, xem ấn phẩm đặt/đang mượn. Tìm nâng cao có giao diện AND/OR/NOT được quan sát trực tiếp; chưa xác nhận lượt thử truy vấn nâng cao thành công.
+- PDF hướng dẫn đặt chỗ và kiểm tra sách mượn, không có quy trình gia hạn. Không dùng nút “Đăng ký mượn” để thay cho gia hạn hoặc suy ra thao tác gia hạn.
+- Thời hạn đặt chỗ hai ngày và mô tả mật khẩu ban đầu trong PDF chưa được xác nhận hiện hành; không biến thành lời khẳng định trong FAQ. Không chép dữ liệu tài khoản ví dụ từ ảnh.
+- Đã thử tìm kiếm công khai và mở bản ghi chi tiết; dữ liệu bản rỗi chỉ là trạng thái tại lúc xem. Không cố định con số kết quả/bản rỗi vào câu trả lời FAQ.
+- Có URL kết quả và chi tiết được sinh từ giao diện thực tế. Liên kết mở truy vấn là phương án có thể bổ sung sau kiểm chứng, chưa tự mở rộng phạm vi thành backend tự lấy danh mục hoặc API giao dịch.
+
+Phạm vi bản đầu vẫn là FAQ + tìm từ khóa trên bộ nguồn đã rà soát; trạng thái thiết kế vẫn chờ duyệt.
