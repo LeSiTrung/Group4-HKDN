@@ -1,6 +1,6 @@
 # Thiết kế bản đầu: FAQ và tìm kiếm từ khóa D7
 
-Ngày: 28/10/2026. Trạng thái: chờ người dùng duyệt trước khi lập kế hoạch triển khai.
+Ngày: 28/10/2026. Cập nhật phạm vi: bản đầu và điều kiện đưa cho người dùng thật. Trạng thái: chờ người dùng duyệt trước khi lập kế hoạch triển khai.
 
 ## 1. Mục đích và căn cứ
 
@@ -141,3 +141,62 @@ Người dùng cung cấp `D:/Download/HDSD_TRACUU_OPAC.v1.1.pdf` và yêu cầu
 - Có URL kết quả và chi tiết được sinh từ giao diện thực tế. Liên kết mở truy vấn là phương án có thể bổ sung sau kiểm chứng, chưa tự mở rộng phạm vi thành backend tự lấy danh mục hoặc API giao dịch.
 
 Phạm vi bản đầu vẫn là FAQ + tìm từ khóa trên bộ nguồn đã rà soát; trạng thái thiết kế vẫn chờ duyệt.
+
+## 12. Yêu cầu bổ sung: sản phẩm đồ án phục vụ người dùng thật
+
+Người dùng yêu cầu làm đầy đủ, chi tiết, có thể hoạt động với người dùng thật và xác nhận nhóm sẽ tự chuẩn bị toàn bộ hạ tầng. Các tiêu chí bên dưới mở rộng phần bàn giao/vận hành; không biến các nghiệp vụ chưa có API thành tính năng giả hoặc tự thêm giao dịch ngoài phạm vi đã thống nhất.
+
+FAQ + tìm từ khóa là mốc triển khai đầu tiên, không được lấy việc chạy được bản đầu để tuyên bố toàn bộ đồ án hoặc quá trình triển khai thực tế đã hoàn thành. Tên học phần trong repo hiện là HKDN; người dùng gọi đây là đồ án tốt nghiệp. Chưa tự đổi tên báo cáo hoặc mẫu trường khi chưa xác nhận, việc này không cản phát triển sản phẩm.
+
+### 12.1. Bốn nghiệp vụ phải có luồng sử dụng hoàn chỉnh
+
+| Nghiệp vụ | Bản đầu có thể thực hiện với đầu vào hiện có | Điều kiện để mở rộng |
+| --- | --- | --- |
+| Tra cứu | Hướng dẫn theo loại/trường, giải thích kết quả, dẫn OPAC/PDF đúng mục; kiểm thử liên kết mở truy vấn trước khi bổ sung nút tìm theo từ khóa | Trả danh mục bên trong chatbot chỉ khi có nguồn/API hoặc cơ chế đọc được phép, kiểm thử cập nhật và xử lý lỗi |
+| Giờ phục vụ | Phân biệt cơ sở, hỏi rõ khi thiếu thông tin; nếu chưa có lịch hiện hành thì nêu giới hạn và dẫn kênh xác nhận | Lịch hiện hành, ngày hiệu lực và ngoại lệ nghỉ/lễ được thư viện xác nhận trước khi trả lời thời gian cụ thể |
+| Gia hạn | Giải thích khác biệt giữa đặt chỗ và gia hạn; hướng dẫn các bước có nguồn, chuyển tới thư viện khi chưa đủ quy trình | Cơ chế được cấp phép, xác thực, môi trường/tài khoản thử và kiểm thử kết quả, gửi trùng, timeout trước giao dịch thật |
+| CSDL điện tử | Hướng dẫn chọn nguồn, thao tác tra cứu và điều kiện truy cập có căn cứ; dẫn trang chính thức | Xác nhận chính sách tài khoản/quyền truy cập hiện hành trước khi khẳng định có thể đọc hoặc tải toàn văn |
+
+Một luồng thiếu đầu vào phải có câu trả lời hữu ích và chỉ rõ bước tiếp theo. Không dùng “chưa cấu hình” hoặc câu trả lời mẫu làm kết quả cho bạn đọc.
+
+### 12.2. Đóng gói để nhóm tự triển khai
+
+Đề xuất kỹ thuật của người viết: giữ React + FastAPI, đóng gói ứng dụng bằng Docker; build frontend thành tệp tĩnh và phục vụ cùng origin với API. Dùng reverse proxy hỗ trợ HTTPS trước ứng dụng. Không bắt buộc thêm CSDL khi chưa có nhu cầu lưu dữ liệu giao dịch; FAQ và mã cấu hình triển khai được quản lý theo phiên bản.
+
+- Phát triển tại Windows như hiện tại; gói bàn giao chạy trên một máy chủ Linux do nhóm chọn sau. Không mua máy chủ/tên miền hoặc mở dịch vụ công khai trong bước thiết kế/phát triển.
+- Bản phát hành có lệnh build/chạy/dừng, cấu hình mẫu, kiểm tra sức khỏe, phiên bản ứng dụng và phiên bản dữ liệu. Không lệ thuộc đường dẫn trên máy cá nhân.
+- Cấu hình production theo domain thực tế; chỉ mở HTTP(S) qua proxy, API không có cổng công khai riêng. Chuyển hướng HTTPS, giới hạn kích thước request, số yêu cầu và thời gian chờ ở một nơi phù hợp để tránh hai lớp cấu hình lệch nhau.
+- Chạy ứng dụng bằng tài khoản không có quyền root khi khả thi với image đã chọn. Không đưa bí mật vào Git hoặc frontend; chỉ cần bí mật khi thực sự tích hợp dịch vụ tương ứng.
+- Tự khởi động lại khi tiến trình lỗi, có health check và cách xem log. Log vận hành không chứa nội dung chat, mật khẩu hoặc toàn bộ request body.
+- Sao lưu dữ liệu FAQ/cấu hình cần thiết và thử khôi phục; giữ được bản phát hành trước để quay lại khi cập nhật lỗi. Có phương án lưu trữ an toàn riêng cho bí mật nếu sau này phát sinh.
+- Chỉ coi phần triển khai thực tế hoàn thành sau khi kiểm tra bằng domain HTTPS thật từ mạng ngoài máy chủ; build container hoặc localhost không thay cho bằng chứng này.
+
+Docker/reverse proxy là cách đóng gói đề xuất, không phải lựa chọn hạ tầng người dùng đã chỉ định. Công cụ proxy, image/version, chi phí và cấu hình máy cụ thể được chốt theo môi trường thực tế; chưa cần chọn dịch vụ trả phí để viết bản đầu.
+
+### 12.3. Cập nhật dữ liệu và trách nhiệm vận hành
+
+- Nhóm chỉ định người phụ trách cập nhật nguồn trước khi mời người dùng thử. Quy trình bản đầu: sửa JSON → kiểm tra dữ liệu và bộ ca liên quan → xem thay đổi nguồn/đáp án → phát hành phiên bản mới; không cần trang quản trị chỉ để thay tệp.
+- Mỗi FAQ có nguồn và ngày rà soát; lịch/phí/thời hạn chưa được xác nhận phải giữ trạng thái cần xác nhận. Nguồn bị thay thế được ngừng dùng, không xóa dấu vết phiên bản cũ.
+- Hướng dẫn cán bộ/nhóm nhận biết link hỏng, nguồn xung đột và cách rút FAQ sai khỏi phiên bản đang dùng. Khi không có người duy trì phải nêu rõ giới hạn cập nhật cho người dùng.
+- Hội thoại chỉ ở bộ nhớ trang của người dùng như mục 7; không thêm tài khoản hoặc lưu lịch sử chỉ để tạo cảm giác đầy đủ. Kiểm tra thực tế cấu hình proxy/app để bảo đảm không ghi nội dung chat.
+
+### 12.4. Chất lượng và bằng chứng nghiệm thu
+
+Ngoài kiểm tra bản đầu ở mục 9, cần đủ các nhóm bằng chứng sau cho mốc dùng thật:
+
+1. **Nghiệp vụ và nguồn:** đủ bốn nhóm câu hỏi với đáp án hoặc hành vi chuyển tiếp đúng; tất cả câu trả lời nghiệp vụ có căn cứ hỗ trợ, không chỉ link tồn tại. Các ca bịa gia hạn, khẳng định phí/lịch chưa xác minh hoặc sai quyền truy cập là lỗi chặn phát hành.
+2. **Đánh giá độc lập:** dùng tập phát triển riêng với tập chấm cuối theo kế hoạch D7; ghi câu hỏi, đáp án mong đợi, nguồn/phiên bản, kết quả và lỗi. Ngưỡng trong kế hoạch là đề xuất; cần xác nhận với người đánh giá trước nghiệm thu. Không tự báo đạt khi chưa chạy/chấm.
+3. **Độ ổn định:** kiểm tra tải, timeout và lỗi trên cấu hình máy được ghi rõ. Mốc kỹ thuật tạm để kiểm tra bản FAQ: 5 phiên đồng thời, ít nhất 100 request có trộn câu hợp lệ/không tìm thấy; đo p50/p95, lỗi bất thường và mức dùng tài nguyên. Đề xuất p95 API không quá 2 giây trên môi trường bàn giao cho xử lý FAQ không gọi web/LLM; đây là mục tiêu cần đo, chưa phải cam kết đã đạt.
+4. **Trình duyệt và khả năng tiếp cận:** luồng chính trên Chrome/Edge máy tính và điện thoại hoặc thiết bị thật có thể bố trí; kiểm tra bàn phím, focus, đọc trạng thái, tương phản, màn hình nhỏ, mạng chậm và mất backend. Giả lập kích thước màn hình không thay cho kiểm tra thiết bị thật.
+5. **Triển khai:** dựng lại từ bản checkout/gói bàn giao sạch, kiểm tra domain/HTTPS, khởi động lại máy/tiến trình, cập nhật và quay về phiên bản trước, khôi phục dữ liệu. Không để hệ thống chỉ chạy được trên máy người phát triển.
+6. **Thử với người dùng thật:** chuẩn bị kịch bản hỏi đáp cho sinh viên và người kiểm tra nghiệp vụ; nhóm mời và lấy phản hồi qua kênh được phép. Ghi số người tham gia, tác vụ hoàn thành, lỗi, phản hồi và cách sửa; không tạo người dùng/nhận xét hoặc kết quả khảo sát giả. Mức thử và người chấm được thống nhất với Mentor; chưa có thử nghiệm thì để hạng mục này chưa hoàn thành.
+7. **Hồ sơ:** hướng dẫn bạn đọc, hướng dẫn cập nhật/vận hành, sơ đồ hệ thống, đặc tả API/dữ liệu, bảng đánh giá, hạn chế, báo cáo/slide và kịch bản demo dựa trên phiên bản đã kiểm tra. Hình minh họa, số đo và kết luận phải khớp sản phẩm thật.
+
+### 12.5. Thứ tự thực hiện và điều kiện chuyển mốc
+
+- **Mốc A — nền tảng chạy được:** nguồn FAQ đã rà soát, tìm kiếm và UI/API hoàn chỉnh, test và build qua. Dừng gọi đây là bản khung trả lời mẫu.
+- **Mốc B — sẵn sàng triển khai:** gói phát hành tái lập, kiểm tra bảo mật cơ bản/độ ổn định, cập nhật nguồn và khôi phục chạy được. Vẫn chưa tuyên bố đã có người dùng thật.
+- **Mốc C — thử nghiệm thực tế:** nhóm chuẩn bị máy chủ/domain, triển khai HTTPS, thử từ mạng ngoài, mời người dùng và người kiểm tra nghiệp vụ, sửa lỗi từ phản hồi.
+- **Mốc D — bàn giao đồ án:** bộ đánh giá và hồ sơ phản ánh đúng những mốc đã đạt; công bố rõ phần phụ thuộc chưa được cấp. Nếu tích hợp RAG/LLM hoặc API thư viện sau này thì bổ sung thiết kế, điều kiện dữ liệu và kiểm thử tương ứng trước khi đưa vào bản đang phục vụ.
+
+Những phần có thể làm và kiểm chứng tại máy phát triển phải được hoàn thành trước khi yêu cầu cấp hạ tầng hoặc xin duyệt thao tác triển khai. Thiếu domain/API chỉ chặn các mốc cần chúng, không chặn hoàn thiện nền tảng.
