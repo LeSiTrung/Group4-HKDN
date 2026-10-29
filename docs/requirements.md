@@ -43,4 +43,6 @@ Không yêu cầu xây hệ thống lưu thông thay thế: chưa có quản lý
 
 ## Điều kiện hoàn thành
 
+Mốc chất lượng hội thoại bổ sung: cách hỏi tìm sách tự nhiên/không dấu, tác giả/năm xuất bản theo ngữ cảnh gần nhất; đổi chủ đề rõ ràng phải thay ngữ cảnh cũ. Thiếu biểu ghi hoặc thuộc tính phải thể hiện giới hạn. Hỏi nhiều ngày/cơ sở không được âm thầm dùng lịch hôm nay/cơ sở đầu tiên. Điều kiện loại trừ chưa phân tích được phải hỏi rõ lại. Quản trị cần xem được phản hồi do bạn đọc chủ động gửi, với thông báo chia sẻ và quyền truy cập phù hợp; không mở quyền xem toàn bộ lịch sử riêng.
+
 Ứng dụng/API/database khởi động; các luồng tài khoản, chat có nguồn, tìm/chi tiết sách, hỏi tiếp, lịch sử riêng, quản trị và xử lý lỗi phải có bằng chứng chạy. Dữ liệu metadata và dữ liệu lưu thông phải được phân biệt trên giao diện/câu trả lời. Test cục bộ và build phải đạt; P0/P1 còn biết phải được xử lý hoặc ghi blocker cụ thể. Tích hợp thật và triển khai trên máy đích chỉ đạt khi đã nghiệm thu riêng; không đánh dấu PROJECT COMPLETE trong khi các điều kiện bắt buộc còn bị chặn.

@@ -11,5 +11,7 @@ Updated 2026-10-29.
 - Voice: feature detection/UI handling exist; physical microphone/STT/TTS/mobile acceptance remains unverified. Browser speech services may depend on external availability.
 - Dependencies: direct Python versions are pinned, transitive resolution is not a cross-platform lock. One Starlette TestClient/httpx deprecation warning remains.
 - Channels avoid blind resend after ambiguous delivery. A crash during send can leave a pending event requiring operator investigation.
+- Conversation bounds: exclusions/mixed independent requests ask for clarification rather than implementing a complete Boolean query language. Verified schedule answers support today and one branch; additional dates require clarification. Missing catalog attributes remain unconfirmed.
+- CI workflow is committed configuration only until a GitHub run is observed. Local Node24 passed; Node22/Linux runner execution is still unverified. Vitest4.1.12 resolved the npm advisories observed during this milestone; future registry advisories may change.
 
 Fixed this milestone: provider diagnostics mismatch, launch-directory-dependent runtime path, stale-account identity races, late source withdrawal, malformed model output, contextual book follow-ups, late renewal responses overwriting manual reconciliation. Regressions remain in the suite.

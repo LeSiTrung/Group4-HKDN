@@ -55,7 +55,15 @@ Lần index đầu tải mô hình embedding `sentence-transformers/paraphrase-m
 
 Nhóm tự chuẩn bị máy chủ, DNS và TLS. [Hướng dẫn vận hành](docs/operations.md) có lệnh Linux, Docker Compose + Caddy, cấu hình origin/cookie, backup/restore và rollback. Không tự triển khai công khai hoặc gọi API tính phí trong quá trình phát triển.
 
+## Hỏi đáp và phản hồi
+
+Trang quản trị có mục **Phản hồi chatbot** để xem lượt bạn đọc đã chủ động đánh giá, lọc hữu ích/chưa hữu ích và phân trang. Chỉ câu trả lời được đánh giá, câu hỏi liền trước, nhận xét và nguồn được đưa vào mục này; không kèm email, tên tài khoản hoặc toàn bộ hội thoại. Giao diện thông báo phạm vi chia sẻ trước nút đánh giá.
+
+Chat nhận thêm cách hỏi tự nhiên như “Có sách … không?”, “Tra cứu sách …” và câu hỏi tiếp về tác giả/năm xuất bản. Thiếu ISBN, vị trí kệ hoặc trạng thái còn sách thì giữ biểu ghi/nguồn và yêu cầu xác nhận. Điều kiện loại trừ, nhiều yêu cầu độc lập hoặc ngày phục vụ chưa hỗ trợ được hỏi rõ lại.
+
 ## Kiểm thử
+
+Workflow `.github/workflows/verify.yml` chạy test/build khi push, pull request hoặc thủ công. CI không gọi LLM/dịch vụ tính phí, không triển khai. Kết quả local không chứng minh workflow đã chạy trên GitHub.
 
 ```powershell
 backend/.venv/Scripts/python.exe -m pytest -q

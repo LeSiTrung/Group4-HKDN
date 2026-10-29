@@ -2,6 +2,17 @@
 
 Ngày làm việc: 28–29/10/2026. Đây là nhật ký kỹ thuật; kiểm thử cục bộ không thay thế nghiệm thu thư viện hoặc triển khai production.
 
+## Mốc cập nhật hội thoại và phản hồi — 29/10
+
+- Backend cuối: **135 passed**, 28.27s, một cảnh báo deprecation TestClient/httpx; restore self-test và launcher preflight pass.
+- Frontend cài sạch từ lock mới: **29 passed** trên Vitest4.1.12, production build pass. Kiểm tra local dùng Node24/Python3.11; workflow đặt Node22/Python3.11 trên Linux nhưng chưa có run từ xa.
+- Bộ phát triển mở rộng: **45/45** deterministic ([JSON](validation/2026-10-29-quality-offline.json)), **45/45** API thật ([JSON](validation/2026-10-29-quality-api.json)), **2/2** probe ngữ nghĩa thật ([JSON](validation/2026-10-29-quality-semantic.json)). Gồm cách hỏi tự nhiên, đổi/ngắt ngữ cảnh, thuộc tính chưa biết và ngày/cơ sở mơ hồ. Không held-out, không staff-validated; vẫn chỉ có17 FAQ/1 sách thật được seed.
+- API semantic-author mất2087.93ms khi đã ấm. Request ngoài phạm vi đầu tiên mất10001.2ms trong lúc khởi tạo chỉ mục lười và các kiểm tra khác đang chạy; đây là latency request, không phải đo riêng thời gian embedding. `capabilities` trong JSON là health đầu lượt, không phải trạng thái cuối.
+- Browser với QA database riêng: đăng nhập admin,21 rating giả lập; trang2/2 đúng1 kết quả, lọc hữu ích đưa về trang1/1 đúng1 kết quả, đăng xuất; server/tab QA đã đóng. Không đưa các hàng giả lập vào runtime chính.
+- Rà soát độc lập:6 regression mới cho “tra cứu”, đổi chủ đề, câu hỏi sở hữu sách quá hạn và ngày bổ sung; đã tái hiện FAIL rồi sửa PASS. Test feedback kiểm tra401/403, minimal projection, câu hỏi liền trước, filter/pagination, page rất lớn và cascade; UI kiểm tra text/URL không tin cậy, trạng thái và disclosure.
+- Audit npm sau cập nhật báo **0** lỗ hổng ([JSON](validation/2026-10-29-quality-npm-audit.json)). Audit trước đó có3 package dev-tool bị báo, gồm tinypool/mocker/Vitest. Chọn bản Vitest4.1.12 tương thích Vite6; không chạy audit fix force hay đổi framework. Tham chiếu: [tinypool advisory](https://github.com/advisories/GHSA-85c8-ppgw-ccpr), [Vitest mocker advisory](https://github.com/advisories/GHSA-qxg6-89mg-rqv8). Audit không bảo đảm không còn lỗ hổng chưa được công bố.
+- CI chỉ được xác nhận cấu hình/YAML và lệnh local. Không claim GitHub Actions, Docker, public TLS, provider giao dịch hoặc thiết bị giọng nói đã nghiệm thu.
+
 ## Kết quả chốt ngày 29/10
 
 Sau chỉnh tên sản phẩm: chạy lại backend 101/101 (16.94s), frontend 24/24 và build thành công (JS 297.26kB, gzip89.72kB). Trang đang mở đã tải lại và hiển thị UTH Library. Các JSON đánh giá bên dưới giữ nguyên kết quả đo trước chỉnh tên; không ghi đè bằng kết quả suy đoán.

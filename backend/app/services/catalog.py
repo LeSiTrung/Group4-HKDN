@@ -118,27 +118,53 @@ def search_books(state,query,kind='all'):
 
 def is_book_request(question):
     q=normalize(question)
-    return bool(re.search(r'\b(tim sach|tim tai lieu|sach ve|sach cua|sach tuong tu|goi y sach|sach danh cho)\b',q)) and not any(x in q for x in ('huong dan','cach tim','lam sao','nhu the nao','o dau','vao dau'))
+    if re.search(r'\bco (sach|cuon|quyen)\b',q) and re.search(r'\b(qua han|phi|phat|han tra|gia han)\b',q):
+        return False
+    return bool(re.search(r'\b(tim (?:sach|tai lieu|cuon|quyen)|tra cuu (?:sach|tai lieu)|co (?:sach|cuon|quyen) .+|sach ve|sach cua|sach tuong tu|goi y sach|sach danh cho)\b',q)) and not any(x in q for x in ('huong dan','cach tim','lam sao','nhu the nao','o dau','vao dau'))
+
+
+def book_attribute(question):
+    q=normalize(question)
+    for attribute,pattern in (
+        ('availability',r'con ban|con sach|co san|con khong|tinh trang|con muon|muon duoc|bao nhieu ban|so ban'),
+        ('isbn',r'isbn'),('shelf',r'o ke|ke nao|xep gia|vi tri'),
+        ('publisher',r'nha xuat ban'),('author',r'tac gia|ai viet|nguoi viet'),
+        ('year',r'xuat ban|nam nao'),
+    ):
+        if re.search(r'\b(?:'+pattern+r')\b',q):
+            return attribute
+    return None
+
+
+def book_followup(question):
+    q=normalize(question)
+    return bool(re.search(r'^(co cuon|cuon nao|sach nay|sach do|cuon nay|cuon do|con khong|con ban|con sach|con muon|co san|danh cho|nguoi moi|nang cao|tuong tu|tac gia|ai viet|nam xuat ban|xuat ban|isbn|o ke|co bao nhieu ban)',q)) and not any(x in q for x in ('huong dan','cach tim','nhu the nao'))
 
 
 def book_query(question):
     q=normalize(question)
-    q=re.sub(r'\b(toi|minh|ban|co|khong|tim|sach|tai lieu|ve|theo|cho|giup|quyen|cuon|nao|danh|nguoi|viet|muon|goi y|tuong tu|cua)\b',' ',q)
+    q=re.split(r'\b(?:con muon|muon duoc|con ban|con sach|co san|bao nhieu ban|tinh trang)\b',q,maxsplit=1)[0]
+    q=re.sub(r'\b(toi|minh|ban|co|khong|tim|sach|tai lieu|tra cuu|ve|theo|cho|giup|quyen|cuon|nao|danh|nguoi|viet|muon|goi y|tuong tu|cua)\b',' ',q)
     return ' '.join(q.split())
 
 
 def contextual_question(question,history):
     q=normalize(question)
+    if is_book_request(question) and not re.search(r'^co (?:cuon|quyen|sach) (?:nao|do|nay)\b',q):
+        return question
     if re.fullmatch(r'(?:co so|cs)\s*[123]',q):
         previous=next((m['content'] for m in reversed(history or []) if m['role']=='user'),None)
         if previous and any(x in normalize(previous) for x in ('mo cua','gio phuc vu','lich phuc vu')):
             return previous+' '+question
-    if not re.search(r'^(co cuon|cuon nao|sach nay|sach do|cuon nay|cuon do|con khong|co san|danh cho|nguoi moi|nang cao|tuong tu)',q):
+    if not book_followup(question):
         return question
-    attribute=bool(re.search(r'\b(tac gia|xuat ban|nam nao|con ban|con sach|co san|con khong|tinh trang|isbn)\b',q))
+    attribute=book_attribute(question)
     for turn in reversed(history or []):
         if turn.get('context_query'):
             return 'Tìm sách về '+turn['context_query']+('' if attribute else ' '+question)
-        if turn['role']=='user' and is_book_request(turn['content']):
-            return turn['content']+('' if attribute else ' '+question)
+        if turn['role']=='user':
+            if is_book_request(turn['content']):
+                return 'Tìm sách về '+book_query(turn['content'])+('' if attribute else ' '+question)
+            if not book_followup(turn['content']):
+                break
     return question

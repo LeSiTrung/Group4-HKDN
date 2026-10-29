@@ -61,6 +61,12 @@ Ví dụ request:
 
 Response có `answer`, `status`, `sources:[{title,url,checked_at}]`, `suggestions`, `mode:'faq'|'rag'|'fallback'`, `books` (mảng biểu ghi local), `conversation_id` và `message_id` (null cho khách). Status có thể là `answered`, `needs_confirmation`, `clarify`, `not_found`. Câu trả lời nguồn thiếu xác nhận giữ cảnh báo. LLM chỉ diễn đạt evidence cho câu hỏi phù hợp; tra metadata sách và lịch phục vụ dùng logic cấu trúc. LLM phải trả JSON hợp lệ và IDs thuộc evidence; số/URL lạ hoặc lời xác nhận giao dịch bị loại. Các kiểm tra này không chứng minh mọi câu trả lời đều đúng ngữ nghĩa và không thay thế kiểm chứng nghiệp vụ của thư viện.
 
+## Phản hồi người dùng
+
+`GET /admin/feedback?rating=-1|1&page=1&page_size=20` chỉ dành cho admin, `page>=1`, `1<=page_size<=50`; bỏ rating để xem tất cả. Response `{items,total,page,page_size,summary:{positive,negative}}`; summary đếm toàn bộ đánh giá hợp lệ, total theo bộ lọc. Item gồm `{message_id,question,answer,rating,comment,status,mode,sources}`, sắp theo ID câu trả lời giảm dần. Question chỉ là lượt user liền trước trong cùng hội thoại, không lấy từ hội thoại khác hoặc bỏ qua lượt assistant để tìm xa hơn. Không trả user_id/email/tên, tiêu đề hay toàn bộ hội thoại. Việc xóa tài khoản/hội thoại vẫn xóa feedback theo quan hệ cascade. Trang vượt số kết quả trả items rỗng, kể cả số trang rất lớn.
+
+Phạm vi này chỉ xem những đánh giá đã gửi rõ ràng qua `/feedback`; không tự thu thập câu hỏi khách hoặc những lượt chưa đánh giá. Nội dung câu hỏi/nhận xét có thể chứa thông tin người gửi đã nhập; API không khẳng định đã ẩn danh nội dung văn bản.
+
 ## Danh mục và gia hạn
 
 `BookInput` gồm `title` (bắt buộc, tối đa 500), `author` (300), `year` (rỗng hoặc bốn chữ số), `kind:'books'|'digital'`, `subjects` (1.000), `description` (8.000), `source_url` (HTTPS, tối đa 1.000, duy nhất), `checked_at` (ngày không ở tương lai theo Việt Nam), `published` (mặc định false). Response thêm `id` và `url` (cùng giá trị `source_url`). Không có ISBN, vị trí kệ, số lượng hay trạng thái lưu thông nếu nguồn hiện tại không cung cấp. Import không nhận file upload: client gửi JSON; toàn bộ request vẫn bị giới hạn 64 KiB, nên phải chia lô nhỏ hơn 200 nếu metadata dài. URL trùng trong cùng lô trả 422; URL đã có trong database được cập nhật đủ trường, kể cả trạng thái xuất bản.

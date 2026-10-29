@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.chat import router as chat_router
 from app.api.auth import router as auth_router
 from app.api.history import router as history_router
+from app.api.feedback_review import router as feedback_review_router
 from app.config import Settings
 from app.database.connection import Store
 from app.security import RequestGate
@@ -68,6 +69,7 @@ def create_app(data_dir=None, testing=False):
     app.include_router(history_router, prefix='/api')
     app.include_router(chat_router, prefix='/api')
     app.include_router(admin_router, prefix='/api')
+    app.include_router(feedback_review_router, prefix='/api')
     app.include_router(library_router, prefix='/api')
     app.include_router(channels_router, prefix='/api')
     app.include_router(catalog_router,prefix='/api')

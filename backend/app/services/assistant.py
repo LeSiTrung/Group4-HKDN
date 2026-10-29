@@ -5,7 +5,7 @@ from zoneinfo import ZoneInfo
 from .knowledge import published_rows, today
 from .rag_service import keyword_search, normalize
 from .llm_service import generate_answer, provider_name
-from .catalog import contextual_question,is_book_request,book_query,search_books
+from .catalog import contextual_question,is_book_request,book_query,search_books,book_attribute,book_followup
 from urllib.parse import urlencode
 
 SUGGESTIONS = ['Hướng dẫn tra cứu OPAC','Thư viện mở cửa lúc mấy giờ hôm nay?','Tôi muốn gia hạn sách']
@@ -23,46 +23,58 @@ def answer_question(state, question, history=None):
     original_q=normalize(question)
     question=contextual_question(question,history)
     q = normalize(question)
+    if q==original_q and book_followup(original_q) and book_attribute(original_q):
+        return result('Bạn đang hỏi về tài liệu nào? Vui lòng cung cấp nhan đề hoặc tìm sách trước để mình đối chiếu đúng biểu ghi.', 'clarify',suggestions=['Tìm sách Olympic cơ học'])
+    if 'muon sach' in q and re.search(r'\b(bao gio|khi nao)\b.*\btra\b',q):
+        question='Thời hạn mượn sách'
+        q=normalize(question)
     if q in ('xin chao','chao','hello','hi'):
         return result('Chào bạn! Mình có thể hỗ trợ tra cứu OPAC, hướng dẫn tài nguyên điện tử và thông tin dịch vụ thư viện.',suggestions=SUGGESTIONS)
     if is_book_request(question):
+        if re.search(r'\b(khong phai|ngoai tru|loai tru|mo cua|gio phuc vu|gia han|phi|phat|qua han|han tra)\b',q):
+            return result('Câu hỏi có điều kiện loại trừ hoặc nhiều yêu cầu khác nhau. Bạn vui lòng hỏi riêng tên/chủ đề sách cần tìm, sau đó hỏi về dịch vụ để mình đối chiếu đúng từng nguồn.', 'clarify',suggestions=SUGGESTIONS)
         query=book_query(question)
         if query:
             books=search_books(state,query)[:5]
             if books:
                 answer=f'Mình tìm được {len(books)} biểu ghi phù hợp trong danh mục đã rà soát. Xem tên sách, nguồn và ngày kiểm tra bên dưới. Đây là bản chụp metadata; để biết còn sách hoặc hạn mượn, hãy kiểm tra trực tiếp OPAC.'
                 status='answered'
-                if history and re.search(r'\b(cuon do|cuon nay|sach do|sach nay)\b',original_q):
-                    if re.search(r'\b(con ban|con sach|co san|con khong|tinh trang)\b',original_q):
-                        answer='Metadata đang có không xác nhận tình trạng còn bản sách theo thời gian thực. Hãy mở biểu ghi OPAC gốc bên dưới hoặc hỏi thư viện trước khi đến mượn.'
-                        status='needs_confirmation'
-                    elif len(books)>1:
+                attribute=book_attribute(original_q)
+                if attribute=='availability':
+                    answer='Metadata đang có không xác nhận tình trạng còn bản sách theo thời gian thực. Hãy mở biểu ghi OPAC gốc bên dưới hoặc hỏi thư viện trước khi đến mượn.'
+                    status='needs_confirmation'
+                elif history and book_followup(original_q) and attribute:
+                    if len(books)>1:
                         return {**result('Có nhiều tài liệu trong ngữ cảnh. Bạn vui lòng chọn nhan đề cụ thể.','clarify',suggestions=['Tìm sách '+b['title'] for b in books[:3]]),'books':books,'context_query':query}
-                    elif 'tac gia' in original_q:
-                        answer=f"Theo biểu ghi nguồn, tác giả của “{books[0]['title']}” là {books[0]['author']}." if books[0]['author'] else 'Biểu ghi chưa có thông tin tác giả; mình không tự suy đoán.'
-                    elif re.search(r'\b(xuat ban|nam nao)\b',original_q):
-                        answer=f"Biểu ghi “{books[0]['title']}” ghi năm xuất bản {books[0]['year']}." if books[0]['year'] else 'Biểu ghi chưa có năm xuất bản; hãy kiểm tra nguồn gốc.'
+                    if attribute in ('author','year') and books[0][attribute].strip():
+                        label='tác giả' if attribute=='author' else 'năm xuất bản'
+                        answer=f"Theo biểu ghi nguồn, {label} của “{books[0]['title']}” là {books[0][attribute]}."
+                    else:
+                        label={'isbn':'ISBN','shelf':'vị trí kệ / ký hiệu xếp giá','publisher':'nhà xuất bản','author':'tác giả','year':'năm xuất bản'}[attribute]
+                        answer=f'Biểu ghi đang có chưa xác nhận {label}. Bạn hãy mở nguồn gốc hoặc hỏi thư viện; mình không tự suy đoán thông tin này.'
+                        status='needs_confirmation'
                 return {**result(answer,status,sources=[{'title':b['title'],'url':b['url'],'checked_at':b['checked_at']} for b in books]),'books':books,'context_query':query}
             url='https://opacthuvien.ut.edu.vn/opac/Oshow.aspx?'+urlencode({'rdSearchOption':0,'txtSearch':query})
             return {**result('Chưa có biểu ghi phù hợp trong danh mục đã rà soát của chatbot. Điều này không chứng minh thư viện không có sách. Bạn có thể tìm tiếp trên OPAC hoặc nhập tên/tác giả cụ thể hơn.',
                             'not_found',sources=[{'title':'Tìm trực tiếp trên OPAC','url':url,'checked_at':None}]),'books':[],'context_query':query}
-    if re.search(r'\b(gio|mo cua|dong cua|lich phuc vu|hom nay)\b',q) and any(x in q for x in ('gio','mo cua','dong cua','phuc vu')):
-        branch = re.search(r'(?:co so|cs)\s*([123])',q)
-        if not branch:
+    if re.search(r'\b(mo cua|dong cua|lich phuc vu|gio phuc vu|thoi gian phuc vu)\b',q):
+        branches=set(re.findall(r'\b(?:co so|cs)\s*(\d+)\b',q))
+        if len(branches)!=1 or not branches<={'1','2','3'}:
             return result('Bạn muốn xem giờ phục vụ tại cơ sở nào? Vui lòng hỏi kèm cơ sở và ngày cần tra cứu.', 'clarify', suggestions=[f'Giờ mở cửa hôm nay cơ sở {i}' for i in (1,2,3)])
+        branch=next(iter(branches))
         now = datetime.now(ZoneInfo('Asia/Ho_Chi_Minh'))
-        if 'hom nay' not in q:
-            return result('Hiện mình tra lịch theo ngày hôm nay. Hãy hỏi “Giờ mở cửa hôm nay” kèm cơ sở để đối chiếu lịch đã xác nhận.', 'clarify', suggestions=[f'Giờ mở cửa hôm nay cơ sở {branch[1]}'])
+        if 'hom nay' not in q or re.search(r'\b(mai|ngay mot|ngay kia|hom qua|tuan sau|tuan truoc|ngay \d+|thang \d+|thu hai|thu ba|thu tu|thu nam|thu sau|thu bay|chu nhat)\b',q) or re.search(r'\b\d{1,2}[/-]\d{1,2}\b',question):
+            return result('Hiện mình tra lịch theo ngày hôm nay. Hãy hỏi “Giờ mở cửa hôm nay” kèm một cơ sở; mình chưa áp dụng lịch hôm nay cho ngày khác.', 'clarify', suggestions=[f'Giờ mở cửa hôm nay cơ sở {branch}'])
         with state.db() as db:
             rows = db.execute('SELECT * FROM schedules WHERE branch=? AND weekday=? AND valid_from<=? AND valid_until>=?',
-                              (branch[1],now.weekday(),now.date().isoformat(),now.date().isoformat())).fetchall()
+                              (branch,now.weekday(),now.date().isoformat(),now.date().isoformat())).fetchall()
         if rows:
             # A short dated exception overrides the broader weekly schedule.
             span = min((datetime.fromisoformat(r['valid_until'])-datetime.fromisoformat(r['valid_from'])).days for r in rows)
             rows = [r for r in rows if (datetime.fromisoformat(r['valid_until'])-datetime.fromisoformat(r['valid_from'])).days==span]
             windows = 'Nghỉ phục vụ' if any(r['closed'] for r in rows) else '; '.join(f"{r['opens']}–{r['closes']}" for r in rows)
             notes = ' '.join(r['note'] for r in rows if r['note'])
-            return result(f"Lịch đã xác nhận cho cơ sở {branch[1]} ngày {now:%d/%m/%Y}: {windows}. {notes}".strip(),
+            return result(f"Lịch đã xác nhận cho cơ sở {branch} ngày {now:%d/%m/%Y}: {windows}. {notes}".strip(),
                           sources=[{'title':r['source_title'],'url':r['source_url'],'checked_at':r['checked_at']} for r in rows])
     rows = published_rows(state.db)
     ranked = keyword_search(question, rows)
