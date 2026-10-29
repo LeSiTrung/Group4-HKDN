@@ -1,5 +1,7 @@
 # Vận hành Chatbot thư viện
 
+Chat chỉ phục vụ thư viện. Trần gateway1MiB dành cho tin nhắn dài; middleware vẫn chặn64KiB ở mutation khác. Giữ rate/auth/origin protections. LLM dùng context8.192, ngân sách assembled prompt6.144 byte UTF8 và capacity2. Prompt quá lớn không gọi model mà dùng FAQ có nguồn; input/context quá16.000 ký tự yêu cầu chia phần. Current message trong SQLite không bị cắt; lịch sử đưa vào model là trích đoạn rõ ràng. Không coi khả năng nhập dài là suy luận vô hạn hoặc tăng số user đồng thời đã nghiệm thu.
+
 Tên triển khai hiện tại là `uth-library`, image chọn bằng `LIBRARY_IMAGE`, dữ liệu container nằm tại `/var/lib/library`. Nếu đã triển khai một bản cũ với tên project khác, hãy sao lưu và giữ volume cũ trước khi chuyển tên; Compose mặc định đặt tên volume theo project. Dữ liệu Windows vẫn ở `backend/runtime`. Đổi tên cookie phiên yêu cầu đăng nhập lại, không xóa tài khoản/lịch sử.
 
 Một tiến trình Uvicorn + SQLite WAL + Qdrant local là cấu hình hiện tại. Không thêm `--reload`, `--workers >1`, nhiều replica hoặc cùng gắn volume Qdrant vào các API. CLI index chạy khi API đã dừng; khi đang phục vụ, dùng quản trị → tạo lại chỉ mục. Remote Qdrant có thể cấu hình nhưng chưa biến SQLite/rate limit/job hiện tại thành hệ thống phân tán.

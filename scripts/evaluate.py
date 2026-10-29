@@ -18,6 +18,8 @@ def failures(case, response):
     errors = []
     if response.get('status') != case['status']:
         errors.append(f"status: expected {case['status']}, got {response.get('status')}")
+    if case.get('mode') and response.get('mode')!=case['mode']:
+        errors.append(f"mode: expected {case['mode']}, got {response.get('mode')}")
     if not response.get('answer', '').strip():
         errors.append('empty answer')
     if case.get('source') and not any(case['source'] in s.get('url', '') for s in response.get('sources', [])):

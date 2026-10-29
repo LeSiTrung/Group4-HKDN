@@ -26,4 +26,4 @@ def test_reader_can_register(client):
 
 def test_csrf_and_large_body_rejected(client):
     assert client.post('/api/auth/logout', headers={'Origin': 'https://evil.example'}).status_code == 403
-    assert client.post('/api/chat', content='x'*65537).status_code == 413
+    assert client.post('/api/auth/logout', content='x'*65537).status_code == 413

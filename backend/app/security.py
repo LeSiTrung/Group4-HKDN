@@ -42,6 +42,7 @@ class RequestGate:
             if blocked:
                 return await JSONResponse({'detail': 'Bạn gửi quá nhanh. Vui lòng thử lại sau một phút.'}, 429, headers={'Retry-After': '60'})(scope, receive, send)
         if unsafe:
+            body_limit=1048576 if path=='/api/chat' else 65536
             chunks, size = [], 0
             while True:
                 message = await receive()
@@ -49,8 +50,9 @@ class RequestGate:
                     return
                 chunk = message.get('body', b'')
                 size += len(chunk)
-                if size > 65536:
-                    return await JSONResponse({'detail': 'Yêu cầu vượt quá 64 KiB.'}, 413)(scope, receive, send)
+                if size > body_limit:
+                    limit_label='1 MiB' if body_limit==1048576 else '64 KiB'
+                    return await JSONResponse({'detail': f'Yêu cầu vượt quá {limit_label}. Hãy chia nội dung thành các tin nhắn nhỏ hơn.'}, 413)(scope, receive, send)
                 chunks.append(chunk)
                 if not message.get('more_body', False):
                     break

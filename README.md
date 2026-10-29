@@ -57,6 +57,10 @@ Nhóm tự chuẩn bị máy chủ, DNS và TLS. [Hướng dẫn vận hành](do
 
 ## Hỏi đáp và phản hồi
 
+Chatbot chỉ hỗ trợ thư viện UTH. Bạn có thể nhắn tự nhiên, chào hỏi, tìm tài liệu và hỏi tiếp về dịch vụ; câu ngoài phạm vi được hướng lại về thư viện. Không có chế độ kiến thức chung.
+
+Ô nhập và nhận dạng giọng nói không còn cắt ở2.000 ký tự. Server nhận tối đa1MiB tổng body cho một lượt chat và lưu nguyên văn tin nhắn đã chấp nhận vào lịch sử tài khoản. Nếu nội dung/ngữ cảnh tra cứu vượt16.000 ký tự thì chatbot yêu cầu chia phần. Ngân sách prompt LLM còn nhỏ hơn và phụ thuộc nguồn/lịch sử; khi không phù hợp, chatbot dùng câu trả lời từ nguồn đã rà soát thay vì cắt câu hỏi hoặc chờ model quá lâu. Đây không phải xử lý văn bản vô hạn.
+
 Trang quản trị có mục **Phản hồi chatbot** để xem lượt bạn đọc đã chủ động đánh giá, lọc hữu ích/chưa hữu ích và phân trang. Chỉ câu trả lời được đánh giá, câu hỏi liền trước, nhận xét và nguồn được đưa vào mục này; không kèm email, tên tài khoản hoặc toàn bộ hội thoại. Giao diện thông báo phạm vi chia sẻ trước nút đánh giá.
 
 Chat nhận thêm cách hỏi tự nhiên như “Có sách … không?”, “Tra cứu sách …” và câu hỏi tiếp về tác giả/năm xuất bản. Thiếu ISBN, vị trí kệ hoặc trạng thái còn sách thì giữ biểu ghi/nguồn và yêu cầu xác nhận. Điều kiện loại trừ, nhiều yêu cầu độc lập hoặc ngày phục vụ chưa hỗ trợ được hỏi rõ lại.

@@ -1,5 +1,16 @@
 # Technical progress
 
+## 2026-10-29 — library-only natural chat and long messages
+
+- User explicitly clarified library-only scope. Removed the earlier uncommitted general-chat interpretation, service prompt, route, UI and corresponding cancelled tests; no general mode was released. Kept the requested long-message and natural library support improvements.
+- CHAT-03: removed2k composer/message/voice cuts; retained full original input and whitespace. Exact chat endpoint1MiB body, other routes64KiB; existing auth/rate/CSRF remain. Accepted account messages persist whole. Over16k current/derived context gets explicit clarification before expensive retrieval.
+- Scoped greetings/thanks and helpful redirects; generic email/database definitions no longer produce unrelated LIC contact/resources. Multi-turn hours follow-ups retain evidence boundary. No unsourced general-answer generator exists.
+- LLM-03: grounded generation only; marked4k history, capacity2, context8192 and conservative6144-byte complete prompt budget. Full evidence/current input are not clipped to fit. Oversized assembled prompt returns source-based fallback immediately. Budget counts UTF8/history/evidence; malformed Unicode context falls back safely.
+- Baseline negative control against committed b371d79 failed11 new social/scope cases; current cases pass. Revised scope tests supersede cancelled open-chat expectations, rather than masking failures. Fresh library-only review found no confirmed blocking regression; its context-budget caveat was addressed with RED→GREEN budget/Unicode tests.
+- Backend188 passed in25.75s; frontend35 passed, build42 modules, audit0. Restore self-test and launcher preflight pass. Original45 library development cases pass offline/live; separate10 dialogue/long-input cases pass offline/live;2 semantic probes pass, including a real rag response.
+- Measured long5133-character library request: earlier model timeout/fallback60282.63ms; complete-prompt budget now yields source fallback36.76ms. No SLA/general-accuracy claim. Sources, not a claim that the model read unlimited text, explain the answer.
+- No runtime schema migration or real-user account/dataset mutation. External catalog/API/channel, Docker/HTTPS and physical voice acceptance remain blocked/unverified. See docs/validation.md; PROJECT NOT COMPLETE.
+
 ## 2026-10-29 — conversation quality, feedback and CI
 
 - CONV-02/TIME-02: reproduced ten conversation failures plus date/branch failures before fixing shared routing/context. Added natural lookup forms, author/year follow-ups, explicit unknown ISBN/shelf/publisher/availability, topic replacement and clarification for unresolved references, negation and mixed requests. Invalid/multiple branches and additional dates cannot reuse today's verified schedule. Loan deadlines/fees retain service routing.

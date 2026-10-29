@@ -2,6 +2,16 @@
 
 Ngày làm việc: 28–29/10/2026. Đây là nhật ký kỹ thuật; kiểm thử cục bộ không thay thế nghiệm thu thư viện hoặc triển khai production.
 
+## Mốc hội thoại chỉ dành cho thư viện, tin nhắn dài — 29/10
+
+- Yêu cầu mới nhất của người dùng giới hạn chatbot trong nghiệp vụ thư viện. Không giữ nhánh trả lời kiến thức chung; lời chào và câu cảm ơn vẫn được hỗ trợ. Câu ngoài phạm vi được hướng về tìm tài liệu/dịch vụ; câu hỏi thiếu căn cứ được yêu cầu làm rõ.
+- Backend: **188 passed**, 25.75s, một cảnh báo deprecation TestClient/httpx. Frontend: **35 passed**, 5 file; production build thành công (JS300.60kB, gzip90.57kB; CSS27.39kB). `npm audit --audit-level=moderate`: **0 vulnerabilities**. Restore self-test và `run.ps1 -Check` pass.
+- Bộ45 câu thư viện: **45/45** [offline](validation/2026-10-29-library-chat-offline.json) và **45/45** [API thật](validation/2026-10-29-library-chat-api.json). Bộ10 câu phạm vi/tin nhắn dài: **10/10** [offline](validation/2026-10-29-library-dialogue-offline.json) và **10/10** [API thật](validation/2026-10-29-library-dialogue-api.json). Hai probe ngữ nghĩa: **2/2** [API thật](validation/2026-10-29-library-chat-semantic.json); semantic-author trả mode `rag`, nguồn OPAC trang6, 7331.09ms. Đây là kiểm tra phát triển, chưa được cán bộ thư viện nghiệm thu và không đo đầy đủ tỷ lệ hallucination.
+- Ca OPAC5.133 ký tự trả FAQ có nguồn ở mode `fallback` trong36.76ms sau khi thêm chặn ngân sách prompt; cùng ca trước đó phải chờ model timeout khoảng60.283s. Đây là một phép đo cục bộ, không phải SLA. Complete prompt quá lớn không được gửi cho model hoặc cắt evidence; hệ thống dùng FAQ đầy đủ làm phương án dự phòng.
+- Không còn giới hạn2.000 ký tự ở ô nhập/validator câu hỏi. Bản gốc tin nhắn được nhận và lưu nguyên vẹn cho tài khoản; toàn bộ body chat tối đa1MiB, mutation khác64KiB. Câu hiện tại hoặc ngữ cảnh truy xuất hơn16.000 ký tự được yêu cầu chia nhỏ trước retrieval. Model giữ tối đa6 lượt/4.000 ký tự lịch sử có đánh dấu trích đoạn, complete prompt tối đa6.144 byte UTF-8, Ollama context8192/output1000 token và tối đa2 yêu cầu đồng thời. Không có cam kết dung lượng vô hạn.
+- Thử âm11 regression phạm vi với responder ở commit `b371d79` thất bại; phiên bản mới pass. Thử prompt budget và Unicode lỗi tái hiện FAIL rồi sửa PASS. HTTP loopback thật: body UTF-8 69.015 byte được nhận với200/clarify, body1.050.015 byte bị từ chối413; `/health` trả200. Browser smoke mới chưa chạy được vì CUA báo browser user unavailable; không dùng kết quả browser cũ để khẳng định UI mới đã kiểm tra trực tiếp.
+- Không thay schema, không xóa dữ liệu runtime, không gọi API trả phí. Caddy body ceiling đã cập nhật nhưng runtime Docker/Caddy/public TLS chưa được kiểm chứng; provider ngoài, danh mục đầy đủ, gia hạn thật và kênh nhắn tin thật vẫn cần quyền/cấu hình chính thức.
+
 ## Mốc cập nhật hội thoại và phản hồi — 29/10
 
 - Backend cuối: **135 passed**, 28.27s, một cảnh báo deprecation TestClient/httpx; restore self-test và launcher preflight pass.

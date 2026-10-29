@@ -10,6 +10,7 @@ const starters = [
   { icon: 'clock', title: 'Giờ phục vụ', text: 'Tôi có thể kiểm tra giờ mở cửa ở đâu?' },
   { icon: 'globe', title: 'Thư viện số', text: 'Làm thế nào để truy cập tài liệu điện tử?' },
 ]
+const contextExcerptMarker = '\n[Trích đoạn ngữ cảnh; phần còn lại không được gửi.]'
 export default function ChatWindow({ user, conversationId, onCreated }) {
   const [messages, setMessages] = useState([])
   const [message, setMessage] = useState('')
@@ -38,14 +39,14 @@ export default function ChatWindow({ user, conversationId, onCreated }) {
   useEffect(() => { end.current?.scrollIntoView({ behavior: 'instant', block: 'end' }) }, [messages, busy])
 
   async function send(text) {
-    const question = text.trim()
-    if (!question || sending.current || historyLoading) return
+    const question = text
+    if (!question.trim() || sending.current || historyLoading) return
     sending.current = true
     setBusy(true); setError(''); setSuggestions([])
     setMessages(current => [...current, { role: 'user', content: question }])
     setMessage('')
     try {
-      const history = user ? undefined : messages.filter(item => ['user', 'assistant'].includes(item.role)).slice(-6).map(item => ({ role: item.role, content: item.content.slice(0, 2000) }))
+      const history = user ? undefined : messages.filter(item => ['user', 'assistant'].includes(item.role)).slice(-6).map(item => ({ role: item.role, content: item.content.length > 2000 ? `${item.content.slice(0, 2000 - contextExcerptMarker.length)}${contextExcerptMarker}` : item.content }))
       const result = await sendMessage(question, activeId.current, history)
       if (!mounted.current) return
       activeId.current = result.conversation_id
@@ -64,7 +65,7 @@ export default function ChatWindow({ user, conversationId, onCreated }) {
     const instance = new SpeechRecognition()
     recognition.current = instance
     instance.lang = 'vi-VN'; instance.interimResults = false; instance.maxAlternatives = 1
-    instance.onresult = event => { if (mounted.current) setMessage(current => `${current}${current ? ' ' : ''}${event.results[0][0].transcript}`.slice(0, 2000)) }
+    instance.onresult = event => { if (mounted.current) setMessage(current => `${current}${current ? ' ' : ''}${event.results[0][0].transcript}`) }
     instance.onerror = event => { if (mounted.current) { setListening(false); setError(event.error === 'not-allowed' ? 'Chưa được cấp quyền micro. Hãy cho phép micro trong cài đặt trình duyệt.' : `Không nhận được giọng nói (${event.error}). Bạn có thể nhập bằng bàn phím.`) } }
     instance.onend = () => { if (mounted.current) setListening(false) }
     try { instance.start(); setListening(true) } catch { setError('Không thể mở micro. Hãy kiểm tra quyền truy cập và thử lại.') }
@@ -92,7 +93,7 @@ export default function ChatWindow({ user, conversationId, onCreated }) {
       {speaking && <button className="text-button stop-speaking" onClick={() => { window.speechSynthesis.cancel(); setSpeaking(false) }}><Icon name="stop" size={16} /> Dừng đọc</button>}
       {suggestions.length > 0 && <div className="suggestions">{suggestions.map((text, index) => <button key={`${text}-${index}`} onClick={() => send(text)} disabled={busy}>{text}<Icon name="arrow" size={14} /></button>)}</div>}
       <ChatInput value={message} onChange={setMessage} onSend={send} busy={busy || historyLoading} onVoice={voice} listening={listening} />
-      <p className="composer-note"><Icon name="shield" size={13} /> Thông tin chính sách cần nguồn còn hiệu lực. {user ? 'Lịch sử được lưu trong tài khoản.' : 'Khách: lịch sử chỉ lưu trong phiên đang mở.'}</p>
+      <p className="composer-note"><Icon name="shield" size={13} /> Thông tin thư viện cần nguồn còn hiệu lực. Ngữ cảnh hội thoại có giới hạn. {user ? 'Lịch sử được lưu trong tài khoản.' : 'Khách: lịch sử chỉ lưu trong phiên đang mở.'}</p>
     </div>
   </section>
 }

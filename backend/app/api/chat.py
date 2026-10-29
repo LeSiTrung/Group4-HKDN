@@ -9,11 +9,11 @@ router = APIRouter(tags=["chat"])
 
 class HistoryTurn(BaseModel):
     role:Literal['user','assistant']
-    content:str=Field(max_length=2000)
+    content:str
 
 
 class ChatRequest(BaseModel):
-    message: str = Field(min_length=1, max_length=2000, strict=True)
+    message: str = Field(min_length=1, strict=True)
     conversation_id: int | None = Field(default=None,gt=0)
     history:list[HistoryTurn]=Field(default_factory=list,max_length=6)
 
@@ -22,7 +22,7 @@ class ChatRequest(BaseModel):
     def nonblank(cls, value):
         if not value.strip():
             raise ValueError('Vui lòng nhập câu hỏi.')
-        return value.strip()
+        return value
 
 
 class ChatResponse(BaseModel):
@@ -55,7 +55,7 @@ def chat(payload: ChatRequest,request:Request,user=Depends(optional_user)):
                 if not db.execute('SELECT id FROM conversations WHERE id=? AND user_id=?',(cid,user['id'])).fetchone():
                     raise HTTPException(409,'Hội thoại đã được xóa. Hãy bắt đầu cuộc trò chuyện mới.')
             else:
-                cid = db.execute('INSERT INTO conversations(user_id,title) VALUES (?,?)',(user['id'],payload.message[:80])).lastrowid
+                cid = db.execute('INSERT INTO conversations(user_id,title) VALUES (?,?)',(user['id'],payload.message.strip()[:80])).lastrowid
             db.execute("INSERT INTO messages(conversation_id,role,content) VALUES (?,'user',?)",(cid,payload.message))
             mid = db.execute("INSERT INTO messages(conversation_id,role,content,sources,status,mode,books,context_query) VALUES (?,'assistant',?,?,?,?,?,?)",
                 (cid,result['answer'],json.dumps(result['sources'],ensure_ascii=False),result['status'],result['mode'],json.dumps(result.get('books',[]),ensure_ascii=False),result.get('context_query',''))).lastrowid

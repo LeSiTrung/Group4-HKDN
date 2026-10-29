@@ -13,6 +13,7 @@ Updated 2026-10-29. Authority: AGENTS.md and docs/superpowers/plans/2026-10-28-l
 | CONV-02 / TIME-02 | P1 | Natural lookup, safe follow-ups and date/branch handling | Verified locally | Conversation/date regressions plus 45/45 live development cases; unsupported conditions clarify |
 | FEEDBACK-01 | P2 | Admin feedback quality loop | Verified locally | 12 API tests, 5 UI tests, browser pagination/filter smoke; explicit sharing only |
 | QA-02 | P2 | CI and test-tool dependency security | Implemented; remote run pending | Local135 backend/29 frontend, clean build/install, npm audit0; workflow not run remotely |
+| CHAT-03 / LLM-03 | P1 | Library-only natural conversation, long input, bounded generation | Verified locally | 188 backend/35 frontend;45+10 live cases,2 semantic probes; no general-knowledge mode, no infinite-context claim |
 | EXT-01 | P1/external | Live OPAC, approved transactions/channels, authoritative content | BLOCKED | Backend403; no bridge/channel credentials. Seed:17 reviewed FAQs,1 real metadata snapshot |
 | DEPLOY-01 | P1/external | Public HTTPS, capacity/restore rehearsal, real users | BLOCKED | Requires group-owned target and library/user acceptance |
 

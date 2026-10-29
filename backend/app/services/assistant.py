@@ -4,7 +4,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from .knowledge import published_rows, today
 from .rag_service import keyword_search, normalize
-from .llm_service import generate_answer, provider_name
+from .llm_service import generate_answer, provider_name, MAX_MODEL_MESSAGE_CHARS
 from .catalog import contextual_question,is_book_request,book_query,search_books,book_attribute,book_followup
 from urllib.parse import urlencode
 
@@ -19,17 +19,52 @@ def result(answer,status='answered',sources=None,suggestions=None,mode='faq'):
     return {'answer':answer,'status':status,'sources':sources or [],'suggestions':suggestions or [],'mode':mode}
 
 
+def library_subject(question):
+    return bool(re.search(r'\b(thu vien|opac|uth|lic|sach|tai lieu|gia han|qua han|han tra|muon tra|mo cua|dong cua|gio phuc vu|lich phuc vu|proquest|stinet|xep gia|isbn|ddc|ebook)\b',normalize(question)))
+
+
+def outside_definition(question):
+    return bool(re.search(r'\b(la gi|nghia la gi|dinh nghia|khai niem|giai thich)\b',normalize(question))) and not library_subject(question)
+
+
+def library_question(question,history=None):
+    if library_subject(question):
+        return True
+    followup=r'^(con|vay|the|thi|bao nhieu|khi nao|may gio|o dau|duoc khong|co khong|co phuc vu|ngay|hom nay|mai|thu|chu nhat|tai sao|vi sao|gi|sao|them|tiep|khac)\b'
+    if outside_definition(question) or not re.search(followup,normalize(question)):
+        return False
+    for turn in reversed((history or [])[-6:]):
+        if turn['role']=='user':
+            if library_subject(turn['content']):
+                return True
+            if not re.search(followup,normalize(turn['content'])):
+                break
+    return False
+
+
+def library_redirect(question):
+    if not outside_definition(question) and len(normalize(question).split())<=3:
+        return result('Bạn muốn tìm sách hoặc tài liệu về chủ đề này, hay cần hỗ trợ dịch vụ nào của thư viện? Hãy cho mình thêm tên tài liệu, tác giả hoặc nhu cầu tra cứu nhé.', 'clarify',suggestions=SUGGESTIONS)
+    return result('Mình là chatbot dành riêng cho thư viện UTH, hỗ trợ tìm tài liệu, tra cứu OPAC, mượn/gia hạn, giờ phục vụ và tài nguyên điện tử. Mình không trả lời kiến thức chung ngoài phạm vi này. Nếu bạn muốn tìm tài liệu về chủ đề đang hỏi, hãy cho mình tên sách hoặc chủ đề cần tra cứu.', 'not_found',suggestions=SUGGESTIONS)
+
+
 def answer_question(state, question, history=None):
+    if len(question)>MAX_MODEL_MESSAGE_CHARS:
+        return result('Mình đã nhận đầy đủ tin nhắn, nhưng nội dung vượt khả năng đọc trong một lượt của mô hình đang dùng. Bạn hãy chia thành các phần nhỏ hơn hoặc gửi riêng câu hỏi và đoạn cần hỗ trợ. Mình không âm thầm cắt nội dung để trả lời như đã đọc hết.', 'clarify')
     original_q=normalize(question)
     question=contextual_question(question,history)
+    if len(question)>MAX_MODEL_MESSAGE_CHARS:
+        return result('Ngữ cảnh tài liệu trước quá dài cho một lượt xử lý. Bạn hãy gửi lại tên/chủ đề sách ngắn gọn hoặc chia nội dung thành các phần; mình không âm thầm cắt ngữ cảnh để tìm kiếm.', 'clarify')
     q = normalize(question)
     if q==original_q and book_followup(original_q) and book_attribute(original_q):
         return result('Bạn đang hỏi về tài liệu nào? Vui lòng cung cấp nhan đề hoặc tìm sách trước để mình đối chiếu đúng biểu ghi.', 'clarify',suggestions=['Tìm sách Olympic cơ học'])
     if 'muon sach' in q and re.search(r'\b(bao gio|khi nao)\b.*\btra\b',q):
         question='Thời hạn mượn sách'
         q=normalize(question)
-    if q in ('xin chao','chao','hello','hi'):
+    if re.fullmatch(r'(xin chao|chao|hello|hi|alo)( ban| thu vien| tro ly)?',q):
         return result('Chào bạn! Mình có thể hỗ trợ tra cứu OPAC, hướng dẫn tài nguyên điện tử và thông tin dịch vụ thư viện.',suggestions=SUGGESTIONS)
+    if q in ('cam on','cam on ban','thank you','thanks','ok'):
+        return result('Rất vui được hỗ trợ bạn. Khi cần tìm tài liệu hoặc hỏi về dịch vụ thư viện, bạn cứ nhắn mình nhé.',suggestions=SUGGESTIONS)
     if is_book_request(question):
         if re.search(r'\b(khong phai|ngoai tru|loai tru|mo cua|gio phuc vu|gia han|phi|phat|qua han|han tra)\b',q):
             return result('Câu hỏi có điều kiện loại trừ hoặc nhiều yêu cầu khác nhau. Bạn vui lòng hỏi riêng tên/chủ đề sách cần tìm, sau đó hỏi về dịch vụ để mình đối chiếu đúng từng nguồn.', 'clarify',suggestions=SUGGESTIONS)
@@ -76,8 +111,14 @@ def answer_question(state, question, history=None):
             notes = ' '.join(r['note'] for r in rows if r['note'])
             return result(f"Lịch đã xác nhận cho cơ sở {branch} ngày {now:%d/%m/%Y}: {windows}. {notes}".strip(),
                           sources=[{'title':r['source_title'],'url':r['source_url'],'checked_at':r['checked_at']} for r in rows])
+    if outside_definition(question):
+        return library_redirect(question)
     rows = published_rows(state.db)
     ranked = keyword_search(question, rows)
+    if not ranked and not library_question(question,history):
+        return library_redirect(question)
+    if not ranked and not library_subject(question):
+        return result('Bạn đang hỏi tiếp về dịch vụ thư viện nào, ở cơ sở và ngày nào? Mình cần thông tin cụ thể để đối chiếu nguồn, chưa thể xác nhận từ câu hỏi ngắn này.', 'clarify',suggestions=SUGGESTIONS)
     semantic = False
     if not ranked and os.getenv('ENABLE_VECTORS','true').lower()=='true' and not state.settings.testing:
         try:

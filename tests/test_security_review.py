@@ -154,7 +154,7 @@ def test_chunked_body_limit_counts_bytes_without_content_length(tmp_path):
     async def send(message):
         sent.append(message)
     gate = RequestGate(downstream, Settings(tmp_path, testing=True))
-    scope = {'type': 'http', 'method': 'POST', 'path': '/api/chat', 'headers': [(b'x-requested-with', b'LibraryAssistant')]}
+    scope = {'type': 'http', 'method': 'POST', 'path': '/api/probe', 'headers': [(b'x-requested-with', b'LibraryAssistant')]}
     asyncio.run(gate(scope, receive, send))
     assert sent[0]['status'] == 413
     assert not reached_app

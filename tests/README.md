@@ -14,6 +14,8 @@ backend/.venv/Scripts/python.exe scripts/evaluate.py --base-url http://127.0.0.1
 
 Lệnh đầu dùng database tạm, tắt LLM/vector; live chỉ nhận API loopback có provider none/ollama để tránh phí. Đúng status/source hoặc source_ids không chứng minh mọi nội dung LLM luôn đúng. Xem docs/validation.md cho kết quả và giới hạn đã đo.
 
+`evaluation/library-conversation.json` bổ sung10 case về chào/cảm ơn, câu ngắn, điều hướng ngoài phạm vi, tin nhắn dài và kế thừa ngữ cảnh. Chạy bằng `scripts/evaluate.py --cases tests/evaluation/library-conversation.json --output tmp/library-conversation.json` (thêm base-url để kiểm API live). Không có corpus hội thoại kiến thức chung; các test mở rộng đó đã được thay thế theo chỉ đạo chỉ hỗ trợ thư viện. `test_llm_capacity.py` kiểm tra prompt toàn văn, Unicode/history budget, capacity và provider guards bằng mock; không tự gọi API tính phí.
+
 ## CI và chạy lại tại máy
 
 Workflow `.github/workflows/verify.yml` chạy khi push, pull request hoặc chạy thủ công. Hai job độc lập dùng Ubuntu, Python 3.11 và Node 22; token chỉ có `contents: read`, checkout không lưu credential. CI không deploy/publish và không cần secret, tài khoản thư viện, Ollama hay Qdrant đang chạy. Cài dependency vẫn cần truy cập registry; kiểm thử tích hợp dùng mock, không gọi hệ thống thư viện hoặc nhà cung cấp AI thật.
