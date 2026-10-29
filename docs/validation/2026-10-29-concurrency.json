@@ -1,0 +1,126 @@
+{
+  "scope": "local FAQ only; 10 concurrent workers, 20 guest requests; no LLM or external provider throughput measured",
+  "wall_ms": 510.45,
+  "results": [
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 410.84,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 400.05,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 401.96,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 409.03,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 408.68,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 398.67,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 408.84,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 404.69,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 404.16,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 390.2,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 50.26,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 103.4,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 105.25,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 94.35,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 97.06,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 101.31,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 98.19,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 97.59,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 97.74,
+      "ok": true
+    },
+    {
+      "http": 200,
+      "mode": "faq",
+      "elapsed_ms": 97.43,
+      "ok": true
+    }
+  ]
+}

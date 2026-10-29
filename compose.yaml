@@ -1,0 +1,72 @@
+name: d7-library
+services:
+  app:
+    image: ${D7_IMAGE:-d7-library:local}
+    build: .
+    restart: unless-stopped
+    env_file: backend/.env
+    environment:
+      DATA_DIR: /var/lib/d7
+      COOKIE_SECURE: "true"
+      ALLOWED_ORIGINS: https://${SITE_DOMAIN:?Set SITE_DOMAIN in backend/.env}
+      OLLAMA_URL: http://ollama:11434
+    command: ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "--proxy-headers", "--forwarded-allow-ips", "172.30.47.2", "--no-access-log"]
+    volumes:
+      - runtime:/var/lib/d7
+    networks:
+      proxy:
+      model:
+    depends_on:
+      - ollama
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=5).close()"]
+      interval: 30s
+      timeout: 10s
+      start_period: 20s
+      retries: 3
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    logging:
+      options: {max-size: "10m", max-file: "3"}
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:?Set SITE_DOMAIN in backend/.env}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      proxy:
+        ipv4_address: 172.30.47.2
+    depends_on:
+      app:
+        condition: service_healthy
+    logging:
+      options: {max-size: "10m", max-file: "3"}
+  ollama:
+    image: ollama/ollama:0.40.2
+    restart: unless-stopped
+    volumes:
+      - ollama:/root/.ollama
+    networks:
+      - model
+    logging:
+      options: {max-size: "10m", max-file: "3"}
+volumes:
+  runtime:
+  ollama:
+  caddy_data:
+  caddy_config:
+networks:
+  proxy:
+    ipam:
+      config:
+        - subnet: 172.30.47.0/29
+  model:

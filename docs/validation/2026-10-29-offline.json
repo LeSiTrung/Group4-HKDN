@@ -1,0 +1,681 @@
+{
+  "recorded_at": "2026-10-29T02:47:20.991585+00:00",
+  "kind": "development regression; not held-out or library-validated",
+  "execution": "isolated deterministic TestClient; vectors/LLM disabled",
+  "capabilities": {
+    "accounts": true,
+    "history": true,
+    "admin": true,
+    "crawler": true,
+    "vectors": {
+      "configured": false,
+      "ready": false,
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "error": null
+    },
+    "llm_provider": "none",
+    "library_configured": false,
+    "messenger_configured": false,
+    "zalo_configured": false
+  },
+  "passed": 27,
+  "total": 27,
+  "results": [
+    {
+      "id": "hello",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 5.96,
+      "response": {
+        "answer": "Chào bạn! Mình có thể hỗ trợ tra cứu OPAC, hướng dẫn tài nguyên điện tử và thông tin dịch vụ thư viện.",
+        "status": "answered",
+        "sources": [],
+        "suggestions": [
+          "Hướng dẫn tra cứu OPAC",
+          "Thư viện mở cửa lúc mấy giờ hôm nay?",
+          "Tôi muốn gia hạn sách"
+        ],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "opac-unaccented",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 16.4,
+      "response": {
+        "answer": "Mở OPAC của Thư viện UTH. Nhập tên tài liệu hoặc từ khóa vào ô tìm kiếm, chọn loại tài liệu phù hợp rồi nhấn kính lúp hoặc Enter. Chọn nhan đề trong kết quả để xem thông tin chi tiết. Có thể dùng Tìm kiếm nâng cao khi cần kết hợp nhiều điều kiện.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=3",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "paper",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 12.45,
+      "response": {
+        "answer": "Trong bộ chọn cạnh ô tìm kiếm, chọn Sách truyền thống, nhập từ khóa rồi tìm kiếm. Mở nhan đề để xem phần thông tin xếp giá. Không dùng số kết quả minh họa trong tài liệu hướng dẫn làm số lượng hiện tại.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=4",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "author-field",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 11.82,
+      "response": {
+        "answer": "OPAC có menu Nhan đề, Tác giả, Năm xuất bản, Nhà xuất bản và Từ khóa. Chọn trường phù hợp rồi nhập nội dung cần tìm. Tìm theo tác giả giúp phân biệt với tìm toàn bộ, nơi từ khóa có thể xuất hiện ở nhiều trường.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=6",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "advanced",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 12.36,
+      "response": {
+        "answer": "Mở Tìm kiếm nâng cao trên OPAC. Chọn trường cho mỗi điều kiện và cách khớp như Chứa hoặc Chính xác. AND yêu cầu đồng thời các điều kiện; OR chọn kết quả thỏa ít nhất một điều kiện; NOT loại điều kiện. Thêm giới hạn để chọn khoảng năm hoặc loại tài liệu. Hãy kiểm tra lại kết quả sau khi áp dụng bộ lọc.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://opacthuvien.ut.edu.vn/opac/OSearchAdvanced.aspx",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "ebook",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 12.34,
+      "response": {
+        "answer": "Chọn Tài liệu số (Toàn văn) trên OPAC để tìm nhóm tài liệu điện tử. Mở bản ghi để xem thông tin và lựa chọn truy cập. Việc có bản ghi hoặc nút tải không có nghĩa tài khoản của bạn được quyền tải mọi tài liệu; hãy làm theo điều kiện truy cập của từng nguồn.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://opacthuvien.ut.edu.vn/opac/",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "loans",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 12.45,
+      "response": {
+        "answer": "Trên OPAC, chọn Đăng nhập và dùng thông tin tài khoản được thư viện cấp. Mở Trang cá nhân để xem ấn phẩm đang mượn và các thông tin hạn trả. Không nhập mật khẩu thư viện vào ô chat. Nếu không truy cập được, liên hệ thư viện để kiểm tra tài khoản.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=12",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "password",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 12.2,
+      "response": {
+        "answer": "Dùng thông tin tài khoản được thư viện cấp và liên hệ thư viện nếu quên hoặc không đăng nhập được. Mô tả mật khẩu ban đầu trong PDF cũ chưa được xác nhận là chính sách hiện hành. Chatbot không biết, không thử và không yêu cầu mật khẩu OPAC của bạn.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/ho-tro-nhanh/",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "fees",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 8.94,
+      "response": {
+        "answer": "Mình chưa có thông tin hiện hành đã được thư viện xác nhận cho nội dung này. Vui lòng xác nhận với thư viện trước khi áp dụng lịch, phí hoặc thời hạn; mình không tự suy ra từ tài liệu cũ.",
+        "status": "needs_confirmation",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://lic.ut.edu.vn/noi-quy-thu-vien/",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "loan-term",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 8.73,
+      "response": {
+        "answer": "Mình chưa có thông tin hiện hành đã được thư viện xác nhận cho nội dung này. Vui lòng xác nhận với thư viện trước khi áp dụng lịch, phí hoặc thời hạn; mình không tự suy ra từ tài liệu cũ.",
+        "status": "needs_confirmation",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://lic.ut.edu.vn/quy-dinh-muon-tra-tai-lieu/",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "hours-branch",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 11.48,
+      "response": {
+        "answer": "Mình chưa có thông tin hiện hành đã được thư viện xác nhận cho nội dung này. Vui lòng xác nhận với thư viện trước khi áp dụng lịch, phí hoặc thời hạn; mình không tự suy ra từ tài liệu cũ.",
+        "status": "needs_confirmation",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://lic.ut.edu.vn/thong-bao-ve-viec-mo-cua-phuc-vu-ban-doc-ngoai-gio/",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "hours-missing-branch",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 3.13,
+      "response": {
+        "answer": "Bạn muốn xem giờ phục vụ tại cơ sở nào? Vui lòng hỏi kèm cơ sở và ngày cần tra cứu.",
+        "status": "clarify",
+        "sources": [],
+        "suggestions": [
+          "Giờ mở cửa hôm nay cơ sở 1",
+          "Giờ mở cửa hôm nay cơ sở 2",
+          "Giờ mở cửa hôm nay cơ sở 3"
+        ],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "opac-empty",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 11.61,
+      "response": {
+        "answer": "Thử từ khóa ngắn hơn, kiểm tra lỗi gõ, đổi loại tài liệu về Toàn bộ hoặc chọn đúng trường nhan đề/tác giả. Không có kết quả cho một cách hỏi chưa chứng minh thư viện không có tài liệu đó. Nếu vẫn không tìm được, liên hệ thư viện để được trợ giúp.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://opacthuvien.ut.edu.vn/opac/",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "shelf-guidance",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 11.85,
+      "response": {
+        "answer": "Mở nhan đề trên OPAC và xem Thông tin xếp giá: số bản tài liệu rỗi, số bản được giữ chỗ và ký hiệu đăng ký cá biệt. Trạng thái thay đổi theo giao dịch, nên xem trực tiếp tại thời điểm cần mượn. Chatbot không dùng con số của một bản ghi minh họa để khẳng định sách khác đang còn.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://opacthuvien.ut.edu.vn/opac/",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "reserve-vs-renew",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 11.73,
+      "response": {
+        "answer": "Đặt chỗ/Đăng ký mượn là yêu cầu mượn tài liệu; gia hạn là kéo dài hạn trả của tài liệu đang mượn. PDF OPAC hướng dẫn đặt chỗ: đăng nhập bằng tài khoản được cấp, tìm và mở tài liệu, chọn Đăng ký mượn, sau đó kiểm tra ấn phẩm đặt mượn trong Trang cá nhân. PDF này không cung cấp quy trình gia hạn. Hãy xác nhận điều kiện đặt chỗ hiện hành với thư viện.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=7",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "resources",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 11.64,
+      "response": {
+        "answer": "LIC giới thiệu các nguồn OPAC, ebook UT–XD, ProQuest và STINET cùng các hướng dẫn sử dụng. Mỗi nguồn có điều kiện truy cập riêng; hãy mở hướng dẫn tương ứng từ trang tài nguyên của LIC. Chưa xác nhận tài khoản/quyền truy cập hiện hành của bạn, nên không thể bảo đảm mọi tài liệu đều tải được.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://lic.ut.edu.vn/thong-tin-cac-tai-lieu-co-ban-quyen-da-duoc-xay-dung-va-trien-khai-tren-cac-he-thong-cua-nha-truong/",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "digital-library",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 12.11,
+      "response": {
+        "answer": "Mở https://thuvienso.ut.edu.vn/home, nhập từ khóa vào ô tìm kiếm hoặc chọn bộ sưu tập phù hợp như giáo trình, khóa luận, luận văn. Tra cứu được bản ghi công khai không đồng nghĩa có quyền truy cập toàn văn; hãy làm theo điều kiện đăng nhập và sử dụng của hệ thống.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://thuvienso.ut.edu.vn/home",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "renewal",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 12.79,
+      "response": {
+        "answer": "Mình chưa có quy trình gia hạn hiện hành được xác nhận hoặc kết nối giao dịch do thư viện cấp. Hãy kiểm tra ấn phẩm đang mượn trong OPAC và liên hệ thư viện để xác nhận điều kiện, số lần và kênh gia hạn. Chưa có giao dịch nào được thực hiện từ câu hỏi này.",
+        "status": "needs_confirmation",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/ho-tro-nhanh/",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "outside",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 9.42,
+      "response": {
+        "answer": "Mình chưa tìm được thông tin đủ căn cứ cho câu hỏi này. Bạn có thể hỏi rõ tên dịch vụ, cơ sở hoặc cách tra cứu cần hỗ trợ.",
+        "status": "not_found",
+        "sources": [],
+        "suggestions": [
+          "Hướng dẫn tra cứu OPAC",
+          "Thư viện mở cửa lúc mấy giờ hôm nay?",
+          "Tôi muốn gia hạn sách"
+        ],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "injection",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 10.28,
+      "response": {
+        "answer": "Mình chưa tìm được thông tin đủ căn cứ cho câu hỏi này. Bạn có thể hỏi rõ tên dịch vụ, cơ sở hoặc cách tra cứu cần hỗ trợ.",
+        "status": "not_found",
+        "sources": [],
+        "suggestions": [
+          "Hướng dẫn tra cứu OPAC",
+          "Thư viện mở cửa lúc mấy giờ hôm nay?",
+          "Tôi muốn gia hạn sách"
+        ],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "catalog",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 8.76,
+      "response": {
+        "answer": "Mình tìm được 1 biểu ghi phù hợp trong danh mục đã rà soát. Xem tên sách, nguồn và ngày kiểm tra bên dưới. Đây là bản chụp metadata; để biết còn sách hoặc hạn mượn, hãy kiểm tra trực tiếp OPAC.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "10 năm Olympic cơ học toàn quốc 1989 - 1998",
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": [
+          {
+            "id": 1,
+            "title": "10 năm Olympic cơ học toàn quốc 1989 - 1998",
+            "author": "GS. TS. Đào Huy Bích (Chủ biên)",
+            "year": "1998",
+            "kind": "books",
+            "subjects": "Cơ học; kỹ thuật tàu thủy; Olympic cơ học",
+            "description": "Giới thiệu các kỳ thi Olympic cơ học từ 1989 - 1998. Metadata được đọc trực tiếp từ bản ghi OPAC ngày 28/10/2026; đây là bản chụp thông tin thư mục, không phải trạng thái còn sách hiện tại.",
+            "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967",
+            "checked_at": "2026-10-28",
+            "published": true,
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          }
+        ]
+      }
+    },
+    {
+      "id": "catalog-typo",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 7.38,
+      "response": {
+        "answer": "Mình tìm được 1 biểu ghi phù hợp trong danh mục đã rà soát. Xem tên sách, nguồn và ngày kiểm tra bên dưới. Đây là bản chụp metadata; để biết còn sách hoặc hạn mượn, hãy kiểm tra trực tiếp OPAC.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "10 năm Olympic cơ học toàn quốc 1989 - 1998",
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": [
+          {
+            "id": 1,
+            "title": "10 năm Olympic cơ học toàn quốc 1989 - 1998",
+            "author": "GS. TS. Đào Huy Bích (Chủ biên)",
+            "year": "1998",
+            "kind": "books",
+            "subjects": "Cơ học; kỹ thuật tàu thủy; Olympic cơ học",
+            "description": "Giới thiệu các kỳ thi Olympic cơ học từ 1989 - 1998. Metadata được đọc trực tiếp từ bản ghi OPAC ngày 28/10/2026; đây là bản chụp thông tin thư mục, không phải trạng thái còn sách hiện tại.",
+            "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967",
+            "checked_at": "2026-10-28",
+            "published": true,
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          }
+        ]
+      }
+    },
+    {
+      "id": "catalog-missing",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 8.22,
+      "response": {
+        "answer": "Chưa có biểu ghi phù hợp trong danh mục đã rà soát của chatbot. Điều này không chứng minh thư viện không có sách. Bạn có thể tìm tiếp trên OPAC hoặc nhập tên/tác giả cụ thể hơn.",
+        "status": "not_found",
+        "sources": [
+          {
+            "title": "Tìm trực tiếp trên OPAC",
+            "url": "https://opacthuvien.ut.edu.vn/opac/Oshow.aspx?rdSearchOption=0&txtSearch=zzzkhongcobanghi123",
+            "checked_at": null
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "author-followup",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 7.75,
+      "response": {
+        "answer": "Theo biểu ghi nguồn, tác giả của “10 năm Olympic cơ học toàn quốc 1989 - 1998” là GS. TS. Đào Huy Bích (Chủ biên).",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "10 năm Olympic cơ học toàn quốc 1989 - 1998",
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": [
+          {
+            "id": 1,
+            "title": "10 năm Olympic cơ học toàn quốc 1989 - 1998",
+            "author": "GS. TS. Đào Huy Bích (Chủ biên)",
+            "year": "1998",
+            "kind": "books",
+            "subjects": "Cơ học; kỹ thuật tàu thủy; Olympic cơ học",
+            "description": "Giới thiệu các kỳ thi Olympic cơ học từ 1989 - 1998. Metadata được đọc trực tiếp từ bản ghi OPAC ngày 28/10/2026; đây là bản chụp thông tin thư mục, không phải trạng thái còn sách hiện tại.",
+            "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967",
+            "checked_at": "2026-10-28",
+            "published": true,
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          }
+        ]
+      }
+    },
+    {
+      "id": "year-followup",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 7.4,
+      "response": {
+        "answer": "Biểu ghi “10 năm Olympic cơ học toàn quốc 1989 - 1998” ghi năm xuất bản 1998.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "10 năm Olympic cơ học toàn quốc 1989 - 1998",
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": [
+          {
+            "id": 1,
+            "title": "10 năm Olympic cơ học toàn quốc 1989 - 1998",
+            "author": "GS. TS. Đào Huy Bích (Chủ biên)",
+            "year": "1998",
+            "kind": "books",
+            "subjects": "Cơ học; kỹ thuật tàu thủy; Olympic cơ học",
+            "description": "Giới thiệu các kỳ thi Olympic cơ học từ 1989 - 1998. Metadata được đọc trực tiếp từ bản ghi OPAC ngày 28/10/2026; đây là bản chụp thông tin thư mục, không phải trạng thái còn sách hiện tại.",
+            "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967",
+            "checked_at": "2026-10-28",
+            "published": true,
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          }
+        ]
+      }
+    },
+    {
+      "id": "availability-followup",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 6.83,
+      "response": {
+        "answer": "Metadata đang có không xác nhận tình trạng còn bản sách theo thời gian thực. Hãy mở biểu ghi OPAC gốc bên dưới hoặc hỏi thư viện trước khi đến mượn.",
+        "status": "needs_confirmation",
+        "sources": [
+          {
+            "title": "10 năm Olympic cơ học toàn quốc 1989 - 1998",
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": [
+          {
+            "id": 1,
+            "title": "10 năm Olympic cơ học toàn quốc 1989 - 1998",
+            "author": "GS. TS. Đào Huy Bích (Chủ biên)",
+            "year": "1998",
+            "kind": "books",
+            "subjects": "Cơ học; kỹ thuật tàu thủy; Olympic cơ học",
+            "description": "Giới thiệu các kỳ thi Olympic cơ học từ 1989 - 1998. Metadata được đọc trực tiếp từ bản ghi OPAC ngày 28/10/2026; đây là bản chụp thông tin thư mục, không phải trạng thái còn sách hiện tại.",
+            "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967",
+            "checked_at": "2026-10-28",
+            "published": true,
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          }
+        ]
+      }
+    },
+    {
+      "id": "branch-followup",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 11.48,
+      "response": {
+        "answer": "Mình chưa có thông tin hiện hành đã được thư viện xác nhận cho nội dung này. Vui lòng xác nhận với thư viện trước khi áp dụng lịch, phí hoặc thời hạn; mình không tự suy ra từ tài liệu cũ.",
+        "status": "needs_confirmation",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://lic.ut.edu.vn/thong-bao-ve-viec-mo-cua-phuc-vu-ban-doc-ngoai-gio/",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    }
+  ]
+}

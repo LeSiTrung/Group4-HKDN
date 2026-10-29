@@ -1,72 +1,70 @@
-# D7 - Chatbot Thư viện UTH
+# D7 — Trợ lý Thư viện UTH
 
-Bộ khung ban đầu cho đề tài D7 – Chatbot thư viện. Đây là scaffold để nhóm phát triển tiếp, chưa phải sản phẩm hoàn chỉnh.
+Ứng dụng React + FastAPI có hỏi đáp kèm nguồn, truy xuất ngữ nghĩa tiếng Việt, danh mục sách có nguồn và ngày đối chiếu, tài khoản/lịch sử riêng, quản trị nội dung và lịch phục vụ, thu thập trang thành bản nháp, tra cứu OPAC và các bộ kết nối thư viện/Messenger/Zalo. SQLite lưu dữ liệu nghiệp vụ; FastEmbed + Qdrant lưu chỉ mục có thể tạo lại. Ollama chạy LLM cục bộ; có thể cấu hình nhà cung cấp tương thích OpenAI khi được phép.
 
-## Công nghệ dự kiến
-- Frontend: React + HTML + CSS
-- Backend: Python + FastAPI
-- AI: tích hợp LLM qua API ở giai đoạn tiếp theo
-- Dữ liệu: PostgreSQL/pgvector có thể bổ sung sau
+Không có tài khoản quản trị mặc định. Giờ mở cửa, phí và quy định chưa được thư viện xác nhận vẫn hiển thị giới hạn. Bộ kết nối đã có không đồng nghĩa dịch vụ bên ngoài đã nghiệm thu. Xem [kết quả kiểm chứng](docs/validation.md) và [các giới hạn tích hợp](docs/integrations.md).
 
-## Chạy backend
-1. Cài Python 3.10+.
-2. Mở terminal tại thư mục `backend`.
-3. Tạo môi trường ảo:
-   ```bash
-   python -m venv .venv
-   ```
-4. Kích hoạt trên Windows:
-   ```powershell
-   .\.venv\Scripts\Activate.ps1
-   ```
-5. Cài thư viện:
-   ```bash
-   pip install -r requirements.txt
-   ```
-6. Chạy API:
-   ```bash
-   uvicorn app.main:app --reload
-   ```
-7. Mở http://127.0.0.1:8000/docs để xem API.
+Bạn đọc tìm sách theo nhan đề, tác giả, chủ đề hoặc mô tả; xem chi tiết, nguồn gốc và tài liệu liên quan. Chat hỗ trợ một số câu hỏi tiếp nối về sách/cơ sở; khách gửi tối đa sáu lượt ngữ cảnh từ bộ nhớ giao diện, tài khoản dùng lịch sử riêng trên server. Quản trị có CRUD/nhập JSON danh mục và đối soát yêu cầu gia hạn chưa rõ kết quả. Danh mục là bản chụp metadata, không chứa số bản rỗi, vị trí kệ hoặc trạng thái mượn trực tiếp; ứng dụng chưa thay thế phần mềm quản lý lưu thông của thư viện.
 
-## Chạy frontend
-Cần cài Node.js LTS trước. Mở terminal tại `frontend` rồi chạy:
-```bash
-npm install
-npm run dev
-```
-Vite sẽ in địa chỉ website ra terminal.
+## Chạy trên Windows
 
-## Cấu trúc
-- `frontend/`: giao diện chat React.
-- `backend/`: API FastAPI.
-- `data/`: dữ liệu mẫu/ tài liệu thư viện (chỉ dùng tài liệu được phép).
-- `docs/`: tài liệu yêu cầu và thiết kế.
-- `tests/`: nơi đặt kiểm thử.
-
-## Tài liệu Học kỳ doanh nghiệp
-
-- [Kế hoạch thực hiện đề tài](docs/ke-hoach-d7-chatbot-thu-vien.md): phạm vi, lịch đến 28/12/2026 và tiêu chí đánh giá.
-- [Nguồn báo cáo LaTeX](docs/bao-cao-hkdn/main.tex): hiện có Chương 1, danh sách nhóm và tài liệu tham khảo.
-- [Bản PDF bàn giao](output/pdf/chuong-1-gioi-thieu-don-vi.pdf).
-
-Tài liệu báo cáo được soạn bằng LaTeX. Cần XeLaTeX hoặc Tectonic và phông Times New Roman. Từ thư mục `docs/bao-cao-hkdn`, chạy:
+Cần Python 3.11, Node.js 22 và npm. Các lệnh dưới đây chạy từ repository; chỉ cài thư viện Python vào môi trường của dự án.
 
 ```powershell
-tectonic main.tex
+py -3.11 -m venv backend/.venv
+backend/.venv/Scripts/python.exe -m pip install -r backend/requirements-dev.txt
+if (-not (Test-Path -LiteralPath backend/.env)) { Copy-Item backend/.env.example backend/.env }
+Push-Location frontend
+npm ci
+npm run build
+Pop-Location
+./run.ps1 -Check
+./run.ps1
 ```
 
-Nếu dùng XeLaTeX, chạy hai lần để cập nhật mục lục và trích dẫn:
+Không ghi đè `backend/.env` nếu đã cấu hình. Nếu môi trường ảo được tạo bằng uv không có pip, dùng `uv pip install --python backend/.venv/Scripts/python.exe -r backend/requirements-dev.txt`.
+
+Mở [ứng dụng cục bộ](http://127.0.0.1:8000), [API](http://127.0.0.1:8000/docs) hoặc [health](http://127.0.0.1:8000/health). `run.ps1` kiểm tra dependency/build và chạy một tiến trình trên loopback; dừng bằng Ctrl+C. Dữ liệu giữ trong `backend/runtime`. Khi phát triển giao diện, chạy thêm `npm run dev` tại `frontend`; Vite chuyển `/api` và `/health` về cổng 8000.
+
+Tạo quản trị viên bằng mật khẩu nhập kín (ít nhất 12 ký tự):
 
 ```powershell
-xelatex -interaction=nonstopmode -halt-on-error main.tex
-xelatex -interaction=nonstopmode -halt-on-error main.tex
+Push-Location backend
+./.venv/Scripts/python.exe -m app.cli create-admin --email admin@example.org --name "Quản trị viên"
+Pop-Location
 ```
 
-Sau khi kiểm tra bố cục, cập nhật PDF trong `output/pdf/` từ bản `main.pdf` vừa biên dịch. Tệp build và ảnh kiểm tra tạm không đưa vào Git.
+Thay email bằng email của nhóm. Lệnh không nâng quyền hay đổi mật khẩu tài khoản đã tồn tại.
 
-Hình thức tham khảo mẫu TTTN do LIC công bố năm 2022; bố cục nội dung theo hướng dẫn HKDN nhóm được cung cấp. Lớp của các thành viên và các thông tin chưa xác nhận cần được hoàn thiện trước khi nộp. Ghi chú nguồn và biên tập nằm trong `docs/bao-cao-hkdn/ghi-chu-bien-tap.tex`, không đưa vào bản PDF nộp.
+## Chuẩn bị AI cục bộ
 
-## Lưu ý
-- Không đưa API key, mật khẩu hoặc dữ liệu cá nhân lên GitHub.
-- Chưa tích hợp API AI, đăng nhập thư viện hoặc gia hạn sách thật.
+Sau khi cài Ollama trên máy của nhóm, mở dịch vụ bằng `ollama serve` nếu chưa chạy, rồi tải mô hình bằng lệnh chủ động:
+
+```powershell
+ollama pull qwen3:4b
+ollama list
+# Dừng API trước khi CLI truy cập Qdrant local.
+Push-Location backend
+./.venv/Scripts/python.exe -m app.cli index
+Pop-Location
+```
+
+Lần index đầu tải mô hình embedding `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` vào `backend/runtime/models`; cần mạng và dung lượng đĩa. CLI index tạo chỉ mục FAQ; chỉ mục sách được tạo khi tìm ngữ nghĩa lần đầu. Không chạy CLI index cùng API đang giữ Qdrant local: dùng nút tạo lại chỉ mục trong quản trị khi API đang chạy. `.env.example` dùng Ollama CPU (`LLM_NUM_GPU=0`) và timeout 60 giây, thấp hơn giới hạn chờ 90 giây của frontend. Chưa có mô hình/dịch vụ thì ứng dụng trả FAQ hoặc thông báo giới hạn; `/health` không chứng minh LLM đã sinh câu trả lời thành công. Muốn chạy chỉ FAQ và tìm metadata bằng từ khóa, đặt `LLM_PROVIDER=none`, `ENABLE_VECTORS=false`.
+
+## Linux và HTTPS
+
+Nhóm tự chuẩn bị máy chủ, DNS và TLS. [Hướng dẫn vận hành](docs/operations.md) có lệnh Linux, Docker Compose + Caddy, cấu hình origin/cookie, backup/restore và rollback. Không tự triển khai công khai hoặc gọi API tính phí trong quá trình phát triển.
+
+## Kiểm thử
+
+```powershell
+backend/.venv/Scripts/python.exe -m pytest -q
+backend/.venv/Scripts/python.exe scripts/restore.py --self-test
+Push-Location frontend
+npm test
+npm run build
+Pop-Location
+./run.ps1 -Check
+```
+
+[Yêu cầu và giới hạn](docs/requirements.md), [thiết kế API](docs/api-design.md), [schema dữ liệu](docs/database-design.md), [vận hành](docs/operations.md), [kiểm chứng](docs/validation.md) và [hợp đồng tích hợp](docs/integrations.md) là tài liệu kỹ thuật. Tài liệu học kỳ đã có trong `docs/` được giữ nguyên; phạm vi phát triển hiện tại tập trung vào phần mềm. Kết quả test cục bộ không thay thế nghiệm thu thư viện, giao dịch thật, kênh nhắn tin hoặc triển khai HTTPS trên máy chủ đích.
