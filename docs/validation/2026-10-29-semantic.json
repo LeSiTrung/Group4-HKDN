@@ -1,0 +1,67 @@
+{
+  "recorded_at": "2026-10-29T02:45:14.220419+00:00",
+  "kind": "development regression; not held-out or library-validated",
+  "execution": "http://127.0.0.1:8000",
+  "capabilities": {
+    "accounts": true,
+    "history": true,
+    "admin": true,
+    "crawler": true,
+    "vectors": {
+      "configured": true,
+      "ready": true,
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "error": null
+    },
+    "llm_provider": "ollama",
+    "library_configured": false,
+    "messenger_configured": false,
+    "zalo_configured": false
+  },
+  "passed": 2,
+  "total": 2,
+  "results": [
+    {
+      "id": "semantic-author",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 2065.94,
+      "response": {
+        "answer": "OPAC có menu Nhan đề, Tác giả, Năm xuất bản, Nhà xuất bản và Từ khóa. Chọn trường phù hợp rồi nhập nội dung cần tìm. Tìm theo tác giả giúp phân biệt với tìm toàn bộ, nơi từ khóa có thể xuất hiện ở nhiều trường.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=6",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "fallback",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "semantic-outside",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 16.11,
+      "response": {
+        "answer": "Mình chưa tìm được thông tin đủ căn cứ cho câu hỏi này. Bạn có thể hỏi rõ tên dịch vụ, cơ sở hoặc cách tra cứu cần hỗ trợ.",
+        "status": "not_found",
+        "sources": [],
+        "suggestions": [
+          "Hướng dẫn tra cứu OPAC",
+          "Thư viện mở cửa lúc mấy giờ hôm nay?",
+          "Tôi muốn gia hạn sách"
+        ],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    }
+  ]
+}

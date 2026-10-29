@@ -1,0 +1,225 @@
+{
+  "recorded_at": "2026-10-29T08:33:44.913767+00:00",
+  "kind": "development regression; not held-out or library-validated",
+  "execution": "isolated deterministic TestClient; vectors/LLM disabled",
+  "capabilities": {
+    "accounts": true,
+    "history": true,
+    "admin": true,
+    "crawler": true,
+    "vectors": {
+      "configured": false,
+      "ready": false,
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "error": null
+    },
+    "llm_provider": "none",
+    "library_configured": false,
+    "messenger_configured": false,
+    "zalo_configured": false
+  },
+  "passed": 10,
+  "total": 10,
+  "results": [
+    {
+      "id": "greeting",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 7.38,
+      "response": {
+        "answer": "Chào bạn! Mình có thể hỗ trợ tra cứu OPAC, hướng dẫn tài nguyên điện tử và thông tin dịch vụ thư viện.",
+        "status": "answered",
+        "sources": [],
+        "suggestions": [
+          "Hướng dẫn tra cứu OPAC",
+          "Thư viện mở cửa lúc mấy giờ hôm nay?",
+          "Tôi muốn gia hạn sách"
+        ],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "thanks",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 3.7,
+      "response": {
+        "answer": "Rất vui được hỗ trợ bạn. Khi cần tìm tài liệu hoặc hỏi về dịch vụ thư viện, bạn cứ nhắn mình nhé.",
+        "status": "answered",
+        "sources": [],
+        "suggestions": [
+          "Hướng dẫn tra cứu OPAC",
+          "Thư viện mở cửa lúc mấy giờ hôm nay?",
+          "Tôi muốn gia hạn sách"
+        ],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "topic-word",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 14.82,
+      "response": {
+        "answer": "Bạn muốn tìm sách hoặc tài liệu về chủ đề này, hay cần hỗ trợ dịch vụ nào của thư viện? Hãy cho mình thêm tên tài liệu, tác giả hoặc nhu cầu tra cứu nhé.",
+        "status": "clarify",
+        "sources": [],
+        "suggestions": [
+          "Hướng dẫn tra cứu OPAC",
+          "Thư viện mở cửa lúc mấy giờ hôm nay?",
+          "Tôi muốn gia hạn sách"
+        ],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "scope-email",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 3.68,
+      "response": {
+        "answer": "Mình là chatbot dành riêng cho thư viện UTH, hỗ trợ tìm tài liệu, tra cứu OPAC, mượn/gia hạn, giờ phục vụ và tài nguyên điện tử. Mình không trả lời kiến thức chung ngoài phạm vi này. Nếu bạn muốn tìm tài liệu về chủ đề đang hỏi, hãy cho mình tên sách hoặc chủ đề cần tra cứu.",
+        "status": "not_found",
+        "sources": [],
+        "suggestions": [
+          "Hướng dẫn tra cứu OPAC",
+          "Thư viện mở cửa lúc mấy giờ hôm nay?",
+          "Tôi muốn gia hạn sách"
+        ],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "scope-programming",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 9.48,
+      "response": {
+        "answer": "Mình là chatbot dành riêng cho thư viện UTH, hỗ trợ tìm tài liệu, tra cứu OPAC, mượn/gia hạn, giờ phục vụ và tài nguyên điện tử. Mình không trả lời kiến thức chung ngoài phạm vi này. Nếu bạn muốn tìm tài liệu về chủ đề đang hỏi, hãy cho mình tên sách hoặc chủ đề cần tra cứu.",
+        "status": "not_found",
+        "sources": [],
+        "suggestions": [
+          "Hướng dẫn tra cứu OPAC",
+          "Thư viện mở cửa lúc mấy giờ hôm nay?",
+          "Tôi muốn gia hạn sách"
+        ],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "long-library-question",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 39.43,
+      "response": {
+        "answer": "Mở OPAC của Thư viện UTH. Nhập tên tài liệu hoặc từ khóa vào ô tìm kiếm, chọn loại tài liệu phù hợp rồi nhấn kính lúp hoặc Enter. Chọn nhan đề trong kết quả để xem thông tin chi tiết. Có thể dùng Tìm kiếm nâng cao khi cần kết hợp nhiều điều kiện.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=3",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "unverified-fee",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 9.89,
+      "response": {
+        "answer": "Mình chưa có thông tin hiện hành đã được thư viện xác nhận cho nội dung này. Vui lòng xác nhận với thư viện trước khi áp dụng lịch, phí hoặc thời hạn; mình không tự suy ra từ tài liệu cũ.",
+        "status": "needs_confirmation",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://lic.ut.edu.vn/noi-quy-thu-vien/",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "hours-followup",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 9.35,
+      "response": {
+        "answer": "Bạn đang hỏi tiếp về dịch vụ thư viện nào, ở cơ sở và ngày nào? Mình cần thông tin cụ thể để đối chiếu nguồn, chưa thể xác nhận từ câu hỏi ngắn này.",
+        "status": "clarify",
+        "sources": [],
+        "suggestions": [
+          "Hướng dẫn tra cứu OPAC",
+          "Thư viện mở cửa lúc mấy giờ hôm nay?",
+          "Tôi muốn gia hạn sách"
+        ],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "multi-turn-day",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 9.17,
+      "response": {
+        "answer": "Bạn đang hỏi tiếp về dịch vụ thư viện nào, ở cơ sở và ngày nào? Mình cần thông tin cụ thể để đối chiếu nguồn, chưa thể xác nhận từ câu hỏi ngắn này.",
+        "status": "clarify",
+        "sources": [],
+        "suggestions": [
+          "Hướng dẫn tra cứu OPAC",
+          "Thư viện mở cửa lúc mấy giờ hôm nay?",
+          "Tôi muốn gia hạn sách"
+        ],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "oversize-context",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 3.68,
+      "response": {
+        "answer": "Mình đã nhận đầy đủ tin nhắn, nhưng nội dung vượt khả năng đọc trong một lượt của mô hình đang dùng. Bạn hãy chia thành các phần nhỏ hơn hoặc gửi riêng câu hỏi và đoạn cần hỗ trợ. Mình không âm thầm cắt nội dung để trả lời như đã đọc hết.",
+        "status": "clarify",
+        "sources": [],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    }
+  ]
+}

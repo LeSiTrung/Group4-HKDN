@@ -1,0 +1,53 @@
+name: Verify
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  LLM_PROVIDER: none
+  ENABLE_VECTORS: 'false'
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - name: Install backend dependencies in a virtual environment
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install -r backend/requirements-dev.txt
+      - name: Backend regression tests
+        run: .venv/bin/python -m pytest -q
+      - name: Restore self-test
+        run: .venv/bin/python scripts/restore.py --self-test
+      - name: Offline conversation evaluation
+        run: .venv/bin/python scripts/evaluate.py --output tmp/evaluation-offline.json
+
+  frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - run: npm ci
+      - run: npm test
+      - run: npm run build

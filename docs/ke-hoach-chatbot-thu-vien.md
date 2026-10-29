@@ -1,4 +1,4 @@
-# Kế hoạch D7 - Chatbot thư viện UTH
+# Kế hoạch Chatbot thư viện UTH
 
 Ngày khảo sát: 27/10/2026. Trạng thái: đề xuất để trao đổi với Mentor, chưa triển khai code, chưa được đơn vị nghiệm thu.
 
@@ -6,16 +6,16 @@ Ngày khảo sát: 27/10/2026. Trạng thái: đề xuất để trao đổi v�
 
 Hai tài liệu do sinh viên cung cấp:
 
-- **[T1] Đề tài tổng hợp LIC UTH**, `D:/Download/De tai tong hop LIC UTH.pdf`, 8 trang. D7 nằm ở trang PDF 7, số trang in 6. Mục 1.3 ở trang PDF 2 đề xuất nhóm 2-4 sinh viên, thời gian 12-15 tuần. Mục 5.2 ở trang PDF 8 yêu cầu mã nguồn, tài liệu kỹ thuật, hướng dẫn vận hành, báo cáo, demo; đề tài AI có thêm bảng đánh giá độ chính xác.
+- **[T1] Đề tài tổng hợp LIC UTH**, `D:/Download/De tai tong hop LIC UTH.pdf`, 8 trang. Chatbot thư viện nằm ở trang PDF 7, số trang in 6. Mục 1.3 ở trang PDF 2 đề xuất nhóm 2-4 sinh viên, thời gian 12-15 tuần. Mục 5.2 ở trang PDF 8 yêu cầu mã nguồn, tài liệu kỹ thuật, hướng dẫn vận hành, báo cáo, demo; đề tài AI có thêm bảng đánh giá độ chính xác.
 - **[T2] Hướng dẫn thực hiện HKDN**, `D:/Download/Huong dan thuc hien HKDN.pdf`, 6 trang. Trang 1-3 mô tả phân bổ và hướng dẫn; trang 4 quy định bảo mật, nội dung báo cáo tiến độ; trang 5-6 quy định đánh giá và báo cáo cuối kỳ 5 chương.
 
-Yêu cầu trực tiếp của người dùng trong lần làm việc này: đọc tài liệu, tìm hiểu D7, lập kế hoạch rõ ràng; **chưa viết code**. Các quy định trong PDF được dùng làm căn cứ lập kế hoạch học phần, không phải sự cho phép tự liên hệ Mentor, công bố dữ liệu, đăng ký tài khoản hay thao tác hệ thống trường.
+Yêu cầu trực tiếp của người dùng trong lần làm việc này: đọc tài liệu, tìm hiểu Chatbot thư viện, lập kế hoạch rõ ràng; **chưa viết code**. Các quy định trong PDF được dùng làm căn cứ lập kế hoạch học phần, không phải sự cho phép tự liên hệ Mentor, công bố dữ liệu, đăng ký tài khoản hay thao tác hệ thống trường.
 
-Nội dung D7 trong T1: **“Hỗ trợ tra cứu, giờ mở cửa, gia hạn tài liệu, hướng dẫn sử dụng cơ sở dữ liệu điện tử”**. Cột công nghệ gợi ý LLM và tích hợp Zalo/Messenger/web. Đây là công nghệ gợi ý; tài liệu không nói phải triển khai đồng thời ba kênh và không ấn định nhà cung cấp AI.
+Nội dung Chatbot thư viện trong T1: **“Hỗ trợ tra cứu, giờ mở cửa, gia hạn tài liệu, hướng dẫn sử dụng cơ sở dữ liệu điện tử”**. Cột công nghệ gợi ý LLM và tích hợp Zalo/Messenger/web. Đây là công nghệ gợi ý; tài liệu không nói phải triển khai đồng thời ba kênh và không ấn định nhà cung cấp AI.
 
 Tên làm việc đề xuất: **Xây dựng chatbot hỗ trợ dịch vụ thư viện UTH dựa trên nguồn thông tin chính thức**.
 
-Mục tiêu: người dùng hỏi bằng tiếng Việt, nhận câu trả lời đúng phạm vi, có dẫn nguồn, biết cách tìm tài liệu và sử dụng dịch vụ. D7 lấy hỗ trợ dịch vụ làm trọng tâm. Không chuyển phạm vi thành D1 (OPAC thông minh), D2 (gợi ý theo hồ sơ mượn), D4 (OCR) hoặc D5 (mượn trả tự phục vụ).
+Mục tiêu: người dùng hỏi bằng tiếng Việt, nhận câu trả lời đúng phạm vi, có dẫn nguồn, biết cách tìm tài liệu và sử dụng dịch vụ. Chatbot thư viện lấy hỗ trợ dịch vụ làm trọng tâm. Không chuyển phạm vi thành D1 (OPAC thông minh), D2 (gợi ý theo hồ sơ mượn), D4 (OCR) hoặc D5 (mượn trả tự phục vụ).
 
 ### Thông tin đã xác nhận và giả định để lập lịch
 
@@ -31,7 +31,7 @@ Mục tiêu: người dùng hỏi bằng tiếng Việt, nhận câu trả lời
 
 Nguồn công khai được tìm hiểu ngày 27/10/2026:
 
-| Nguồn | Điều đã quan sát | Ý nghĩa với D7 |
+| Nguồn | Điều đã quan sát | Ý nghĩa với Chatbot thư viện |
 | --- | --- | --- |
 | [W1 - Trang chủ LIC](https://lic.ut.edu.vn/) | Có các liên kết tài nguyên và thông tin thư viện ba cơ sở | Cần phân biệt cơ sở khi trả lời địa điểm, giờ phục vụ |
 | [W2 - Thông tin tài liệu có bản quyền](https://lic.ut.edu.vn/thong-tin-cac-tai-lieu-co-ban-quyen-da-duoc-xay-dung-va-trien-khai-tren-cac-he-thong-cua-nha-truong/) | Giới thiệu OPAC, Ebook UT-XD, ProQuest, STINET và các hướng dẫn | Có hệ sinh thái để chatbot hướng dẫn; chưa chứng minh API được cấp cho nhóm |
@@ -47,7 +47,7 @@ Nguồn công khai được tìm hiểu ngày 27/10/2026:
 
 **Phát hiện cần xử lý trước:** W3 và W4 không thống nhất thời hạn mượn, mức phí. Một số thông tin địa điểm ở nội dung trang hỗ trợ và chân trang cũng không đồng nhất. Không tự lấy ngày crawl của công cụ tìm kiếm làm ngày có hiệu lực. Cần một danh sách nguồn được Mentor/cán bộ nghiệp vụ xác nhận, kèm ngày áp dụng và nguồn bị thay thế.
 
-Khảo sát OPAC trước đây chỉ được dùng để nhắc về ranh giới quyền dữ liệu; không tái sử dụng số kết quả tìm kiếm cũ hay kiến trúc D1 như kết luận hiện tại của D7.
+Khảo sát OPAC trước đây chỉ được dùng để nhắc về ranh giới quyền dữ liệu; không tái sử dụng số kết quả tìm kiếm cũ hay kiến trúc D1 như kết luận hiện tại của Chatbot thư viện.
 
 ## 3. Hiện trạng repo và hướng tận dụng
 
@@ -62,7 +62,7 @@ Khảo sát OPAC trước đây chỉ được dùng để nhắc về ranh gi�
 
 ## 4. Phạm vi chức năng và tiêu chí chấp nhận
 
-| Mã | Nghiệp vụ D7 | Phiên bản đề xuất | Cách kiểm tra |
+| Mã | Nghiệp vụ Chatbot thư viện | Phiên bản đề xuất | Cách kiểm tra |
 | --- | --- | --- | --- |
 | F1 | Hỗ trợ tra cứu | Hướng dẫn OPAC/thư viện số; tìm theo tên, tác giả, chủ đề trên dữ liệu mẫu được cấp hoặc API đọc được phép; hiển thị bản ghi và liên kết gốc | Kết quả tồn tại trong dữ liệu, đúng trường thông tin; không bịa sách hoặc tình trạng còn sách |
 | F2 | Giờ mở cửa | Trả lời theo cơ sở, ngày và lịch được duyệt; hỏi lại khi thiếu cơ sở; ưu tiên thông báo ngoại lệ còn hiệu lực | Đúng cơ sở, đúng khoảng ngày; không suy lịch lễ từ lịch tuần |
@@ -70,7 +70,7 @@ Khảo sát OPAC trước đây chỉ được dùng để nhắc về ranh gi�
 | F4 | Sử dụng CSDL điện tử | Hướng dẫn từng bước cho một số nguồn được chọn, dự kiến OPAC, thư viện số, Ebook UT-XD, ProQuest/STINET tùy dữ liệu | Link đúng, điều kiện truy cập đúng tài liệu hiện hành, không tự tạo tài khoản/mật khẩu |
 | F5 | Trả lời có căn cứ | Câu trả lời nghiệp vụ kèm tên nguồn, link và vị trí mục/trang khi có; hỏi lại hoặc chuyển hỗ trợ khi thiếu căn cứ | Người kiểm tra mở được nguồn và tìm được nội dung hỗ trợ câu trả lời |
 
-F5 là yêu cầu chất lượng do kế hoạch đề xuất để bốn nghiệp vụ D7 đáng tin cậy.
+F5 là yêu cầu chất lượng do kế hoạch đề xuất để bốn nghiệp vụ Chatbot thư viện đáng tin cậy.
 
 **Gia hạn thật là nhánh cần chốt, không tự bỏ khỏi đề tài:** nếu Mentor yêu cầu, bổ sung xác thực tài khoản qua cơ chế được cấp, kiểm tra điều kiện bằng hệ thống thư viện, cho người dùng xem tài liệu và xác nhận, gửi yêu cầu, hiển thị hạn trả mới từ kết quả chính thức, lưu dấu vết tối thiểu. LLM không được tự quyết điều kiện hoặc thời hạn. Cần kiểm tra không đủ quyền, quá hạn, có người đặt trước, gửi trùng, timeout sau khi gửi và đối chiếu trạng thái trước khi thử lại.
 
@@ -170,7 +170,7 @@ Ghi rõ tập dữ liệu/phiên bản nguồn, cấu hình, thời điểm đo,
 
 ## 9. Thực hiện đúng quy trình HKDN
 
-Theo T2, cần kiểm tra tình trạng: đăng ký nguyện vọng → được trường phân bổ → nhận Mentor/giảng viên đầu mối → nhận nhiệm vụ. Việc chọn D7 để chuẩn bị không tự xác nhận đã được phân bổ.
+Theo T2, cần kiểm tra tình trạng: đăng ký nguyện vọng → được trường phân bổ → nhận Mentor/giảng viên đầu mối → nhận nhiệm vụ. Việc chọn Chatbot thư viện để chuẩn bị không tự xác nhận đã được phân bổ.
 
 Đề xuất báo cáo mỗi tuần một lần, **tần suất chính thức do Mentor quy định**. Mỗi báo cáo có: công việc đã làm; kết quả và link minh chứng được phép; khó khăn; việc đang làm; kế hoạch tiếp theo. Thêm ngày/người phụ trách/phản hồi và cách xử lý để theo dõi được trách nhiệm.
 
@@ -180,7 +180,7 @@ Không tự công bố dữ liệu, mã nguồn, tài liệu nội bộ; đây l
 
 ### Dàn ý báo cáo cuối kỳ theo đúng T2
 
-| Chương | Nội dung bắt buộc theo hướng dẫn | Minh chứng D7 nên thu thập |
+| Chương | Nội dung bắt buộc theo hướng dẫn | Minh chứng Chatbot thư viện nên thu thập |
 | --- | --- | --- |
 | 1. Giới thiệu doanh nghiệp và vị trí thực hiện | Giới thiệu, lĩnh vực, bộ phận, vai trò sinh viên, Mentor/nhóm | Thông tin LIC được xác nhận, phân công và đóng góp cá nhân |
 | 2. Tổng quan dự án/công việc | Bối cảnh, mục tiêu, vấn đề, phạm vi, yêu cầu, công nghệ/công cụ | Khảo sát, đặc tả được duyệt, lý do chọn giải pháp |
@@ -195,7 +195,7 @@ Hồ sơ bàn giao dự kiến: mã nguồn và hướng dẫn cài đặt theo 
 ## 10. Việc cần chốt trước khi viết code
 
 1. Nhóm đã xác nhận 4 người và kết thúc 28/12/2026; cần bổ sung tên/năng lực, thời lượng mỗi tuần, việc đã làm, ngày bắt đầu chính thức và hạn nộp/bảo vệ cụ thể.
-2. D7 đã được phân bổ chưa; ai là Mentor, giảng viên đầu mối và người xác nhận nghiệp vụ?
+2. Chatbot thư viện đã được phân bổ chưa; ai là Mentor, giảng viên đầu mối và người xác nhận nghiệp vụ?
 3. Web có đủ yêu cầu kênh không; có bắt buộc Zalo/Messenger không?
 4. Gia hạn cần hướng dẫn hay thực hiện thật; nếu thật, ai cung cấp API/tài khoản thử và cơ chế xác thực?
 5. Văn bản nào đang hiệu lực về mượn, gia hạn, phí, lịch phục vụ và địa điểm? Nguồn nào thay thế nguồn nào?
