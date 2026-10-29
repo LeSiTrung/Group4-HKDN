@@ -41,7 +41,7 @@ def public_user(row):
 
 
 def optional_user(request: Request):
-    token = request.cookies.get('d7_session')
+    token = request.cookies.get('library_session')
     if not token:
         return None
     with request.app.state.db() as db:
@@ -75,7 +75,7 @@ def start_session(request, response, user_id, expected_hash):
         ensure_current_account(db,{'id':user_id,'password_hash':expected_hash})
         db.execute('DELETE FROM sessions WHERE expires_at<=?', (int(time.time()),))
         db.execute('INSERT INTO sessions VALUES (?,?,?)', (hashlib.sha256(token.encode()).hexdigest(), user_id, int(time.time())+86400*7))
-    response.set_cookie('d7_session', token, httponly=True, secure=request.app.state.settings.secure_cookies,
+    response.set_cookie('library_session', token, httponly=True, secure=request.app.state.settings.secure_cookies,
                         samesite='strict', max_age=86400*7, path='/')
 
 
@@ -110,10 +110,10 @@ def me(user=Depends(require_user)):
 
 @router.post('/logout')
 def logout(request: Request, response: Response):
-    token = request.cookies.get('d7_session', '')
+    token = request.cookies.get('library_session', '')
     with request.app.state.db() as db:
         db.execute('DELETE FROM sessions WHERE token_hash=?', (hashlib.sha256(token.encode()).hexdigest(),))
-    response.delete_cookie('d7_session', path='/')
+    response.delete_cookie('library_session', path='/')
     return {'ok': True}
 
 
@@ -151,5 +151,5 @@ def delete_account(body: DeleteAccount, request: Request, response: Response, us
             raise HTTPException(409,'Có giao dịch gia hạn cần đối soát. Vui lòng xử lý với thư viện trước khi xóa tài khoản; bạn vẫn có thể xóa lịch sử chat.')
         if not db.execute("DELETE FROM users WHERE id=? AND role!='admin'", (user['id'],)).rowcount:
             raise HTTPException(409,'Tài khoản đã thay đổi. Không thể xóa tài khoản này.')
-    response.delete_cookie('d7_session', path='/')
+    response.delete_cookie('library_session', path='/')
     return {'ok': True}

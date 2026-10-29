@@ -1,4 +1,4 @@
-# Dữ liệu và chỉ mục D7
+# Dữ liệu và chỉ mục Chatbot thư viện
 
 Schema đang được triển khai bằng `sqlite3` chuẩn Python trong `backend/app/database/connection.py`, không dùng ORM. SQLite là nguồn dữ liệu nghiệp vụ; Qdrant chỉ giữ chỉ mục có thể tạo lại. Dữ liệu lưu tại `DATA_DIR/library.sqlite3`; đường dẫn tương đối neo vào `backend`, mặc định `backend/runtime`. Nếu tồn tại database ở vị trí làm việc cũ gây nhập nhằng, cấu hình phải đổi sang đường dẫn tuyệt đối của kho đúng trước khi khởi động.
 

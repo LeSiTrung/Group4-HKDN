@@ -14,7 +14,7 @@ import httpx
 from bs4 import BeautifulSoup
 from fastapi import HTTPException
 
-USER_AGENT = 'D7LibraryBot/1.0'
+USER_AGENT = 'UTHLibraryBot/1.0'
 MAX_BYTES = 1_048_576
 OPAC = 'https://opacthuvien.ut.edu.vn/opac/'
 

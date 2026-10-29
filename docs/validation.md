@@ -4,6 +4,8 @@ Ngày làm việc: 28–29/10/2026. Đây là nhật ký kỹ thuật; kiểm th
 
 ## Kết quả chốt ngày 29/10
 
+Sau chỉnh tên sản phẩm: chạy lại backend 101/101 (16.94s), frontend 24/24 và build thành công (JS 297.26kB, gzip89.72kB). Trang đang mở đã tải lại và hiển thị UTH Library. Các JSON đánh giá bên dưới giữ nguyên kết quả đo trước chỉnh tên; không ghi đè bằng kết quả suy đoán.
+
 | Kiểm tra thực hiện | Kết quả |
 | --- | --- |
 | Backend pytest toàn bộ | 101/101, 14.45s; một cảnh báo deprecation TestClient/httpx |

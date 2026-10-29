@@ -29,7 +29,7 @@ export default function Loans({ user, onLogin }) {
     finally { setConfirm(null); setBusy(false) }
   }
   return <div className="content-page"><div className="page-heading"><span className="eyebrow">DỊCH VỤ BẠN ĐỌC</span><h1>Sách đang mượn</h1><p>Theo dõi khoản mượn và gửi yêu cầu gia hạn có xác nhận.</p></div>
-    {!user ? <div className="panel"><Empty icon="user" title="Đăng nhập để tiếp tục">Tài khoản D7 giúp bảo vệ thông tin khoản mượn của bạn.</Empty><button className="primary center-button" onClick={onLogin}>Đăng nhập</button></div> : <>
+    {!user ? <div className="panel"><Empty icon="user" title="Đăng nhập để tiếp tục">Tài khoản chatbot giúp bảo vệ thông tin khoản mượn của bạn.</Empty><button className="primary center-button" onClick={onLogin}>Đăng nhập</button></div> : <>
       <Notice>Kết nối chỉ hoạt động khi thư viện đã cấu hình dịch vụ tích hợp. Mã truy cập chỉ ở trong bộ nhớ của trang này và được xóa khi bạn rời trang. Không nhập mật khẩu thư viện.</Notice>
       <form className="panel loan-connect" onSubmit={load}><Field label="Mã truy cập thư viện" hint="Dùng mã truy cập được hệ thống thư viện cấp."><input type="password" value={token} onChange={event => { setToken(event.target.value); setLoans(null) }} autoComplete="off" required maxLength={4096} /></Field><button className="primary" disabled={busy || !token.trim()}><Icon name="link" size={18} />{busy ? 'Đang xử lý…' : 'Xem sách đang mượn'}</button></form>
       <ErrorNotice>{error}</ErrorNotice>

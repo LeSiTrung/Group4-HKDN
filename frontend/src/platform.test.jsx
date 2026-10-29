@@ -22,7 +22,7 @@ describe('API security contract', () => {
     fetch.mockResolvedValue(response({ answer: 'ok' }))
     await api('/chat', { method: 'POST', body: { message: 'Xin chào' } })
     expect(fetch.mock.calls[0][0]).toBe('/api/chat')
-    expect(fetch.mock.calls[0][1]).toMatchObject({ credentials: 'include', headers: { 'X-Requested-With': 'D7', 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'Xin chào' }) })
+    expect(fetch.mock.calls[0][1]).toMatchObject({ credentials: 'include', headers: { 'X-Requested-With': 'LibraryAssistant', 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'Xin chào' }) })
   })
   it('reports validation errors and blocks executable source URLs', async () => {
     fetch.mockResolvedValue(response({ detail: [{ msg: 'Câu hỏi quá dài' }] }, false, 422))

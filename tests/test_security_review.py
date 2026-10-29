@@ -13,7 +13,7 @@ from app.main import create_app
 from app.security import RequestGate
 
 PASSWORD = 'Synthetic-test-password-123'
-HEADERS = {'X-Requested-With': 'D7', 'Origin': 'http://app.example'}
+HEADERS = {'X-Requested-With': 'LibraryAssistant', 'Origin': 'http://app.example'}
 
 
 @pytest.fixture
@@ -33,7 +33,7 @@ def test_registration_cannot_elevate_role_or_expose_credentials(account_client):
     assert response.status_code == 201
     assert set(response.json()['user']) == {'id', 'email', 'name', 'role'}
     assert response.json()['user']['role'] == 'reader'
-    token = account_client.cookies.get('d7_session')
+    token = account_client.cookies.get('library_session')
     with account_client.app.state.db() as db:
         user = db.execute('SELECT * FROM users').fetchone()
         session = db.execute('SELECT * FROM sessions').fetchone()
@@ -53,10 +53,10 @@ def test_password_change_revokes_other_sessions_and_old_password(account_client)
     assert register(account_client).status_code == 201
     other = TestClient(account_client.app, headers=HEADERS)
     assert other.post('/api/auth/login', json={'email': 'reader@example.com', 'password': PASSWORD}).status_code == 200
-    old_token = account_client.cookies.get('d7_session')
+    old_token = account_client.cookies.get('library_session')
     replacement = 'Another-synthetic-password-456'
     assert account_client.post('/api/auth/password', json={'current_password': PASSWORD, 'new_password': replacement}).status_code == 200
-    assert account_client.cookies.get('d7_session') != old_token
+    assert account_client.cookies.get('library_session') != old_token
     assert account_client.get('/api/auth/me').status_code == 200
     assert other.get('/api/auth/me').status_code == 401
     assert other.post('/api/auth/login', json={'email': 'reader@example.com', 'password': PASSWORD}).status_code == 401
@@ -65,9 +65,9 @@ def test_password_change_revokes_other_sessions_and_old_password(account_client)
 
 def test_logout_revokes_copied_cookie_server_side(account_client):
     register(account_client)
-    old_token = account_client.cookies.get('d7_session')
+    old_token = account_client.cookies.get('library_session')
     assert account_client.post('/api/auth/logout').status_code == 200
-    account_client.cookies.set('d7_session', old_token)
+    account_client.cookies.set('library_session', old_token)
     assert account_client.get('/api/auth/me').status_code == 401
 
 
@@ -109,7 +109,7 @@ def test_account_deletion_cascades_private_data_only(account_client):
         assert db.execute('SELECT email FROM users').fetchone()[0] == 'other@example.com'
 
 
-@pytest.mark.parametrize('headers', [{}, {'X-Requested-With': 'XMLHttpRequest'}, {'X-Requested-With': 'D7', 'Origin': 'null'}, {'X-Requested-With': 'D7', 'Origin': 'http://app.example.evil.test'}])
+@pytest.mark.parametrize('headers', [{}, {'X-Requested-With': 'XMLHttpRequest'}, {'X-Requested-With': 'LibraryAssistant', 'Origin': 'null'}, {'X-Requested-With': 'LibraryAssistant', 'Origin': 'http://app.example.evil.test'}])
 def test_csrf_rejects_missing_marker_and_untrusted_origins(account_client, headers):
     response = TestClient(account_client.app).post('/api/auth/logout', headers=headers)
     assert response.status_code == 403
@@ -118,7 +118,7 @@ def test_csrf_rejects_missing_marker_and_untrusted_origins(account_client, heade
 def test_secure_cookie_flags_and_response_headers(tmp_path, monkeypatch):
     monkeypatch.setenv('COOKIE_SECURE', 'true')
     monkeypatch.setenv('ALLOWED_ORIGINS', 'https://app.example')
-    with TestClient(create_app(tmp_path, testing=True), base_url='https://app.example', headers={'X-Requested-With': 'D7', 'Origin': 'https://app.example'}) as client:
+    with TestClient(create_app(tmp_path, testing=True), base_url='https://app.example', headers={'X-Requested-With': 'LibraryAssistant', 'Origin': 'https://app.example'}) as client:
         response = register(client)
         assert response.status_code == 201
         cookie = response.headers['set-cookie'].lower()
@@ -136,7 +136,7 @@ def test_auth_rate_limit_uses_actual_peer_not_forwarded_header(tmp_path):
     @app.post('/api/auth/login')
     def login_probe():
         return {'ok': True}
-    with TestClient(app, headers={'X-Requested-With': 'D7'}) as client:
+    with TestClient(app, headers={'X-Requested-With': 'LibraryAssistant'}) as client:
         for index in range(10):
             assert client.post('/api/auth/login', headers={'X-Forwarded-For': '198.51.100.' + str(index)}).status_code == 200
         response = client.post('/api/auth/login', headers={'X-Forwarded-For': '198.51.100.99'})
@@ -154,7 +154,7 @@ def test_chunked_body_limit_counts_bytes_without_content_length(tmp_path):
     async def send(message):
         sent.append(message)
     gate = RequestGate(downstream, Settings(tmp_path, testing=True))
-    scope = {'type': 'http', 'method': 'POST', 'path': '/api/chat', 'headers': [(b'x-requested-with', b'D7')]}
+    scope = {'type': 'http', 'method': 'POST', 'path': '/api/chat', 'headers': [(b'x-requested-with', b'LibraryAssistant')]}
     asyncio.run(gate(scope, receive, send))
     assert sent[0]['status'] == 413
     assert not reached_app

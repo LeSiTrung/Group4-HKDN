@@ -12,7 +12,7 @@ from .services.rag_service import VectorIndex
 
 
 def main():
-    parser=argparse.ArgumentParser(description='D7 operator tools')
+    parser=argparse.ArgumentParser(description='Library assistant operator tools')
     sub=parser.add_subparsers(dest='command',required=True)
     admin=sub.add_parser('create-admin')
     admin.add_argument('--email',required=True)

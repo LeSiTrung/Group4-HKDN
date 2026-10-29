@@ -1,5 +1,13 @@
 # Technical progress
 
+## 2026-10-29 — project naming correction
+
+- Removed the topic-list code from product branding, UI, API metadata, package/config names and documentation; product name is UTH Library / Trợ lý Thư viện UTH.
+- Updated client/server CSRF marker together to LibraryAssistant and session cookie to library_session. Existing users need to sign in again; account/history records stay in the same SQLite file.
+- Renamed the planning file and updated topic references. Existing report text received only the requested name correction; no academic content was added.
+- Local runtime data, private backups and Git history were not rewritten. Container identity/path changed; any older external Compose installation must preserve its volumes or restore a backup before adopting the new project name.
+- Verification after renaming: 101 backend tests passed (16.94s), 24 frontend tests passed, production build passed; refreshed in-app browser shows UTH Library title/brand. No topic code remains in tracked product text or filenames.
+
 ## 2026-10-29 — implementation and verification milestone
 
 - Read AGENTS.md; kept academic reports/slides outside scope. Continued branch codex/library-platform from 087af11.

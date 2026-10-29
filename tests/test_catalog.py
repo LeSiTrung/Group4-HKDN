@@ -7,7 +7,7 @@ from app.main import create_app
 def client(tmp_path,monkeypatch):
     monkeypatch.setenv('LLM_PROVIDER','none')
     monkeypatch.setenv('ENABLE_VECTORS','false')
-    with TestClient(create_app(tmp_path,testing=True),headers={'X-Requested-With':'D7'}) as c:
+    with TestClient(create_app(tmp_path,testing=True),headers={'X-Requested-With':'LibraryAssistant'}) as c:
         c.post('/api/auth/register',json={'name':'Catalog operator','email':'catalog@example.test','password':'catalog-password-123'})
         with c.app.state.db() as db:
             db.execute("UPDATE users SET role='admin'")

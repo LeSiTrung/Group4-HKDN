@@ -12,7 +12,7 @@ from app.services import assistant, llm_service
 from app.services.knowledge import today
 
 PASSWORD = 'Synthetic-review-password-123'
-HEADERS = {'X-Requested-With': 'D7'}
+HEADERS = {'X-Requested-With': 'LibraryAssistant'}
 
 
 @pytest.fixture
@@ -83,9 +83,9 @@ def test_deleted_account_inflight_chat_cannot_write_to_reused_user_id(client):
     with client.app.state.db() as db:
         db.execute("UPDATE users SET role='reader'")
     victim = client.get('/api/auth/me').json()['user']
-    copied_cookie = client.cookies.get('d7_session')
+    copied_cookie = client.cookies.get('library_session')
     replacement = TestClient(client.app, headers=HEADERS)
-    replacement.cookies.set('d7_session', copied_cookie)
+    replacement.cookies.set('library_session', copied_cookie)
     def account_replaced(message, history=None):
         assert replacement.request('DELETE', '/api/auth/me', json={'password': PASSWORD}).status_code == 200
         assert replacement.post('/api/auth/register', json={'name': 'Different reader', 'email': 'different@example.test', 'password': PASSWORD}).status_code == 201
@@ -114,7 +114,7 @@ def replace_account_during_password_check(client, monkeypatch):
         db.execute("UPDATE users SET role='reader'")
         old_hash = db.execute('SELECT password_hash FROM users').fetchone()[0]
     replacement = TestClient(client.app, headers=HEADERS)
-    replacement.cookies.set('d7_session', client.cookies.get('d7_session'))
+    replacement.cookies.set('library_session', client.cookies.get('library_session'))
     original_verify = account_auth.password_hash.verify
     replaced = []
     def verify(password, hashed):

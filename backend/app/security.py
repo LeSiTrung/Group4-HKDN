@@ -20,7 +20,7 @@ class RequestGate:
         unsafe = method not in ('GET', 'HEAD', 'OPTIONS')
         if unsafe and path.startswith('/api/') and not path.startswith('/api/webhooks/'):
             origin = headers.get('origin', '').rstrip('/')
-            if headers.get('x-requested-with') != 'D7' or (origin and origin not in self.settings.origins):
+            if headers.get('x-requested-with') != 'LibraryAssistant' or (origin and origin not in self.settings.origins):
                 return await JSONResponse({'detail': 'Nguồn yêu cầu không hợp lệ.'}, 403)(scope, receive, send)
         if not self.settings.testing and path.startswith('/api/'):
             now = time.monotonic()

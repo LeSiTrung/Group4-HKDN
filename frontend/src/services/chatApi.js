@@ -8,7 +8,7 @@ export async function api(path, { body, ...options } = {}) {
       ...options,
       signal: options.signal || controller.signal,
       credentials: 'include',
-      headers: { 'X-Requested-With': 'D7', ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
+      headers: { 'X-Requested-With': 'LibraryAssistant', ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }),
     })
     const data = response.status === 204 ? null : await response.json().catch(() => null)

@@ -9,7 +9,7 @@ from app.api import library, admin
 
 @pytest.fixture
 def client(tmp_path):
-    with TestClient(create_app(tmp_path,testing=True),headers={'X-Requested-With':'D7'}) as c:
+    with TestClient(create_app(tmp_path,testing=True),headers={'X-Requested-With':'LibraryAssistant'}) as c:
         c.post('/api/auth/register',json={'name':'Operator','email':'op@example.test','password':'operator-password-123'})
         with c.app.state.db() as db:
             db.execute("UPDATE users SET role='admin'")

@@ -1,4 +1,6 @@
-# Vận hành D7
+# Vận hành Chatbot thư viện
+
+Tên triển khai hiện tại là `uth-library`, image chọn bằng `LIBRARY_IMAGE`, dữ liệu container nằm tại `/var/lib/library`. Nếu đã triển khai một bản cũ với tên project khác, hãy sao lưu và giữ volume cũ trước khi chuyển tên; Compose mặc định đặt tên volume theo project. Dữ liệu Windows vẫn ở `backend/runtime`. Đổi tên cookie phiên yêu cầu đăng nhập lại, không xóa tài khoản/lịch sử.
 
 Một tiến trình Uvicorn + SQLite WAL + Qdrant local là cấu hình hiện tại. Không thêm `--reload`, `--workers >1`, nhiều replica hoặc cùng gắn volume Qdrant vào các API. CLI index chạy khi API đã dừng; khi đang phục vụ, dùng quản trị → tạo lại chỉ mục. Remote Qdrant có thể cấu hình nhưng chưa biến SQLite/rate limit/job hiện tại thành hệ thống phân tán.
 
@@ -43,7 +45,7 @@ Trên máy local `ollama serve` khởi động dịch vụ nếu chưa có; `oll
 
 Nhóm tự chuẩn bị Docker Engine/Compose v2, DNS hostname về máy, và quyền cổng 80/443 TCP; 443 UDP tùy mạng cho HTTP/3. Chỉ chạy công khai khi có quyền triển khai. Không cần đăng ký dịch vụ AI trả phí cho cấu hình Ollama.
 
-1. Copy `.env.example` nếu chưa có, thay `SITE_DOMAIN` bằng hostname thực của nhóm (không `https://`, path hoặc port). Secret thật chỉ ở file riêng của máy chủ. `SITE_DOMAIN` trống khiến Compose dừng rõ ràng. Chọn `D7_IMAGE` là tag duy nhất cho từng bản, ví dụ `d7-library:2026-10-29`.
+1. Copy `.env.example` nếu chưa có, thay `SITE_DOMAIN` bằng hostname thực của nhóm (không `https://`, path hoặc port). Secret thật chỉ ở file riêng của máy chủ. `SITE_DOMAIN` trống khiến Compose dừng rõ ràng. Chọn `LIBRARY_IMAGE` là tag duy nhất cho từng bản, ví dụ `uth-library:2026-10-29`.
 2. Các lệnh sau chạy từ repository. `config --quiet` kiểm tra cấu trúc mà không in secret. Không gửi output đầy đủ của `docker compose config`, `docker inspect` hoặc `.env` cho người khác.
 
 ```bash
@@ -58,7 +60,7 @@ docker compose --env-file backend/.env up -d
 docker compose --env-file backend/.env ps
 ```
 
-Image app chứa frontend build cùng origin, chạy UID 10001, một worker. Compose ép Secure cookie, origin HTTPS chính xác, data path `/var/lib/d7`, và Ollama URL nội bộ; không publish cổng 8000/11434. Chỉ Caddy publish cổng web. Caddy dùng hostname cụ thể, tự cấp/gia hạn TLS nếu DNS/cổng/CA hoạt động. Chứng chỉ và cấu hình Caddy có volume riêng. Image Ollama pin `0.40.2`; Caddy dùng tag `2-alpine`, Node/Python dùng tag dòng tương ứng trong Dockerfile: lưu image ID/digest đã nghiệm thu trước mỗi phát hành vì các tag dòng có thể đổi.
+Image app chứa frontend build cùng origin, chạy UID 10001, một worker. Compose ép Secure cookie, origin HTTPS chính xác, data path `/var/lib/library`, và Ollama URL nội bộ; không publish cổng 8000/11434. Chỉ Caddy publish cổng web. Caddy dùng hostname cụ thể, tự cấp/gia hạn TLS nếu DNS/cổng/CA hoạt động. Chứng chỉ và cấu hình Caddy có volume riêng. Image Ollama pin `0.40.2`; Caddy dùng tag `2-alpine`, Node/Python dùng tag dòng tương ứng trong Dockerfile: lưu image ID/digest đã nghiệm thu trước mỗi phát hành vì các tag dòng có thể đổi.
 
 Proxy network dùng `172.30.47.0/29`, IP Caddy cố định `172.30.47.2`. Uvicorn chỉ tin forwarded headers từ IP đó; Caddy ghi đè client IP/scheme từ kết nối thực, không tin X-Forwarded-For của khách. Không publish API trực tiếp hoặc đổi thành trust `*`. Nếu subnet trùng mạng có sẵn, sửa đồng thời subnet, IP Caddy và `--forwarded-allow-ips` trong Compose. Khi đặt thêm CDN/proxy trước Caddy, địa chỉ thực/rate limit cần cấu hình và nghiệm thu riêng; cấu hình này dành cho Caddy là biên trực tiếp.
 
@@ -103,9 +105,9 @@ Windows, từ `backend`:
 Docker:
 
 ```bash
-docker compose --env-file backend/.env exec app python -m app.cli backup /var/lib/d7/backups/2026-10-29-before-update
+docker compose --env-file backend/.env exec app python -m app.cli backup /var/lib/library/backups/2026-10-29-before-update
 mkdir -p backups/2026-10-29-before-update
-docker compose --env-file backend/.env cp app:/var/lib/d7/backups/2026-10-29-before-update/library.sqlite3 backups/2026-10-29-before-update/library.sqlite3
+docker compose --env-file backend/.env cp app:/var/lib/library/backups/2026-10-29-before-update/library.sqlite3 backups/2026-10-29-before-update/library.sqlite3
 ```
 
 Giữ bản thứ hai ngoài máy/volume nguồn với quyền giới hạn; lưu riêng `.env` bằng kho bí mật được phép và image/tag phiên bản. Database chứa ledger gia hạn/webhook, kiến thức và user; phải backup tất cả cùng nhau. Vectors là dữ liệu tái tạo, không phải bản sao duy nhất. Cache model có thể giữ riêng để tránh tải lại nhưng không thay thế backup database.
@@ -127,12 +129,12 @@ Docker, backup đã nằm trên host trong `backups/`:
 
 ```bash
 docker compose --env-file backend/.env stop proxy app
-docker compose --env-file backend/.env run --rm --no-deps -v "${PWD}/backups:/restore:ro" app python /app/scripts/restore.py /restore/2026-10-29-before-update/library.sqlite3 /var/lib/d7/recovered-2026-10-29/library.sqlite3
+docker compose --env-file backend/.env run --rm --no-deps -v "${PWD}/backups:/restore:ro" app python /app/scripts/restore.py /restore/2026-10-29-before-update/library.sqlite3 /var/lib/library/recovered-2026-10-29/library.sqlite3
 ```
 
-Sửa `environment.DATA_DIR` của service app trong Compose thành `/var/lib/d7/recovered-2026-10-29` (chỉ đổi `.env` không đủ vì Compose đang override), chạy `run --rm --no-deps app python -m app.cli index`, rồi `up -d`. Thư mục mới vẫn nằm trong volume bền vững. Xác nhận số lượng dữ liệu, đăng nhập mới, nguồn và lịch sử thử trước khi tiếp tục phục vụ. Giữ bản runtime cũ và tệp cấu hình trước restore.
+Sửa `environment.DATA_DIR` của service app trong Compose thành `/var/lib/library/recovered-2026-10-29` (chỉ đổi `.env` không đủ vì Compose đang override), chạy `run --rm --no-deps app python -m app.cli index`, rồi `up -d`. Thư mục mới vẫn nằm trong volume bền vững. Xác nhận số lượng dữ liệu, đăng nhập mới, nguồn và lịch sử thử trước khi tiếp tục phục vụ. Giữ bản runtime cũ và tệp cấu hình trước restore.
 
-Trước nâng cấp, tag image hiện tại để giữ lại, ví dụ `docker image tag d7-library:local d7-library:before-update-2026-10-29`, rồi backup. Rollback phần mềm bằng đặt `D7_IMAGE` về tag đã giữ và chạy `docker compose --env-file backend/.env up -d --no-build app proxy`. Database mới không được mặc định coi là tương thích phiên bản cũ: nếu schema đã đổi, restore backup trước nâng cấp vào thư mục mới và trỏ DATA_DIR tương ứng. Bản hiện tại dùng schema version 2, bổ sung bảng books và cột books/context_query của messages; ứng dụng từ chối schema mới hơn 2. Xem [schema dữ liệu](database-design.md). Không hạ schema bằng cách xóa bảng/cột.
+Trước nâng cấp, tag image hiện tại để giữ lại, ví dụ `docker image tag uth-library:local uth-library:before-update-2026-10-29`, rồi backup. Rollback phần mềm bằng đặt `LIBRARY_IMAGE` về tag đã giữ và chạy `docker compose --env-file backend/.env up -d --no-build app proxy`. Database mới không được mặc định coi là tương thích phiên bản cũ: nếu schema đã đổi, restore backup trước nâng cấp vào thư mục mới và trỏ DATA_DIR tương ứng. Bản hiện tại dùng schema version 2, bổ sung bảng books và cột books/context_query của messages; ứng dụng từ chối schema mới hơn 2. Xem [schema dữ liệu](database-design.md). Không hạ schema bằng cách xóa bảng/cột.
 
 ## Nguồn cấu hình
 

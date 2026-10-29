@@ -1,4 +1,4 @@
-"""Restore a D7 SQLite backup into a new directory, never over live data."""
+"""Restore a library assistant SQLite backup into a new directory, never over live data."""
 import argparse
 import sqlite3
 import tempfile
@@ -14,7 +14,7 @@ def restore(source: Path, destination: Path):
             raise ValueError('Source database integrity check failed.')
         tables = {row[0] for row in backup.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         if not TABLES <= tables:
-            raise ValueError('Source is not a D7 application database.')
+            raise ValueError('Source is not a library assistant application database.')
         destination.parent.mkdir(parents=True, exist_ok=True)
         with destination.open('xb'):
             pass

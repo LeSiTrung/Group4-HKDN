@@ -1,4 +1,4 @@
-# D7 — Trợ lý Thư viện UTH
+# Trợ lý Thư viện UTH
 
 Ứng dụng React + FastAPI có hỏi đáp kèm nguồn, truy xuất ngữ nghĩa tiếng Việt, danh mục sách có nguồn và ngày đối chiếu, tài khoản/lịch sử riêng, quản trị nội dung và lịch phục vụ, thu thập trang thành bản nháp, tra cứu OPAC và các bộ kết nối thư viện/Messenger/Zalo. SQLite lưu dữ liệu nghiệp vụ; FastEmbed + Qdrant lưu chỉ mục có thể tạo lại. Ollama chạy LLM cục bộ; có thể cấu hình nhà cung cấp tương thích OpenAI khi được phép.
 

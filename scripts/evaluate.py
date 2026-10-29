@@ -44,14 +44,14 @@ def main():
             if parsed.scheme != 'http' or parsed.hostname not in ('localhost', '127.0.0.1') or parsed.path not in ('', '/') or parsed.username or parsed.password:
                 parser.error('Only an HTTP loopback API is allowed.')
             import httpx
-            client = stack.enter_context(httpx.Client(base_url=args.base_url, headers={'X-Requested-With': 'D7'}, timeout=90, trust_env=False))
+            client = stack.enter_context(httpx.Client(base_url=args.base_url, headers={'X-Requested-With': 'LibraryAssistant'}, timeout=90, trust_env=False))
         else:
             os.environ['LLM_PROVIDER'] = 'none'
             os.environ['ENABLE_VECTORS'] = 'false'
             from fastapi.testclient import TestClient
             from app.main import create_app
             directory = stack.enter_context(tempfile.TemporaryDirectory())
-            client = stack.enter_context(TestClient(create_app(Path(directory), testing=True), headers={'X-Requested-With': 'D7'}))
+            client = stack.enter_context(TestClient(create_app(Path(directory), testing=True), headers={'X-Requested-With': 'LibraryAssistant'}))
         health = client.get('/health')
         health.raise_for_status()
         capabilities = health.json()['capabilities']

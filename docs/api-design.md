@@ -4,9 +4,9 @@ FastAPI cung cấp OpenAPI tại `/openapi.json`, giao diện tại `/docs`. API
 
 ## Xác thực và giới hạn
 
-Đăng nhập/đăng ký trả `{user:{id,name,email,role}}` và cookie `d7_session` HttpOnly, SameSite=Strict, hạn 7 ngày. Production bật Secure. Token phiên là chuỗi ngẫu nhiên; SQLite chỉ lưu hash. Frontend dùng `credentials:'include'`; không lưu mật khẩu/token thư viện vào localStorage.
+Đăng nhập/đăng ký trả `{user:{id,name,email,role}}` và cookie `library_session` HttpOnly, SameSite=Strict, hạn 7 ngày. Production bật Secure. Token phiên là chuỗi ngẫu nhiên; SQLite chỉ lưu hash. Frontend dùng `credentials:'include'`; không lưu mật khẩu/token thư viện vào localStorage.
 
-Mọi thao tác thay đổi `/api/*` cần header `X-Requested-With: D7`; Origin nếu có phải nằm trong `ALLOWED_ORIGINS`. Webhook dùng kiểm tra chữ ký riêng. Body tối đa 65.536 byte tại middleware và Caddy; hạn tổng body này cũng áp dụng webhook. Mỗi địa chỉ IP có tối đa 10 thao tác auth/phút hoặc 120 yêu cầu API khác/phút; vượt hạn trả 429 và `Retry-After: 60`. Hạn trong bộ nhớ một tiến trình, không phải hạn phân tán.
+Mọi thao tác thay đổi `/api/*` cần header `X-Requested-With: LibraryAssistant`; Origin nếu có phải nằm trong `ALLOWED_ORIGINS`. Webhook dùng kiểm tra chữ ký riêng. Body tối đa 65.536 byte tại middleware và Caddy; hạn tổng body này cũng áp dụng webhook. Mỗi địa chỉ IP có tối đa 10 thao tác auth/phút hoặc 120 yêu cầu API khác/phút; vượt hạn trả 429 và `Retry-After: 60`. Hạn trong bộ nhớ một tiến trình, không phải hạn phân tán.
 
 Lỗi chuẩn `{detail: string}`; Pydantic có thể trả `detail` là danh sách lỗi. 401 cần đăng nhập; 403 thiếu quyền/origin; 404 không có tài nguyên thuộc người dùng; 409 xung đột; 413 body lớn; 422 dữ liệu không hợp lệ; 502/503 dịch vụ bên ngoài lỗi/chưa sẵn sàng. Không suy ra thành công từ HTTP timeout.
 

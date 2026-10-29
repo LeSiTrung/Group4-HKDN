@@ -24,7 +24,7 @@ def test_inflight_renewal_does_not_overwrite_final_reconciliation(tmp_path, monk
     monkeypatch.setenv('ENABLE_VECTORS', 'false')
     monkeypatch.setenv('LLM_PROVIDER', 'none')
     monkeypatch.setenv('LIBRARY_RENEW_URL', 'https://bridge.example/renew')
-    with TestClient(create_app(tmp_path, testing=True), headers={'X-Requested-With': 'D7'}) as client:
+    with TestClient(create_app(tmp_path, testing=True), headers={'X-Requested-With': 'LibraryAssistant'}) as client:
         client.post('/api/auth/register', json={'name': 'Operator', 'email': 'reviewer@example.test', 'password': 'Synthetic-password-123'})
         with client.app.state.db() as db:
             db.execute("UPDATE users SET role='admin'")

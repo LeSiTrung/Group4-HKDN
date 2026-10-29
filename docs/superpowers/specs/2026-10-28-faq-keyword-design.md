@@ -1,4 +1,4 @@
-# Thiết kế bản đầu: FAQ và tìm kiếm từ khóa D7
+# Thiết kế bản đầu: FAQ và tìm kiếm từ khóa Chatbot thư viện
 
 Ngày: 28/10/2026. Cập nhật phạm vi: bản đầu và điều kiện đưa cho người dùng thật. Trạng thái: chờ người dùng duyệt trước khi lập kế hoạch triển khai.
 
@@ -185,7 +185,7 @@ Docker/reverse proxy là cách đóng gói đề xuất, không phải lựa ch�
 Ngoài kiểm tra bản đầu ở mục 9, cần đủ các nhóm bằng chứng sau cho mốc dùng thật:
 
 1. **Nghiệp vụ và nguồn:** đủ bốn nhóm câu hỏi với đáp án hoặc hành vi chuyển tiếp đúng; tất cả câu trả lời nghiệp vụ có căn cứ hỗ trợ, không chỉ link tồn tại. Các ca bịa gia hạn, khẳng định phí/lịch chưa xác minh hoặc sai quyền truy cập là lỗi chặn phát hành.
-2. **Đánh giá độc lập:** dùng tập phát triển riêng với tập chấm cuối theo kế hoạch D7; ghi câu hỏi, đáp án mong đợi, nguồn/phiên bản, kết quả và lỗi. Ngưỡng trong kế hoạch là đề xuất; cần xác nhận với người đánh giá trước nghiệm thu. Không tự báo đạt khi chưa chạy/chấm.
+2. **Đánh giá độc lập:** dùng tập phát triển riêng với tập chấm cuối theo kế hoạch Chatbot thư viện; ghi câu hỏi, đáp án mong đợi, nguồn/phiên bản, kết quả và lỗi. Ngưỡng trong kế hoạch là đề xuất; cần xác nhận với người đánh giá trước nghiệm thu. Không tự báo đạt khi chưa chạy/chấm.
 3. **Độ ổn định:** kiểm tra tải, timeout và lỗi trên cấu hình máy được ghi rõ. Mốc kỹ thuật tạm để kiểm tra bản FAQ: 5 phiên đồng thời, ít nhất 100 request có trộn câu hợp lệ/không tìm thấy; đo p50/p95, lỗi bất thường và mức dùng tài nguyên. Đề xuất p95 API không quá 2 giây trên môi trường bàn giao cho xử lý FAQ không gọi web/LLM; đây là mục tiêu cần đo, chưa phải cam kết đã đạt.
 4. **Trình duyệt và khả năng tiếp cận:** luồng chính trên Chrome/Edge máy tính và điện thoại hoặc thiết bị thật có thể bố trí; kiểm tra bàn phím, focus, đọc trạng thái, tương phản, màn hình nhỏ, mạng chậm và mất backend. Giả lập kích thước màn hình không thay cho kiểm tra thiết bị thật.
 5. **Triển khai:** dựng lại từ bản checkout/gói bàn giao sạch, kiểm tra domain/HTTPS, khởi động lại máy/tiến trình, cập nhật và quay về phiên bản trước, khôi phục dữ liệu. Không để hệ thống chỉ chạy được trên máy người phát triển.

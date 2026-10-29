@@ -5,7 +5,7 @@ from app.main import create_app
 
 @pytest.fixture
 def client(tmp_path):
-    with TestClient(create_app(tmp_path, testing=True), headers={'X-Requested-With': 'D7'}) as client:
+    with TestClient(create_app(tmp_path, testing=True), headers={'X-Requested-With': 'LibraryAssistant'}) as client:
         yield client
 
 

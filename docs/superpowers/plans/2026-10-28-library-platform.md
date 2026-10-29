@@ -13,7 +13,7 @@
 - Work in `D:/Github/Group4-HKDN`, branch `codex/library-platform`; user designated this checkout, preserve it instead of moving work elsewhere.
 - No paid calls, public deployment, publishing, library login or live transactions without the necessary supplied configuration and authority.
 - Python 3.11 local venv; one application process with persistent SQLite/Qdrant local storage; production supports remote Qdrant.
-- No passwords/tokens in repository, frontend storage, logs or screenshots. Cookies HttpOnly/SameSite; unsafe browser requests require `X-Requested-With: D7` and a trusted Origin.
+- No passwords/tokens in repository, frontend storage, logs or screenshots. Cookies HttpOnly/SameSite; unsafe browser requests require `X-Requested-With: LibraryAssistant` and a trusted Origin.
 - No default administrator password. Bootstrap via CLI. Public registration creates reader only.
 - Missing providers/integrations return explicit unavailable states; adapter contract tests are distinct from real service acceptance.
 
@@ -27,7 +27,7 @@
 
 ## Shared HTTP contracts
 
-All browser API requests use credentials and `X-Requested-With: D7` (GET harmless too). Errors use `detail` string or validation list. API prefix `/api`.
+All browser API requests use credentials and `X-Requested-With: LibraryAssistant` (GET harmless too). Errors use `detail` string or validation list. API prefix `/api`.
 
 - `GET /health`: status, knowledge_count, version, capabilities (LLM/vector/crawler/channels/library readiness, no secrets).
 - `POST /auth/register {name,email,password}`; `POST /auth/login {email,password}` → `{user:{id,name,email,role}}` + session cookie. `GET /auth/me` → same. `POST /auth/logout`. `POST /auth/password {current_password,new_password}`. `DELETE /auth/me {password}` removes own history/account.

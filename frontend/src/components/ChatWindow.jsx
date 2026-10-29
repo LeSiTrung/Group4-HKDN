@@ -84,7 +84,7 @@ export default function ChatWindow({ user, conversationId, onCreated }) {
         <h1>Xin chào{user ? `, ${user.name.split(' ').at(-1)}` : ' bạn'}.<br />Hôm nay bạn muốn<br /><em>khám phá điều gì?</em></h1>
         <p>Tra cứu tài liệu, tìm hiểu dịch vụ và nhận hướng dẫn<br className="desktop-break" /> từ những nguồn thông tin của thư viện UTH.</p>
         <div className="starter-grid">{starters.map(item => <button key={item.title} className="starter-card" onClick={() => send(item.text)} disabled={busy}><Icon name={item.icon} /><strong>{item.title}</strong><span>{item.text}</span><Icon className="card-arrow" name="arrow" size={16} /></button>)}</div>
-      </div> : <div className="messages" aria-live="polite" aria-relevant="additions">{messages.map((item, index) => <ChatMessage item={item} user={user} onSpeak={speak} key={item.id || `${item.role}-${index}`} />)}{busy && <div className="typing" role="status"><span /><span /><span /><span className="typing-label">D7 đang đối chiếu nguồn…</span></div>}<div ref={end} /></div>}
+      </div> : <div className="messages" aria-live="polite" aria-relevant="additions">{messages.map((item, index) => <ChatMessage item={item} user={user} onSpeak={speak} key={item.id || `${item.role}-${index}`} />)}{busy && <div className="typing" role="status"><span /><span /><span /><span className="typing-label">Trợ lý đang đối chiếu nguồn…</span></div>}<div ref={end} /></div>}
     </div>
     <div className="chat-bottom">
       <ErrorNotice>{error}</ErrorNotice>

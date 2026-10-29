@@ -1,18 +1,18 @@
-name: d7-library
+name: uth-library
 services:
   app:
-    image: ${D7_IMAGE:-d7-library:local}
+    image: ${LIBRARY_IMAGE:-uth-library:local}
     build: .
     restart: unless-stopped
     env_file: backend/.env
     environment:
-      DATA_DIR: /var/lib/d7
+      DATA_DIR: /var/lib/library
       COOKIE_SECURE: "true"
       ALLOWED_ORIGINS: https://${SITE_DOMAIN:?Set SITE_DOMAIN in backend/.env}
       OLLAMA_URL: http://ollama:11434
     command: ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "--proxy-headers", "--forwarded-allow-ips", "172.30.47.2", "--no-access-log"]
     volumes:
-      - runtime:/var/lib/d7
+      - runtime:/var/lib/library
     networks:
       proxy:
       model:

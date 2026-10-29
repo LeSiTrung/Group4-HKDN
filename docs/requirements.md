@@ -1,4 +1,4 @@
-# Yêu cầu kỹ thuật và phạm vi D7
+# Yêu cầu kỹ thuật và phạm vi Chatbot thư viện
 
 Tài liệu phản ánh chức năng có trong mã hiện tại; mức kiểm chứng nằm riêng ở [validation.md](validation.md). Mục tiêu là trợ lý dịch vụ thư viện có nguồn, tra cứu metadata sách và hỗ trợ tích hợp chính thức. Sự hiện diện của code không xác nhận dữ liệu/quy định đã được thư viện duyệt hoặc dịch vụ ngoài đã hoạt động thật.
 
@@ -26,7 +26,7 @@ Knowledge xuất bản vẫn có thể mang `needs_confirmation`; câu trả l�
 ## Yêu cầu bảo mật và độ tin cậy
 
 - Backend là nơi kiểm tra phiên, quyền admin và quyền sở hữu hội thoại; 404 cho hội thoại không thuộc mình. Không lưu mật khẩu thư viện/access token upstream vào database hoặc localStorage.
-- Mọi mutation web cần `X-Requested-With: D7` và Origin cho phép; cookie SameSite Strict, bật Secure khi HTTPS. Request body tối đa 64 KiB, kể cả import và webhook; rate limit trong bộ nhớ theo IP.
+- Mọi mutation web cần `X-Requested-With: LibraryAssistant` và Origin cho phép; cookie SameSite Strict, bật Secure khi HTTPS. Request body tối đa 64 KiB, kể cả import và webhook; rate limit trong bộ nhớ theo IP.
 - Evidence và lịch sử là dữ liệu không đáng tin, không được thay system instructions. LLM không có công cụ ghi dữ liệu/gia hạn; kết quả timeout của giao dịch phải đối soát, không tự coi thất bại.
 - Truy xuất phải dùng nguồn còn xuất bản/còn hiệu lực; thiếu nguồn trả rõ giới hạn. Bộ lọc LLM là lớp phòng vệ, không phải chứng minh hết hallucination.
 - Không tăng chi phí API, dùng dữ liệu cá nhân thật cho test, triển khai công khai hoặc đổi production khi chưa được phép. Bí mật nằm ngoài Git/frontend; volume và backup cần phân quyền và chính sách lưu giữ.

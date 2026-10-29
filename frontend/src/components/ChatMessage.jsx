@@ -15,7 +15,7 @@ export default function ChatMessage({ item, user, onSpeak }) {
   const assistant = item.role === 'assistant'
   return <article className={`message ${assistant ? 'assistant' : 'user-message'}`}>
     <div className={`avatar ${assistant ? '' : 'reader-avatar'}`} aria-hidden="true">{assistant ? <Icon name="book" size={19} /> : <Icon name="user" size={18} />}</div>
-    <div className="message-main"><div className="message-meta"><strong>{assistant ? 'Trợ lý D7' : user?.name || 'Bạn'}</strong>{assistant && item.mode && <Status value={item.mode} />}</div>
+    <div className="message-main"><div className="message-meta"><strong>{assistant ? 'Trợ lý Thư viện' : user?.name || 'Bạn'}</strong>{assistant && item.mode && <Status value={item.mode} />}</div>
       <div className="message-content">{item.content}</div>
       {item.books?.length > 0 && <div className="chat-books"><p className="chat-books-note">Biểu ghi có nguồn đối chiếu, không phải tình trạng mượn thời gian thực.</p>{item.books.map((book, index) => <article className="chat-book-card" key={book.id || index}><div className="inline-actions"><Icon name="book" size={17} /><ExternalLink href={book.url || book.source_url}><strong>{book.title}</strong></ExternalLink></div><p>{book.author || 'Chưa có tác giả'}{book.year ? ` · ${book.year}` : ''}</p>{book.description && <p className="catalog-description">{book.description}</p>}{book.checked_at && <small>Đối chiếu: {displayDate(book.checked_at)}</small>}</article>)}</div>}
       {assistant && item.status && <div className="message-status"><Status value={item.status} /></div>}

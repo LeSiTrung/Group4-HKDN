@@ -1,10 +1,10 @@
-# Khảo sát hiện trạng D7 — 28/10/2026
+# Khảo sát hiện trạng Chatbot thư viện — 28/10/2026
 
 Tài liệu ghi nhận kết quả đọc repo, kiểm tra công cụ và khảo sát web để chuẩn bị phát triển. Đây chưa phải thiết kế đã duyệt hoặc bằng chứng ứng dụng chạy thành công.
 
 ## 1. Phạm vi và quyết định của người dùng
 
-- Dùng repo `D:/Github/Group4-HKDN` để phát triển đồ án HKDN D7 — Chatbot Thư viện UTH.
+- Dùng repo `D:/Github/Group4-HKDN` để phát triển đồ án HKDN Chatbot thư viện — Chatbot Thư viện UTH.
 - Bốn nghiệp vụ: hỗ trợ tra cứu, giờ mở cửa, gia hạn tài liệu, hướng dẫn sử dụng cơ sở dữ liệu điện tử.
 - Người dùng xác nhận ngày 28/10: ưu tiên gia hạn thật nếu có điều kiện tích hợp; bản đầu có thể hướng dẫn quy trình.
 - Người dùng xác nhận ngày 28/10: chưa được cấp tài liệu nghiệp vụ, bản xuất danh mục hoặc API; hiện chỉ có thể tra cứu trên web thư viện.
@@ -13,10 +13,10 @@ Tài liệu ghi nhận kết quả đọc repo, kiểm tra công cụ và khảo
 
 ## 2. Căn cứ đã kiểm tra
 
-- `README.md`, `docs/requirements.md`, `docs/api-design.md`, `docs/database-design.md`, toàn bộ kế hoạch D7.
+- `README.md`, `docs/requirements.md`, `docs/api-design.md`, `docs/database-design.md`, toàn bộ kế hoạch Chatbot thư viện.
 - Các điểm vào frontend/backend, thành phần chat, cấu hình và các service hiện có; tìm kiếm các nơi gọi chúng.
 - Hai PDF gốc còn tồn tại ngoài repo: `D:/Download/De tai tong hop LIC UTH.pdf` (8 trang), `D:/Download/Huong dan thuc hien HKDN.pdf` (6 trang). Đã trích đọc trọn các trang liên quan: tài liệu đề tài trang PDF 2, 7–8; hướng dẫn HKDN trang 4–6.
-- PDF đề tài xác nhận bốn nghiệp vụ D7, gợi ý LLM và Zalo/Messenger/web; không bắt buộc đồng thời ba kênh. Đầu ra gồm mã nguồn, tài liệu kỹ thuật, hướng dẫn vận hành, báo cáo, demo và bảng đánh giá độ chính xác cho đề tài AI.
+- PDF đề tài xác nhận bốn nghiệp vụ Chatbot thư viện, gợi ý LLM và Zalo/Messenger/web; không bắt buộc đồng thời ba kênh. Đầu ra gồm mã nguồn, tài liệu kỹ thuật, hướng dẫn vận hành, báo cáo, demo và bảng đánh giá độ chính xác cho đề tài AI.
 - PDF hướng dẫn xác nhận báo cáo 5 chương, báo cáo tiến độ theo tần suất Mentor quy định và yêu cầu bảo mật thông tin nội bộ.
 - Đã đọc ghi chú biên tập báo cáo; chưa kiểm tra bố cục PDF báo cáo hoặc biên dịch lại LaTeX.
 

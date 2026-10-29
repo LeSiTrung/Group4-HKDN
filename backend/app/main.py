@@ -59,7 +59,7 @@ def create_app(data_dir=None, testing=False):
                 pass
         app.state.vectors.close()
 
-    app = FastAPI(title='D7 Library Assistant', version='1.0.0', lifespan=lifespan)
+    app = FastAPI(title='UTH Library Assistant', version='1.0.0', lifespan=lifespan)
     app.state.settings = settings
     app.add_middleware(RequestGate, settings=settings)
     app.add_middleware(CORSMiddleware, allow_origins=list(settings.origins), allow_credentials=True,
