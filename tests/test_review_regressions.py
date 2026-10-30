@@ -66,7 +66,7 @@ def test_source_withdrawn_during_generation_is_not_returned(client, monkeypatch)
     row = add_knowledge(client)
     client.app.state.settings.testing = False
     calls = []
-    def withdraw(question, rows, history=None):
+    def withdraw(question, rows, history=None, evidence=None):
         calls.append(True)
         with client.app.state.db() as db:
             db.execute('DELETE FROM knowledge WHERE id=?', (row['id'],))

@@ -1,6 +1,6 @@
 # Technical roadmap
 
-Updated 2026-10-29. Authority: AGENTS.md and docs/superpowers/plans/2026-10-28-library-platform.md. Software and operations only.
+Updated 2026-10-30. Authority: AGENTS.md and docs/superpowers/plans/2026-10-30-rag-pipeline.md. Software and operations only.
 
 | ID | Priority | Deliverable | Status | Evidence / remaining work |
 |---|---|---|---|---|
@@ -12,8 +12,9 @@ Updated 2026-10-29. Authority: AGENTS.md and docs/superpowers/plans/2026-10-28-l
 | QA-01 | P1 | Regression, independent review, reproducible evaluation | Verified locally | docs/validation.md and tests/evaluation; review findings fixed |
 | CONV-02 / TIME-02 | P1 | Natural lookup, safe follow-ups and date/branch handling | Verified locally | Conversation/date regressions plus 45/45 live development cases; unsupported conditions clarify |
 | FEEDBACK-01 | P2 | Admin feedback quality loop | Verified locally | 12 API tests, 5 UI tests, browser pagination/filter smoke; explicit sharing only |
-| QA-02 | P2 | CI and test-tool dependency security | Implemented; remote run pending | Local135 backend/29 frontend, clean build/install, npm audit0; workflow not run remotely |
+| QA-02 | P2 | CI and test-tool dependency security | Baseline verified remotely | PR1 and merged main77699cd backend/frontend Actions passed29/10; new RAG branch still needs its own remote run |
 | CHAT-03 / LLM-03 | P1 | Library-only natural conversation, long input, bounded generation | Verified locally | 188 backend/35 frontend;45+10 live cases,2 semantic probes; no general-knowledge mode, no infinite-context claim |
+| RAG-04 / RAG-05 / RAG-06 | P1 | Incremental chunk index, hybrid retrieval, excerpt-grounded generation, admin diagnostics | Verified locally | 239 backend/42 frontend;45+10 offline/live and2 live semantic probes; real long-source inference and admin browser checks. docs/validation/2026-10-30-rag.json |
 | EXT-01 | P1/external | Live OPAC, approved transactions/channels, authoritative content | BLOCKED | Backend403; no bridge/channel credentials. Seed:17 reviewed FAQs,1 real metadata snapshot |
 | DEPLOY-01 | P1/external | Public HTTPS, capacity/restore rehearsal, real users | BLOCKED | Requires group-owned target and library/user acceptance |
 

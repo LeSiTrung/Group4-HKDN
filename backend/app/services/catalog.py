@@ -97,21 +97,23 @@ def public_book(db_factory,row_id):
 
 def search_books(state,query,kind='all'):
     matched=search_local(state.db,query,kind)
-    if matched or state.settings.testing or os.getenv('ENABLE_VECTORS','true').lower()!='true':
+    # Single-term identifiers need a lexical match, not an unrelated vector suggestion.
+    if matched or len(tokens(query))<2 or state.settings.testing or os.getenv('ENABLE_VECTORS','true').lower()!='true':
         return matched
     with state.db() as db:
-        rows=[item(r) for r in db.execute('SELECT * FROM books WHERE published=1'+(' AND kind=?' if kind!='all' else ''),(() if kind=='all' else (kind,)))]
+        rows=[item(r) for r in db.execute('SELECT * FROM books WHERE published=1')]
     documents=[{'id':r['id'],'question':r['title'],'aliases':[r['author'],r['subjects']],'answer':r['description'] or r['title']} for r in rows]
     if not documents:
         return []
     try:
-        hits=state.vectors.search(query,documents,namespace='books')
+        source_ids={row['id'] for row in rows if kind=='all' or row['kind']==kind}
+        hits=state.vectors.search(query,documents,namespace='books',source_ids=source_ids)
     except Exception:
         return []
     results=[]
     for row,_ in hits:
         current=public_book(state.db,row['id'])
-        if current:
+        if current and (kind=='all' or current['kind']==kind):
             results.append(current)
     return results
 

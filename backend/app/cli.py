@@ -9,6 +9,7 @@ from .database.connection import Store
 from .api.auth import password_hash, Registration
 from .services.knowledge import seed, published_rows
 from .services.rag_service import VectorIndex
+from .services import llm_service
 
 
 def main():
@@ -18,9 +19,14 @@ def main():
     admin.add_argument('--email',required=True)
     admin.add_argument('--name',default='Quản trị viên')
     sub.add_parser('index')
+    sub.add_parser('ai-check')
     backup=sub.add_parser('backup')
     backup.add_argument('directory',type=Path)
     args=parser.parse_args()
+    if args.command=='ai-check':
+        result=llm_service.check_model()
+        print(json.dumps(result,ensure_ascii=False))
+        raise SystemExit(0 if result['ready'] else 1)
     settings=Settings.load()
     store=Store(settings.data_dir/'library.sqlite3')
     seed(store.connect,ROOT.parent/'data/faq/library.json')
@@ -37,7 +43,8 @@ def main():
     elif args.command=='index':
         index=VectorIndex(settings)
         try:
-            print(json.dumps({'indexed':index.rebuild(published_rows(store.connect)),'model':index.model_name}))
+            count=index.rebuild(published_rows(store.connect))
+            print(json.dumps({'indexed':count,'model':index.model_name,**index.status()}))
         finally:
             index.close()
     else:

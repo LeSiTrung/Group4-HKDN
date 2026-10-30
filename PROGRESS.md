@@ -1,5 +1,15 @@
 # Technical progress
 
+## 2026-10-30 — integrated local LLM / RAG
+
+- RAG-04: versioned Qdrant chunk collections,384-byte raw UTF-8 text with48-byte overlap, stable IDs/source hashes. Persistent payload synchronization reuses unchanged embeddings after restart; upserts finish before obsolete deletion. Failure/partial-write/restart/stale-source/pagination/namespace/filter tests use real local Qdrant and a deterministic fake embedding. Existing collections/runtime data preserved.
+- RAG-05: lexical questions and content chunks plus semantic retrieval, reciprocal-rank fusion, direct strong FAQ preservation. LLM receives selected complete excerpts, validates source IDs and full numbers/URLs in both selected evidence and original sources, then source freshness is rechecked. Best semantic excerpts retain their order. Long embedding queries use full lexical retrieval rather than truncation. Exact/fuzzy single-term catalog lookup is separated from descriptive semantic recommendations.
+- RAG-06: admin-only model catalog check and source preview in API/UI; source/date/excerpt/method/degraded state visible without reader histories or provider secrets. CLI ai-check opens no database; index reports source/chunk totals and releases local locks. No new dependency, training run, paid call or production deployment.
+- Actual local indexing:17 knowledge entries /74 chunks, existing multilingual MiniLM384 dimensions. Ollama0.40.2/qwen3:4b present and used for inference. Final semantic-author mode rag with OPAC page6,8648.44ms;6,840-character synthetic long wrapper with actual OPAC answer at tail yielded source ID4 and answer Tác giả in13,354.98ms. One run each, not an accuracy/SLA claim.
+- Final backend239/239 in43.88s; frontend42/42 and production build303.25kB JS/gzip91.23kB. Restore self-test and launcher preflight pass.45/45 library and10/10 dialogue cases offline/live;2/2 live semantic probes. Separate browser QA DB: admin login, model catalog, OPAC preview, logout; temporary tab/server closed, main users untouched.
+- Fresh review found partial-number evidence at chunk boundaries; regression RED→GREEN fixed it and URL-prefix acceptance. Live regression also caught incidental content overriding a curated question, invented semantic match for a missing single-term identifier, and truncation of a long embedding query; all reproduced and fixed. Semantic excerpt order has a dedicated RED→GREEN test. No unresolved Important/Critical finding from the fresh review.
+- Evidence: docs/validation/2026-10-30-rag.json and docs/validation/2026-10-30-rag-long-source.json. Baseline main77699cd/PR1 remote CI passed29/10; current RAG branch is verified locally, not yet remotely. Full catalog, official transaction/channel credentials, Docker/public TLS and staff acceptance remain external limits. PROJECT NOT COMPLETE.
+
 ## 2026-10-29 — library-only natural chat and long messages
 
 - User explicitly clarified library-only scope. Removed the earlier uncommitted general-chat interpretation, service prompt, route, UI and corresponding cancelled tests; no general mode was released. Kept the requested long-message and natural library support improvements.

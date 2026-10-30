@@ -1,5 +1,13 @@
 # API kỹ thuật
 
+## Kiểm tra LLM/RAG dành cho quản trị
+
+- `POST /api/admin/ai/check`: trả provider/model/configured/ready/reachable/model_available/error và `check=model_catalog`. Chỉ hỏi danh sách model Ollama, không inference/pull/gọi provider ngoài; ready không phải chứng minh chất lượng sinh câu trả lời. Lỗi kết nối/model thiếu được trả trong JSON200 với ready=false; không lộ key/base URL/log provider.
+- `POST /api/admin/retrieval`: body `{query}` không trắng,1–1.000 ký tự. Trả method/degraded và sources gồm id/question/source_url/checked_at/score/excerpts. Chỉ nguồn đã xuất bản, đã duyệt và còn hiệu lực; không dùng lịch sử hay danh tính bạn đọc. Điểm rank không phải xác suất đúng.
+- `POST /api/admin/reindex`: count vẫn là số nguồn; vectors.namespaces cung cấp sources/chunks/ready. Đồng bộ tăng dần, không xóa collection. Xem [pipeline](rag-pipeline.md).
+
+Các route này giữ cookie, quyền admin, CSRF marker, rate limit và body64KiB. Khách401, reader403.
+
 FastAPI cung cấp OpenAPI tại `/openapi.json`, giao diện tại `/docs`. API JSON có tiền tố `/api`; frontend build được phục vụ cùng origin ở `/`. Các route bên dưới phản ánh mã hiện có; OpenAPI là nguồn schema chi tiết.
 
 ## Xác thực và giới hạn

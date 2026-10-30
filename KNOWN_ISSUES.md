@@ -1,6 +1,6 @@
 # Known technical issues
 
-Updated 2026-10-29.
+Updated 2026-10-30.
 
 - BLOCKED external: OPAC backend requests encounter HTTP403/challenge although a normal browser can view pages. Failed access is not an empty catalog result. Do not bypass controls.
 - BLOCKED external: no library-approved loans/renewal bridge or test account, Messenger/Zalo credentials, or public host/domain supplied. Contract tests do not prove real delivery/transactions.
@@ -11,8 +11,9 @@ Updated 2026-10-29.
 - Voice: feature detection/UI handling exist; physical microphone/STT/TTS/mobile acceptance remains unverified. Browser speech services may depend on external availability.
 - Dependencies: direct Python versions are pinned, transitive resolution is not a cross-platform lock. One Starlette TestClient/httpx deprecation warning remains.
 - Channels avoid blind resend after ambiguous delivery. A crash during send can leave a pending event requiring operator investigation.
-- Long input is supported within finite transport/retrieval budgets:1MiB chat body,16k-character current/derived question,6144-byte assembled model prompt. Over-budget model prompts use source fallback without partial evidence; oversized questions ask to split. No universal answer, unlimited memory or general-knowledge mode is promised.
+- Long input is supported within finite budgets:1MiB chat body,16k-character current/derived question,384-byte semantic query,6144-byte assembled model prompt. Oversized embedding queries use full lexical retrieval; oversized model prompts use source fallback with no partial question. Oversized current questions ask to split. No universal answer, unlimited memory or general-knowledge mode is promised.
 - Conversation bounds: exclusions/mixed independent requests ask for clarification rather than implementing a complete Boolean query language. Verified schedule answers support today and one branch; additional dates require clarification. Missing catalog attributes remain unconfirmed.
-- CI workflow is committed configuration only until a GitHub run is observed. Local Node24 passed; Node22/Linux runner execution is still unverified. Vitest4.1.12 resolved the npm advisories observed during this milestone; future registry advisories may change.
+- CI baseline PR1 and merged main77699cd passed backend/frontend on GitHub Actions29/10 (Python3.11/Node22 Linux). New RAG branch has not been pushed for remote verification. Vitest4.1.12 resolved the npm advisories observed previously; future advisories may change.
+- RAG now uses versioned chunk collections and incremental synchronization, keeping old collections intact. Chunk source hashes, selected evidence and current parent rows are checked, but these guards are not a formal semantic verifier; staff-reviewed acceptance and broader production data remain needed. Raw boundaries may split words; overlap helps preserve context and complete-number/URL checks reject partial facts. Catalog single-term identifiers use lexical/fuzzy only; descriptive semantic queries need at least2 terms.
 
 Fixed this milestone: provider diagnostics mismatch, launch-directory-dependent runtime path, stale-account identity races, late source withdrawal, malformed model output, contextual book follow-ups, late renewal responses overwriting manual reconciliation. Regressions remain in the suite.

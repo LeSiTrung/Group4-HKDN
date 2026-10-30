@@ -38,6 +38,8 @@ Thay email bằng email của nhóm. Lệnh không nâng quyền hay đổi mậ
 
 ## Chuẩn bị AI cục bộ
 
+Pipeline chia đoạn, hybrid retrieval, đồng bộ chỉ mục tăng dần và công cụ quản trị đã tích hợp: xem [LLM/RAG](docs/rag-pipeline.md). Chạy `python -m app.cli ai-check` trong venv tại `backend`, hoặc vào **Quản trị → Hệ thống → Kiểm tra mô hình**. **Kiểm tra truy xuất** cho xem bằng chứng trước khi sinh câu trả lời; kiểm tra catalog model không đồng nghĩa inference đã nghiệm thu.
+
 Sau khi cài Ollama trên máy của nhóm, mở dịch vụ bằng `ollama serve` nếu chưa chạy, rồi tải mô hình bằng lệnh chủ động:
 
 ```powershell

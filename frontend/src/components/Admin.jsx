@@ -10,6 +10,41 @@ const weekdays = ['Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sá
 const listValue = value => Array.isArray(value) ? value.join(', ') : value || ''
 const splitList = value => String(value || '').split(/[,;\n]/).map(item => item.trim()).filter(Boolean)
 
+function AIDiagnostics({ busy }) {
+  const [pending, setPending] = useState('')
+  const [error, setError] = useState('')
+  const [model, setModel] = useState(null)
+  const [query, setQuery] = useState('')
+  const [retrieval, setRetrieval] = useState(null)
+  async function checkModel() {
+    setPending('model'); setError(''); setModel(null)
+    try { setModel(await api('/admin/ai/check', { method: 'POST' })) }
+    catch (err) { setError(err.message) }
+    finally { setPending('') }
+  }
+  async function preview(event) {
+    event.preventDefault()
+    setPending('retrieval'); setError(''); setRetrieval(null)
+    try { setRetrieval(await api('/admin/retrieval', { method: 'POST', body: { query: query.trim() } })) }
+    catch (err) { setError(err.message) }
+    finally { setPending('') }
+  }
+  return <>
+    <div className="panel stack"><h3>Mô hình AI cục bộ</h3><p className="subtle">Kiểm tra kết nối và danh sách mô hình; chưa xác minh khả năng sinh câu trả lời.</p>
+      <button className="secondary fit" disabled={busy || Boolean(pending)} onClick={checkModel}>{pending === 'model' ? 'Đang kiểm tra…' : 'Kiểm tra mô hình'}</button>
+      {model && <div role="status"><p>{model.provider} · {model.model}</p><p>{model.ready ? 'Mô hình đã có trên máy chủ' : !model.configured ? 'Chưa cấu hình mô hình.' : !model.reachable ? 'Chưa kết nối được máy chủ mô hình.' : !model.model_available ? 'Chưa tìm thấy mô hình đã cấu hình trên máy chủ.' : 'Mô hình chưa sẵn sàng.'}</p>{model.error && <p className="destructive-text">{model.error}</p>}</div>}
+    </div>
+    <form className="panel stack" onSubmit={preview}><h3>Kiểm tra nguồn truy xuất</h3><p className="subtle">Xem các trích đoạn được chọn từ kho tri thức đã duyệt trước khi tạo câu trả lời.</p>
+      <Field label="Câu hỏi kiểm tra truy xuất"><input value={query} onChange={event => { setQuery(event.target.value); setRetrieval(null); setError('') }} required maxLength={1000} disabled={Boolean(pending)} /></Field>
+      <button className="primary fit" disabled={busy || Boolean(pending) || !query.trim()}>{pending === 'retrieval' ? 'Đang truy xuất…' : 'Kiểm tra truy xuất'}</button>
+      {retrieval && <div aria-live="polite"><p>Phương thức: {retrieval.method}</p>{retrieval.degraded && <Notice>Truy xuất đang dùng chế độ dự phòng.</Notice>}
+        {retrieval.sources.length ? retrieval.sources.map(source => <article key={source.id}><h4>{source.question}</h4><small className="block subtle">Đối chiếu: {displayDate(source.checked_at)} · Điểm truy xuất: {source.score}</small>{source.excerpts.map((excerpt, index) => <p key={index}>{excerpt}</p>)}<ExternalLink className="text-button" href={source.source_url}>Nguồn: {source.question}</ExternalLink></article>) : <Empty title="Không có nguồn phù hợp">Thử diễn đạt khác hoặc kiểm tra nội dung đã xuất bản.</Empty>}
+      </div>}
+    </form>
+    <ErrorNotice>{error}</ErrorNotice>
+  </>
+}
+
 export default function Admin({ user }) {
   const [tab, setTab] = useState('knowledge')
   const [rows, setRows] = useState(null)
@@ -98,7 +133,7 @@ export default function Admin({ user }) {
         {Array.isArray(rows) && <div className="results-list">{rows.length ? rows.map(row => <article className="panel job-card" key={row.id}><div><h3>{row.branch} · {weekdays[row.weekday] || row.weekday}</h3><p>{row.closed ? <Status value="closed" /> : `${row.opens} – ${row.closes}`} · {displayDate(row.valid_from)} đến {displayDate(row.valid_until)}</p><small>{row.note} · Xác minh: {row.verified_by}</small><ExternalLink className="text-button" href={row.source_url}>{row.source_title || 'Nguồn lịch phục vụ'}<Icon name="link" size={14} /></ExternalLink></div><button className="icon-button destructive-text" aria-label={`Xóa lịch ${row.branch} ${weekdays[row.weekday]}`} onClick={() => setRemoving({ path: `schedules/${row.id}`, title: `${row.branch} · ${weekdays[row.weekday]}`, kind: 'schedule' })}><Icon name="trash" size={18} /></button></article>) : <Empty icon="clock" title="Chưa có lịch đã xác minh">Thêm lịch khi có nguồn đối chiếu và thời gian hiệu lực cụ thể.</Empty>}</div>}
       </>}
       {tab === 'users' && Array.isArray(rows) && <div className="panel table-wrap"><table><caption className="sr-only">Danh sách tài khoản bạn đọc</caption><thead><tr><th scope="col">Bạn đọc</th><th scope="col">Vai trò</th><th scope="col">Trạng thái</th><th scope="col">Thao tác</th></tr></thead><tbody>{rows.map(row => <tr key={row.id}><td><strong>{row.name}</strong><small className="block">{row.email}</small></td><td>{row.role === 'admin' ? 'Quản trị viên' : 'Bạn đọc'}</td><td><span className={`badge ${row.active ? 'success' : 'warning'}`}>{row.active ? 'Hoạt động' : 'Đã khóa'}</span></td><td><button className="secondary" disabled={busy || row.id === user.id} onClick={() => mutate(`users/${row.id}`, { method: 'PATCH', body: { active: !row.active }, message: row.active ? 'Đã khóa tài khoản và thu hồi phiên truy cập.' : 'Đã mở lại tài khoản.' })}>{row.id === user.id ? 'Tài khoản của bạn' : row.active ? 'Khóa tài khoản' : 'Mở khóa'}</button></td></tr>)}</tbody></table>{!rows.length && <Empty icon="user" title="Chưa có tài khoản">Danh sách bạn đọc sẽ xuất hiện tại đây.</Empty>}</div>}
-      {tab === 'status' && rows && <><div className="panel"><h3>Chỉ mục tìm kiếm</h3><p className="subtle">Cập nhật chỉ mục sau khi kiểm duyệt nguồn. Mục chưa xuất bản hoặc hết hiệu lực không được dùng để trả lời.</p><button className="primary" disabled={busy} onClick={() => mutate('reindex', { message: 'Đã yêu cầu cập nhật chỉ mục. Xem trạng thái hệ thống để kiểm tra kết quả.' })}><Icon name="refresh" size={18} />{busy ? 'Đang cập nhật…' : 'Cập nhật chỉ mục'}</button></div><div className="panel"><h3>Trạng thái máy chủ</h3><p className="subtle">Khả năng và trạng thái được trả về trực tiếp từ máy chủ. Chưa cấu hình tích hợp thì dịch vụ chưa sẵn sàng.</p><pre className="status-json">{JSON.stringify(rows, null, 2)}</pre></div></>}
+      {tab === 'status' && rows && <><AIDiagnostics busy={busy} /><div className="panel"><h3>Chỉ mục tìm kiếm</h3><p className="subtle">Cập nhật chỉ mục sau khi kiểm duyệt nguồn. Mục chưa xuất bản hoặc hết hiệu lực không được dùng để trả lời.</p><button className="primary" disabled={busy} onClick={() => mutate('reindex', { message: 'Đã yêu cầu cập nhật chỉ mục. Xem trạng thái hệ thống để kiểm tra kết quả.' })}><Icon name="refresh" size={18} />{busy ? 'Đang cập nhật…' : 'Cập nhật chỉ mục'}</button></div><div className="panel"><h3>Trạng thái máy chủ</h3><p className="subtle">Khả năng và trạng thái được trả về trực tiếp từ máy chủ. Chưa cấu hình tích hợp thì dịch vụ chưa sẵn sàng.</p><pre className="status-json">{JSON.stringify(rows, null, 2)}</pre></div></>}
       {loading && <div className="loading-state" role="status">Đang tải dữ liệu quản trị…</div>}
     </section>
     {editing && <Modal title={editing.id ? 'Chỉnh sửa tri thức' : 'Thêm mục tri thức'} onClose={() => { if (!busy) setEditing(null) }}><form className="stack" onSubmit={saveKnowledge}><div className="form-grid"><Field label="Tiêu đề"><input name="title" defaultValue={editing.title || ''} required maxLength={200} /></Field><Field label="Danh mục"><input name="category" defaultValue={editing.category || 'general'} required maxLength={50} /></Field></div><Field label="Câu hỏi chính"><input name="question" defaultValue={editing.question || ''} required maxLength={500} /></Field><Field label="Câu hỏi tương đương" hint="Ngăn cách bằng dấu phẩy, chấm phẩy hoặc xuống dòng."><textarea name="aliases" rows={2} defaultValue={listValue(editing.aliases)} maxLength={4000} /></Field><Field label="Từ khóa"><input name="keywords" defaultValue={listValue(editing.keywords)} maxLength={2000} /></Field><Field label="Nội dung trả lời"><textarea name="answer" rows={6} defaultValue={editing.answer || ''} required maxLength={12000} /></Field><div className="form-grid"><Field label="Tên nguồn"><input name="source_title" defaultValue={editing.source_title || ''} required maxLength={200} /></Field><Field label="URL nguồn"><input name="source_url" type="url" defaultValue={editing.source_url || ''} required maxLength={1000} /></Field><Field label="Ngày đối chiếu"><input name="checked_at" type="date" defaultValue={editing.checked_at?.slice(0, 10) || ''} required /></Field><Field label="Trạng thái kiểm duyệt"><select name="status" defaultValue={editing.status || 'needs_confirmation'}><option value="needs_confirmation">Cần xác nhận</option><option value="reviewed_public">Đã duyệt nguồn công khai</option><option value="verified">Đã xác minh</option></select></Field><Field label="Hiệu lực từ (nếu có)"><input name="valid_from" type="date" defaultValue={editing.valid_from?.slice(0, 10) || ''} /></Field><Field label="Hiệu lực đến (nếu có)"><input name="valid_until" type="date" defaultValue={editing.valid_until?.slice(0, 10) || ''} /></Field></div><Field label="Người / đơn vị xác minh"><input name="verified_by" defaultValue={editing.verified_by || ''} maxLength={100} /></Field><label className="checkbox-field"><input name="published" type="checkbox" defaultChecked={Boolean(editing.published)} /><span>Xuất bản sau khi đã kiểm tra nội dung và nguồn</span></label><ErrorNotice>{error}</ErrorNotice><div className="form-actions"><button className="secondary" type="button" disabled={busy} onClick={() => setEditing(null)}>Hủy</button><button className="primary" disabled={busy}>{busy ? 'Đang lưu…' : 'Lưu mục tri thức'}</button></div></form></Modal>}

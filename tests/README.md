@@ -40,3 +40,7 @@ Pop-Location
 ```
 
 Workflow dùng major version được tài liệu chính thức minh họa: [checkout v7](https://github.com/actions/checkout), [setup-python v7](https://github.com/actions/setup-python), [setup-node v7](https://github.com/actions/setup-node). Chạy các lệnh local không xác nhận GitHub Actions đã chạy; cần kiểm tra kết quả từng job sau khi workflow được push.
+
+## LLM/RAG integration regressions
+
+`test_rag_index.py` uses real local Qdrant with a deterministic fake embedding: Unicode coverage, persisted restart reuse, incremental edits, partial write/delete recovery, stale hashes, namespace and catalog filtering. `test_retrieval_pipeline.py` checks lexical/hybrid evidence selection, outage fallback, unseen evidence and complete number/URL validation. `test_rag_operations.py` checks admin/CLI diagnostics without external inference; `frontend/src/rag.test.jsx` checks the admin UI. None of these mocked-provider tests proves real model quality. See docs/validation.md for separately recorded local inference and browser checks.

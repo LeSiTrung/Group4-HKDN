@@ -3,7 +3,7 @@
 Read AGENTS.md, PROGRESS.md and PROJECT_ROADMAP.md. Verify current processes/results; do not present an old runtime snapshot as current.
 
 1. Resume internal work from concrete defects, failing tests or acceptance gaps. Do not rebuild the tested platform or expand speculative P3 features.
-   Latest milestone:188 backend tests,35 frontend tests,45 library plus10 scope/long-input API cases. User requires library-only answers; do not add general knowledge chat. Prompt/context/transport limits are deliberate and documented. After an authorized push, inspect Python/Node22 CI jobs; do not report configuration as execution.
+   Latest verification:239 backend/42 frontend,45+10 offline/live cases,2 semantic probes and real long-document inference; incremental384-byte chunk indexing, hybrid retrieval, excerpt-grounded LLM and admin diagnostics. See docs/rag-pipeline.md and PROGRESS. User requires library-only answers. PR1 baseline CI passed on main77699cd; current RAG branch needs its own remote run after an authorized push. Preserve query/prompt/transport bounds and runtime sources/models.
 2. On a working Docker/Linux host, run build, Caddy validation, health, backup/restore rehearsal and authenticated HTTPS browser flows in docs/operations.md.
 3. Obtain authorized catalog metadata/API documentation and dated policies. Import/review through admin; retain sources, checked dates and effective intervals. One seed book is insufficient for a complete library catalog.
 4. With an approved bridge/test account, verify loans, confirmation, real renewal acknowledgement, timeout and reconciliation. Verify Messenger/Zalo signatures and actual delivery with authorized credentials. No paid calls or transactions without authority.

@@ -1,6 +1,17 @@
 # Kiểm chứng kỹ thuật
 
-Ngày làm việc: 28–29/10/2026. Đây là nhật ký kỹ thuật; kiểm thử cục bộ không thay thế nghiệm thu thư viện hoặc triển khai production.
+## Pipeline LLM/RAG tích hợp — 30/10/2026
+
+- **239/239 backend**,43.88s; một cảnh báo Starlette TestClient/httpx cũ. **42/42 frontend** trên6 file; production build thành công42 module, JS303.25kB/gzip91.23kB. Restore self-test và launcher preflight pass. Không thêm dependency.
+- **45/45** câu thư viện và **10/10** câu phạm vi/tin nhắn dài pass offline và API thật; **2/2** probe semantic pass API thật. semantic-author trả mode rag, nguồn OPAC trang6,8648.44ms; author-field13836.73ms, câu dài5133 ký tự trả nguồn trong60.94ms. Các phép đo cục bộ này không phải SLA. [JSON kiểm chứng và hash mã](validation/2026-10-30-rag.json).
+- CLI index thực tế17 mục/74 đoạn, model multilingual MiniLM384 chiều; Ollama0.40.2/qwen3:4b đã có, không pull thêm hoặc gọi provider trả phí. Kiểm thử Qdrant dùng thư viện thật với embedding giả có tính xác định để kiểm tra restart/tăng dần/lỗi ghi/hash/lọc/pagination; không gọi những bài này là đo chất lượng model.
+- Probe riêng dùng embedding và LLM thật: bọc câu trả lời OPAC đã rà soát bằng phần mở đầu kiểm thử, tổng6.840 ký tự; giữ nội dung cần tìm ở cuối. Truy xuất semantic và model trả “Tác giả”, source ID4,13.354,98ms. Database/vector tạm riêng, không nhập nội dung kiểm thử vào kho chính. [JSON probe](validation/2026-10-30-rag-long-source.json). Đây là một ví dụ phát triển, không phải nguồn mới hoặc đánh giá độc lập.
+- Browser thật trên database QA riêng: đăng nhập admin giả lập, kiểm tra catalog model, xem trích đoạn/URL/ngày nguồn OPAC, đăng xuất. Tab/server QA đã đóng. Không tạo tài khoản quản trị mặc định hoặc sửa tài khoản/dữ liệu bạn đọc trong runtime chính.
+- Rà soát độc lập phát hiện số bị cắt ở biên đoạn vẫn được chấp nhận; đã tái hiện RED và sửa GREEN. Thêm chặn URL tiền tố, ưu tiên câu hỏi đã duyệt trước từ xuất hiện tình cờ, giữ thứ tự đoạn semantic tốt nhất, chặn mã sách lạ thành đề xuất và query embedding dài bị cắt. Regression cũ được giữ; không sửa expected của corpus để che lỗi.
+- Nội dung vẫn17 FAQ/1 biểu ghi sách thật, không đủ danh mục đầy đủ. Nguồn/ID/số/URL được kiểm tra không bảo đảm mọi diễn giải đều faithful. Cần nghiệm thu nghiệp vụ và dữ liệu có quyền. Pipeline chỉ phục vụ thư viện; không huấn luyện model nền mới hoặc tuyên bố production hoàn chỉnh.
+- PR1 và main77699cd đã có CI backend/frontend thành công29/10. Nhánh RAG mới chưa có run từ xa. Docker/Caddy/public TLS, giao dịch/kênh thật và thiết bị giọng nói vẫn chưa nghiệm thu. Chi tiết cách chạy/giới hạn: [pipeline](rag-pipeline.md).
+
+Ngày làm việc: 28–30/10/2026. Đây là nhật ký kỹ thuật; kiểm thử cục bộ không thay thế nghiệm thu thư viện hoặc triển khai production.
 
 ## Mốc hội thoại chỉ dành cho thư viện, tin nhắn dài — 29/10
 

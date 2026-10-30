@@ -1,5 +1,7 @@
 # Vận hành Chatbot thư viện
 
+Pipeline LLM/RAG và cách xem nguồn/kiểm tra model: [rag-pipeline.md](rag-pipeline.md). CLI `ai-check` có thể chạy khi API phục vụ vì không mở database/Qdrant; CLI `index` cần dừng API local. Khi đang chạy, dùng quản trị để đồng bộ. Collection chunks_v1 mới giữ collection cũ; không cần migration SQLite. Không xóa volume/runtime khi đổi phiên bản.
+
 Chat chỉ phục vụ thư viện. Trần gateway1MiB dành cho tin nhắn dài; middleware vẫn chặn64KiB ở mutation khác. Giữ rate/auth/origin protections. LLM dùng context8.192, ngân sách assembled prompt6.144 byte UTF8 và capacity2. Prompt quá lớn không gọi model mà dùng FAQ có nguồn; input/context quá16.000 ký tự yêu cầu chia phần. Current message trong SQLite không bị cắt; lịch sử đưa vào model là trích đoạn rõ ràng. Không coi khả năng nhập dài là suy luận vô hạn hoặc tăng số user đồng thời đã nghiệm thu.
 
 Tên triển khai hiện tại là `uth-library`, image chọn bằng `LIBRARY_IMAGE`, dữ liệu container nằm tại `/var/lib/library`. Nếu đã triển khai một bản cũ với tên project khác, hãy sao lưu và giữ volume cũ trước khi chuyển tên; Compose mặc định đặt tên volume theo project. Dữ liệu Windows vẫn ở `backend/runtime`. Đổi tên cookie phiên yêu cầu đăng nhập lại, không xóa tài khoản/lịch sử.

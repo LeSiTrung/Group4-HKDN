@@ -4,6 +4,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from .knowledge import published_rows, today
 from .rag_service import keyword_search, normalize
+from .retrieval import retrieve_knowledge
 from .llm_service import generate_answer, provider_name, MAX_MODEL_MESSAGE_CHARS
 from .catalog import contextual_question,is_book_request,book_query,search_books,book_attribute,book_followup
 from urllib.parse import urlencode
@@ -119,14 +120,10 @@ def answer_question(state, question, history=None):
         return library_redirect(question)
     if not ranked and not library_subject(question):
         return result('Bạn đang hỏi tiếp về dịch vụ thư viện nào, ở cơ sở và ngày nào? Mình cần thông tin cụ thể để đối chiếu nguồn, chưa thể xác nhận từ câu hỏi ngắn này.', 'clarify',suggestions=SUGGESTIONS)
-    semantic = False
-    if not ranked and os.getenv('ENABLE_VECTORS','true').lower()=='true' and not state.settings.testing:
-        try:
-            ranked = state.vectors.search(question,rows)
-            semantic = bool(ranked)
-        except Exception:
-            # Provider details stay in admin health, never in public chat.
-            pass
+    vectors=state.vectors if os.getenv('ENABLE_VECTORS','true').lower()=='true' and not state.settings.testing else None
+    retrieval=retrieve_knowledge(question,rows,vectors)
+    ranked=retrieval['ranked']
+    semantic=retrieval['method'] in ('hybrid','semantic')
     if not ranked:
         return result('Mình chưa tìm được thông tin đủ căn cứ cho câu hỏi này. Bạn có thể hỏi rõ tên dịch vụ, cơ sở hoặc cách tra cứu cần hỗ trợ.', 'not_found',suggestions=SUGGESTIONS)
     top, score = ranked[0]
@@ -145,7 +142,9 @@ def answer_question(state, question, history=None):
     answer, selected, mode = top['answer'], [top], 'faq'
     if not unconfirmed and not sensitive and not state.settings.testing and (semantic or score<0.85):
         candidates = [r for r,_ in ranked[:3] if r['status']!='needs_confirmation' and r['category'] not in ('hours','fees','policy')]
-        generated = generate_answer(question,candidates,history)
+        candidate_ids={row['id'] for row in candidates}
+        evidence=[excerpt for excerpt in retrieval['evidence'] if excerpt['source_id'] in candidate_ids]
+        generated = generate_answer(question,candidates,history,evidence=evidence)
         if generated:
             answer, mode = generated['answer'], 'rag'
             selected = [r for r in candidates if r['id'] in generated['source_ids']]

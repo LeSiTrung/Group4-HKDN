@@ -1,0 +1,24 @@
+{
+  "kind": "synthetic long-document wrapper; reviewed OPAC answer retained at tail; no runtime data mutation",
+  "input_chars": 6840,
+  "source_url": "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=6",
+  "method": "semantic",
+  "namespaces": {
+    "knowledge": {
+      "sources": 1,
+      "chunks": 33,
+      "ready": true
+    }
+  },
+  "evidence": [
+    "n, Nhà xuất bản và Từ khóa. Chọn trường phù hợp rồi nhập nội dung cần tìm. Tìm theo tác giả giúp phân biệt với tìm toàn bộ, nơi từ khóa có thể xuất hiện ở nhiều trường.",
+    "viện. Giới thiệu hướng dẫn sử dụng thư viện. Giới thiệu hướng dẫn sử dụng thư viện. Giới thiệu hướng dẫn sử dụng thư viện. Giới thiệu hướng dẫn sử dụng thư viện. Giới thiệu hướng dẫn sử dụng thư viện. OPAC có menu Nhan đề, Tác giả, Năm xuất bản, Nhà xuất bản và Từ khóa. Chọn tr"
+  ],
+  "generated": {
+    "answer": "Tác giả",
+    "source_ids": [
+      4
+    ]
+  },
+  "elapsed_ms": 13354.98
+}
