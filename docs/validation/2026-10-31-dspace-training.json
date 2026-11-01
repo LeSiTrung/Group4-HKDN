@@ -1,0 +1,292 @@
+{
+  "recorded_at": "2026-10-31T10:32:20.195399+00:00",
+  "kind": "local software and synthetic retrieval verification; not staff acceptance or production certification",
+  "collection": {
+    "recorded_at": "2026-10-31T09:53:20.253708+00:00",
+    "source": "https://thuvienso.ut.edu.vn",
+    "inventory_total": 5578,
+    "target": 5578,
+    "processed": 5578,
+    "collected": 5569,
+    "fetched": 5462,
+    "reused": 107,
+    "failed": 0,
+    "restricted": 9,
+    "inaccessible": {
+      "05235b94-2dff-4836-a32f-3e40eb5e841e": "restricted_401",
+      "0776d420-d97b-4316-8bda-a7a4ffcb3647": "restricted_401",
+      "15ce8c03-92b1-48b2-8e57-c47b1d01c259": "restricted_401",
+      "3d18114a-ccdd-4e3a-ab7b-a43540af5787": "restricted_401",
+      "5a28a462-3aeb-4003-b3dc-4260af62d8e5": "restricted_401",
+      "84715a01-62d8-4fde-9567-4a03da22eb17": "restricted_401",
+      "a0606bc6-d1fd-438c-8772-1a222cff604c": "restricted_401",
+      "c06e793b-66c3-45e1-ad1a-38e64357a669": "restricted_401",
+      "f5437a12-a69d-4c7c-9a5f-740fff3c82ba": "restricted_401"
+    },
+    "remaining": 0,
+    "complete": true,
+    "stopped": false,
+    "failures": {},
+    "max_workers": 2,
+    "minimum_request_gap_seconds": 0.25,
+    "scope": "public metadata only; no full text or reader data"
+  },
+  "import": {
+    "discovered": 5569,
+    "accepted": 5568,
+    "rejected": [
+      {
+        "file": "d003e496-ceeb-4b5d-9b25-e19091bb3405.json",
+        "reason": "missing_title"
+      }
+    ],
+    "applied": true,
+    "publish_new": true,
+    "imported": 5568,
+    "skipped_existing": 0
+  },
+  "repeat_import": {
+    "discovered": 5569,
+    "accepted": 5568,
+    "rejected": [
+      {
+        "file": "d003e496-ceeb-4b5d-9b25-e19091bb3405.json",
+        "reason": "missing_title"
+      }
+    ],
+    "applied": true,
+    "publish_new": true,
+    "imported": 0,
+    "skipped_existing": 5568
+  },
+  "catalog": {
+    "counts": {
+      "published_books": 5569,
+      "digital_books": 5568,
+      "knowledge": 27
+    },
+    "lexical_profile": [
+      {
+        "query": "nghien cuu XML xay dung trang Web ho tro khach hang",
+        "elapsed_ms": 1044.17,
+        "matches": 55,
+        "first_source": "https://thuvienso.ut.edu.vn/items/0009688f-12f3-4902-9b95-7a31e878ee77"
+      },
+      {
+        "query": "Nguyen Van An",
+        "elapsed_ms": 823.25,
+        "matches": 2581,
+        "first_source": "https://thuvienso.ut.edu.vn/items/4acc10fd-5a7f-453b-b445-f8272d69a020"
+      },
+      {
+        "query": "tau thuy",
+        "elapsed_ms": 744.84,
+        "matches": 521,
+        "first_source": "https://thuvienso.ut.edu.vn/items/727a3bb4-facd-443b-8c5a-39843ac56067"
+      },
+      {
+        "query": "olimpic co hoc",
+        "elapsed_ms": 723.27,
+        "matches": 1,
+        "first_source": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+      },
+      {
+        "query": "zzuthmissing837216",
+        "elapsed_ms": 680.33,
+        "matches": 0,
+        "first_source": null
+      }
+    ],
+    "kind": "single local run; not concurrent SLA"
+  },
+  "training": {
+    "kind": "synthetic public-metadata retrieval experiment; not human library acceptance",
+    "smoke": false,
+    "base_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "base_revision": null,
+    "seed": 31,
+    "max_seq_length": 128,
+    "training_steps": 300,
+    "best_checkpoint": "training\\runtime\\uth-minilm-2026-10-31\\checkpoints\\checkpoint-300",
+    "selection_metric": "eval_uth-dev_cosine_ndcg@5",
+    "baseline_dev": {
+      "uth-dev_cosine_accuracy@1": 0.38308457711442784,
+      "uth-dev_cosine_accuracy@5": 0.4925373134328358,
+      "uth-dev_cosine_precision@5": 0.10248756218905472,
+      "uth-dev_cosine_recall@5": 0.49129353233830847,
+      "uth-dev_cosine_ndcg@5": 0.44045032223632663,
+      "uth-dev_cosine_mrr@5": 0.42458540630182423,
+      "uth-dev_cosine_map@5": 0.42280265339966827
+    },
+    "baseline_test": {
+      "uth-test_cosine_accuracy@1": 0.423728813559322,
+      "uth-test_cosine_accuracy@5": 0.4689265536723164,
+      "uth-test_cosine_precision@5": 0.09378531073446328,
+      "uth-test_cosine_recall@5": 0.4689265536723164,
+      "uth-test_cosine_ndcg@5": 0.4478122198180316,
+      "uth-test_cosine_mrr@5": 0.4408192090395481,
+      "uth-test_cosine_map@5": 0.4408192090395481
+    },
+    "final_dev": {
+      "uth-dev_cosine_accuracy@1": 0.6019900497512438,
+      "uth-dev_cosine_accuracy@5": 0.6940298507462687,
+      "uth-dev_cosine_precision@5": 0.14378109452736318,
+      "uth-dev_cosine_recall@5": 0.6923714759535654,
+      "uth-dev_cosine_ndcg@5": 0.6518955835616175,
+      "uth-dev_cosine_mrr@5": 0.6393449419568822,
+      "uth-dev_cosine_map@5": 0.637686567164179
+    },
+    "final_test": {
+      "uth-test_cosine_accuracy@1": 0.5734463276836158,
+      "uth-test_cosine_accuracy@5": 0.6807909604519774,
+      "uth-test_cosine_precision@5": 0.13615819209039548,
+      "uth-test_cosine_recall@5": 0.6784369114877589,
+      "uth-test_cosine_ndcg@5": 0.6297151356601102,
+      "uth-test_cosine_mrr@5": 0.6137005649717514,
+      "uth-test_cosine_map@5": 0.6132485875706215
+    },
+    "verdict": "WIN",
+    "test_primary_metric": "uth-test_cosine_ndcg@5",
+    "baseline": 0.4478122198180316,
+    "score": 0.6297151356601102,
+    "delta": 0.18190291584207857,
+    "elapsed_seconds": 157.58,
+    "hardware": {
+      "gpu": "NVIDIA GeForce RTX 3060 Laptop GPU",
+      "peak_allocated_bytes": 2305350144,
+      "cuda": "12.8",
+      "python": "3.11.17"
+    },
+    "packages": {
+      "torch": "2.11.0+cu128",
+      "sentence-transformers": "6.2.0",
+      "transformers": "5.22.1",
+      "datasets": "5.1.0",
+      "accelerate": "1.15.0"
+    },
+    "dataset_manifest_sha256": "94e5dcfc4432a7afecbb1c9352b6dba2115712c4d493aaea850e6808c089e65a",
+    "dataset": {
+      "kind": "weak supervision from public metadata; synthetic development evaluation, not library acceptance",
+      "seed": 31,
+      "source_files": 5569,
+      "source_sha256": "01a6d50266eac681ad80de58ed6b306df2686f1540190574bb5db989510f861f",
+      "documents": 5568,
+      "work_groups": 5214,
+      "rejected": 1,
+      "pairs_by_split": {
+        "train": 4458,
+        "test": 354,
+        "dev": 402
+      },
+      "files_sha256": {
+        "documents.json": "7da20cdce6b0d7ac43bb92b3a9fbb14edcf4ad878c611829e26b3f0c52edcec2",
+        "pairs.json": "0adde55a88a17b6832b6d45971258ebe947a0bfd948ff3932d7c8be3cced8315",
+        "groups.json": "a121763bc8ef6132c48c535ab73683064bd8e5f5936794568000d40e70e63a2c",
+        "rejected.json": "bdf05ec8c857db0458e3f956a72eb9c5be0c6e6903bc33cdbb823ff701c8eeb4"
+      },
+      "group_policy": "Accent/case-normalized title families plus shared-author components stay in one split; one canonical training pair per title family; relevance does not merge unrelated works by the same author",
+      "limitations": [
+        "Synthetic partial-title queries; false-negative topic overlap remains possible",
+        "Title-family grouping is conservative and not a bibliographic authority resolver",
+        "All corpus documents may be retrieved at eval, but dev/test queries and positives are excluded from training pairs",
+        "Encoder max_seq_length=128 is explicit; full raw metadata remains preserved separately"
+      ]
+    },
+    "promotion_status": "not deployed; ONNX/FastEmbed export, runtime parity and staff-reviewed held-out evaluation still required",
+    "publication": "No Hub push or external tracker; local artifacts only"
+  },
+  "verification": {
+    "backend": {
+      "passed": 329,
+      "exit_code": 0
+    },
+    "frontend": {
+      "passed": 44,
+      "files": 7
+    },
+    "frontend_build": "passed; 42 modules,303.83kB JavaScript/91.40kB gzip",
+    "restore_self_test": "passed; ledgers preserved, sessions revoked, corruption/overwrite refused",
+    "focused_independent_review": {
+      "backend_passed": 71,
+      "frontend_passed": 9,
+      "important_or_critical_findings": 0,
+      "cross_split_query_topics": 0,
+      "cross_split_tokenized_passages": 0
+    },
+    "final_title_selection_review": {
+      "passed": 44,
+      "important_or_critical_findings": 0
+    },
+    "browser": {
+      "guest_digital_lookup": "passed",
+      "selected_title_author_followup": "passed",
+      "screenshot": "tmp/dspace-chat.png"
+    },
+    "export": {
+      "status": "blocked_dependency_resolution",
+      "environment_changed": false,
+      "reason": "sentence-transformers6.2 requires Transformers>=5; available optimum-onnx requires <4.58"
+    },
+    "live_evaluations": {
+      "questions": {
+        "passed": 45,
+        "total": 45,
+        "failures": []
+      },
+      "library-conversation": {
+        "passed": 10,
+        "total": 10,
+        "failures": []
+      },
+      "semantic": {
+        "passed": 2,
+        "total": 2,
+        "failures": []
+      },
+      "public-library": {
+        "passed": 10,
+        "total": 10,
+        "failures": []
+      },
+      "dspace": {
+        "passed": 8,
+        "total": 8,
+        "failures": []
+      }
+    },
+    "dspace-index": {
+      "indexed": 5569,
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "configured": true,
+      "ready": true,
+      "error": null,
+      "namespaces": {
+        "books": {
+          "sources": 5569,
+          "chunks": 18441,
+          "ready": true
+        }
+      }
+    },
+    "dspace-live-extra": {
+      "checks": [
+        "digital catalog filtering and distinct pages",
+        "detail provenance and no fabricated availability",
+        "catalog query boundary",
+        "anonymous admin denied",
+        "absent identifier empty locally"
+      ],
+      "passed": 5,
+      "elapsed_ms": 3975.85,
+      "health_status": "ok",
+      "llm_provider": "ollama"
+    }
+  },
+  "limits": [
+    "Public digital metadata only; 9 restricted items not authenticated; one missing title excluded",
+    "No full text, printed OPAC bulk data, live holdings or transactions",
+    "Synthetic evaluation; trained embedding is not promoted to FastEmbed",
+    "Initial harvest/insert-only import; no upstream withdrawal refresh",
+    "Public HTTPS, remote CI, target-host capacity and staff/user acceptance remain unverified"
+  ]
+}

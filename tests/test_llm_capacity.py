@@ -25,9 +25,11 @@ def mock_provider(monkeypatch, content=None, envelope=None):
 
 def test_grounded_generation_uses_bounded_ollama_context_and_output(monkeypatch):
     requests = mock_provider(monkeypatch)
+    monkeypatch.delenv('LLM_MODEL', raising=False)
     monkeypatch.setenv('LLM_NUM_GPU', '0')
     assert llm_service.generate_answer('Tra cứu sách ở đâu?', ROWS) == RESULT
     body = json.loads(requests[0].content)
+    assert body['model'] == 'qwen3:1.7b'
     assert body['format']['required'] == ['answer', 'source_ids']
     assert body['stream'] is False and body['think'] is False
     assert body['options']['num_ctx'] == 8192

@@ -1,0 +1,735 @@
+{
+  "source": "https://lic.ut.edu.vn",
+  "checked_at": "2026-11-01T09:13:21.641630+00:00",
+  "complete": true,
+  "blocked": null,
+  "reused": 60,
+  "sitemaps": [
+    {
+      "url": "https://lic.ut.edu.vn/sitemap_index.xml",
+      "kind": "sitemapindex",
+      "locations": 6,
+      "sha256": "56badb8c1c54d757536d7aa45dddae166d1c375df2427805978195289c52d60f"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/post-sitemap.xml",
+      "kind": "urlset",
+      "locations": 25,
+      "sha256": "7f24876bdf65bb088c090673a479ca7c176a69427261f16590b8a4d15df7e801"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/page-sitemap.xml",
+      "kind": "urlset",
+      "locations": 52,
+      "sha256": "6b7e103407c49f39ae3cc650ac86e1648696d1f98bd38873d9e13804fcd8842a"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/blocks-sitemap.xml",
+      "kind": "urlset",
+      "locations": 8,
+      "sha256": "709cfdf8259ded8f02a925cfcb264e15e82927b1ea2b9221c57d85fbbbe3f01b"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/wpdmpro-sitemap.xml",
+      "kind": "urlset",
+      "locations": 3,
+      "sha256": "e60c8fa97729aa7d18cbb8ae54f73fe95208e1befd64b4baf54139d5a516b2f0"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/featured_item-sitemap.xml",
+      "kind": "urlset",
+      "locations": 10,
+      "sha256": "22fc923a4a1aad5ba7abae43411000b2d359148020182c5aac582caba1505da9"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/category-sitemap.xml",
+      "kind": "urlset",
+      "locations": 2,
+      "sha256": "6e55b8d0786ffe7ba471c282f76064ac9330bda089bad54a20ad25d545e98477"
+    }
+  ],
+  "sitemap_locations": 100,
+  "sitemap_all_loc_elements": 349,
+  "minimum_request_gap_seconds": 1,
+  "scope": "public HTML only; staged review candidates, not published facts",
+  "robots_sha256": "8597332a5b81786bb7bd163ec2e6e3a82267dd026eade0dd57da5bdad6313ff4",
+  "counts": {
+    "quarantine_spam": 9,
+    "skipped_non_library_it": 19,
+    "skipped_personnel": 2,
+    "skipped_template": 21,
+    "quarantine_unrelated": 13,
+    "skipped_media": 31,
+    "accepted": 30,
+    "skipped_query": 2,
+    "duplicate": 4,
+    "quarantine_empty": 8,
+    "missing_404": 2
+  },
+  "discovered_unique": 141,
+  "pending": 0,
+  "urls": {
+    "https://lic.ut.edu.vn/ma-chance-casino-france-connexion-a-un-win-machancecasino-fr-mon-compte-avis-2023/": {
+      "status": "quarantine_spam",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/les-avantages-du-programme-joka-casino-vip/": {
+      "status": "quarantine_spam",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/avis-de-playregal-lisez-les-avis-marchands-de-www-playregalcom/": {
+      "status": "quarantine_spam",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/betwinner-connexion-em-inscription-2023/": {
+      "status": "quarantine_spam",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/amunra-casino-avis/": {
+      "status": "quarantine_spam",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/quels-sont-les-jeux-de-casino-disponibles-en-ligne/": {
+      "status": "quarantine_spam",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/dieu-khoan-su-dung-uth-app/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/cong-tac-vien/": {
+      "status": "skipped_personnel",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/dich-vu-cong-nghe-thong-tin/he-thong-dao-tao-truc-tuyen/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/dich-vu-cong-nghe-thong-tin/ho-tro-kich-hoat-the/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/nhan-su/": {
+      "status": "skipped_personnel",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/dich-vu-cong-nghe-thong-tin/website-va-lap-trinh-phan-mem/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/dich-vu-cong-nghe-thong-tin/phan-mem-quan-ly-truong-hoc/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/dich-vu-cong-nghe-thong-tin/dich-vu-quet-trung-lap/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/dich-vu-cong-nghe-thong-tin/quan-tri-tai-khoan-he-thong-thong-tin/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/dich-vu-cong-nghe-thong-tin/giai-phap-cntt/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/dich-vu-cong-nghe-thong-tin/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/quan-ly-he-thong-hoc-thi-va-ho-tro-truc-tuyen/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/lap-trinh-phan-mem/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/bao-tri-may-tinh/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/quan-tri-he-thong-thong-tin/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/pham-mem-quan-ly-dao-tao/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/quan-ly-phong-lab-phong-hoc-phong-hop-truc-tuyen/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/quan-tri-mang-du-lieu-website-csdl/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/he-thong-mang-may-tinh/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/phan-mem-quan-ly-dao-tao/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/elearning/": {
+      "status": "skipped_non_library_it",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/blocks/footer-about-us/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/blocks/dich-vu/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/blocks/features-overview/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/blocks/demos/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/blocks/shop-category-slider/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/blocks/shop-header/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/blocks/blog-header/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/blocks/elements-overview/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/download/huong-dan-viet-bao-cao-thuc-tap-tot-nghiep/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/download/mau-bia-viet-bao-cao-thuc-tap-tot-nghiep/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/download/phan-mem-quan-ly-dao-tao/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/featured_item/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/featured_item/bai-dang-cua-dich-vu/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/featured_item/another-print-package/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/featured_item/lookbook-summer/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/featured_item/fl3-print-package/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/featured_item/awesome-pencil-poster/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/featured_item/portfolio-typography/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/featured_item/flatsome-poster-print/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/featured_item/magazine/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/featured_item/flat-t-shirt-company/": {
+      "status": "skipped_template",
+      "discovered_from": "sitemap"
+    },
+    "https://lic.ut.edu.vn/to-chuc-ngay-sach-va-van-hoa-doc-viet-nam-lan-thu-5-nam-2026/": {
+      "status": "quarantine_unrelated",
+      "sha256": "4eb2a43515be622e34cf1598afb67302a7c946be8815a6be1be997fe33b7b7a7",
+      "fetched_at": "2026-11-01T09:05:34.689248+00:00"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2026/04/20260417_LIC_KH-THI-GIOI-THIEU-SACH.pdf": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/v-v-trien-khai-dich-vu-muon-lien-thu-vien-giua-trung-tam-thong-tin-thu-vien-truong-dh-giao-thong-van-tai-tp-hcm-va-thu-vien-truong-dh-bach-khoa-dhqg-hcm/": {
+      "status": "accepted",
+      "sha256": "af1580cd58b70742744f4e195715ec34219d3e81d15b3f675cfcadbac3e07da9",
+      "fetched_at": "2026-11-01T09:05:35.550495+00:00"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2025/08/2025.07.08_Chinhsachmuonlienthuvien.pdf": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/trung-tam-thong-tin-thu-vien-uth-va-thu-vien-truong-dai-hoc-bach-khoa-dai-hoc-quoc-gia-tp-hcm-ky-ket-bien-ban-ghi-nho-hop-tac/": {
+      "status": "accepted",
+      "sha256": "2664f7410c3acc4c16c1f46dbe19e849baea59c802b8f8c530091eed5e22a474",
+      "fetched_at": "2026-11-01T09:05:36.679170+00:00"
+    },
+    "https://lic.ut.edu.vn/thong-bao-v-v-khao-sat-y-kien-ban-hoc-2024-2025/": {
+      "status": "quarantine_unrelated",
+      "sha256": "049f5d99bda2bca411e2f44f2f0adbb47b3a2281213cd72b8be74555680e94a3",
+      "fetched_at": "2026-11-01T09:05:37.523249+00:00"
+    },
+    "https://lic.ut.edu.vn/ke-hoach-to-chuc-ngay-sach-va-van-hoa-doc-viet-nam-lan-thu-4-nam-2025/": {
+      "status": "quarantine_unrelated",
+      "sha256": "9b4b6011551380c36f6ad892603a8cd547b72bfa7064c0e7f4ae4ea1ddcb82df",
+      "fetched_at": "2026-11-01T09:05:38.528209+00:00"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2025/04/20250414_KH-thi-gioi-thieu-sach.pdf": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/ho-tro-kich-hoat-the/": {
+      "status": "quarantine_unrelated",
+      "sha256": "8c41aa0b213a984992d783b6eba376ef94255a855cd93c32a2906c201bfdd927",
+      "fetched_at": "2026-11-01T09:05:39.683664+00:00"
+    },
+    "https://lic.ut.edu.vn/thong-bao-v-v-sinh-vien-mac-dong-phuc-cua-truong-khi-den-thu-vien/": {
+      "status": "accepted",
+      "sha256": "5dba2f649eb957c1643125b282f105c54567addbcb88f0ce62fdadcca6c887c8",
+      "fetched_at": "2026-11-01T09:05:40.576972+00:00"
+    },
+    "https://lic.ut.edu.vn/ke-hoach-to-chuc-ngay-sach-va-van-hoa-doc-viet-nam-lan-thu-3-nam-2024-2/": {
+      "status": "quarantine_unrelated",
+      "sha256": "4c7027e6cdfade512c1b7626a93001ebdd08757a42d738634f142081a65c937d",
+      "fetched_at": "2026-11-01T09:05:41.552915+00:00"
+    },
+    "https://lic.ut.edu.vn/noi-quy-thu-vien/": {
+      "status": "accepted",
+      "sha256": "b5d1b5702303681c3f7e9393530a5986cdaabe7eb16d878683ddd4e29ff9558b",
+      "fetched_at": "2026-11-01T09:05:42.660729+00:00"
+    },
+    "https://lic.ut.edu.vn/wp-login.php?query_omitted": {
+      "status": "skipped_query",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/thong-bao-ve-viec-mo-cua-phuc-vu-ban-doc-ngoai-gio/": {
+      "status": "accepted",
+      "sha256": "e2604d0b268297289712e855e975c033350874696283ae388cd61056a0a2d0d4",
+      "fetched_at": "2026-11-01T09:05:43.547078+00:00"
+    },
+    "https://lic.ut.edu.vn/thong-bao-v-v-khao-sat-y-kien-ban-doc-nam-hoc-2022-2023/": {
+      "status": "accepted",
+      "sha256": "a5fda11881c990a1a8bae8bba4dfcdc003515764d3925c2b44c47d48db29251c",
+      "fetched_at": "2026-11-01T09:05:44.681634+00:00"
+    },
+    "https://lic.ut.edu.vn/tuyen-sinh-2023-dai-hoc-giao-thong-van-tai-tp-hcm-huong-toi-dinh-cao-tri-thuc-nghe-nghiep/": {
+      "status": "quarantine_unrelated",
+      "sha256": "aecdda1231103271b76573ca48d68a37bd2c56f8ab812a402ca47cd763f1574e",
+      "fetched_at": "2026-11-01T09:05:45.615962+00:00"
+    },
+    "https://lic.ut.edu.vn/thong-bao-ve-viec-khai-thac-cac-co-so-du-lieu/": {
+      "status": "accepted",
+      "sha256": "a3a3f569e8ab0b2e32d4db00f71a550b475405637e38ba8998366b377ee3da0e",
+      "fetched_at": "2026-11-01T09:05:46.578149+00:00"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/09/2.-HDSD-CSDL-EBOOK-UT-XD-ok.pdf": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/thong-bao-v-v-nang-cap-trang-thong-tin-giang-vien/": {
+      "status": "accepted",
+      "sha256": "5fa23ea5f3658a881cf5787d13a35470a3e9b2d080f5973c9cac81f0617c5f0d",
+      "fetched_at": "2026-11-01T09:05:47.652364+00:00"
+    },
+    "https://lic.ut.edu.vn/noi-quy-thu-vien-2/": {
+      "status": "duplicate",
+      "sha256": "56b173ff19035b002b87fc155747911278a3f37c9a3bec8ea2e80b1cccdb47ed",
+      "fetched_at": "2026-11-01T09:05:48.595387+00:00",
+      "duplicate_of": "https://lic.ut.edu.vn/noi-quy-thu-vien/"
+    },
+    "https://lic.ut.edu.vn/thong-tin-cac-tai-lieu-co-ban-quyen-da-duoc-xay-dung-va-trien-khai-tren-cac-he-thong-cua-nha-truong/": {
+      "status": "accepted",
+      "sha256": "1e70532920e91a6727f2736cb97911e5b0a6db79dfbcaf94e8fca3643ae7fbaf",
+      "fetched_at": "2026-11-01T09:05:49.642100+00:00"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/10/2.-HD-khai-thac-tai-lieu-va-su-dung-website-Thu-vien-OPAC-1.pdf": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/10/5.-HD-tim-kiem-va-khai-thac-TL-tren-STINET.pdf": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/quy-dinh-muon-tra-tai-lieu/": {
+      "status": "accepted",
+      "sha256": "02ccb9933f15bf2fa7e7f2483d56561400419ca3e32e06e360055378ce14a416",
+      "fetched_at": "2026-11-01T09:05:50.573883+00:00"
+    },
+    "https://lic.ut.edu.vn/cap-nhat-moi-giao-dien-website/": {
+      "status": "quarantine_unrelated",
+      "sha256": "dd419ac6fa232d28cedb421e857d7ef737eaeb5a0f47ca3d7233f5d8e32b0bb3",
+      "fetched_at": "2026-11-01T09:05:51.562067+00:00"
+    },
+    "https://lic.ut.edu.vn/cap-nhat-moi-dich-vu-website/": {
+      "status": "quarantine_unrelated",
+      "sha256": "bcf40f14d90f784b7e91204de6646681be268e06b1569d6a9485dbd5afcb54c4",
+      "fetched_at": "2026-11-01T09:05:52.520292+00:00"
+    },
+    "https://lic.ut.edu.vn/": {
+      "status": "accepted",
+      "sha256": "b495dab393f4e27998a44b6189d7c88ea078df029a4316da26e8e77679462812",
+      "fetched_at": "2026-11-01T09:05:53.615070+00:00"
+    },
+    "https://lic.ut.edu.vn/trung-tam-thong-tin-thu-vien/": {
+      "status": "accepted",
+      "sha256": "8798c2720494499daf110746f3b85166d371bae659eb8f364ea3ed5053bc3e45",
+      "fetched_at": "2026-11-01T09:05:54.772028+00:00"
+    },
+    "https://lic.ut.edu.vn/tai-nguyen-thong-tin-thu-vien/nguon-tai-nguyen-mo/": {
+      "status": "accepted",
+      "sha256": "781c4839230d240297583d0e7d8a0987cca1eb22a05e516f3e2de8120b16f0f5",
+      "fetched_at": "2026-11-01T09:05:55.617932+00:00"
+    },
+    "https://lic.ut.edu.vn/dich-vu-thu-vien/photo-scan-tai-lieu/": {
+      "status": "accepted",
+      "sha256": "638c5e3d7038b35d0f9a059d7b69b1cd781364f32f1d6ddfe27c73552ec4e8bc",
+      "fetched_at": "2026-11-01T09:05:56.617040+00:00"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2024/11/1.HD-su-dung-thu-vien-va-khai-thac-hieu-qua-cac-CSDL-tai-nguyen-thong-tin-thu-vien.pdf": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/dich-vu-thu-vien/tra-cuu-tai-lieu-va-tim-kiem-thong-tin/": {
+      "status": "accepted",
+      "sha256": "fcebbe89e9c32595164faf35940a86a856bb4d7462ccee18feb1573180f46745",
+      "fetched_at": "2026-11-01T09:05:57.581347+00:00"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2024/10/2024.10.16_HD-khai-thac-tai-lieu-tren-OPAC.pdf": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-phong-doc/": {
+      "status": "accepted",
+      "sha256": "85da9331b46853f1a18eca77df1f0d660ccfda4ed3d7627dd401dc26bba42f5d",
+      "fetched_at": "2026-11-01T09:05:58.611202+00:00"
+    },
+    "https://lic.ut.edu.vn/dich-vu-thu-vien/ho-tro-nhanh/": {
+      "status": "quarantine_unrelated",
+      "sha256": "c175faf898adf6ddbd00e5585f7b0b6b5e26081fe64f40abc8c5d1e99c1c193a",
+      "fetched_at": "2026-11-01T09:05:59.584883+00:00"
+    },
+    "https://lic.ut.edu.vn/dich-vu-thu-vien/su-dung-may-tinh-internet/": {
+      "status": "accepted",
+      "sha256": "9f63027e3a16204a7fb862c7a6c61e4561a3bcfbbc7513c51cd241330cf2f54b",
+      "fetched_at": "2026-11-01T09:06:00.620221+00:00"
+    },
+    "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-muon-tra-tai-lieu/": {
+      "status": "accepted",
+      "sha256": "c69455bf6b98dfc5f53a6fb69a7cf7d4549bde460c73bc643dca88aa83b59a63",
+      "fetched_at": "2026-11-01T09:06:01.595127+00:00"
+    },
+    "https://lic.ut.edu.vn/dich-vu-thu-vien/huong-dan-su-dung-tai-nguyen-thu-vien/": {
+      "status": "accepted",
+      "sha256": "936719841b55776c3ab9ac41777a84348f83aa1f420b7e92c18be3b606b8c0a5",
+      "fetched_at": "2026-11-01T09:06:02.640844+00:00"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/09/3.-HDSD-CSDL-cong-bo-nhiem-vu-KH-CN-VN-.pdf": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2024/04/2024-Huong-dan-su-dung-Thu-vien-so-DSPACE.pdf": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2024/07/HD-khai-thac-tai-lieu-Vien-KHCN-va-GTVT.pdf": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/dich-vu-thu-vien/xuat-ban-phat-hanh-tai-lieu/": {
+      "status": "accepted",
+      "sha256": "8711f0dcd67e751a0d858e4d615ed2725be5ad286c636b4f6cf38067700923f9",
+      "fetched_at": "2026-11-01T09:06:03.769936+00:00"
+    },
+    "https://lic.ut.edu.vn/tai-nguyen-thong-tin-thu-vien/": {
+      "status": "accepted",
+      "sha256": "c390af385370e3b04261beb799a13b8833b6588f15792bdfb5f2ad8428305267",
+      "fetched_at": "2026-11-01T09:06:04.620915+00:00"
+    },
+    "https://lic.ut.edu.vn/gioi-thieu-ve-truong/": {
+      "status": "duplicate",
+      "sha256": "2b231c7eda0a988e768343d5f53557d89755abc2706c074dda81afc9136dc454",
+      "fetched_at": "2026-11-01T09:06:06.879272+00:00",
+      "duplicate_of": "https://lic.ut.edu.vn/"
+    },
+    "https://lic.ut.edu.vn/dich-vu-thu-vien/khai-thac-tai-nguyen-so-du-lieu-hoc-tap/": {
+      "status": "quarantine_empty",
+      "sha256": "ab9f4794630c9379af9b9193d81bced548353a07aaf80c67c881c9d124ff9328",
+      "fetched_at": "2026-11-01T09:06:07.474549+00:00"
+    },
+    "https://lic.ut.edu.vn/dich-vu-thu-vien/hoc-tap-ca-nhan-hoc-nhom/": {
+      "status": "quarantine_empty",
+      "sha256": "cb3c669a2c68561dcd0365d9a2c832390a5d95c9961945527e5ca18bfe788464",
+      "fetched_at": "2026-11-01T09:06:08.647389+00:00"
+    },
+    "https://lic.ut.edu.vn/dich-vu-thu-vien/": {
+      "status": "quarantine_empty",
+      "sha256": "3e75538e2d6e4e9d8ed483f1b71fa2d1a811c0063b18e087c7e3a554af8192c4",
+      "fetched_at": "2026-11-01T09:06:09.734231+00:00"
+    },
+    "https://lic.ut.edu.vn/lich-su-hinh-thanh/": {
+      "status": "accepted",
+      "sha256": "c717e7090c2dad7816cddcca068578174b187e6b4c7fb0dac7e3f660666d4aa8",
+      "fetched_at": "2026-11-01T09:06:11.032387+00:00"
+    },
+    "https://lic.ut.edu.vn/co-so-quan-12/": {
+      "status": "quarantine_unrelated",
+      "sha256": "9e623e9cf1193a1d85c85f215777af5a50c43c5cca02456f2cd678bbee83f67f",
+      "fetched_at": "2026-11-01T09:06:12.062770+00:00"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3496141430370_56b359b20ee6b1d9cca16691b19988de-1067x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3445927049376_8fe9d84e5902709edc9d6988a5930e1a-1067x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3445927063194_60df51a9a26df06654254ad86d9f91ca-1067x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3445927078627_0fea53aff4d78f7791284bb03c0548b8-1067x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3445927089504_0aae1dbee25037aa0dfebff4b02171fd-1067x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3496141418906_2d16df106f8e4edc4d8ba487eb036b2e-1067x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3496141418922_4da582f0f4e682abffdc174821cfa6de-600x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3496141427023_317ffcfc6d01b5ff9ce327f4187ec9d5-1067x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/co-so-tp-thu-duc/": {
+      "status": "quarantine_unrelated",
+      "sha256": "4baf8b80c5857a383801e3dd33edeb6824407ee24435908237a7798e28a49cff",
+      "fetched_at": "2026-11-01T09:06:12.970491+00:00"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3435269590123_5b2adfe223b728ab2442213ae7ff6fe4-1068x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3435269594756_ad332b068ef7002cc368e5f50e45408a-1068x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3440738098938_9d6261962fb70b6ab338511336060ede-1068x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3440738105187_c641d938c542f2bd7622df7e1b001344-1068x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3440812089042_f6f6ceafc21915cb30b98e73ec662128-1068x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3443206050549_9e5946ce0cd3bf5a8e312d1e893f7203-1068x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3443207005787_c01b283be97030846e6fc9764679bff0-599x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/12345-599x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/co-so-binh-thanh/": {
+      "status": "accepted",
+      "sha256": "6a3610bdc78e13dbe45a98e857593003e63f94f6494abc63e4c744d5f4b081ba",
+      "fetched_at": "2026-11-01T09:06:14.062446+00:00"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3437945972985_ec4c1bba69a9e4b2042c66ed0a369b0c-1068x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3437945977808_5b5088756390499f5ef3005cfe9a5e9c-599x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3437945982773_b82386720dca6428e1ea6688daabb34a-1068x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/wp-content/uploads/2022/06/z3437945967431_b761121acdb4c21be60e754b8679fbd7-1068x800.jpg": {
+      "status": "skipped_media",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/thu-vien-dien-tu/": {
+      "status": "accepted",
+      "sha256": "abaac7640734f3b4ee87b97f2933a8bf4132691eec92ec49e8953a332f5d2fd7",
+      "fetched_at": "2026-11-01T09:06:14.934112+00:00"
+    },
+    "https://lic.ut.edu.vn/tai-nguyen/": {
+      "status": "accepted",
+      "sha256": "154ed04cfd1a818e592648861bc7ab78baf23b6e432707a5e4d8c608d92ad495",
+      "fetched_at": "2026-11-01T09:06:15.918876+00:00"
+    },
+    "https://lic.ut.edu.vn/tai-nguyen/?query_omitted": {
+      "status": "skipped_query",
+      "discovered_from": "navigation"
+    },
+    "https://lic.ut.edu.vn/tam-nhin-su-mang/": {
+      "status": "accepted",
+      "sha256": "1c4cbd80704120adcd8c04a5f424559bf2770bc8f1a54aad3dfba630edc4f4eb",
+      "fetched_at": "2026-11-01T09:06:16.935952+00:00"
+    },
+    "https://lic.ut.edu.vn/lien-he/": {
+      "status": "quarantine_unrelated",
+      "sha256": "fcf1a037259ac19836bd6eee92c6f01d47afba5a5f68ae5893ec9815e5502191",
+      "fetched_at": "2026-11-01T09:06:18.093046+00:00"
+    },
+    "https://lic.ut.edu.vn/phat-trien-tai-nguyen-thong-tin/": {
+      "status": "quarantine_empty",
+      "sha256": "fe1c4d7f70ca66fd2ff51e06428262c2f55527e22a4e3e20e2d73e014287f026",
+      "fetched_at": "2026-11-01T09:06:19.107066+00:00"
+    },
+    "https://lic.ut.edu.vn/nghiep-vu-thu-vien/": {
+      "status": "quarantine_empty",
+      "sha256": "3decbbee2d6a525ea3a1b1062ac9b76312136086b89df38d543ad1207a54e1e2",
+      "fetched_at": "2026-11-01T09:06:19.909610+00:00"
+    },
+    "https://lic.ut.edu.vn/gioi-thieu/": {
+      "status": "quarantine_unrelated",
+      "sha256": "dcb9675804622b780bfe3373076ab56a4b7dbb2e7907fb2f61a5d4ae829b03aa",
+      "fetched_at": "2026-11-01T09:06:21.199611+00:00"
+    },
+    "https://lic.ut.edu.vn/tong-quan/": {
+      "status": "accepted",
+      "sha256": "68cc86f1a88410fa4c060648a8d9427673d604d001159f8134368a7321cb9fc1",
+      "fetched_at": "2026-11-01T09:06:22.086956+00:00"
+    },
+    "https://lic.ut.edu.vn/ho-tro-truc-tuyen/": {
+      "status": "quarantine_empty",
+      "sha256": "cc5cdf3c919a75f129156dd755d23b08a8d166b4213191f25fb1433dbd0e6789",
+      "fetched_at": "2026-11-01T09:06:23.015950+00:00"
+    },
+    "https://lic.ut.edu.vn/ho-tro-nghiep-vu/": {
+      "status": "quarantine_empty",
+      "sha256": "b7753b9d8693833cc6fe0c842319b7436c4a9b7cbab48bdf4cca5ac95a0971c2",
+      "fetched_at": "2026-11-01T09:06:24.031343+00:00"
+    },
+    "https://lic.ut.edu.vn/ho-tro-tu-van/": {
+      "status": "quarantine_empty",
+      "sha256": "d4bfda7bc23450d3752d80b2c95cc621850c1c41a0738cf978b5b2e89565cdbe",
+      "fetched_at": "2026-11-01T09:06:25.160854+00:00"
+    },
+    "https://lic.ut.edu.vn/category/tin-tuc/": {
+      "status": "accepted",
+      "sha256": "f8fc27d8be35eb6b4a8bf07cfd28ff4fe62812862d1731d6a98687c789f87974",
+      "fetched_at": "2026-11-01T09:06:26.012471+00:00"
+    },
+    "https://lic.ut.edu.vn/category/thong-bao/": {
+      "status": "quarantine_spam",
+      "sha256": "ee348a33db521c7afd86c8ed922c5d8b107c62c4adbc1db25ded20198e52405f",
+      "fetched_at": "2026-11-01T09:06:27.216646+00:00"
+    },
+    "https://lic.ut.edu.vn/cdn-cgi/l/email-protection": {
+      "status": "missing_404",
+      "sha256": "ffd6fc7dcc4c19e9134db8caf6c26a6be4d2993f6834aa841968ea9882a13e9c",
+      "fetched_at": "2026-11-01T09:06:27.310640+00:00"
+    },
+    "https://lic.ut.edu.vn/phuc-vu-ban-doc/": {
+      "status": "missing_404",
+      "sha256": "ffd6fc7dcc4c19e9134db8caf6c26a6be4d2993f6834aa841968ea9882a13e9c",
+      "fetched_at": "2026-11-01T09:06:28.942520+00:00"
+    },
+    "https://lic.ut.edu.vn/xuat-ban-phat-hanh/": {
+      "status": "duplicate",
+      "sha256": "e9804e435fa15076ac77b7a0c48ca14681391b4eb2ef06b834a05403a46c7c88",
+      "fetched_at": "2026-11-01T09:06:31.082257+00:00",
+      "duplicate_of": "https://lic.ut.edu.vn/dich-vu-thu-vien/xuat-ban-phat-hanh-tai-lieu/"
+    },
+    "https://lic.ut.edu.vn/category/tin-tuc/page/2/": {
+      "status": "accepted",
+      "sha256": "a184f42831e86b7e39e29386f17d60b8e9ba6f71fd9d6e5b25b95cb0138cab09",
+      "fetched_at": "2026-11-01T09:06:32.105471+00:00"
+    },
+    "https://lic.ut.edu.vn/category/thong-bao/page/2/": {
+      "status": "quarantine_spam",
+      "sha256": "90035f16774a6a1023e8754915a4c7bad2c3f910af37ac8df616446013535763",
+      "fetched_at": "2026-11-01T09:06:32.940238+00:00"
+    },
+    "https://lic.ut.edu.vn/category/thong-bao/page/3/": {
+      "status": "accepted",
+      "sha256": "06ee59acec696665f351da335b543da5cafb0e08d1d4dc29cc6fc1c80da7caac",
+      "fetched_at": "2026-11-01T09:06:34.149426+00:00"
+    },
+    "https://lic.ut.edu.vn/category/tin-tuc/page/1/": {
+      "status": "duplicate",
+      "sha256": "8683c333cb1508474df54e3407c02602b30609c6e0e89c2fc69416fd440a3139",
+      "fetched_at": "2026-11-01T09:06:35.544396+00:00",
+      "duplicate_of": "https://lic.ut.edu.vn/category/tin-tuc/"
+    },
+    "https://lic.ut.edu.vn/category/thong-bao/page/1/": {
+      "status": "quarantine_spam",
+      "sha256": "89263454f15dd9c113fcdd5ea9ce12fd370163020641e0ab289b12b81074e3c2",
+      "fetched_at": "2026-11-01T09:06:37.074602+00:00"
+    }
+  },
+  "verification": {
+    "command": "backend/.venv/Scripts/python -m pytest tests/test_lic_collection.py tests/test_integrations.py tests/test_dspace_collection.py -q",
+    "passed": 63,
+    "lic_tests_passed": 12,
+    "snapshot_checksums_verified": 60,
+    "manifest_counts_sum_verified": 141,
+    "staging_gitignored": true,
+    "initial_fetch_reused": 0,
+    "resume_reused": 60,
+    "cache_schema_verified": 60,
+    "review_regressions": [
+      "Cached pages do not consume new fetch budget",
+      "Query exclusions never shadow clean URLs",
+      "Malformed timestamp/type/links cache is refetched",
+      "Page redirects enforce exclusions before fetch"
+    ]
+  },
+  "coverage_definition": "All canonical internal HTML candidates exposed by the public sitemap and recursively discovered navigation exhausted for this dated snapshot. Explicit exclusions and 404 outcomes remain recorded; not all historical/orphan pages, query combinations, attachments, external sources, private APIs or current-policy correctness.",
+  "not_published": true,
+  "production_faq_mutated_by_collector": false,
+  "staging_directory": "backend/runtime/lic-public",
+  "collection_http_200_html": 58,
+  "collection_http_404": 2,
+  "sitemap_image_location_elements_excluded": 249,
+  "external_links_followed": false,
+  "errors": 0,
+  "blocked_coverage": [],
+  "needs_manual_review": [
+    "Lexical accepted status only identifies review candidates; it is not policy approval.",
+    "Image/PDF-only notices have no OCR/full text in this collection.",
+    "Spam-contaminated category archives are quarantined even when they contain legitimate article links.",
+    "Two discovered paths returned404: /phuc-vu-ban-doc/ and /cdn-cgi/l/email-protection.",
+    "A new output directory is required for a fresh page snapshot; ordinary resume preserves original fetched_at."
+  ]
+}

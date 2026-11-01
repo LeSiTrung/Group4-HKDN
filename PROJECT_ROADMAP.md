@@ -1,6 +1,6 @@
 # Technical roadmap
 
-Updated 2026-10-29. Authority: AGENTS.md and docs/superpowers/plans/2026-10-28-library-platform.md. Software and operations only.
+Updated 2026-10-31. Authority: AGENTS.md and implementation plans in docs/superpowers/plans. Software and operations only.
 
 | ID | Priority | Deliverable | Status | Evidence / remaining work |
 |---|---|---|---|---|
@@ -8,13 +8,26 @@ Updated 2026-10-29. Authority: AGENTS.md and docs/superpowers/plans/2026-10-28-l
 | AI-01 | P1 | Reviewed FAQ, multilingual embedding/Qdrant, grounded Ollama | Verified locally | 27/27 deterministic and live API cases; 2/2 semantic probes. Development checks, not library acceptance |
 | SEARCH-01 | P1 | Curated book CRUD/import/search, detail and follow-up | Verified locally | Keyword/fuzzy/semantic paths, draft exclusion, provenance and unknown live availability |
 | UI-01 | P1 | Reader/admin interface, responsive layout, voice capability | Verified locally; voice acceptance pending | 24 tests + build; browser chat/catalog/admin/auth smoke; no physical microphone acceptance |
-| OPS-01 | P1 | Launcher, container/HTTPS configuration, backup/restore | Partially verified | Windows launcher + restore pass; Compose config valid; full container runtime BLOCKED by unavailable daemon |
+| OPS-01 | P1 | Launcher, container/HTTPS configuration, backup/restore | Verified locally; target-host acceptance pending | Windows launcher, actual Linux image/runtime/backup-restore and local Caddy TLS pass01/11; public DNS/ACME/capacity remain pending |
 | QA-01 | P1 | Regression, independent review, reproducible evaluation | Verified locally | docs/validation.md and tests/evaluation; review findings fixed |
 | CONV-02 / TIME-02 | P1 | Natural lookup, safe follow-ups and date/branch handling | Verified locally | Conversation/date regressions plus 45/45 live development cases; unsupported conditions clarify |
 | FEEDBACK-01 | P2 | Admin feedback quality loop | Verified locally | 12 API tests, 5 UI tests, browser pagination/filter smoke; explicit sharing only |
-| QA-02 | P2 | CI and test-tool dependency security | Implemented; remote run pending | Local135 backend/29 frontend, clean build/install, npm audit0; workflow not run remotely |
+| QA-02 | P2 | CI and test-tool dependency security | Baseline verified remotely | PR1 and merged main77699cd backend/frontend Actions passed29/10; new RAG branch still needs its own remote run |
 | CHAT-03 / LLM-03 | P1 | Library-only natural conversation, long input, bounded generation | Verified locally | 188 backend/35 frontend;45+10 live cases,2 semantic probes; no general-knowledge mode, no infinite-context claim |
-| EXT-01 | P1/external | Live OPAC, approved transactions/channels, authoritative content | BLOCKED | Backend403; no bridge/channel credentials. Seed:17 reviewed FAQs,1 real metadata snapshot |
+| RAG-04 / RAG-05 / RAG-06 | P1 | Incremental chunk index, hybrid retrieval, excerpt-grounded generation, admin diagnostics | Verified locally | 239 backend/42 frontend;45+10 offline/live and2 live semantic probes; real long-source inference and admin browser checks. docs/validation/2026-10-30-rag.json |
+| LLM-04 | P1 | Apply installed Qwen3-1.7B to grounded library chat | Verified locally | Defaults/local config/docs updated; prompt placeholder regression RED→GREEN;239 backend,45+10 live cases,2 semantic probes and guest browser check. docs/validation/2026-10-30-qwen17.json; broader accuracy/capacity pending |
+| EXT-01 | P1/external | Live OPAC, approved transactions/channels, authoritative content | BLOCKED | Printed OPAC crawler disallowed; no bridge/channel credentials. Digital metadata collection does not supply current holdings or transaction authority |
 | DEPLOY-01 | P1/external | Public HTTPS, capacity/restore rehearsal, real users | BLOCKED | Requires group-owned target and library/user acceptance |
+| DATA-01 / DATA-02 / HOURS-01 | P1 | Public-source inventory, curated import and regular hours | Verified locally | 30 LIC pages read/2 empty;10 added FAQs,27 indexed sources/126 chunks.253 backend and45+10+2+10 live checks. OPAC robots disallows catalog crawl; current hours unconfirmed. docs/validation/2026-10-31-public-data.json |
+| COLLECT-01 / IMPORT-01 / SEARCH-02 | P1 | Public digital metadata collection, safe import and full-catalog integration | Verified locally | 5,578 inventory IDs reconciled:5,569 public/9 restricted;5,568 imported/one missing-title quarantine.5,569 indexed records/18,441 chunks.329 backend/44 frontend,75 live chat+5 API checks; guest browser source/follow-up. docs/validation/2026-10-31-dspace-training.json |
+| TRAIN-01 | P2 | Local measured embedding fine-tune | Experiment/export completed; promotion pending | 300 CUDA steps,4,458 train/402 dev/354 test pairs. Synthetic test nDCG@5 0.4478→0.6297; numerical export parity now passes. Separate actual-pipeline comparison now passes; production retains base pending staff QA. docs/embedding-training.md |
+| SEARCH-03 / QA-03 | P1 | Structured author/title search, context retention, precise related books | Verified locally | Frozen25-case comparison, author returned precision@5 0.0727→0.9045.356 backend/45 frontend,80 live chat+6 API checks, browser filter smoke. docs/validation/2026-10-31-retrieval-quality.json |
+| EXPORT-01 | P2 | Exact checkpoint ONNX and FastEmbed tensor parity | Verified locally; serving promotion pending | 50 varied inputs, max ONNX/FastEmbed error<3.1e-7; independent original-runtime reference, hashes and47-wheel lock. Main model/index unchanged; isolated runtime integration now verified in RAG-07. docs/embedding-export.md |
+| LOCAL-01 / RAG-07 | P1 | Verified offline local embedding and isolated actual-pipeline comparison | Verified locally; promotion pending | Same354 synthetic cases: nDCG@5 0.463898→0.623509;81 wins/7 regressions/266 ties retained. Separate5,569-record books/knowledge index; main baseline unchanged. docs/candidate-runtime.md |
+| LOCAL-02 | P1 | Bounded server-side admin catalog search/pagination | Verified locally |20 rows/page; equivalent wire payload reduced99.5992%; real page2/filter/source browser QA. No schema/dependency change |
+| QA-04 | P1 | Candidate integration regression and cleanup | Verified locally |387 backend/45 frontend/build;80/80 live chat per profile; public-only snapshot helper; temporary QA admin removed. docs/validation/2026-10-31-candidate-integration.json |
+| DATA-03 / ACCESS-02 | P1 | Scoped LIC frontier collection and honest OPAC coverage | LIC verified locally; OPAC bulk BLOCKED |100 sitemap pages/141 outcomes/60 snapshots/30review candidates. OPAC browser counters verified; robots denies crawl, export/feed required. docs/lic-collection.md |
+| HOURS-02 / DATA-04 | P1 | Additional reviewed services and conflicting guide references | Verified locally; current policy confirmation pending |4curated entries imported idempotently;31FAQs/145chunks; both guide references preserved, dated schedules take precedence |
+| DOCKER-01 / QA-05 | P1 | Actual container, local TLS and final cross-platform API checks | Verified locally |405 backend/45 frontend;86live chat cases per Windows/Linux profile;25app+10TLS checks; main private data excluded. docs/validation/2026-11-01-data-container.json |
 
 **PROJECT NOT COMPLETE.** Local demo and tested adapters are available; external acceptance, adequate production catalog coverage and target-host verification remain required.

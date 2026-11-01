@@ -1,0 +1,12 @@
+[
+  {"id":"regular-hours","message":"Giờ mở cửa mặc định của thư viện?","status":"needs_confirmation","mode":"faq","source":"#page=12","contains":"07:30–20:30"},
+  {"id":"regular-hours-unaccented","message":"Thu vien mo cua may gio?","status":"needs_confirmation","source":"#page=12","contains":"13:00–16:30"},
+  {"id":"today-reference","message":"Giờ mở cửa hôm nay cơ sở 1","status":"needs_confirmation","source":"#page=12","contains":"không xác nhận đang mở cửa"},
+  {"id":"holiday-unknown","message":"Giờ mở cửa ngày lễ cơ sở 1","status":"clarify"},
+  {"id":"future-unknown","message":"Giờ mở cửa ngày mai cơ sở 2","status":"clarify"},
+  {"id":"reading-room","message":"Cần làm gì khi sử dụng phòng đọc của thư viện?","status":"answered","source":"phuc-vu-phong-doc","contains":"thẻ"},
+  {"id":"computer-use","message":"Tôi có thể sử dụng máy tính và Internet tại thư viện thế nào?","status":"answered","source":"su-dung-may-tinh-internet","contains":"học tập"},
+  {"id":"oer-vietnamese","message":"Thư viện giới thiệu những nguồn học liệu mở tiếng Việt nào?","status":"answered","source":"nguon-tai-nguyen-mo","contains":"VOER"},
+  {"id":"group-room-unconfigured","message":"Có thể đặt phòng học nhóm trong thư viện qua chatbot không?","status":"needs_confirmation","source":"hoc-tap-ca-nhan-hoc-nhom","contains":"chưa có kết nối"},
+  {"id":"interlibrary-unconfirmed","message":"UTH có thông tin về dịch vụ mượn liên thư viện với Đại học Bách khoa không?","status":"needs_confirmation","source":"v-v-trien-khai-dich-vu-muon-lien-thu-vien","contains":"chưa thực hiện giao dịch"}
+]

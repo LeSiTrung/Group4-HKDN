@@ -30,9 +30,27 @@ it('labels local catalog snapshots and paginates the submitted query', async () 
   expect(fetch.mock.calls[1][0]).toContain('source=local')
 })
 
+it('searches the selected metadata field locally and keeps it on subsequent pages', async () => {
+  fetch.mockResolvedValueOnce(response({ source: 'local', total: 21, page: 1, page_size: 20, items: [{ id: 1, title: 'Tài liệu tác giả', url: 'https://lic.ut.edu.vn/record/1' }] })).mockResolvedValueOnce(response({ source: 'local', total: 21, page: 2, page_size: 20, items: [] }))
+  render(<Catalog />)
+  fireEvent.change(screen.getByLabelText('Từ khóa tìm kiếm'), { target: { value: 'Nguyễn Văn An' } })
+  fireEvent.change(screen.getByLabelText('Nguồn tra cứu'), { target: { value: 'opac' } })
+  fireEvent.change(screen.getByLabelText('Tìm theo'), { target: { value: 'author' } })
+  expect(screen.getByLabelText('Nguồn tra cứu').value).toBe('local')
+  expect(screen.getByRole('option', { name: 'OPAC trực tuyến' }).disabled).toBe(true)
+  fireEvent.click(screen.getByRole('button', { name: 'Tra cứu', exact: true }))
+  await screen.findByText('Tài liệu tác giả')
+  expect(fetch.mock.calls[0][0]).toContain('field=author')
+  fireEvent.change(screen.getByLabelText('Tìm theo'), { target: { value: 'title' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Trang sau' }))
+  await waitFor(() => expect(fetch).toHaveBeenCalledTimes(2))
+  expect(fetch.mock.calls[1][0]).toContain('field=author')
+  expect(fetch.mock.calls[1][0]).toContain('page=2')
+})
+
 it('creates an unpublished catalog record with source and review date', async () => {
   const mutate = vi.fn().mockResolvedValue({ id: 1 })
-  render(<BookAdmin rows={[]} onMutate={mutate} />)
+  render(<BookAdmin rows={{ items: [], total: 0, page: 1, page_size: 20 }} onMutate={mutate} />)
   fireEvent.click(screen.getByRole('button', { name: 'Thêm tài liệu' }))
   fireEvent.change(screen.getByLabelText('Nhan đề'), { target: { value: 'Tài liệu thử' } })
   fireEvent.change(screen.getByLabelText('URL biểu ghi / nguồn'), { target: { value: 'https://example.edu/book/1' } })
@@ -44,7 +62,7 @@ it('creates an unpublished catalog record with source and review date', async ()
 
 it('rejects invalid import JSON before network and imports a valid array atomically', async () => {
   const mutate = vi.fn().mockResolvedValue({ imported: 1 })
-  render(<BookAdmin rows={[]} onMutate={mutate} />)
+  render(<BookAdmin rows={{ items: [], total: 0, page: 1, page_size: 20 }} onMutate={mutate} />)
   fireEvent.click(screen.getByRole('button', { name: 'Nhập JSON' }))
   fireEvent.change(screen.getByLabelText('Dữ liệu JSON'), { target: { value: '{broken' } })
   fireEvent.click(screen.getByRole('button', { name: 'Nhập danh mục' }))
@@ -81,7 +99,7 @@ it('opens a local book detail with related records from the API', async () => {
 
 it('rejects imports larger than the 200-record backend limit', async () => {
   const mutate = vi.fn()
-  render(<BookAdmin rows={[]} onMutate={mutate} />)
+  render(<BookAdmin rows={{ items: [], total: 0, page: 1, page_size: 20 }} onMutate={mutate} />)
   fireEvent.click(screen.getByRole('button', { name: 'Nhập JSON' }))
   fireEvent.change(screen.getByLabelText('Dữ liệu JSON'), { target: { value: JSON.stringify(Array.from({ length: 201 }, () => ({ title: 'record' }))) } })
   fireEvent.click(screen.getByRole('button', { name: 'Nhập danh mục' }))

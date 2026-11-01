@@ -1,0 +1,222 @@
+{
+  "kind": "deterministic public-metadata lookup regression; not semantic or staff acceptance",
+  "selection": "first12 SHA256(seed31:source_url), before implementation changes; no test-driven training",
+  "corpus_sha256": "eef7e017aeeb1a6289dc58d43324257bdc6f6008cf1501396341fa7318fa593d",
+  "corpus_count": 5569,
+  "cases": [
+    {
+      "id": "title-00",
+      "field": "title",
+      "q": "phan tich tinh hinh thuc hien san luong 6 thang dau nam 2009 va mot so giai phap nham nang cao san luong cua doi tau cong ty co phan van tai dau khi viet nam",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/eed57faa-f7cd-4724-ae89-ed24be556161"
+      ]
+    },
+    {
+      "id": "author-00",
+      "field": "author",
+      "q": "le thi kim lang",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/eed57faa-f7cd-4724-ae89-ed24be556161"
+      ]
+    },
+    {
+      "id": "title-01",
+      "field": "title",
+      "q": "nghien cuu danh gia kha nang su dung bot da thay the cat trong san xuat be tong lam duong giao thong nong thon",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/e882260f-9593-4aaf-bd3f-4e83e613aa66"
+      ]
+    },
+    {
+      "id": "author-01",
+      "field": "author",
+      "q": "ho ngoc bao",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/e882260f-9593-4aaf-bd3f-4e83e613aa66"
+      ]
+    },
+    {
+      "id": "title-02",
+      "field": "title",
+      "q": "quy trinh lap rap chassi o to n900 mo phong qua trinh lap rap dong co va dong co len khung xe",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/9bdcfb2e-bb5c-4316-92b1-df4c814811db"
+      ]
+    },
+    {
+      "id": "author-02",
+      "field": "author",
+      "q": "nguyen minh nhat",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/2a117abe-979e-4240-b5ad-1af6a97c16d1",
+        "https://thuvienso.ut.edu.vn/items/9bdcfb2e-bb5c-4316-92b1-df4c814811db",
+        "https://thuvienso.ut.edu.vn/items/f60d6697-9300-4f0f-923b-54e3b882af79"
+      ]
+    },
+    {
+      "id": "title-03",
+      "field": "title",
+      "q": "thiet ke tuyen duong moi di qua hai diem t h phan duong",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/11026720-8879-40af-b80d-43795f5be7d7"
+      ]
+    },
+    {
+      "id": "author-03",
+      "field": "author",
+      "q": "do thai hoc",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/11026720-8879-40af-b80d-43795f5be7d7",
+        "https://thuvienso.ut.edu.vn/items/779b158a-bc56-4e41-b845-b91e51e207f4"
+      ]
+    },
+    {
+      "id": "title-04",
+      "field": "title",
+      "q": "tim hieu ket cau va lap quy trinh van hanh bao duong may incinerator cua hang muira lap tren tau mt athena",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/c88b98ae-89b6-48d7-a70c-cdc857e71fd8"
+      ]
+    },
+    {
+      "id": "author-04",
+      "field": "author",
+      "q": "nguyen duy chien",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/c88b98ae-89b6-48d7-a70c-cdc857e71fd8"
+      ]
+    },
+    {
+      "id": "title-05",
+      "field": "title",
+      "q": "danh gia tac dong cua quy hoach su dung dat len mang luoi giao thong duong bo quan thu duc thanh pho ho chi minh nhung de xuat huong den giao thong ben vung",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/143eedc3-acb6-468a-8e4f-3fea31daa31d"
+      ]
+    },
+    {
+      "id": "author-05",
+      "field": "author",
+      "q": "nguyen thanh trung",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/008db0cd-ceba-4790-b011-426aa8e75749",
+        "https://thuvienso.ut.edu.vn/items/0beb7ebf-4a62-4471-bdc7-1afeedb301dc",
+        "https://thuvienso.ut.edu.vn/items/143eedc3-acb6-468a-8e4f-3fea31daa31d",
+        "https://thuvienso.ut.edu.vn/items/25e63f95-70fc-4e2c-a325-f9b4e03499a7",
+        "https://thuvienso.ut.edu.vn/items/2e50b3cf-63bd-41cf-a764-c86aff31d28c",
+        "https://thuvienso.ut.edu.vn/items/38edb75e-8bf9-4b98-a907-5343970274db",
+        "https://thuvienso.ut.edu.vn/items/4589fc30-717c-41ca-84f5-bc7eae6341c4",
+        "https://thuvienso.ut.edu.vn/items/6cc1f1ed-8216-405d-9553-ca7a315d54bb",
+        "https://thuvienso.ut.edu.vn/items/f64de866-1a9c-40f0-83f9-4d2d18b88b69",
+        "https://thuvienso.ut.edu.vn/items/fe58f3a0-d116-4972-8bc9-061a31174fd4"
+      ]
+    },
+    {
+      "id": "title-06",
+      "field": "title",
+      "q": "khai thac he thong chieu sang va tin hieu tren xe lexus ls 460 xay dung mo hinh he thong chieu sang o to",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/38d1be0e-5436-4fb4-9e9f-95e6ea7e9832"
+      ]
+    },
+    {
+      "id": "author-06",
+      "field": "author",
+      "q": "nguyen ngoc hai",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/078336e4-367a-4d60-a855-a8c84729e2c7",
+        "https://thuvienso.ut.edu.vn/items/38d1be0e-5436-4fb4-9e9f-95e6ea7e9832"
+      ]
+    },
+    {
+      "id": "title-07",
+      "field": "title",
+      "q": "phat trien nang luc tu van giam sat trong quan ly chat luong cong trinh xay dung truong hop cong ty co phan tu van quan ly chat luong dau tien fqm",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/7a01209d-5fff-4743-88a5-1b841fd2c987"
+      ]
+    },
+    {
+      "id": "author-07",
+      "field": "author",
+      "q": "duong ngoc",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/7a01209d-5fff-4743-88a5-1b841fd2c987"
+      ]
+    },
+    {
+      "id": "title-08",
+      "field": "title",
+      "q": "thiet ke tuyen duong moi di qua hai diem v m phan duong",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/5bddcf62-c9d1-4c4a-85f3-824c36cca543"
+      ]
+    },
+    {
+      "id": "author-08",
+      "field": "author",
+      "q": "duong van minh",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/5896b958-5929-4f80-8e14-b5b7a6e160ac",
+        "https://thuvienso.ut.edu.vn/items/5bddcf62-c9d1-4c4a-85f3-824c36cca543",
+        "https://thuvienso.ut.edu.vn/items/a5d6296d-5675-4a7c-a15e-2119ba5d37b1",
+        "https://thuvienso.ut.edu.vn/items/e65998da-0af8-48c8-9e91-b843c37bf721"
+      ]
+    },
+    {
+      "id": "title-09",
+      "field": "title",
+      "q": "kiem toan quyet toan von dau tu hoan thanh cong trinh nha cong vu chi cuc thue huyen long thanh dong nai",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/e4db3eaa-8898-4938-84dc-36e339603074"
+      ]
+    },
+    {
+      "id": "title-10",
+      "field": "title",
+      "q": "he vetiver mot giai phap ho tro chong xoi mon sat lo trong xay dung",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/0917655f-825e-4259-a8aa-6ccf49c08ed5"
+      ]
+    },
+    {
+      "id": "author-10",
+      "field": "author",
+      "q": "nguyen van trung",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/0917655f-825e-4259-a8aa-6ccf49c08ed5",
+        "https://thuvienso.ut.edu.vn/items/0d075798-a82f-48e7-b0ea-1250e6ac5439",
+        "https://thuvienso.ut.edu.vn/items/ed4e909f-6117-48b5-a540-525d0579e575"
+      ]
+    },
+    {
+      "id": "title-11",
+      "field": "title",
+      "q": "nghien cuu he thong ho tro lai xe thong minh de nang cao kha nang an toan khi lai xe",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/1ff60ca9-2200-469b-a725-983f1a2869ab"
+      ]
+    },
+    {
+      "id": "author-11",
+      "field": "author",
+      "q": "phan thanh phap",
+      "relevant_urls": [
+        "https://thuvienso.ut.edu.vn/items/1ff60ca9-2200-469b-a725-983f1a2869ab"
+      ]
+    },
+    {
+      "id": "missing-author",
+      "field": "author",
+      "q": "zzuthmissing837216",
+      "relevant_urls": []
+    },
+    {
+      "id": "missing-title",
+      "field": "title",
+      "q": "zzuthmissing837216",
+      "relevant_urls": []
+    }
+  ]
+}

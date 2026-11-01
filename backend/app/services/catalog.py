@@ -4,10 +4,14 @@ import re
 import os
 from datetime import date
 from difflib import SequenceMatcher
+from functools import lru_cache
 from typing import Literal
 from pydantic import BaseModel, Field, field_validator
 from .knowledge import KnowledgeInput, today
 from .rag_service import normalize, tokens
+
+_DOCUMENT_TYPES=r'(?:sach|tai lieu|cuon|quyen|luan van|luan an|khoa luan|do an|giao trinh|bai giang)'
+_BOOK_PREFIX=r'(?:(?:tim|tra cuu) '+_DOCUMENT_TYPES+r'|sach)'
 
 
 class BookInput(BaseModel):
@@ -68,9 +72,31 @@ def seed_books(db_factory,path):
         db.execute("INSERT INTO meta VALUES ('books_seeded','1')")
 
 
-def search_local(db_factory,query,kind='all'):
+@lru_cache(maxsize=32768)
+def _similar_words(word,token):
+    # Published metadata repeats token pairs; cache similarity, never rows or rankings.
+    matcher=SequenceMatcher(None,word,token)
+    return matcher.quick_ratio()>=0.83 and matcher.ratio()>=0.83
+
+
+def search_local(db_factory,query,kind='all',field='all'):
+    if field not in ('all','title','author'):
+        raise ValueError('Unsupported catalog field')
     with db_factory() as db:
         rows=db.execute('SELECT * FROM books WHERE published=1'+(' AND kind=?' if kind!='all' else ''),(() if kind=='all' else (kind,))).fetchall()
+    normalized=normalize(query)
+    if not normalized:
+        return []
+    if field!='all':
+        pattern=re.compile(r'(?<!\w)'+re.escape(normalized)+r'(?!\w)')
+        matched=[]
+        for row in rows:
+            values=row[field].split(';') if field=='author' else [row[field]]
+            values=[normalize(value) for value in values]
+            if any(pattern.search(value) for value in values):
+                matched.append((item(row),normalized in values))
+        matched.sort(key=lambda pair:(not pair[1],pair[0]['id']))
+        return [row for row,_ in matched]
     words=tokens(query)-{'tim','sach','tai','lieu','theo','quyen','cuon','tac','gia','chu','de','nguoi','viet'}
     if not words:
         return []
@@ -78,14 +104,24 @@ def search_local(db_factory,query,kind='all'):
     for row in rows:
         text=normalize(' '.join(row[k] for k in ('title','author','year','subjects','description')))
         corpus=set(text.split())
-        matched=sum(any(w==t or (len(w)>=4 and len(t)>=4 and SequenceMatcher(None,w,t).ratio()>=0.83) for t in corpus) for w in words)
+        matched=len(words&corpus)
+        for word in words-corpus:
+            if len(word)<4:
+                continue
+            for token in corpus:
+                # Length/character upper bounds preserve the original fuzzy threshold.
+                if len(token)<4 or 2*min(len(word),len(token))/(len(word)+len(token))<0.83:
+                    continue
+                if _similar_words(word,token):
+                    matched+=1
+                    break
         coverage=matched/len(words)
         if coverage<0.6:
             continue
         title_hits=len(words&tokens(row['title']))
         author_hits=len(words&tokens(row['author']))
         ranked.append((item(row),coverage+title_hits*0.15+author_hits*0.1))
-    ranked.sort(key=lambda pair:(-pair[1],pair[0]['id']))
+    ranked.sort(key=lambda pair:(normalize(pair[0]['title'])!=normalized,-pair[1],pair[0]['id']))
     return [r for r,_ in ranked]
 
 
@@ -95,32 +131,41 @@ def public_book(db_factory,row_id):
     return item(row) if row else None
 
 
-def search_books(state,query,kind='all'):
-    matched=search_local(state.db,query,kind)
-    if matched or state.settings.testing or os.getenv('ENABLE_VECTORS','true').lower()!='true':
+def book_documents(rows):
+    return [{'id':r['id'],'question':r['title'],'aliases':[r['author'],r['subjects']],
+             'answer':r['description'] or r['title']} for r in rows]
+
+
+def search_books(state,query,kind='all',field='all'):
+    matched=search_local(state.db,query,kind,field)
+    # Single-term identifiers need a lexical match, not an unrelated vector suggestion.
+    if field!='all' or matched or len(tokens(query))<2 or state.settings.testing or os.getenv('ENABLE_VECTORS','true').lower()!='true':
         return matched
     with state.db() as db:
-        rows=[item(r) for r in db.execute('SELECT * FROM books WHERE published=1'+(' AND kind=?' if kind!='all' else ''),(() if kind=='all' else (kind,)))]
-    documents=[{'id':r['id'],'question':r['title'],'aliases':[r['author'],r['subjects']],'answer':r['description'] or r['title']} for r in rows]
+        rows=[item(r) for r in db.execute('SELECT * FROM books WHERE published=1')]
+    documents=book_documents(rows)
     if not documents:
         return []
     try:
-        hits=state.vectors.search(query,documents,namespace='books')
+        source_ids={row['id'] for row in rows if kind=='all' or row['kind']==kind}
+        hits=state.vectors.search(query,documents,namespace='books',source_ids=source_ids)
     except Exception:
         return []
     results=[]
     for row,_ in hits:
         current=public_book(state.db,row['id'])
-        if current:
+        if current and (kind=='all' or current['kind']==kind):
             results.append(current)
     return results
 
 
 def is_book_request(question):
     q=normalize(question)
+    if re.fullmatch(r'(?:tim|tra cuu) '+_DOCUMENT_TYPES+r'(?: (?:(?:va|hoac) )?'+_DOCUMENT_TYPES+r')*',q):
+        return False
     if re.search(r'\bco (sach|cuon|quyen)\b',q) and re.search(r'\b(qua han|phi|phat|han tra|gia han)\b',q):
         return False
-    return bool(re.search(r'\b(tim (?:sach|tai lieu|cuon|quyen)|tra cuu (?:sach|tai lieu)|co (?:sach|cuon|quyen) .+|sach ve|sach cua|sach tuong tu|goi y sach|sach danh cho)\b',q)) and not any(x in q for x in ('huong dan','cach tim','lam sao','nhu the nao','o dau','vao dau'))
+    return bool(re.search(r'\b((?:tim|tra cuu) '+_DOCUMENT_TYPES+r'|co (?:sach|cuon|quyen) .+|sach ve|sach cua|sach tuong tu|goi y sach|sach danh cho)\b',q)) and not any(x in q for x in ('huong dan','cach tim','lam sao','nhu the nao','o dau','vao dau'))
 
 
 def book_attribute(question):
@@ -141,8 +186,17 @@ def book_followup(question):
     return bool(re.search(r'^(co cuon|cuon nao|sach nay|sach do|cuon nay|cuon do|con khong|con ban|con sach|con muon|co san|danh cho|nguoi moi|nang cao|tuong tu|tac gia|ai viet|nam xuat ban|xuat ban|isbn|o ke|co bao nhieu ban)',q)) and not any(x in q for x in ('huong dan','cach tim','nhu the nao'))
 
 
+def author_query(question):
+    match=re.fullmatch(_BOOK_PREFIX+r' (?:cua(?: tac gia)?|(?:theo )?tac gia) (.+)',normalize(question))
+    return match[1] if match else None
+
+
 def book_query(question):
+    author=author_query(question)
+    if author:
+        return author
     q=normalize(question)
+    q=re.sub(r'\b(?:tim|tra cuu) '+_DOCUMENT_TYPES+r'\b',' ',q,count=1)
     q=re.split(r'\b(?:con muon|muon duoc|con ban|con sach|co san|bao nhieu ban|tinh trang)\b',q,maxsplit=1)[0]
     q=re.sub(r'\b(toi|minh|ban|co|khong|tim|sach|tai lieu|tra cuu|ve|theo|cho|giup|quyen|cuon|nao|danh|nguoi|viet|muon|goi y|tuong tu|cua)\b',' ',q)
     return ' '.join(q.split())
@@ -161,10 +215,23 @@ def contextual_question(question,history):
     attribute=book_attribute(question)
     for turn in reversed(history or []):
         if turn.get('context_query'):
-            return 'Tìm sách về '+turn['context_query']+('' if attribute else ' '+question)
+            context=turn['context_query']
+            return (context if is_book_request(context) else 'Tìm sách về '+context)+('' if attribute else ' '+question)
         if turn['role']=='user':
             if is_book_request(turn['content']):
-                return 'Tìm sách về '+book_query(turn['content'])+('' if attribute else ' '+question)
+                return turn['content']+('' if attribute else ' '+question)
             if not book_followup(turn['content']):
                 break
     return question
+
+
+def selected_title(history):
+    for turn in reversed(history or []):
+        if turn['role']!='user':
+            continue
+        if is_book_request(turn['content']):
+            match=re.fullmatch(_BOOK_PREFIX+r' (.+)',normalize(turn['content']))
+            return match[1] if match else ''
+        if not book_followup(turn['content']):
+            break
+    return ''

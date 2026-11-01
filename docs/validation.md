@@ -1,6 +1,49 @@
 # Kiểm chứng kỹ thuật
 
-Ngày làm việc: 28–29/10/2026. Đây là nhật ký kỹ thuật; kiểm thử cục bộ không thay thế nghiệm thu thư viện hoặc triển khai production.
+## Kiểm chứng khi push và hồi quy offline — 01/11/2026
+
+[Đợt commit](validation/2026-11-01-git-delivery.json) ghi16 commit độc lập và lỗi được phát hiện bởi CI. Run41303107363 trên SHA b7dfdaec đạt backend405/restore/frontend45/build, nhưng evaluation offline chỉ44/45 vì câu chỉ nêu loại tài liệu bị chuyển sang tìm biểu ghi. Đã sửa phân luồng và thêm3 regression, giữ nguyên expected của evaluation:408backend/37focused/45offline và restore đạt local. Kết quả remote mới nhất cần xem ở Actions của nhánh; không coi run trước sửa là thành công toàn bộ.
+
+## Nguồn LIC và Docker/Linux thực tế — 01/11/2026
+
+[Bằng chứng](validation/2026-11-01-data-container.json): **405 backend**, **45 frontend**, npm audit0, production build Node22 trong Docker thành công. **86/86** tình huống chat qua API trên cả Windows/baseline và Linux/candidate sau lần build/nhập dữ liệu cuối.25 kiểm tra ứng dụng/phân quyền/khởi động lại ở checkpoint ban đầu và10 kiểm tra HTTPS nội bộ/Caddy/cookie đạt; backup/restore SQLite thực tế trong Linux đạt. CA chỉ truyền cho client kiểm thử, không đổi trust store máy. Chưa nghiệm thu public DNS/ACME, sức tải hoặc toàn bộ Compose/Ollama.
+
+[LIC](validation/2026-11-01-lic-collection.json):100 URL trang sitemap,141 outcome có phân loại,60 snapshot/30 ứng viên nội dung duy nhất. Không đồng nhất hoàn tất frontier HTML với toàn bộ PDF/ảnh/web. Đã rà riêng PDF hướng dẫn33 trang ở thư mục2024/11, phát hiện lịch khác bản2022, thêm nguồn nhưng giữ `needs_confirmation`. Bốn FAQ đã duyệt nhập idempotent, runtime31 mục/145 đoạn; nguồn bị thu hồi/hết hiệu lực vẫn được lọc. [OPAC](validation/2026-11-01-opac-access.json) xác nhận các bộ đếm qua browser nhưng robots/403 chặn bulk; không tuyên bố đã thu toàn bộ sách.
+
+Điểm truy xuất354 câu ở mốc31/10 bên dưới là số đo lịch sử; phiên này không retrain, chỉnh test hay công bố điểm mới. Các mục cũ dưới đây ghi kết quả tại thời điểm tương ứng.
+
+## Embedding thử nghiệm và phân trang quản trị — 31/10/2026
+
+[Bằng chứng mới nhất](validation/2026-10-31-candidate-integration.json): **387 backend**, **45 frontend**, production build; **80/80 chat qua API cho mỗi cấu hình** với Ollama hoạt động. Truy xuất 354 câu tổng hợp qua Qdrant thật trên cùng 5.569 bản ghi: Hit@5 48,6%→66,1%, nDCG@5 0,464→0,624; 81 cải thiện/7 giảm/266 bằng nhau, không loại câu vượt ngân sách hoặc chỉnh tham số theo test. Giữ toàn bộ 7 ca giảm trong JSON để nghiệm thu; đây không phải độ chính xác người dùng thật.
+
+Quản trị đã tìm kiếm/phân trang ở server, giảm 99,5992% payload trang đầu trong phép đo tương đương. Browser kiểm tra 20 bản ghi/trang, trang 2/279, lọc 1/1 và nguồn; tài khoản QA ở môi trường riêng đã xóa, tab/server QA đã đóng. Helper tạo snapshot chỉ sao chép bảng nội dung công khai, không sao chép tài khoản/lịch sử. Review độc lập phát hiện và sửa chấp nhận file tokenizer chưa được kiểm chứng; không còn Important/Critical trong phần được review. [Hướng dẫn chạy lại](candidate-runtime.md).
+
+Main giữ embedding gốc. Docker Linux Engine chưa kết nối được; host/HTTPS, sức tải, nghiệp vụ thư viện thật và đánh giá cán bộ/người dùng còn chờ nghiệm thu. Các phần bên dưới là kết quả lịch sử theo từng mốc.
+
+## Nguồn công khai và lịch thường lệ — 31/10/2026
+
+[Bằng chứng](validation/2026-10-31-public-data.json):253 backend tests pass42.65s;45/45 thư viện,10/10 hội thoại,2/2 semantic và10/10 case dữ liệu/lịch mới qua API thật. LIC đọc30 trang/2 trang rỗng; OPAC robots disallow nên không thu catalog. PDF LIC33 trang đã trích và kiểm ảnh trang12. Nhập10 FAQ: tổng27 mục/126 đoạn; nhập lại bỏ qua10, không ghi đè. SQLite đã được sao lưu.
+
+Đã tái hiện và sửa5 lỗi thiếu luồng lịch/import; test từ chối robots trước delay RED→GREEN503→403. Lịch thường lệ giữ needs_confirmation và nguồn, không tạo hiệu lực/người xác nhận giả. Review độc lập không có lỗi Important/Critical phạm vi import/lịch. Browser control không khả dụng; chưa smoke UI lượt này, frontend unchanged/not rerun. Không coi đây là độ chính xác AI tổng quát hoặc kho sách đầy đủ.
+
+## Qwen3-1.7B — 30/10/2026
+
+Model mặc định và cấu hình Ollama local đã chuyển sang `qwen3:1.7b`. [Bằng chứng](validation/2026-10-30-qwen17.json):239 backend tests,45/45 tình huống thư viện,10/10 hội thoại và2/2 probe ngữ nghĩa qua API thật; browser chat hiển thị câu trả lời và nguồn OPAC. Chỉ một probe ngữ nghĩa yêu cầu LLM sinh nội dung. Đây không phải độ chính xác tổng quát hoặc so sánh hiệu năng với4B.
+
+Probe thực tế ban đầu trả nguyên placeholder ngôn ngữ trong prompt. Đã bổ sung yêu cầu nội dung trường Tác giả/mode rag vào evaluation (RED), sửa hướng dẫn gây nhầm (GREEN), giữ các chặn nguồn/phạm vi/fallback. Lượt probe sau sửa4915.23ms, không phải SLA. Máy local dùng GPU auto-fit; mẫu cấu hình vẫn CPU. Không đổi frontend hoặc chạy lại frontend suite; launcher dùng build hiện có. Các số liệu bên dưới thuộc model/cấu hình tại lần đo cũ.
+
+## Pipeline LLM/RAG tích hợp — 30/10/2026
+
+- **239/239 backend**,43.88s; một cảnh báo Starlette TestClient/httpx cũ. **42/42 frontend** trên6 file; production build thành công42 module, JS303.25kB/gzip91.23kB. Restore self-test và launcher preflight pass. Không thêm dependency.
+- **45/45** câu thư viện và **10/10** câu phạm vi/tin nhắn dài pass offline và API thật; **2/2** probe semantic pass API thật. semantic-author trả mode rag, nguồn OPAC trang6,8648.44ms; author-field13836.73ms, câu dài5133 ký tự trả nguồn trong60.94ms. Các phép đo cục bộ này không phải SLA. [JSON kiểm chứng và hash mã](validation/2026-10-30-rag.json).
+- CLI index thực tế17 mục/74 đoạn, model multilingual MiniLM384 chiều; Ollama0.40.2/qwen3:4b đã có, không pull thêm hoặc gọi provider trả phí. Kiểm thử Qdrant dùng thư viện thật với embedding giả có tính xác định để kiểm tra restart/tăng dần/lỗi ghi/hash/lọc/pagination; không gọi những bài này là đo chất lượng model.
+- Probe riêng dùng embedding và LLM thật: bọc câu trả lời OPAC đã rà soát bằng phần mở đầu kiểm thử, tổng6.840 ký tự; giữ nội dung cần tìm ở cuối. Truy xuất semantic và model trả “Tác giả”, source ID4,13.354,98ms. Database/vector tạm riêng, không nhập nội dung kiểm thử vào kho chính. [JSON probe](validation/2026-10-30-rag-long-source.json). Đây là một ví dụ phát triển, không phải nguồn mới hoặc đánh giá độc lập.
+- Browser thật trên database QA riêng: đăng nhập admin giả lập, kiểm tra catalog model, xem trích đoạn/URL/ngày nguồn OPAC, đăng xuất. Tab/server QA đã đóng. Không tạo tài khoản quản trị mặc định hoặc sửa tài khoản/dữ liệu bạn đọc trong runtime chính.
+- Rà soát độc lập phát hiện số bị cắt ở biên đoạn vẫn được chấp nhận; đã tái hiện RED và sửa GREEN. Thêm chặn URL tiền tố, ưu tiên câu hỏi đã duyệt trước từ xuất hiện tình cờ, giữ thứ tự đoạn semantic tốt nhất, chặn mã sách lạ thành đề xuất và query embedding dài bị cắt. Regression cũ được giữ; không sửa expected của corpus để che lỗi.
+- Nội dung vẫn17 FAQ/1 biểu ghi sách thật, không đủ danh mục đầy đủ. Nguồn/ID/số/URL được kiểm tra không bảo đảm mọi diễn giải đều faithful. Cần nghiệm thu nghiệp vụ và dữ liệu có quyền. Pipeline chỉ phục vụ thư viện; không huấn luyện model nền mới hoặc tuyên bố production hoàn chỉnh.
+- PR1 và main77699cd đã có CI backend/frontend thành công29/10. Nhánh RAG mới chưa có run từ xa. Docker/Caddy/public TLS, giao dịch/kênh thật và thiết bị giọng nói vẫn chưa nghiệm thu. Chi tiết cách chạy/giới hạn: [pipeline](rag-pipeline.md).
+
+Ngày làm việc: 28–30/10/2026. Đây là nhật ký kỹ thuật; kiểm thử cục bộ không thay thế nghiệm thu thư viện hoặc triển khai production.
 
 ## Mốc hội thoại chỉ dành cho thư viện, tin nhắn dài — 29/10
 
@@ -85,6 +128,10 @@ Pop-Location
 Sau khi có hostname thực và `.env` riêng, `docker compose --env-file backend/.env config --quiet` kiểm tra Compose. Build, Caddy validation, health, HTTPS và các luồng browser trên máy đích cần chạy như [operations.md](operations.md). Không ghi kết quả chưa chạy thành pass.
 
 ## Ranh giới nghiệm thu
+
+Mốc SEARCH-03/EXPORT-01: [bằng chứng mới](validation/2026-10-31-retrieval-quality.json). Bộ25 ca `tests/evaluation/catalog-lookup.json` được cố định trước khi sửa và ràng buộc hash của5.569 metadata đang công bố. Chạy `backend/.venv/Scripts/python.exe scripts/evaluate_catalog.py --output tmp/catalog-lookup-recheck.json`; corpus đổi sẽ yêu cầu một phiên bản bộ đo mới, không âm thầm đổi nhãn. `--baseline-all` so sánh chiến lược tất cả trường của checkout hiện tại; số đo trước khi sửa đã lưu riêng trong bằng chứng. Returned precision@5 chia cho số kết quả thực trả (tối đa5), Recall@20 tính trên tập URL gold; các ca gold rỗng đo riêng. Trường tác giả còn có tên ngắn khớp tên dài, chưa có dữ liệu định danh tác giả để phân giải. Numerical ONNX/FastEmbed parity là kiểm tra chuyển đổi, không phải đo relevance hay faithfulness.
+
+Mốc dữ liệu số/embedding31/10: [bằng chứng kỹ thuật](validation/2026-10-31-dspace-training.json), [nhập danh mục](dspace-import.md), [kết quả train](embedding-training.md). Bộ `tests/evaluation/dspace.json` cần corpus công khai đã nhập; chạy bằng `scripts/evaluate.py --base-url http://127.0.0.1:8000 --cases tests/evaluation/dspace.json --output tmp/dspace-evaluation.json`. Không coi thiếu corpus trong một checkout mới là thư viện không có tài liệu. Kiểm thử tổng hợp không thay cho nhãn do thư viện/người dùng thật rà soát.
 
 - Authentication/history/admin/security tests chạy với database tạm chứng minh các case tự động, không thay thế kiểm tra phân quyền trên deployment đang dùng.
 - Embedding/index/model cache cần kiểm tra thực bằng CLI index và câu hỏi semantic; unit test mock không chứng minh đã tải model. LLM phải được gọi thật với evidence, kiểm tra JSON/nguồn và fallback; cài model hay health 200 chưa đủ.

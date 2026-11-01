@@ -189,7 +189,7 @@ input:focus, textarea:focus, select:focus { border-color: var(--primary); }
 .input-with-icon { position: relative; display: flex; align-items: center; min-width: 0; }
 .input-with-icon > svg { position: absolute; left: 13px; color: #6a7c6c; }
 .input-with-icon > input { padding-left: 41px; }
-.catalog-search { display: grid; grid-template-columns: minmax(180px, 1fr) 140px 175px auto; gap: 14px; align-items: end; }
+.catalog-search { display: grid; grid-template-columns: minmax(180px, 1fr) 130px 140px 205px auto; gap: 14px; align-items: end; }
 .catalog-search .primary { min-height: 47px; }
 .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 28px 0 17px; flex-wrap: wrap; }
 .section-heading h2 { font-size: 16px; margin: 0; }
@@ -208,7 +208,8 @@ input:focus, textarea:focus, select:focus { border-color: var(--primary); }
 .pagination { display: flex; gap: 16px; align-items: center; justify-content: center; margin: 22px 0; }
 .pagination > span { color: var(--muted); font-size: 12px; }
 .catalog-admin-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; margin-bottom: 18px; }
-.catalog-admin-toolbar > .input-with-icon { flex: 1; min-width: 220px; }
+.catalog-admin-toolbar > .input-with-icon { flex: 1; min-width: 220px; gap: 8px; }
+.catalog-admin-toolbar > .input-with-icon > button { flex-shrink: 0; white-space: nowrap; }
 .chat-books { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 17px; }
 .chat-books-note { grid-column: 1 / -1; font-size: 10px; color: var(--muted); margin-bottom: 0; }
 .chat-book-card { border: 1px solid var(--line); border-radius: 10px; background: #f7f9f3; padding: 14px; min-width: 0; }

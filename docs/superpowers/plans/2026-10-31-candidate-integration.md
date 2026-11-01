@@ -1,0 +1,14 @@
+# Candidate integration and remaining local readiness plan
+
+> Execute under continuing autonomous authorization. Main owns embedding runtime/comparison; one independent worker owns bounded admin pagination. Preserve prior work, accounts, original indexes and user AGENTS.md. No paid services/public deployment/model promotion.
+
+**Goal:** Finish the local software gaps left after verified export, then compare the trained checkpoint in the real retrieval/chat pipeline using isolated candidate indexes.
+
+**Architecture:** Keep current FastEmbed default unchanged. An explicit local export-report configuration validates artifact/settings/parity and derives a content-specific model/collection identity. Load only verified local ONNX assets offline. Build a candidate index separately, using the same chunk projection and retrieval logic. Compare frozen queries without retraining or threshold tuning; retain regressions in the report. Admin pagination should query only the displayed page rather than fetch the full catalog.
+
+- [x] LOCAL-01: Implement opt-in verified-export loading in VectorIndex. TDD covers missing/corrupt/inconsistent artifacts, distinct model/tokenizer identities, default compatibility, offline loading and source withdrawal/filter boundaries. No silent fallback to another model/index. Expose safe identity/status without local paths.
+- [x] LOCAL-02: Independent worker measures current admin payload, implements server search/pagination and updates every caller/test while preserving CRUD/import behavior and access control. No new dependency or schema.
+- [x] RAG-07: Build a separate candidate books/knowledge index from current public rows only. Compare frozen retrieval cases through actual Qdrant/chunk processing, plus chat source/fallback/availability/domain regressions. GPU indexing is permitted only with measured original-checkpoint versus FastEmbed parity and must be labelled; no fabricated scores. Do not copy reader accounts/histories into a demo or tune existing test scores.
+- [x] QA-04: Focused and full tests, frontend production build, live API and browser verification, independent review; update evidence/status and next operational gates. Production baseline stays intact unless separately justified by relevance acceptance. Library credentials/current policies/target-host/real-device/staff acceptance remain external, not falsely complete.
+
+**Review focus:** Cached vector reuse cannot conceal changed model/tokenizer assets; local loading must never download an unintended model. Partial index failures must not delete valid old chunks. Pagination must preserve submitted filters/page bounds and avoid leaking drafts through public routes. Numerical parity and metadata-derived scores are not staff relevance labels. Preserve finite request/prompt bounds and existing library-only grounding.

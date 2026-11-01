@@ -14,13 +14,16 @@ router = APIRouter(tags=['library'])
 
 @router.get('/catalog')
 def catalog(request:Request,q: str = Query(min_length=1,max_length=200),kind:Literal['all','books','digital']='all',
-            source:Literal['auto','local','opac']='auto',page:int=Query(default=1,ge=1),page_size:int=Query(default=20,ge=1,le=50)):
+            source:Literal['auto','local','opac']='auto',page:int=Query(default=1,ge=1),page_size:int=Query(default=20,ge=1,le=50),
+            field:Literal['all','title','author']='all'):
     q=q.strip()
     if not q:
         raise HTTPException(422,'Vui lòng nhập từ khóa.')
+    if source=='opac' and field!='all':
+        raise HTTPException(422,'Tìm theo nhan đề hoặc tác giả hiện hỗ trợ danh mục đã đối chiếu. Hãy đổi nguồn hoặc chọn tất cả nội dung.')
     if source!='opac':
-        rows=search_books(request.app.state,q,kind)
-        if rows or source=='local':
+        rows=search_books(request.app.state,q,kind,field)
+        if rows or source=='local' or field!='all':
             start=(page-1)*page_size
             return {'items':rows[start:start+page_size],'total':len(rows),'page':page,'page_size':page_size,'source':'local',
                     'search_url':'https://opacthuvien.ut.edu.vn/opac/',

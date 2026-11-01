@@ -1,5 +1,5 @@
 import sqlite3
-from fastapi import APIRouter,Depends,HTTPException,Request
+from fastapi import APIRouter,Depends,HTTPException,Query,Request
 from pydantic import BaseModel,Field,model_validator
 from .auth import require_admin
 from .admin import audit
@@ -9,9 +9,15 @@ router=APIRouter(tags=['curated catalog'])
 
 
 @router.get('/admin/books',dependencies=[Depends(require_admin)])
-def list_books(request:Request):
+def list_books(request:Request,q:str=Query('',max_length=500),page:int=Query(1,ge=1),page_size:int=Query(20,ge=1,le=50)):
     with request.app.state.db() as db:
-        return [item(r) for r in db.execute('SELECT * FROM books ORDER BY id DESC')]
+        db.create_function('casefold',1,str.casefold,deterministic=True)
+        where=" WHERE instr(casefold(title||' '||author||' '||subjects),?)>0" if q else ''
+        params=(q.casefold(),) if q else ()
+        total=db.execute('SELECT COUNT(*) FROM books'+where,params).fetchone()[0]
+        page=min(page,max(1,(total+page_size-1)//page_size))
+        rows=db.execute('SELECT * FROM books'+where+' ORDER BY id DESC LIMIT ? OFFSET ?',(*params,page_size,(page-1)*page_size))
+        return {'items':[item(r) for r in rows],'total':total,'page':page,'page_size':page_size}
 
 
 @router.post('/admin/books',status_code=201)
@@ -77,6 +83,7 @@ def detail(row_id:int,request:Request):
     row=public_book(request.app.state.db,row_id)
     if not row:
         raise HTTPException(404,'Không tìm thấy biểu ghi đã công bố.')
-    query=row['author'] or row['subjects'] or row['title']
-    related=[r for r in search_local(request.app.state.db,query) if r['id']!=row_id][:3]
+    author=next((value.strip() for value in row['author'].split(';') if value.strip()),'')
+    query=author or row['subjects'] or row['title']
+    related=[r for r in search_local(request.app.state.db,query,field='author' if author else 'all') if r['id']!=row_id][:3]
     return {**row,'related':related,'warning':'Metadata có nguồn và ngày rà soát; không phải trạng thái lưu thông hiện tại.'}

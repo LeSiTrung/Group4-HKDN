@@ -1,5 +1,13 @@
 # API kỹ thuật
 
+## Kiểm tra LLM/RAG dành cho quản trị
+
+- `POST /api/admin/ai/check`: trả provider/model/configured/ready/reachable/model_available/error và `check=model_catalog`. Chỉ hỏi danh sách model Ollama, không inference/pull/gọi provider ngoài; ready không phải chứng minh chất lượng sinh câu trả lời. Lỗi kết nối/model thiếu được trả trong JSON200 với ready=false; không lộ key/base URL/log provider.
+- `POST /api/admin/retrieval`: body `{query}` không trắng,1–1.000 ký tự. Trả method/degraded và sources gồm id/question/source_url/checked_at/score/excerpts. Chỉ nguồn đã xuất bản, đã duyệt và còn hiệu lực; không dùng lịch sử hay danh tính bạn đọc. Điểm rank không phải xác suất đúng.
+- `POST /api/admin/reindex`: count vẫn là số nguồn; vectors.namespaces cung cấp sources/chunks/ready. Đồng bộ tăng dần, không xóa collection. Xem [pipeline](rag-pipeline.md).
+
+Các route này giữ cookie, quyền admin, CSRF marker, rate limit và body64KiB. Khách401, reader403.
+
 FastAPI cung cấp OpenAPI tại `/openapi.json`, giao diện tại `/docs`. API JSON có tiền tố `/api`; frontend build được phục vụ cùng origin ở `/`. Các route bên dưới phản ánh mã hiện có; OpenAPI là nguồn schema chi tiết.
 
 ## Xác thực và giới hạn
@@ -27,12 +35,12 @@ Lỗi chuẩn `{detail: string}`; Pydantic có thể trả `detail` là danh sá
 | `DELETE /api/conversations/{id}` | Chủ sở hữu | Xóa hội thoại của mình |
 | `GET /api/export` | Đăng nhập | `{user,conversations}` của mình |
 | `POST /api/feedback` | Chủ message | `{message_id,rating:-1\|1,comment?}` |
-| `GET /api/catalog` | Công khai | `q`, `kind=all\|books\|digital`, `source=auto\|local\|opac`, `page>=1`, `page_size=1..50` (mặc định 20) |
+| `GET /api/catalog` | Công khai | `q`, `field=all\|title\|author`, `kind=all\|books\|digital`, `source=auto\|local\|opac`, `page>=1`, `page_size=1..50` (mặc định20). Trường riêng chỉ dùng metadata local; không tự chuyển sang OPAC khi không có kết quả |
 | `GET /api/catalog/{id}` | Công khai | Chi tiết biểu ghi local đã xuất bản, tối đa ba tài liệu liên quan và cảnh báo metadata |
 | `POST /api/library/loans` | Đăng nhập | `{access_token}`; bridge được phê duyệt |
 | `POST /api/library/renew` | Đăng nhập | `{access_token,loan_id,confirmation:true,idempotency_key}` |
 | `GET /api/admin/status` | Admin | Counts, drafts, vector/LLM/integration configuration, audit |
-| `GET/POST /api/admin/books` | Admin | Danh sách gồm bản nháp/tạo biểu ghi; POST trả 201 |
+| `GET/POST /api/admin/books` | Admin | GET `{items,total,page,page_size}`, `q<=500` tìm chuỗi Unicode không phân biệt hoa/thường nhưng phân biệt dấu; `page>=1`, `page_size=1..50` mặc định20, trang vượt giới hạn được đưa về trang cuối. Gồm bản nháp; POST tạo biểu ghi trả201 |
 | `PUT/DELETE /api/admin/books/{id}` | Admin | Thay toàn bộ biểu ghi/xóa; không tồn tại trả 404; trùng URL trả 409 |
 | `POST /api/admin/books/import` | Admin | `{items:[BookInput,...]}`; 1..200 mục, upsert theo URL nguồn trong một transaction; 201 `{imported}` |
 | `GET /api/admin/renewals` | Admin | Tối đa 100 giao dịch gia hạn mới nhất, kết quả JSON hoặc null |

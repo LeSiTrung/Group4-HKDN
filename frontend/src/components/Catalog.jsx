@@ -5,6 +5,7 @@ import BookDetails from './BookDetails.jsx'
 
 export default function Catalog() {
   const [query, setQuery] = useState('')
+  const [field, setField] = useState('all')
   const [kind, setKind] = useState('all')
   const [source, setSource] = useState('auto')
   const [submitted, setSubmitted] = useState(null)
@@ -24,7 +25,7 @@ export default function Catalog() {
   function submit(event) {
     event.preventDefault()
     if (!query.trim()) return
-    const params = { q: query.trim(), kind, source }
+    const params = { q: query.trim(), kind, source, field }
     setSubmitted(params); search(params)
   }
   const local = result?.source === 'local'
@@ -35,8 +36,9 @@ export default function Catalog() {
     <div className="page-heading"><span className="eyebrow">KHÁM PHÁ BỘ SƯU TẬP</span><h1>Tìm cuốn sách tiếp theo.</h1><p>Tra cứu tài liệu đã đối chiếu hoặc tìm trực tiếp từ mục lục thư viện, cùng nguồn gốc của từng biểu ghi.</p></div>
     <form className="panel catalog-search" onSubmit={submit}>
       <Field label="Từ khóa tìm kiếm"><div className="input-with-icon"><Icon name="search" /><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Tên sách, tác giả hoặc chủ đề…" required maxLength={200} /></div></Field>
+      <Field label="Tìm theo"><select value={field} onChange={event => { setField(event.target.value); if (event.target.value !== 'all') setSource('local') }}><option value="all">Tất cả nội dung</option><option value="title">Nhan đề</option><option value="author">Tác giả</option></select></Field>
       <Field label="Loại tài liệu"><select value={kind} onChange={event => setKind(event.target.value)}><option value="all">Tất cả tài liệu</option><option value="books">Sách in</option><option value="digital">Tài liệu số</option></select></Field>
-      <Field label="Nguồn tra cứu"><select value={source} onChange={event => setSource(event.target.value)}><option value="auto">Tự động</option><option value="local">Danh mục đã đối chiếu</option><option value="opac">OPAC trực tuyến</option></select></Field>
+      <Field label="Nguồn tra cứu"><select value={source} onChange={event => setSource(event.target.value)}><option value="auto">Tự động</option><option value="local">Danh mục đã đối chiếu</option><option value="opac" disabled={field !== 'all'}>OPAC trực tuyến</option></select></Field>
       <button className="primary" disabled={busy || !query.trim()}><Icon name="search" size={18} />{busy ? 'Đang tìm…' : 'Tra cứu'}</button>
     </form>
     <ErrorNotice>{error}</ErrorNotice>

@@ -1,5 +1,13 @@
 # Vận hành Chatbot thư viện
 
+Kiểm chứng ngày 01/11/2026: Docker Engine đã kết nối; image Linux build/chạy dưới UID10001, API/LLM, backup/restore và HTTPS nội bộ qua Caddy đã được kiểm tra thật. Main vẫn ở cổng8000; bản Docker dùng snapshot công khai riêng ở cổng8100. Xem [hướng dẫn và giới hạn Docker](docker-local-validation.md), [bằng chứng mới nhất](validation/2026-11-01-data-container.json). Đây chưa phải nghiệm thu tên miền/ACME công khai, sức tải hoặc toàn bộ Compose/Ollama trên máy đích.
+
+Gói FAQ ngày01/11 bổ sung4 mục đã rà nguồn, nâng runtime đã nhập gói lên31 mục/145 đoạn. Sau backup, dùng `python -m app.cli import-knowledge ../data/faq/public-library-2026-11-01.json`. Hai tài liệu giờ phục vụ2022/2024 đang khác nhau: giữ cả hai với `needs_confirmation`, không tạo lịch hiện hành hoặc tự chọn theo tên thư mục mới hơn. Lịch theo ngày/cơ sở được cán bộ xác nhận vẫn ưu tiên. [Collector LIC](lic-collection.md) chỉ lưu staging, không tự nhập/công bố HTML thô.
+
+Pipeline LLM/RAG và cách xem nguồn/kiểm tra model: [rag-pipeline.md](rag-pipeline.md). CLI `ai-check` có thể chạy khi API phục vụ vì không mở database/Qdrant; CLI `index` cần dừng API local. Khi đang chạy, dùng quản trị để đồng bộ. Collection chunks_v1 mới giữ collection cũ; không cần migration SQLite. Không xóa volume/runtime khi đổi phiên bản.
+
+Gói nguồn công khai: sao lưu SQLite bằng CLI `backup`, rồi từ backend chạy `python -m app.cli import-knowledge ../data/faq/public-library-2026-10-31.json`. Lệnh validate toàn bộ pack trước khi mở database và ghi trong một transaction; cặp question/source_url đã có được bỏ qua để bảo toàn chỉnh sửa hoặc rút công bố. Các mục mới dùng published/status từ file đã rà soát. API đang chạy sẽ đồng bộ vector theo nội dung mới khi truy xuất; muốn CLI index phải dừng API trước. Lịch thường lệ nằm trong knowledge category `hours_reference`, luôn trả `needs_confirmation`; không chèn vào bảng schedules hay tạo ngày hiệu lực/người xác nhận giả. Lịch ngày cụ thể trong schedules vẫn ưu tiên cho câu hỏi hôm nay. Có nhiều mục hours_reference cùng hiệu lực thì ứng dụng không tự chọn một lịch. Ngày tương lai/ngày lễ chưa hỗ trợ vẫn yêu cầu làm rõ.
+
 Chat chỉ phục vụ thư viện. Trần gateway1MiB dành cho tin nhắn dài; middleware vẫn chặn64KiB ở mutation khác. Giữ rate/auth/origin protections. LLM dùng context8.192, ngân sách assembled prompt6.144 byte UTF8 và capacity2. Prompt quá lớn không gọi model mà dùng FAQ có nguồn; input/context quá16.000 ký tự yêu cầu chia phần. Current message trong SQLite không bị cắt; lịch sử đưa vào model là trích đoạn rõ ràng. Không coi khả năng nhập dài là suy luận vô hạn hoặc tăng số user đồng thời đã nghiệm thu.
 
 Tên triển khai hiện tại là `uth-library`, image chọn bằng `LIBRARY_IMAGE`, dữ liệu container nằm tại `/var/lib/library`. Nếu đã triển khai một bản cũ với tên project khác, hãy sao lưu và giữ volume cũ trước khi chuyển tên; Compose mặc định đặt tên volume theo project. Dữ liệu Windows vẫn ở `backend/runtime`. Đổi tên cookie phiên yêu cầu đăng nhập lại, không xóa tài khoản/lịch sử.
@@ -36,7 +44,7 @@ Lệnh index chủ động tải embedding lần đầu. `DATA_DIR` tương đ�
 | Dữ liệu | `DATA_DIR`: SQLite, vectors, cache model. Mặc định backend/runtime khi không cấu hình |
 | Browser | `COOKIE_SECURE=true` trên HTTPS; `ALLOWED_ORIGINS=https://hostname-thuc-te`, không wildcard, không path |
 | Retrieval | `ENABLE_VECTORS`, `EMBEDDING_MODEL`; `QDRANT_URL`/`QDRANT_API_KEY` trống dùng local |
-| LLM local | `LLM_PROVIDER=ollama`, `OLLAMA_URL`, `LLM_MODEL=qwen3:4b`, `LLM_NUM_GPU=0`, `LLM_TIMEOUT=60` trong mẫu cấu hình |
+| LLM local | `LLM_PROVIDER=ollama`, `OLLAMA_URL`, `LLM_MODEL=qwen3:1.7b`, `LLM_NUM_GPU=0`, `LLM_TIMEOUT=60` trong mẫu cấu hình |
 | LLM được phép | `LLM_PROVIDER=openai`, `LLM_BASE_URL` HTTPS gồm `/v1`, `LLM_API_KEY`, `LLM_MODEL` đúng provider; chỉ bật sau khi được phép sử dụng và tính phí |
 | Crawl | `CRAWL_ALLOWED_HOSTS` hostname chính xác; `CRAWL_SEEDS` URL phân cách dấu phẩy; `CRAWL_INTERVAL_HOURS=0` tắt, >=1 mới chạy định kỳ |
 | Library/channels | Các URL/token/secret trong [integrations.md](integrations.md); bỏ trống giữ unavailable |
@@ -44,6 +52,8 @@ Lệnh index chủ động tải embedding lần đầu. `DATA_DIR` tương đ�
 Trên máy local `ollama serve` khởi động dịch vụ nếu chưa có; `ollama pull qwen3:4b` tải mô hình chủ động. `ollama list` chỉ xác nhận tệp hiện diện; phải gửi câu hỏi có nguồn qua ứng dụng để nghiệm thu sinh câu trả lời. CPU là mặc định đã chọn để tránh tranh GPU; thời gian phụ thuộc máy và cold start. Frontend chờ tối đa 90 giây; mẫu cấu hình đặt LLM timeout 60 giây để còn thời gian trả fallback. File `.env` cũ không được tự ghi đè: kiểm tra và điều chỉnh giá trị 120 nếu đang dùng. Đây là timeout HTTP, không phải cam kết tổng latency khi tải model/tạo vector lần đầu. Provider lỗi/JSON không hợp lệ dùng fallback, không bịa giao dịch.
 
 ## Docker Compose + HTTPS
+
+Khi chuyển sang Qwen3-1.7B, cập nhật `LLM_MODEL=qwen3:1.7b` trong `.env` hiện có rồi khởi động lại API. Có thể đặt `LLM_NUM_GPU=-1` để Ollama tự chọn số lớp GPU khi có bộ nhớ phù hợp; `0` tiếp tục chạy CPU. Không cần xóa hay tạo lại Qdrant khi chỉ đổi LLM. Giữ timeout/fallback hiện có; lượt khởi động lạnh có thể vượt timeout dù model đã được cài. API model catalog chỉ xác nhận model hiện diện, cần kiểm tra thêm phản hồi có nguồn qua chat.
 
 Nhóm tự chuẩn bị Docker Engine/Compose v2, DNS hostname về máy, và quyền cổng 80/443 TCP; 443 UDP tùy mạng cho HTTP/3. Chỉ chạy công khai khi có quyền triển khai. Không cần đăng ký dịch vụ AI trả phí cho cấu hình Ollama.
 
@@ -54,7 +64,7 @@ Nhóm tự chuẩn bị Docker Engine/Compose v2, DNS hostname về máy, và qu
 docker compose --env-file backend/.env config --quiet
 docker compose --env-file backend/.env build app
 docker compose --env-file backend/.env up -d ollama
-docker compose --env-file backend/.env exec ollama ollama pull qwen3:4b
+docker compose --env-file backend/.env exec ollama ollama pull qwen3:1.7b
 docker compose --env-file backend/.env run --rm --no-deps app python -m app.cli create-admin --email admin@example.org
 # API chưa chạy nên CLI có thể giữ Qdrant local.
 docker compose --env-file backend/.env run --rm --no-deps app python -m app.cli index

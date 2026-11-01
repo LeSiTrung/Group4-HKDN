@@ -1,0 +1,1145 @@
+{
+  "assembled_at": "2026-10-30T09:13:45.452169+00:00",
+  "kind": "development integration checks; not held-out, staff acceptance, SLA or production certification",
+  "backend": {
+    "passed": 239,
+    "seconds": 43.88,
+    "warnings": [
+      "Existing Starlette TestClient/httpx deprecation"
+    ]
+  },
+  "frontend": {
+    "passed": 42,
+    "build": "success",
+    "modules": 42,
+    "js_kb": 303.25,
+    "js_gzip_kb": 91.23
+  },
+  "restore_self_test": "passed",
+  "launcher_check": "passed",
+  "health_http": 200,
+  "runtime_vectors": {
+    "configured": true,
+    "ready": true,
+    "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "error": null,
+    "namespaces": {
+      "knowledge": {
+        "sources": 17,
+        "chunks": 74,
+        "ready": true
+      }
+    }
+  },
+  "local_model": {
+    "name": "qwen3:4b",
+    "digest": "359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7"
+  },
+  "evaluation": {
+    "offline": {
+      "recorded_at": "2026-10-30T09:12:29.023453+00:00",
+      "passed": 45,
+      "total": 45,
+      "kind": "development regression; not held-out or library-validated",
+      "execution": "isolated deterministic TestClient; vectors/LLM disabled",
+      "cases": [
+        {
+          "id": "hello",
+          "passed": true,
+          "elapsed_ms": 9.8,
+          "status": "answered",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "opac-unaccented",
+          "passed": true,
+          "elapsed_ms": 27.13,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=3"
+          ]
+        },
+        {
+          "id": "paper",
+          "passed": true,
+          "elapsed_ms": 20.84,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=4"
+          ]
+        },
+        {
+          "id": "author-field",
+          "passed": true,
+          "elapsed_ms": 20.0,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=6"
+          ]
+        },
+        {
+          "id": "advanced",
+          "passed": true,
+          "elapsed_ms": 21.72,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/OSearchAdvanced.aspx"
+          ]
+        },
+        {
+          "id": "ebook",
+          "passed": true,
+          "elapsed_ms": 20.71,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/"
+          ]
+        },
+        {
+          "id": "loans",
+          "passed": true,
+          "elapsed_ms": 19.15,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=12"
+          ]
+        },
+        {
+          "id": "password",
+          "passed": true,
+          "elapsed_ms": 19.55,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/dich-vu-thu-vien/ho-tro-nhanh/"
+          ]
+        },
+        {
+          "id": "fees",
+          "passed": true,
+          "elapsed_ms": 16.47,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/noi-quy-thu-vien/"
+          ]
+        },
+        {
+          "id": "loan-term",
+          "passed": true,
+          "elapsed_ms": 15.11,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/quy-dinh-muon-tra-tai-lieu/"
+          ]
+        },
+        {
+          "id": "hours-branch",
+          "passed": true,
+          "elapsed_ms": 18.31,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/thong-bao-ve-viec-mo-cua-phuc-vu-ban-doc-ngoai-gio/"
+          ]
+        },
+        {
+          "id": "hours-missing-branch",
+          "passed": true,
+          "elapsed_ms": 3.6,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "opac-empty",
+          "passed": true,
+          "elapsed_ms": 19.9,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/"
+          ]
+        },
+        {
+          "id": "shelf-guidance",
+          "passed": true,
+          "elapsed_ms": 19.85,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/"
+          ]
+        },
+        {
+          "id": "reserve-vs-renew",
+          "passed": true,
+          "elapsed_ms": 19.83,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=7"
+          ]
+        },
+        {
+          "id": "resources",
+          "passed": true,
+          "elapsed_ms": 19.39,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/thong-tin-cac-tai-lieu-co-ban-quyen-da-duoc-xay-dung-va-trien-khai-tren-cac-he-thong-cua-nha-truong/"
+          ]
+        },
+        {
+          "id": "digital-library",
+          "passed": true,
+          "elapsed_ms": 18.68,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://thuvienso.ut.edu.vn/home"
+          ]
+        },
+        {
+          "id": "renewal",
+          "passed": true,
+          "elapsed_ms": 19.08,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/dich-vu-thu-vien/ho-tro-nhanh/"
+          ]
+        },
+        {
+          "id": "outside",
+          "passed": true,
+          "elapsed_ms": 10.59,
+          "status": "not_found",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "injection",
+          "passed": true,
+          "elapsed_ms": 11.24,
+          "status": "not_found",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "catalog",
+          "passed": true,
+          "elapsed_ms": 9.7,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "catalog-typo",
+          "passed": true,
+          "elapsed_ms": 9.26,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "catalog-missing",
+          "passed": true,
+          "elapsed_ms": 9.12,
+          "status": "not_found",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/Oshow.aspx?rdSearchOption=0&txtSearch=zzzkhongcobanghi123"
+          ]
+        },
+        {
+          "id": "author-followup",
+          "passed": true,
+          "elapsed_ms": 9.43,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "year-followup",
+          "passed": true,
+          "elapsed_ms": 9.32,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "availability-followup",
+          "passed": true,
+          "elapsed_ms": 8.49,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "branch-followup",
+          "passed": true,
+          "elapsed_ms": 17.8,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/thong-bao-ve-viec-mo-cua-phuc-vu-ban-doc-ngoai-gio/"
+          ]
+        },
+        {
+          "id": "natural-book",
+          "passed": true,
+          "elapsed_ms": 9.17,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "natural-unaccented",
+          "passed": true,
+          "elapsed_ms": 8.54,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "lookup-command",
+          "passed": true,
+          "elapsed_ms": 8.98,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "bare-author",
+          "passed": true,
+          "elapsed_ms": 8.68,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "bare-year",
+          "passed": true,
+          "elapsed_ms": 8.75,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "missing-isbn",
+          "passed": true,
+          "elapsed_ms": 8.2,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "missing-shelf",
+          "passed": true,
+          "elapsed_ms": 9.32,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "initial-availability",
+          "passed": true,
+          "elapsed_ms": 8.13,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "negative-condition",
+          "passed": true,
+          "elapsed_ms": 3.56,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "mixed-book-hours",
+          "passed": true,
+          "elapsed_ms": 3.71,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "invalid-branch",
+          "passed": true,
+          "elapsed_ms": 4.23,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "multiple-branches",
+          "passed": true,
+          "elapsed_ms": 3.45,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "different-date",
+          "passed": true,
+          "elapsed_ms": 3.42,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "return-deadline",
+          "passed": true,
+          "elapsed_ms": 15.03,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/quy-dinh-muon-tra-tai-lieu/"
+          ]
+        },
+        {
+          "id": "possessive-loan",
+          "passed": true,
+          "elapsed_ms": 15.51,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/noi-quy-thu-vien/"
+          ]
+        },
+        {
+          "id": "new-topic",
+          "passed": true,
+          "elapsed_ms": 9.05,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "stale-context",
+          "passed": true,
+          "elapsed_ms": 3.46,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "missing-context",
+          "passed": true,
+          "elapsed_ms": 3.58,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        }
+      ]
+    },
+    "api": {
+      "recorded_at": "2026-10-30T09:11:03.157460+00:00",
+      "passed": 45,
+      "total": 45,
+      "kind": "development regression; not held-out or library-validated",
+      "execution": "http://127.0.0.1:8000",
+      "cases": [
+        {
+          "id": "hello",
+          "passed": true,
+          "elapsed_ms": 7.85,
+          "status": "answered",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "opac-unaccented",
+          "passed": true,
+          "elapsed_ms": 19.69,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=3"
+          ]
+        },
+        {
+          "id": "paper",
+          "passed": true,
+          "elapsed_ms": 17.51,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=4"
+          ]
+        },
+        {
+          "id": "author-field",
+          "passed": true,
+          "elapsed_ms": 13836.73,
+          "status": "answered",
+          "mode": "rag",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=6"
+          ]
+        },
+        {
+          "id": "advanced",
+          "passed": true,
+          "elapsed_ms": 16.43,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/OSearchAdvanced.aspx"
+          ]
+        },
+        {
+          "id": "ebook",
+          "passed": true,
+          "elapsed_ms": 15.33,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/"
+          ]
+        },
+        {
+          "id": "loans",
+          "passed": true,
+          "elapsed_ms": 16.4,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=12"
+          ]
+        },
+        {
+          "id": "password",
+          "passed": true,
+          "elapsed_ms": 16.61,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/dich-vu-thu-vien/ho-tro-nhanh/"
+          ]
+        },
+        {
+          "id": "fees",
+          "passed": true,
+          "elapsed_ms": 12.54,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/noi-quy-thu-vien/"
+          ]
+        },
+        {
+          "id": "loan-term",
+          "passed": true,
+          "elapsed_ms": 14.16,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/quy-dinh-muon-tra-tai-lieu/"
+          ]
+        },
+        {
+          "id": "hours-branch",
+          "passed": true,
+          "elapsed_ms": 31.66,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/thong-bao-ve-viec-mo-cua-phuc-vu-ban-doc-ngoai-gio/"
+          ]
+        },
+        {
+          "id": "hours-missing-branch",
+          "passed": true,
+          "elapsed_ms": 3.72,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "opac-empty",
+          "passed": true,
+          "elapsed_ms": 18.74,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/"
+          ]
+        },
+        {
+          "id": "shelf-guidance",
+          "passed": true,
+          "elapsed_ms": 19.13,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/"
+          ]
+        },
+        {
+          "id": "reserve-vs-renew",
+          "passed": true,
+          "elapsed_ms": 17.83,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=7"
+          ]
+        },
+        {
+          "id": "resources",
+          "passed": true,
+          "elapsed_ms": 17.11,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/thong-tin-cac-tai-lieu-co-ban-quyen-da-duoc-xay-dung-va-trien-khai-tren-cac-he-thong-cua-nha-truong/"
+          ]
+        },
+        {
+          "id": "digital-library",
+          "passed": true,
+          "elapsed_ms": 19.35,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://thuvienso.ut.edu.vn/home"
+          ]
+        },
+        {
+          "id": "renewal",
+          "passed": true,
+          "elapsed_ms": 17.14,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/dich-vu-thu-vien/ho-tro-nhanh/"
+          ]
+        },
+        {
+          "id": "outside",
+          "passed": true,
+          "elapsed_ms": 10.32,
+          "status": "not_found",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "injection",
+          "passed": true,
+          "elapsed_ms": 9.09,
+          "status": "not_found",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "catalog",
+          "passed": true,
+          "elapsed_ms": 8.85,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "catalog-typo",
+          "passed": true,
+          "elapsed_ms": 6.87,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "catalog-missing",
+          "passed": true,
+          "elapsed_ms": 6.62,
+          "status": "not_found",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/Oshow.aspx?rdSearchOption=0&txtSearch=zzzkhongcobanghi123"
+          ]
+        },
+        {
+          "id": "author-followup",
+          "passed": true,
+          "elapsed_ms": 6.31,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "year-followup",
+          "passed": true,
+          "elapsed_ms": 7.0,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "availability-followup",
+          "passed": true,
+          "elapsed_ms": 5.95,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "branch-followup",
+          "passed": true,
+          "elapsed_ms": 26.83,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/thong-bao-ve-viec-mo-cua-phuc-vu-ban-doc-ngoai-gio/"
+          ]
+        },
+        {
+          "id": "natural-book",
+          "passed": true,
+          "elapsed_ms": 7.36,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "natural-unaccented",
+          "passed": true,
+          "elapsed_ms": 7.04,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "lookup-command",
+          "passed": true,
+          "elapsed_ms": 6.2,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "bare-author",
+          "passed": true,
+          "elapsed_ms": 7.35,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "bare-year",
+          "passed": true,
+          "elapsed_ms": 8.32,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "missing-isbn",
+          "passed": true,
+          "elapsed_ms": 5.94,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "missing-shelf",
+          "passed": true,
+          "elapsed_ms": 6.72,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "initial-availability",
+          "passed": true,
+          "elapsed_ms": 6.04,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "negative-condition",
+          "passed": true,
+          "elapsed_ms": 2.45,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "mixed-book-hours",
+          "passed": true,
+          "elapsed_ms": 3.01,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "invalid-branch",
+          "passed": true,
+          "elapsed_ms": 2.96,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "multiple-branches",
+          "passed": true,
+          "elapsed_ms": 2.49,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "different-date",
+          "passed": true,
+          "elapsed_ms": 2.23,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "return-deadline",
+          "passed": true,
+          "elapsed_ms": 12.13,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/quy-dinh-muon-tra-tai-lieu/"
+          ]
+        },
+        {
+          "id": "possessive-loan",
+          "passed": true,
+          "elapsed_ms": 12.71,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/noi-quy-thu-vien/"
+          ]
+        },
+        {
+          "id": "new-topic",
+          "passed": true,
+          "elapsed_ms": 6.77,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+          ]
+        },
+        {
+          "id": "stale-context",
+          "passed": true,
+          "elapsed_ms": 2.81,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "missing-context",
+          "passed": true,
+          "elapsed_ms": 2.93,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        }
+      ]
+    },
+    "dialogue_offline": {
+      "recorded_at": "2026-10-30T09:12:31.489028+00:00",
+      "passed": 10,
+      "total": 10,
+      "kind": "development regression; not held-out or library-validated",
+      "execution": "isolated deterministic TestClient; vectors/LLM disabled",
+      "cases": [
+        {
+          "id": "greeting",
+          "passed": true,
+          "elapsed_ms": 8.48,
+          "status": "answered",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "thanks",
+          "passed": true,
+          "elapsed_ms": 3.78,
+          "status": "answered",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "topic-word",
+          "passed": true,
+          "elapsed_ms": 15.21,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "scope-email",
+          "passed": true,
+          "elapsed_ms": 3.81,
+          "status": "not_found",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "scope-programming",
+          "passed": true,
+          "elapsed_ms": 10.0,
+          "status": "not_found",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "long-library-question",
+          "passed": true,
+          "elapsed_ms": 60.37,
+          "status": "answered",
+          "mode": "faq",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=3"
+          ]
+        },
+        {
+          "id": "unverified-fee",
+          "passed": true,
+          "elapsed_ms": 14.46,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/noi-quy-thu-vien/"
+          ]
+        },
+        {
+          "id": "hours-followup",
+          "passed": true,
+          "elapsed_ms": 10.84,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "multi-turn-day",
+          "passed": true,
+          "elapsed_ms": 10.75,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "oversize-context",
+          "passed": true,
+          "elapsed_ms": 3.95,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        }
+      ]
+    },
+    "dialogue_api": {
+      "recorded_at": "2026-10-30T09:11:04.229321+00:00",
+      "passed": 10,
+      "total": 10,
+      "kind": "development regression; not held-out or library-validated",
+      "execution": "http://127.0.0.1:8000",
+      "cases": [
+        {
+          "id": "greeting",
+          "passed": true,
+          "elapsed_ms": 4.08,
+          "status": "answered",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "thanks",
+          "passed": true,
+          "elapsed_ms": 4.09,
+          "status": "answered",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "topic-word",
+          "passed": true,
+          "elapsed_ms": 9.63,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "scope-email",
+          "passed": true,
+          "elapsed_ms": 3.52,
+          "status": "not_found",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "scope-programming",
+          "passed": true,
+          "elapsed_ms": 9.49,
+          "status": "not_found",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "long-library-question",
+          "passed": true,
+          "elapsed_ms": 60.94,
+          "status": "answered",
+          "mode": "fallback",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=3"
+          ]
+        },
+        {
+          "id": "unverified-fee",
+          "passed": true,
+          "elapsed_ms": 14.14,
+          "status": "needs_confirmation",
+          "mode": "faq",
+          "sources": [
+            "https://lic.ut.edu.vn/noi-quy-thu-vien/"
+          ]
+        },
+        {
+          "id": "hours-followup",
+          "passed": true,
+          "elapsed_ms": 9.33,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "multi-turn-day",
+          "passed": true,
+          "elapsed_ms": 9.71,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        },
+        {
+          "id": "oversize-context",
+          "passed": true,
+          "elapsed_ms": 3.63,
+          "status": "clarify",
+          "mode": "faq",
+          "sources": []
+        }
+      ]
+    },
+    "semantic_api": {
+      "recorded_at": "2026-10-30T09:11:13.797478+00:00",
+      "passed": 2,
+      "total": 2,
+      "kind": "development regression; not held-out or library-validated",
+      "execution": "http://127.0.0.1:8000",
+      "cases": [
+        {
+          "id": "semantic-author",
+          "passed": true,
+          "elapsed_ms": 8648.44,
+          "status": "answered",
+          "mode": "rag",
+          "sources": [
+            "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=6"
+          ]
+        },
+        {
+          "id": "semantic-outside",
+          "passed": true,
+          "elapsed_ms": 8.9,
+          "status": "not_found",
+          "mode": "faq",
+          "sources": []
+        }
+      ]
+    }
+  },
+  "browser": "Separate temporary database: synthetic admin login, Ollama catalog check, reviewed OPAC retrieval preview and logout; tab/server closed. Main runtime accounts unchanged.",
+  "code_sha256": {
+    "backend/app/services/rag_service.py": "2e0ad8fe74ce5885bed8198074156156e2ab0c8787ce9d7d09370a1d90ad7068",
+    "backend/app/services/retrieval.py": "b13c0f582c5f6e8bf0f5c0b502810570233f607eb46c990d4c5fb6d1586c720e",
+    "backend/app/services/llm_service.py": "2da66dd245530bdccffddc8f8004e6ae1089a2e2bd06085f49c56452f5333a00",
+    "backend/app/services/assistant.py": "6dc2018d7d0715e3a861df2033fc985246e079efa638508c93d872fa103b71d0",
+    "backend/app/services/catalog.py": "31f44ca1a287be1b104bf31b8859fda755a7f45dcf7e8f9515cd766e6751edc7",
+    "backend/app/api/admin.py": "33902c9a5842c60f9c09f9b23bccac1b09df54ea19c7bb08a6f4b03a65f5aa4a",
+    "backend/app/cli.py": "1fe3da3ef44578a1aae025d24a2da07bd70635d00a7ac5579865e68273e38def",
+    "frontend/src/components/Admin.jsx": "86448374e7a58e68917114ffbcb20dbf28959d08bff35722ad3d9c146583b7a0"
+  },
+  "not_checked": [
+    "New branch remote CI",
+    "Docker/Caddy/public HTTPS runtime",
+    "Approved live library transactions/channels",
+    "Physical microphone",
+    "Library staff acceptance and full catalog"
+  ]
+}

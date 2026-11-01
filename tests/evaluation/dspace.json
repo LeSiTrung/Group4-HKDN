@@ -1,0 +1,10 @@
+[
+  {"id":"digital-title","message":"Tìm tài liệu về nghiên cứu XML xây dựng trang Web hỗ trợ khách hàng","status":"answered","book":"Nghiên cứu XML","source":"thuvienso.ut.edu.vn/items/0009688f-12f3-4902-9b95-7a31e878ee77"},
+  {"id":"digital-no-accent","message":"Tim luan van ve XML ho tro khach hang","status":"answered","book":"Nghiên cứu XML","source":"thuvienso.ut.edu.vn/items/"},
+  {"id":"digital-other-title","message":"Tra cứu đồ án Chung cư Phú Xuân","status":"answered","book":"Chung cư Phú Xuân","source":"thuvienso.ut.edu.vn/items/"},
+  {"id":"digital-ambiguous-followup","message":"Tác giả là ai?","history":[{"role":"user","content":"Tìm tài liệu về nghiên cứu XML xây dựng trang Web hỗ trợ khách hàng"}],"status":"clarify","book":"Nghiên cứu XML"},
+  {"id":"digital-selected-title-followup","message":"Tác giả là ai?","history":[{"role":"user","content":"Tìm tài liệu Nghiên cứu XML và xây dựng trang Web hỗ trợ khách hàng"}],"status":"answered","book":"Nghiên cứu XML","contains":"Nguyễn Đại Dương","source":"thuvienso.ut.edu.vn/items/0009688f-12f3-4902-9b95-7a31e878ee77"},
+  {"id":"digital-unknown-availability","message":"Cuốn này còn mượn được không?","history":[{"role":"user","content":"Tìm tài liệu về nghiên cứu XML xây dựng trang Web hỗ trợ khách hàng"}],"status":"needs_confirmation","source":"thuvienso.ut.edu.vn/items/"},
+  {"id":"absent-identifier","message":"Tìm tài liệu zzuthmissing837216","status":"not_found","no_books":true},
+  {"id":"digital-scope","message":"Viết code XML cho tôi","status":"not_found","no_books":true}
+]

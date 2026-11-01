@@ -1,0 +1,154 @@
+{
+  "date": "2026-11-01",
+  "branch": "codex/rag-pipeline",
+  "repository": "LeSiTrung/Group4-HKDN",
+  "initial_new_commits": 16,
+  "commits": [
+    {
+      "sha": "c7dd0f430afff6e163514b1c03c21bacb5928a49",
+      "subject": "feat(llm): adopt Qwen3 1.7B with grounded response prompts",
+      "files": 7,
+      "snapshot_checks": 1
+    },
+    {
+      "sha": "29b0833392eabbedda5ba61d1d0a72ff0a99df5d",
+      "subject": "fix(crawler): honor robots exclusions before crawl delays",
+      "files": 2,
+      "snapshot_checks": 1
+    },
+    {
+      "sha": "0da5e7e69a24a2fdf489a615136191af62a2c15a",
+      "subject": "feat(catalog): support precise author and digital document queries",
+      "files": 9,
+      "snapshot_checks": 1
+    },
+    {
+      "sha": "4e5c582df4db11b7f22ac2ed19259091c0921c91",
+      "subject": "feat(catalog): expose title and author filters in the reader UI",
+      "files": 3,
+      "snapshot_checks": 2
+    },
+    {
+      "sha": "28d04a7a2b94178360e0a39a3b0a37233c2486c0",
+      "subject": "feat(admin): paginate and filter catalog records on the server",
+      "files": 10,
+      "snapshot_checks": 3
+    },
+    {
+      "sha": "7ebd4bb511493f2330b9fc5cf760e58e8862f64a",
+      "subject": "feat(knowledge): import reviewed FAQs and regular hours safely",
+      "files": 9,
+      "snapshot_checks": 1
+    },
+    {
+      "sha": "5c8a45116fdfbcbd33e1fa25aa724cf9216991a2",
+      "subject": "feat(data): collect public DSpace metadata with resumable checkpoints",
+      "files": 4,
+      "snapshot_checks": 1
+    },
+    {
+      "sha": "8b6f4d4babc7760dbdd1e8879dedec65296416f2",
+      "subject": "feat(catalog): validate and import public DSpace snapshots",
+      "files": 4,
+      "snapshot_checks": 1
+    },
+    {
+      "sha": "a36c96d127f979599c0d5dd7bf96bf46e58a28de",
+      "subject": "feat(training): freeze grouped metadata and fine-tune embeddings",
+      "files": 8,
+      "snapshot_checks": 1
+    },
+    {
+      "sha": "966a84a626473c8cf40ce24d4c7a546e7e689b3f",
+      "subject": "feat(training): export ONNX embeddings with independent parity checks",
+      "files": 6,
+      "snapshot_checks": 1
+    },
+    {
+      "sha": "8ac22dbb7ae860d9307371d523705701edfc4ab9",
+      "subject": "feat(rag): verify local embeddings and resume bounded index batches",
+      "files": 5,
+      "snapshot_checks": 1
+    },
+    {
+      "sha": "b3dde8d27cd6c16e2c8c202b3d8c2ad273ac5059",
+      "subject": "feat(eval): compare catalog and candidate vector retrieval reliably",
+      "files": 10,
+      "snapshot_checks": 1
+    },
+    {
+      "sha": "3b76cc3dfc4252954e6ab1dd84698bcdf8f4dac6",
+      "subject": "feat(data): stage public LIC pages with auditable coverage manifests",
+      "files": 4,
+      "snapshot_checks": 1
+    },
+    {
+      "sha": "5526a5c9339abee85e0a549f0f1e45711337e9b9",
+      "subject": "fix(hours): retain conflicting guides and add reviewed LIC services",
+      "files": 6,
+      "snapshot_checks": 1
+    },
+    {
+      "sha": "17bdd9d0c6634a31c8789522a5dae27b9f134340",
+      "subject": "docs(opac): distinguish catalog access limits and origin failures",
+      "files": 3,
+      "snapshot_checks": 0
+    },
+    {
+      "sha": "b7dfdaec0ce26fb9cad9d82b281419bcbb93289a",
+      "subject": "docs(ops): record verified readiness and contribution conventions",
+      "files": 16,
+      "snapshot_checks": 3
+    }
+  ],
+  "initial_remote_head": "b7dfdaec0ce26fb9cad9d82b281419bcbb93289a",
+  "initial_remote_ci": {
+    "url": "https://github.com/LeSiTrung/Group4-HKDN/actions/runs/41303107363",
+    "conclusion": "failure",
+    "backend_unit_tests": 405,
+    "restore": "passed",
+    "frontend_tests": 45,
+    "frontend_build": "passed",
+    "offline_conversation": {
+      "passed": 44,
+      "total": 45,
+      "case": "digital-library",
+      "message": "Tìm luận văn khóa luận"
+    }
+  },
+  "followup_fix": {
+    "subject": "fix(chat): preserve library guidance for document type queries",
+    "regression_tests_added": 3,
+    "underlying_issue": "A list of document types was interpreted as a catalog topic and hid the reviewed DSpace guide",
+    "changed_evaluation_expectations": false,
+    "independent_review": "approved scope; title/author/topic queries retain catalog routing",
+    "source_sha256": {
+      "backend/app/services/catalog.py": "742f1bd2b21e48fd7342a64cd113af2304e1268aa508953d03d1febeaffe21b0",
+      "tests/test_dspace_chat.py": "a393b908757a33b5ef521c8f35d32a938d7ad1008fb1038a8373a9c874e9a016"
+    }
+  },
+  "local_verification_after_fix": {
+    "backend": {
+      "passed": 408,
+      "seconds": 58.09,
+      "warnings": 1
+    },
+    "focused": 37,
+    "offline_conversation": {
+      "passed": 45,
+      "total": 45
+    },
+    "restore_self_test": "passed",
+    "frontend_source_unchanged_since45tests_and_build": "passed"
+  },
+  "remote_followup": "Requires its own push run; consult latest Actions for exact follow-up SHA and conclusion. Initial run is retained as a failure, not relabeled.",
+  "excluded": [
+    "AGENTS.md",
+    "runtime",
+    "model weights and checkpoints",
+    "private databases and backups",
+    ".env and credentials",
+    "temporary verification snapshots"
+  ],
+  "history_policy": "Normal incremental commits/push; no empty commits, force-push, backdating or main merge"
+}

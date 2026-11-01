@@ -21,6 +21,37 @@ def book(**changes):
     return {**value,**changes}
 
 
+def test_semantic_kind_filter_keeps_complete_index_inventory(client,monkeypatch):
+    from app.services.catalog import search_books
+    rows=[client.post('/api/admin/books',json=book(kind=kind,source_url=f'https://lic.ut.edu.vn/synthetic-{kind}/')).json() for kind in ('books','digital')]
+    state=client.app.state
+    state.settings.testing=False
+    monkeypatch.setenv('ENABLE_VECTORS','true')
+    calls=[]
+    def search(query,documents,namespace='books',source_ids=None):
+        calls.append((documents,source_ids))
+        return [(row,.9) for row in documents if row['id'] in (source_ids or set())]
+    monkeypatch.setattr(state.vectors,'search',search)
+    for kind in ('books','digital'):
+        result=search_books(state,'Unmatched term xzyq',kind)
+        assert result and all(row['kind']==kind for row in result)
+        assert {row['id'] for row in rows}<={d['id'] for d in calls[-1][0]}
+        with state.db() as db:
+            expected={row['id'] for row in db.execute('SELECT id FROM books WHERE published=1 AND kind=?',(kind,))}
+        assert calls[-1][1]==expected
+
+
+def test_single_identifier_does_not_become_an_unrelated_semantic_recommendation(client,monkeypatch):
+    from app.services.catalog import search_books
+    state=client.app.state
+    state.settings.testing=False
+    monkeypatch.setenv('ENABLE_VECTORS','true')
+    calls=[]
+    monkeypatch.setattr(state.vectors,'search',lambda *args,**kwargs:calls.append(True) or [])
+    assert search_books(state,'zzzkhongcobanghi123')==[]
+    assert not calls
+
+
 def test_admin_import_search_provenance_and_pagination(client):
     assert client.post('/api/admin/books/import',json={'items':[book(),book(title='Lập trình nâng cao',source_url='https://lic.ut.edu.vn/synthetic-advanced/')]}).status_code==201
     result=client.get('/api/catalog',params={'q':'python','source':'local','page_size':1}).json()

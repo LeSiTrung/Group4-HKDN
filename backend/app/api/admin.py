@@ -3,11 +3,12 @@ import os
 from datetime import date, time
 from typing import Literal
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from .auth import require_admin
 from ..services.knowledge import KnowledgeInput, decode_row, insert_knowledge, published_rows, today
 from ..services.integrations import crawl_pages, IntegrationError
 from ..services.llm_service import provider_name
+from ..services import llm_service, retrieval
 
 router = APIRouter(prefix='/admin', tags=['administration'], dependencies=[Depends(require_admin)])
 
@@ -61,6 +62,37 @@ def reindex(request:Request):
         raise HTTPException(503,'Chưa xây được chỉ mục embedding. Xem trạng thái quản trị và kiểm tra mô hình/kết nối.')
 
 
+@router.post('/ai/check')
+def check_ai():
+    return llm_service.check_model()
+
+
+class RetrievalInput(BaseModel):
+    query:str = Field(min_length=1,max_length=1000)
+
+    @field_validator('query')
+    @classmethod
+    def nonblank(cls,value):
+        if not value.strip():
+            raise ValueError('Câu hỏi không được để trống.')
+        return value.strip()
+
+
+@router.post('/retrieval')
+def preview_retrieval(body:RetrievalInput,request:Request):
+    rows=[row for row in published_rows(request.app.state.db) if row['status'] in ('reviewed_public','verified')]
+    vectors=request.app.state.vectors if os.getenv('ENABLE_VECTORS','true').lower()=='true' and not request.app.state.settings.testing else None
+    result=retrieval.retrieve_knowledge(body.query,rows,vectors)
+    excerpts={row['id']:[] for row,_ in result['ranked']}
+    for item in result['evidence']:
+        if item['source_id'] in excerpts:
+            excerpts[item['source_id']].append(item['text'])
+    return {'method':result['method'],'degraded':result['degraded'],
+            'sources':[{'id':row['id'],'question':row['question'],'source_url':row['source_url'],
+                        'checked_at':row['checked_at'],'score':score,'excerpts':excerpts[row['id']]}
+                       for row,score in result['ranked'] if excerpts[row['id']]]}
+
+
 def crawl_job(state, job_id, url, max_pages):
     with state.db() as db:
         db.execute("UPDATE jobs SET status='running' WHERE id=?",(job_id,))
@@ -112,7 +144,7 @@ def status(request:Request):
         pending = db.execute("SELECT count(*) FROM knowledge WHERE published=0").fetchone()[0]
         audit_rows = [dict(x) for x in db.execute('SELECT * FROM audit ORDER BY id DESC LIMIT 30')]
     return {'counts':counts,'drafts':pending,'vectors':request.app.state.vectors.status(),
-            'llm':{'provider':provider_name(),'model':os.getenv('LLM_MODEL','qwen3:4b'),'configured':provider_name()!='none'},
+            'llm':{'provider':provider_name(),'model':os.getenv('LLM_MODEL','qwen3:1.7b'),'configured':provider_name()!='none'},
             'library':{'configured':bool(os.getenv('LIBRARY_LOANS_URL') and os.getenv('LIBRARY_RENEW_URL'))},
             'channels':{'messenger':bool(os.getenv('MESSENGER_PAGE_ACCESS_TOKEN')),'zalo':bool(os.getenv('ZALO_ACCESS_TOKEN'))},'audit':audit_rows}
 
