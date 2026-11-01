@@ -189,7 +189,7 @@ input:focus, textarea:focus, select:focus { border-color: var(--primary); }
 .input-with-icon { position: relative; display: flex; align-items: center; min-width: 0; }
 .input-with-icon > svg { position: absolute; left: 13px; color: #6a7c6c; }
 .input-with-icon > input { padding-left: 41px; }
-.catalog-search { display: grid; grid-template-columns: minmax(180px, 1fr) 140px 175px auto; gap: 14px; align-items: end; }
+.catalog-search { display: grid; grid-template-columns: minmax(180px, 1fr) 130px 140px 205px auto; gap: 14px; align-items: end; }
 .catalog-search .primary { min-height: 47px; }
 .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 28px 0 17px; flex-wrap: wrap; }
 .section-heading h2 { font-size: 16px; margin: 0; }
