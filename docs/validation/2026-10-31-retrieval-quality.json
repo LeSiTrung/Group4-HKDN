@@ -1,0 +1,1023 @@
+{
+  "recorded_at": "2026-10-31T10:52:37.342576+00:00",
+  "kind": "local software and metadata lookup verification; not staff-reviewed semantic relevance or user acceptance",
+  "lookup_before": {
+    "recorded_at": "2026-10-31T10:39:06.129465+00:00",
+    "kind": "deterministic public-metadata lookup regression; not semantic or staff acceptance",
+    "execution": "prior all-fields baseline",
+    "corpus_sha256": "eef7e017aeeb1a6289dc58d43324257bdc6f6008cf1501396341fa7318fa593d",
+    "cases_sha256": "29f5a033258c2f6c9f728b72ddc2ee5f4261d378d4a1d5303a568d671a5ad3d6",
+    "summary": {
+      "title": {
+        "positive_cases": 12,
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.204167,
+        "recall_at20": 1.0,
+        "mean_ms": 1353.71
+      },
+      "author": {
+        "positive_cases": 11,
+        "hit_at1": 0.181818,
+        "mrr_at5": 0.25,
+        "returned_precision_at5": 0.072727,
+        "recall_at20": 0.463636,
+        "mean_ms": 804.57
+      }
+    },
+    "negative_correct": 2,
+    "negative_cases": 2,
+    "results": [
+      {
+        "id": "title-00",
+        "field": "title",
+        "elapsed_ms": 1775.05,
+        "returned": 68,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/eed57faa-f7cd-4724-ae89-ed24be556161",
+          "https://thuvienso.ut.edu.vn/items/97c74274-485a-47b5-9bd0-2cba9433f35d",
+          "https://thuvienso.ut.edu.vn/items/30501010-b3ef-4c1a-b85c-45647b0570c4",
+          "https://thuvienso.ut.edu.vn/items/e1eb12a7-c369-4c07-bd1c-a44e23a627f9",
+          "https://thuvienso.ut.edu.vn/items/c2b4e9a4-cf1d-4eb4-88b4-0d1772fc65df"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-00",
+        "field": "author",
+        "elapsed_ms": 733.25,
+        "returned": 14,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/eed57faa-f7cd-4724-ae89-ed24be556161",
+          "https://thuvienso.ut.edu.vn/items/59c1c7a0-4567-4991-a122-64189135a865",
+          "https://thuvienso.ut.edu.vn/items/a223d5fc-9013-4551-935d-33dc2e92c20b",
+          "https://thuvienso.ut.edu.vn/items/b0416bfa-9863-4723-af28-1454fc848304",
+          "https://thuvienso.ut.edu.vn/items/c0afe4b8-4583-4363-9b46-d38979569f43"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-01",
+        "field": "title",
+        "elapsed_ms": 1637.02,
+        "returned": 117,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/e882260f-9593-4aaf-bd3f-4e83e613aa66",
+          "https://thuvienso.ut.edu.vn/items/f10aa898-f840-4ad0-8bc4-ac42f87a76b4",
+          "https://thuvienso.ut.edu.vn/items/dbaf977e-00c0-4883-b71e-219d4714ffa7",
+          "https://thuvienso.ut.edu.vn/items/7955a4e1-4c7a-43da-94ad-97857e1d1c51",
+          "https://thuvienso.ut.edu.vn/items/008f16eb-81d1-4f90-86ee-b72a76782aa1"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-01",
+        "field": "author",
+        "elapsed_ms": 716.12,
+        "returned": 239,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/db8f5f10-b11f-4b23-88c9-e0c21a371a0b",
+          "https://thuvienso.ut.edu.vn/items/1fe795a9-9a92-4f1f-81d9-1f9c27e4609d",
+          "https://thuvienso.ut.edu.vn/items/3a671096-68b9-4051-9edf-69b21369e832",
+          "https://thuvienso.ut.edu.vn/items/ac557941-f7d7-4f09-b3eb-9cf2db0a4785",
+          "https://thuvienso.ut.edu.vn/items/d3ca1044-b882-42e8-9c7a-867e636699d0"
+        ],
+        "hit_at1": 0,
+        "mrr_at5": 0,
+        "returned_precision_at5": 0.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-02",
+        "field": "title",
+        "elapsed_ms": 1158.78,
+        "returned": 9,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/9bdcfb2e-bb5c-4316-92b1-df4c814811db",
+          "https://thuvienso.ut.edu.vn/items/2db7e5a2-0988-4fdf-8d5f-29307023e360",
+          "https://thuvienso.ut.edu.vn/items/150d7ccd-af23-4161-9db8-3d604defb80d",
+          "https://thuvienso.ut.edu.vn/items/7e9b7032-b7a5-4e2f-9077-c93625600c6c",
+          "https://thuvienso.ut.edu.vn/items/d079ac96-f5d6-4e6d-a66a-77882ca595b8"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-02",
+        "field": "author",
+        "elapsed_ms": 750.08,
+        "returned": 104,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/0c601378-4b83-414b-a656-a5153be5f8cc",
+          "https://thuvienso.ut.edu.vn/items/0f54e415-140c-40ec-81cc-5b48f93b1b35",
+          "https://thuvienso.ut.edu.vn/items/85a45ddd-1045-40a0-ba74-40f2edc4bcef",
+          "https://thuvienso.ut.edu.vn/items/aa354b14-a038-44e5-bb95-19f260c30853",
+          "https://thuvienso.ut.edu.vn/items/b3bc2b2e-b0e4-41a5-991a-6dd7a87d48a2"
+        ],
+        "hit_at1": 0,
+        "mrr_at5": 0,
+        "returned_precision_at5": 0.0,
+        "recall_at20": 0.0
+      },
+      {
+        "id": "title-03",
+        "field": "title",
+        "elapsed_ms": 1060.87,
+        "returned": 284,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/11026720-8879-40af-b80d-43795f5be7d7",
+          "https://thuvienso.ut.edu.vn/items/1a7b169b-4fa9-494d-af8c-11cd5461ae7c",
+          "https://thuvienso.ut.edu.vn/items/1d48a7d8-1661-4eb6-af62-fb3106a502ec",
+          "https://thuvienso.ut.edu.vn/items/4fe07307-d1c6-4709-83c3-87e842097bcd",
+          "https://thuvienso.ut.edu.vn/items/0f94e11b-aa37-45f8-a33a-5c3caf857002"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-03",
+        "field": "author",
+        "elapsed_ms": 707.5,
+        "returned": 267,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/11026720-8879-40af-b80d-43795f5be7d7",
+          "https://thuvienso.ut.edu.vn/items/1f2acb88-5f37-40f9-a449-b794a9bf0ccf",
+          "https://thuvienso.ut.edu.vn/items/34dbce74-9621-49d7-b0d4-9eef14495155",
+          "https://thuvienso.ut.edu.vn/items/450804df-bb1f-4fa4-b1a2-bc4598e3b34d",
+          "https://thuvienso.ut.edu.vn/items/587e0511-7467-406e-8ef8-d039beba0e3c"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-04",
+        "field": "title",
+        "elapsed_ms": 1343.38,
+        "returned": 64,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/c88b98ae-89b6-48d7-a70c-cdc857e71fd8",
+          "https://thuvienso.ut.edu.vn/items/c97145cb-52fd-4d1c-8686-30a8633e1376",
+          "https://thuvienso.ut.edu.vn/items/f7ffa6da-423a-49c8-aea0-163b2aacc8ea",
+          "https://thuvienso.ut.edu.vn/items/1e9f8b9f-9d32-4e87-88b9-7135ea861fa1",
+          "https://thuvienso.ut.edu.vn/items/9468b92b-5509-45b8-826e-36b49c3ac3a7"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-04",
+        "field": "author",
+        "elapsed_ms": 805.78,
+        "returned": 385,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/e3ecdd7d-45c8-4819-a499-105e4484176c",
+          "https://thuvienso.ut.edu.vn/items/c88b98ae-89b6-48d7-a70c-cdc857e71fd8",
+          "https://thuvienso.ut.edu.vn/items/e13cca7a-1b24-421c-8bb7-471a30788b11",
+          "https://thuvienso.ut.edu.vn/items/e253242f-23df-4704-95a9-1b8752aa1854",
+          "https://thuvienso.ut.edu.vn/items/032722f9-ab62-49df-87bc-b55a8261ff7c"
+        ],
+        "hit_at1": 0,
+        "mrr_at5": 0.5,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-05",
+        "field": "title",
+        "elapsed_ms": 1764.25,
+        "returned": 23,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/143eedc3-acb6-468a-8e4f-3fea31daa31d",
+          "https://thuvienso.ut.edu.vn/items/1d104026-292b-45d4-9969-9740cae99df3",
+          "https://thuvienso.ut.edu.vn/items/b982db5d-fa70-4bac-88da-2c4209677b17",
+          "https://thuvienso.ut.edu.vn/items/5e184a54-7415-4901-8f84-409219518998",
+          "https://thuvienso.ut.edu.vn/items/27f98d02-aa1f-4780-bdff-16fdfd7f1798"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-05",
+        "field": "author",
+        "elapsed_ms": 942.24,
+        "returned": 1333,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/6b0d9621-5389-4a48-83f2-cc8fc03cfd6f",
+          "https://thuvienso.ut.edu.vn/items/50939f44-b733-467c-a891-e36205bfa979",
+          "https://thuvienso.ut.edu.vn/items/e4934bb2-c7cb-4ffe-bafb-14218696e5ad",
+          "https://thuvienso.ut.edu.vn/items/143eedc3-acb6-468a-8e4f-3fea31daa31d",
+          "https://thuvienso.ut.edu.vn/items/a223d5fc-9013-4551-935d-33dc2e92c20b"
+        ],
+        "hit_at1": 0,
+        "mrr_at5": 0.25,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 0.1
+      },
+      {
+        "id": "title-06",
+        "field": "title",
+        "elapsed_ms": 1502.03,
+        "returned": 42,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/38d1be0e-5436-4fb4-9e9f-95e6ea7e9832",
+          "https://thuvienso.ut.edu.vn/items/1a00d2b6-88c2-4cd5-b0a3-6a02eeecb083",
+          "https://thuvienso.ut.edu.vn/items/1a1bd08e-8129-4214-9018-53c5e1c3bb19",
+          "https://thuvienso.ut.edu.vn/items/7840abe7-9df9-4a34-bd8a-9e7fbebdd659",
+          "https://thuvienso.ut.edu.vn/items/7c805bef-ebfb-45b5-a3ae-8f4bb6821b9a"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-06",
+        "field": "author",
+        "elapsed_ms": 852.97,
+        "returned": 776,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/0bb906a5-8f1e-4ffa-ba3e-36223b093fd7",
+          "https://thuvienso.ut.edu.vn/items/1bf03242-78eb-4b3b-9e2d-46938d50dfd4",
+          "https://thuvienso.ut.edu.vn/items/36ed590f-9157-4349-b3a7-6909ce432f29",
+          "https://thuvienso.ut.edu.vn/items/4e4d8721-42d9-466e-9215-1a0c7fd04b01",
+          "https://thuvienso.ut.edu.vn/items/5b5189ce-03d8-40da-be9b-37ed97a77290"
+        ],
+        "hit_at1": 0,
+        "mrr_at5": 0,
+        "returned_precision_at5": 0.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-07",
+        "field": "title",
+        "elapsed_ms": 1815.86,
+        "returned": 130,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/7a01209d-5fff-4743-88a5-1b841fd2c987",
+          "https://thuvienso.ut.edu.vn/items/6bf86287-3e53-44de-a743-ed1bed566830",
+          "https://thuvienso.ut.edu.vn/items/3d20d963-8fe4-4d1f-9f3a-e2b6af9f4f3a",
+          "https://thuvienso.ut.edu.vn/items/5baf2726-c404-4983-bc22-517e986ede06",
+          "https://thuvienso.ut.edu.vn/items/ddc62b0c-09d4-41a5-8a76-d5ec25588c13"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-07",
+        "field": "author",
+        "elapsed_ms": 809.07,
+        "returned": 428,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/00c8190f-d829-459a-acde-20a34a2ede73",
+          "https://thuvienso.ut.edu.vn/items/9a8e9b95-733e-4bff-b5e6-d28f25aa7dca",
+          "https://thuvienso.ut.edu.vn/items/d96e4e90-750f-4588-bde2-21132aecab1b",
+          "https://thuvienso.ut.edu.vn/items/dba4af9c-3149-4fa6-9d61-ccaab1050f50",
+          "https://thuvienso.ut.edu.vn/items/f33e357c-4d40-41c5-a877-57ad527cd34b"
+        ],
+        "hit_at1": 0,
+        "mrr_at5": 0,
+        "returned_precision_at5": 0.0,
+        "recall_at20": 0.0
+      },
+      {
+        "id": "title-08",
+        "field": "title",
+        "elapsed_ms": 1158.55,
+        "returned": 278,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/5bddcf62-c9d1-4c4a-85f3-824c36cca543",
+          "https://thuvienso.ut.edu.vn/items/7d78e2fe-358c-4f22-8531-bb3289c12034",
+          "https://thuvienso.ut.edu.vn/items/01135e1f-b806-4163-bc88-b1a8330660dc",
+          "https://thuvienso.ut.edu.vn/items/04d80e77-38f1-4792-b846-83458a47e1ce",
+          "https://thuvienso.ut.edu.vn/items/268640ae-cfb2-457c-9939-84a95bcf0951"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-08",
+        "field": "author",
+        "elapsed_ms": 844.03,
+        "returned": 3244,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/0270b8ec-8db4-4358-9df8-c10e37ac7f22",
+          "https://thuvienso.ut.edu.vn/items/082db2bc-80dc-4655-87dd-41f48e4d4d1b",
+          "https://thuvienso.ut.edu.vn/items/08b9a28e-91cd-402d-b556-f10896712986",
+          "https://thuvienso.ut.edu.vn/items/0b5e8c2a-870b-4f6b-8bf5-deb0cb16d5b2",
+          "https://thuvienso.ut.edu.vn/items/237294db-a447-4d76-a614-02baaa28a8f3"
+        ],
+        "hit_at1": 0,
+        "mrr_at5": 0,
+        "returned_precision_at5": 0.0,
+        "recall_at20": 0.0
+      },
+      {
+        "id": "title-09",
+        "field": "title",
+        "elapsed_ms": 1655.38,
+        "returned": 7,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/e4db3eaa-8898-4938-84dc-36e339603074",
+          "https://thuvienso.ut.edu.vn/items/8321aac9-90fc-45a8-9f5e-5a75a996e1a7",
+          "https://thuvienso.ut.edu.vn/items/870e3812-07e4-4a74-9a4d-bae3179ec3c8",
+          "https://thuvienso.ut.edu.vn/items/59ca50c2-29e0-44b1-9ea5-b477ced75738",
+          "https://thuvienso.ut.edu.vn/items/11116a85-6b8e-4541-851a-59b09275a40a"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-10",
+        "field": "title",
+        "elapsed_ms": 1101.89,
+        "returned": 4,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/0917655f-825e-4259-a8aa-6ccf49c08ed5",
+          "https://thuvienso.ut.edu.vn/items/11b59dbf-72e4-4f91-92ce-c1b6ff95e2c6",
+          "https://thuvienso.ut.edu.vn/items/152a55f7-cbf9-4a35-81b9-bdb8b6fe7709",
+          "https://thuvienso.ut.edu.vn/items/0919c459-d6ab-4134-954d-a53d2ed31712"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.25,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-10",
+        "field": "author",
+        "elapsed_ms": 896.28,
+        "returned": 2333,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/5ab35975-4f38-4755-8e44-7584fa1e607f",
+          "https://thuvienso.ut.edu.vn/items/89cca353-6303-48d0-a417-a84eb4fc2892",
+          "https://thuvienso.ut.edu.vn/items/956c25e3-1eab-4707-a2d8-506e56b29406",
+          "https://thuvienso.ut.edu.vn/items/9cba0c63-29da-45f1-9d87-911795e35267",
+          "https://thuvienso.ut.edu.vn/items/e1680294-b280-472c-8275-715e351eb122"
+        ],
+        "hit_at1": 0,
+        "mrr_at5": 0,
+        "returned_precision_at5": 0.0,
+        "recall_at20": 0.0
+      },
+      {
+        "id": "title-11",
+        "field": "title",
+        "elapsed_ms": 932.78,
+        "returned": 39,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/1ff60ca9-2200-469b-a725-983f1a2869ab",
+          "https://thuvienso.ut.edu.vn/items/3c1e676e-92cb-41b2-82b9-55d586795c69",
+          "https://thuvienso.ut.edu.vn/items/5130bd3f-0384-48a8-b0db-169e739286d6",
+          "https://thuvienso.ut.edu.vn/items/1e758877-1888-4a21-a6c7-e7e76bae9f9c",
+          "https://thuvienso.ut.edu.vn/items/8ba3ca66-0f1a-4bf6-b6a0-a4bec68348b2"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-11",
+        "field": "author",
+        "elapsed_ms": 927.76,
+        "returned": 1024,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/07e4c00a-3b46-4b5b-a97b-14fbde00ec71",
+          "https://thuvienso.ut.edu.vn/items/07ef33d7-346f-43f0-a6cc-8f3a76425a45",
+          "https://thuvienso.ut.edu.vn/items/09151d0f-8eee-498a-8674-cfd3d91b391a",
+          "https://thuvienso.ut.edu.vn/items/39944bda-94db-4e14-b700-9008aa0ac676",
+          "https://thuvienso.ut.edu.vn/items/7fac4905-764f-4d37-8556-6f6344db9087"
+        ],
+        "hit_at1": 0,
+        "mrr_at5": 0,
+        "returned_precision_at5": 0.0,
+        "recall_at20": 0.0
+      },
+      {
+        "id": "missing-author",
+        "field": "author",
+        "elapsed_ms": 669.7,
+        "returned": 0,
+        "top5": [],
+        "empty_correct": true
+      },
+      {
+        "id": "missing-title",
+        "field": "title",
+        "elapsed_ms": 692.45,
+        "returned": 0,
+        "top5": [],
+        "empty_correct": true
+      }
+    ],
+    "limits": [
+      "Developer metadata lookup labels, not semantic relevance or staff-approved acceptance",
+      "Returned precision uses only actual top5 results; empty positive results score zero",
+      "Single local run; latency is not a concurrent SLA; no LLM or embedding inference"
+    ]
+  },
+  "lookup_after": {
+    "recorded_at": "2026-10-31T10:41:45.120568+00:00",
+    "kind": "deterministic public-metadata lookup regression; not semantic or staff acceptance",
+    "execution": "structured field routing",
+    "corpus_sha256": "eef7e017aeeb1a6289dc58d43324257bdc6f6008cf1501396341fa7318fa593d",
+    "cases_sha256": "29f5a033258c2f6c9f728b72ddc2ee5f4261d378d4a1d5303a568d671a5ad3d6",
+    "summary": {
+      "title": {
+        "positive_cases": 12,
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0,
+        "mean_ms": 226.77
+      },
+      "author": {
+        "positive_cases": 11,
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.904545,
+        "recall_at20": 1.0,
+        "mean_ms": 113.54
+      }
+    },
+    "negative_correct": 2,
+    "negative_cases": 2,
+    "results": [
+      {
+        "id": "title-00",
+        "field": "title",
+        "elapsed_ms": 222.35,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/eed57faa-f7cd-4724-ae89-ed24be556161"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-00",
+        "field": "author",
+        "elapsed_ms": 116.44,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/eed57faa-f7cd-4724-ae89-ed24be556161"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-01",
+        "field": "title",
+        "elapsed_ms": 226.45,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/e882260f-9593-4aaf-bd3f-4e83e613aa66"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-01",
+        "field": "author",
+        "elapsed_ms": 118.36,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/e882260f-9593-4aaf-bd3f-4e83e613aa66"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-02",
+        "field": "title",
+        "elapsed_ms": 241.98,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/9bdcfb2e-bb5c-4316-92b1-df4c814811db"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-02",
+        "field": "author",
+        "elapsed_ms": 113.36,
+        "returned": 3,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/2a117abe-979e-4240-b5ad-1af6a97c16d1",
+          "https://thuvienso.ut.edu.vn/items/9bdcfb2e-bb5c-4316-92b1-df4c814811db",
+          "https://thuvienso.ut.edu.vn/items/f60d6697-9300-4f0f-923b-54e3b882af79"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-03",
+        "field": "title",
+        "elapsed_ms": 229.84,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/11026720-8879-40af-b80d-43795f5be7d7"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-03",
+        "field": "author",
+        "elapsed_ms": 129.49,
+        "returned": 2,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/11026720-8879-40af-b80d-43795f5be7d7",
+          "https://thuvienso.ut.edu.vn/items/779b158a-bc56-4e41-b845-b91e51e207f4"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-04",
+        "field": "title",
+        "elapsed_ms": 222.06,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/c88b98ae-89b6-48d7-a70c-cdc857e71fd8"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-04",
+        "field": "author",
+        "elapsed_ms": 115.29,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/c88b98ae-89b6-48d7-a70c-cdc857e71fd8"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-05",
+        "field": "title",
+        "elapsed_ms": 222.19,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/143eedc3-acb6-468a-8e4f-3fea31daa31d"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-05",
+        "field": "author",
+        "elapsed_ms": 107.33,
+        "returned": 10,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/008db0cd-ceba-4790-b011-426aa8e75749",
+          "https://thuvienso.ut.edu.vn/items/0beb7ebf-4a62-4471-bdc7-1afeedb301dc",
+          "https://thuvienso.ut.edu.vn/items/143eedc3-acb6-468a-8e4f-3fea31daa31d",
+          "https://thuvienso.ut.edu.vn/items/25e63f95-70fc-4e2c-a325-f9b4e03499a7",
+          "https://thuvienso.ut.edu.vn/items/2e50b3cf-63bd-41cf-a764-c86aff31d28c"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-06",
+        "field": "title",
+        "elapsed_ms": 223.77,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/38d1be0e-5436-4fb4-9e9f-95e6ea7e9832"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-06",
+        "field": "author",
+        "elapsed_ms": 109.16,
+        "returned": 2,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/078336e4-367a-4d60-a855-a8c84729e2c7",
+          "https://thuvienso.ut.edu.vn/items/38d1be0e-5436-4fb4-9e9f-95e6ea7e9832"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-07",
+        "field": "title",
+        "elapsed_ms": 225.88,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/7a01209d-5fff-4743-88a5-1b841fd2c987"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-07",
+        "field": "author",
+        "elapsed_ms": 114.29,
+        "returned": 6,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/7a01209d-5fff-4743-88a5-1b841fd2c987",
+          "https://thuvienso.ut.edu.vn/items/00c8190f-d829-459a-acde-20a34a2ede73",
+          "https://thuvienso.ut.edu.vn/items/4fe08cb8-7992-4a9c-833c-43df2578388b",
+          "https://thuvienso.ut.edu.vn/items/9a8e9b95-733e-4bff-b5e6-d28f25aa7dca",
+          "https://thuvienso.ut.edu.vn/items/ee24ef3b-a274-49a5-bba7-bf2b55e2154c"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.2,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-08",
+        "field": "title",
+        "elapsed_ms": 224.3,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/5bddcf62-c9d1-4c4a-85f3-824c36cca543"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-08",
+        "field": "author",
+        "elapsed_ms": 109.99,
+        "returned": 4,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/5896b958-5929-4f80-8e14-b5b7a6e160ac",
+          "https://thuvienso.ut.edu.vn/items/5bddcf62-c9d1-4c4a-85f3-824c36cca543",
+          "https://thuvienso.ut.edu.vn/items/a5d6296d-5675-4a7c-a15e-2119ba5d37b1",
+          "https://thuvienso.ut.edu.vn/items/e65998da-0af8-48c8-9e91-b843c37bf721"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-09",
+        "field": "title",
+        "elapsed_ms": 216.92,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/e4db3eaa-8898-4938-84dc-36e339603074"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-10",
+        "field": "title",
+        "elapsed_ms": 223.35,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/0917655f-825e-4259-a8aa-6ccf49c08ed5"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-10",
+        "field": "author",
+        "elapsed_ms": 109.76,
+        "returned": 4,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/0917655f-825e-4259-a8aa-6ccf49c08ed5",
+          "https://thuvienso.ut.edu.vn/items/0d075798-a82f-48e7-b0ea-1250e6ac5439",
+          "https://thuvienso.ut.edu.vn/items/ed4e909f-6117-48b5-a540-525d0579e575",
+          "https://thuvienso.ut.edu.vn/items/7ec883a1-a9a9-4606-9dad-56ce2edb3527"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 0.75,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "title-11",
+        "field": "title",
+        "elapsed_ms": 217.2,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/1ff60ca9-2200-469b-a725-983f1a2869ab"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "author-11",
+        "field": "author",
+        "elapsed_ms": 108.41,
+        "returned": 1,
+        "top5": [
+          "https://thuvienso.ut.edu.vn/items/1ff60ca9-2200-469b-a725-983f1a2869ab"
+        ],
+        "hit_at1": 1,
+        "mrr_at5": 1.0,
+        "returned_precision_at5": 1.0,
+        "recall_at20": 1.0
+      },
+      {
+        "id": "missing-author",
+        "field": "author",
+        "elapsed_ms": 110.57,
+        "returned": 0,
+        "top5": [],
+        "empty_correct": true
+      },
+      {
+        "id": "missing-title",
+        "field": "title",
+        "elapsed_ms": 251.67,
+        "returned": 0,
+        "top5": [],
+        "empty_correct": true
+      }
+    ],
+    "limits": [
+      "Developer metadata lookup labels, not semantic relevance or staff-approved acceptance",
+      "Returned precision uses only actual top5 results; empty positive results score zero",
+      "Single local run; latency is not a concurrent SLA; no LLM or embedding inference"
+    ]
+  },
+  "export": {
+    "passed": true,
+    "scope": "original SentenceTransformer CPU vs isolated PyTorch CPU / ONNX CPU; tensor parity only",
+    "max_seq_length": 128,
+    "pooling": "attention-mask mean",
+    "normalized": true,
+    "export_packages": {
+      "torch": "2.11.0+cpu",
+      "sentence-transformers": "6.2.0",
+      "transformers": "5.22.1",
+      "onnx": "1.23.2",
+      "onnxruntime": "1.31.1",
+      "numpy": "2.4.6"
+    },
+    "isolated_pytorch": {
+      "passed": true,
+      "sample_texts": 50,
+      "embedding_shape": [
+        50,
+        384
+      ],
+      "max_abs_error": 0.0,
+      "min_cosine": 0.9999998807907104,
+      "dtype": "float32"
+    },
+    "onnx_batches": [
+      {
+        "batch_size": 1,
+        "passed": true,
+        "sample_texts": 50,
+        "embedding_shape": [
+          50,
+          384
+        ],
+        "max_abs_error": 3.0174851417541504e-07,
+        "min_cosine": 0.9999999403953552,
+        "dtype": "float32"
+      },
+      {
+        "batch_size": 3,
+        "passed": true,
+        "sample_texts": 50,
+        "embedding_shape": [
+          50,
+          384
+        ],
+        "max_abs_error": 3.0174851417541504e-07,
+        "min_cosine": 0.9999999403953552,
+        "dtype": "float32"
+      },
+      {
+        "batch_size": 8,
+        "passed": true,
+        "sample_texts": 50,
+        "embedding_shape": [
+          50,
+          384
+        ],
+        "max_abs_error": 3.0174851417541504e-07,
+        "min_cosine": 0.9999999403953552,
+        "dtype": "float32"
+      }
+    ],
+    "fastembed": {
+      "passed": true,
+      "sample_texts": 50,
+      "embedding_shape": [
+        50,
+        384
+      ],
+      "max_abs_error": 3.0919909477233887e-07,
+      "min_cosine": 0.9999998807907104,
+      "dtype": "float32",
+      "packages": {
+        "fastembed": "0.9.1",
+        "onnxruntime": "1.31.1",
+        "tokenizers": "0.23.3",
+        "numpy": "2.4.6"
+      }
+    },
+    "artifact_sha256": {
+      "config.json": "c528210edf3411460d13318c12f6bb1a939e788951a4dcb3c23df60d96bdd378",
+      "model.onnx": "64d95cfeb94572d9a85ce68ab64b380f6aec6923cbd883a58aebeea817cd2a52",
+      "tokenizer.json": "cad551d5600a84242d0973327029452a1e3672ba6313c2a3c3d69c4310e12719",
+      "tokenizer_config.json": "f87d4952eab944ea4c51ca5121310724ea6d71e7114532c848d67bc32a0f388f"
+    },
+    "production_config_changed": false,
+    "published": false
+  },
+  "export_reference": {
+    "sample_count": 50,
+    "token_lengths": [
+      2,
+      3,
+      7,
+      8,
+      9,
+      11,
+      13,
+      15,
+      19,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      29,
+      31,
+      34,
+      37,
+      39,
+      41,
+      42,
+      49,
+      50,
+      54,
+      64,
+      126,
+      127,
+      128
+    ],
+    "packages": {
+      "torch": "2.11.0+cu128",
+      "sentence-transformers": "6.2.0",
+      "transformers": "5.22.1"
+    },
+    "checkpoint_sha256": {
+      "1_Pooling/config.json": "bb80272f7adad76ce93073c25e18113ee66be1e91f60bcdd72aa41d05b28247e",
+      "config.json": "c528210edf3411460d13318c12f6bb1a939e788951a4dcb3c23df60d96bdd378",
+      "config_sentence_transformers.json": "f353ff8338ac093dac5691f80d316f8b9659c9ec75dddd553648228a8d3ed795",
+      "model.safetensors": "23c1cf9e81512ae54560705410c3004bc7fe5758479856706235b2a0228e0587",
+      "modules.json": "318d49f1092cad125a35af58d9795bcddce84bf7e7240bd8d95b9b6858f9476b",
+      "README.md": "d2c310657ddb042bfbca8960a104431fd94bfdd6f336ed02e67b342a1530da77",
+      "sentence_bert_config.json": "5fee3fcdc4a727fad422f0fed0c867b0921eefa9051de221521956ed42eb4c19",
+      "tokenizer.json": "cad551d5600a84242d0973327029452a1e3672ba6313c2a3c3d69c4310e12719",
+      "tokenizer_config.json": "f87d4952eab944ea4c51ca5121310724ea6d71e7114532c848d67bc32a0f388f"
+    }
+  },
+  "verification": {
+    "backend": {
+      "passed": 356,
+      "warnings": 1,
+      "seconds": 42.58
+    },
+    "frontend": {
+      "passed": 45,
+      "files": 7
+    },
+    "build": "passed:42 modules,304.19kB JavaScript/91.47kB gzip",
+    "independent_final_review": {
+      "related_tests_passed": 28,
+      "remaining_important_or_critical": 0
+    },
+    "field_api": {
+      "passed": 6,
+      "checks": [
+        "real author metadata and digital filter",
+        "exact title source",
+        "related author metadata",
+        "empty structured result stays local",
+        "unsupported upstream field rejected",
+        "field enum validation"
+      ],
+      "author_total": 3,
+      "related_count": 2
+    },
+    "browser": {
+      "status": "passed",
+      "query": "Nguyễn Đại Dương",
+      "field": "author",
+      "total": 3,
+      "local_source_selected": true,
+      "unsupported_opac_option_disabled": true,
+      "screenshot": "tmp/catalog-author-quality.png"
+    },
+    "live_chat": {
+      "catalog-author": {
+        "passed": 5,
+        "total": 5
+      },
+      "dspace": {
+        "passed": 8,
+        "total": 8
+      },
+      "questions": {
+        "passed": 45,
+        "total": 45
+      },
+      "library-conversation": {
+        "passed": 10,
+        "total": 10
+      },
+      "public-library": {
+        "passed": 10,
+        "total": 10
+      },
+      "semantic": {
+        "passed": 2,
+        "total": 2
+      }
+    }
+  },
+  "limitations": [
+    "25 fixed metadata lookup cases selected before code changes; not a semantic benchmark or staff labels",
+    "Author-name phrase matches can include longer names; no bibliographic authority identities",
+    "Before/after latency is single-run on the same corpus; background load/caches were not controlled; not an SLA",
+    "Training/test set unchanged; no model retraining or test-score hyperparameter selection",
+    "Numerical export parity is not a relevance/faithfulness result; production baseline and index remain unchanged",
+    "Historical training metrics did not pin checkpoint hash; hashes establish source identity/stability at export",
+    "Printed catalog, live transactions/channels, public TLS/capacity and staff/user acceptance remain external"
+  ]
+}

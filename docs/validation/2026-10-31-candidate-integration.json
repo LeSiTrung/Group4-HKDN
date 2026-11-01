@@ -1,0 +1,585 @@
+{
+  "date": "2026-10-31",
+  "kind": "local candidate runtime and admin pagination verification; synthetic relevance is not staff/user acceptance",
+  "default_profile": "unchanged baseline FastEmbed; Qwen3-1.7B; no candidate promotion",
+  "dataset_manifest_sha256": "94e5dcfc4432a7afecbb1c9352b6dba2115712c4d493aaea850e6808c089e65a",
+  "corpus_sha256": "986398ee4101609a70e9ffa5922544bde95332b29e5d815da984503ed53cd136",
+  "catalog_records": 5569,
+  "vector_comparison": {
+    "baseline": {
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "cases": 354,
+      "hit_at1": 0.432203,
+      "hit_at5": 0.485876,
+      "mrr_at5": 0.456309,
+      "recall_at5": 0.485876,
+      "ndcg_at5": 0.463898,
+      "mean_ms": 244.85
+    },
+    "candidate": {
+      "model": "local/uth-minilm-a9169f2ae1251e199eda174c45fe64b234f0bf554bb59735ef9cc585ddd41e90",
+      "cases": 354,
+      "hit_at1": 0.576271,
+      "hit_at5": 0.661017,
+      "mrr_at5": 0.610829,
+      "recall_at5": 0.661017,
+      "ndcg_at5": 0.623509,
+      "mean_ms": 222.59
+    },
+    "query_budget_fallbacks": {
+      "baseline": 0,
+      "candidate": 0
+    },
+    "pairwise_ndcg": {
+      "improved": 81,
+      "regressed": 7,
+      "tied": 266
+    },
+    "regressions_for_review": [
+      {
+        "id": "4abb4ab9ef9cb65f",
+        "query": "Tôi cần tài liệu liên quan đến Phân tích hiệu tài chính dự đầu tư khu cư đường Lý Lâm - Phường - Thành Phố Mau",
+        "synthetic_relevant_urls": [
+          "https://thuvienso.ut.edu.vn/items/4c8a8773-81a6-45cd-96e8-0b6821357cca"
+        ],
+        "baseline": {
+          "id": "4abb4ab9ef9cb65f",
+          "within_query_budget": true,
+          "returned": [
+            "https://thuvienso.ut.edu.vn/items/4c8a8773-81a6-45cd-96e8-0b6821357cca",
+            "https://thuvienso.ut.edu.vn/items/4c7b7af2-a3c3-4ae5-85c4-823ab62268f1",
+            "https://thuvienso.ut.edu.vn/items/3c8accd9-b848-4495-acd7-5f026852e5b7",
+            "https://thuvienso.ut.edu.vn/items/c6b05a82-cd1a-4c51-9e4f-e27dea898f5f",
+            "https://thuvienso.ut.edu.vn/items/f5d61d40-1897-49be-b1b3-ace59b52d0c8"
+          ],
+          "elapsed_ms": 220.02,
+          "hit_at1": 1,
+          "hit_at5": 1,
+          "mrr_at5": 1.0,
+          "recall_at5": 1.0,
+          "ndcg_at5": 1.0
+        },
+        "candidate": {
+          "id": "4abb4ab9ef9cb65f",
+          "within_query_budget": true,
+          "returned": [
+            "https://thuvienso.ut.edu.vn/items/c6b05a82-cd1a-4c51-9e4f-e27dea898f5f",
+            "https://thuvienso.ut.edu.vn/items/4c8a8773-81a6-45cd-96e8-0b6821357cca",
+            "https://thuvienso.ut.edu.vn/items/4c7b7af2-a3c3-4ae5-85c4-823ab62268f1",
+            "https://thuvienso.ut.edu.vn/items/f0acb625-aee9-4fd7-85cc-a35b4ad9341b",
+            "https://thuvienso.ut.edu.vn/items/eaf43138-9e21-4c27-aee1-9c264a346c73"
+          ],
+          "elapsed_ms": 204.16,
+          "hit_at1": 0,
+          "hit_at5": 1,
+          "mrr_at5": 0.5,
+          "recall_at5": 1.0,
+          "ndcg_at5": 0.6309297535714575
+        },
+        "staff_review": "pending; do not tune on frozen test"
+      },
+      {
+        "id": "69babefea38350a2",
+        "query": "Tôi cần tài liệu liên quan đến Tính toán thiết hệ thống phanh xe du lịch chỗ",
+        "synthetic_relevant_urls": [
+          "https://thuvienso.ut.edu.vn/items/663351b9-1bf3-4af8-a820-65e0b315eea5"
+        ],
+        "baseline": {
+          "id": "69babefea38350a2",
+          "within_query_budget": true,
+          "returned": [
+            "https://thuvienso.ut.edu.vn/items/e43ab81e-ec73-4be3-9c12-f2f35d4eed8b",
+            "https://thuvienso.ut.edu.vn/items/663351b9-1bf3-4af8-a820-65e0b315eea5",
+            "https://thuvienso.ut.edu.vn/items/3a2521ce-a6cc-42d2-97a4-2ba4318b0247",
+            "https://thuvienso.ut.edu.vn/items/c08ca3a9-810e-4b37-9cb6-45de36776a6e",
+            "https://thuvienso.ut.edu.vn/items/b3cabf89-f60f-43dc-b383-29fd6a77b247"
+          ],
+          "elapsed_ms": 241.75,
+          "hit_at1": 0,
+          "hit_at5": 1,
+          "mrr_at5": 0.5,
+          "recall_at5": 1.0,
+          "ndcg_at5": 0.6309297535714575
+        },
+        "candidate": {
+          "id": "69babefea38350a2",
+          "within_query_budget": true,
+          "returned": [
+            "https://thuvienso.ut.edu.vn/items/e43ab81e-ec73-4be3-9c12-f2f35d4eed8b",
+            "https://thuvienso.ut.edu.vn/items/3a2521ce-a6cc-42d2-97a4-2ba4318b0247",
+            "https://thuvienso.ut.edu.vn/items/b0420f03-2622-4066-9945-83ed8fc6a6ee",
+            "https://thuvienso.ut.edu.vn/items/1cb740d5-d07c-4d3b-bdf1-0f7b6be3f2c0",
+            "https://thuvienso.ut.edu.vn/items/b3cabf89-f60f-43dc-b383-29fd6a77b247"
+          ],
+          "elapsed_ms": 278.87,
+          "hit_at1": 0,
+          "hit_at5": 0,
+          "mrr_at5": 0,
+          "recall_at5": 0.0,
+          "ndcg_at5": 0.0
+        },
+        "staff_review": "pending; do not tune on frozen test"
+      },
+      {
+        "id": "8aee147945eba3d5",
+        "query": "Tôi cần tài liệu liên quan đến Giải pháp phát kinh doanh dịch kho hàng của ty cổ phần Chí giai đoạn",
+        "synthetic_relevant_urls": [
+          "https://thuvienso.ut.edu.vn/items/07e4c00a-3b46-4b5b-a97b-14fbde00ec71"
+        ],
+        "baseline": {
+          "id": "8aee147945eba3d5",
+          "within_query_budget": true,
+          "returned": [
+            "https://thuvienso.ut.edu.vn/items/07e4c00a-3b46-4b5b-a97b-14fbde00ec71",
+            "https://thuvienso.ut.edu.vn/items/d7ca9fcf-cf0e-43d3-97dc-d40a9580c1a6",
+            "https://thuvienso.ut.edu.vn/items/15e1f75e-0253-4b48-9b48-e0bd6be41db9",
+            "https://thuvienso.ut.edu.vn/items/c746b2d9-34a4-4c51-a8dd-39b8e498242e",
+            "https://thuvienso.ut.edu.vn/items/209e588b-d0a8-4261-84c8-c5768e95d130"
+          ],
+          "elapsed_ms": 231.28,
+          "hit_at1": 1,
+          "hit_at5": 1,
+          "mrr_at5": 1.0,
+          "recall_at5": 1.0,
+          "ndcg_at5": 1.0
+        },
+        "candidate": {
+          "id": "8aee147945eba3d5",
+          "within_query_budget": true,
+          "returned": [
+            "https://thuvienso.ut.edu.vn/items/90a4dec1-0b95-4028-9d0b-a9a6ecac277c",
+            "https://thuvienso.ut.edu.vn/items/07e4c00a-3b46-4b5b-a97b-14fbde00ec71",
+            "https://thuvienso.ut.edu.vn/items/e64f04fb-1c72-476d-a6ea-7d32319805f3",
+            "https://thuvienso.ut.edu.vn/items/2b6500aa-2286-4b19-864b-ea4f1c7b760a",
+            "https://thuvienso.ut.edu.vn/items/6a8103a3-079c-4b7c-9187-f37cad4f95aa"
+          ],
+          "elapsed_ms": 217.28,
+          "hit_at1": 0,
+          "hit_at5": 1,
+          "mrr_at5": 0.5,
+          "recall_at5": 1.0,
+          "ndcg_at5": 0.6309297535714575
+        },
+        "staff_review": "pending; do not tune on frozen test"
+      },
+      {
+        "id": "8af80f7e684105bd",
+        "query": "Tôi cần tài liệu liên quan đến Mô hình, nhận hệ tay máy tuyến dùng mạng thích nghi",
+        "synthetic_relevant_urls": [
+          "https://thuvienso.ut.edu.vn/items/801ae895-46ac-4ea9-8301-569bbbce0536"
+        ],
+        "baseline": {
+          "id": "8af80f7e684105bd",
+          "within_query_budget": true,
+          "returned": [
+            "https://thuvienso.ut.edu.vn/items/57aad071-8894-4031-a1c4-12d0ddb4d4ac",
+            "https://thuvienso.ut.edu.vn/items/801ae895-46ac-4ea9-8301-569bbbce0536",
+            "https://thuvienso.ut.edu.vn/items/065320a9-80b1-45bc-9e44-63df6ca2df77",
+            "https://thuvienso.ut.edu.vn/items/8e415dc1-6f5f-4990-a594-9d2f6f86f505",
+            "https://thuvienso.ut.edu.vn/items/7200adbe-5e28-47ce-a5c0-3fd6e51447b9"
+          ],
+          "elapsed_ms": 262.2,
+          "hit_at1": 0,
+          "hit_at5": 1,
+          "mrr_at5": 0.5,
+          "recall_at5": 1.0,
+          "ndcg_at5": 0.6309297535714575
+        },
+        "candidate": {
+          "id": "8af80f7e684105bd",
+          "within_query_budget": true,
+          "returned": [
+            "https://thuvienso.ut.edu.vn/items/7200adbe-5e28-47ce-a5c0-3fd6e51447b9",
+            "https://thuvienso.ut.edu.vn/items/6ac9f7e5-8b1b-4e3d-83b5-8c6dfce5cb56",
+            "https://thuvienso.ut.edu.vn/items/50ff0372-ddd0-4c24-afd4-63b42501a6be",
+            "https://thuvienso.ut.edu.vn/items/8e415dc1-6f5f-4990-a594-9d2f6f86f505",
+            "https://thuvienso.ut.edu.vn/items/a5e3ec6b-42e3-4e5c-8a55-1faf92c1e9e4"
+          ],
+          "elapsed_ms": 216.14,
+          "hit_at1": 0,
+          "hit_at5": 0,
+          "mrr_at5": 0,
+          "recall_at5": 0.0,
+          "ndcg_at5": 0.0
+        },
+        "staff_review": "pending; do not tune on frozen test"
+      },
+      {
+        "id": "aba5141a1779fd20",
+        "query": "Tôi cần tài liệu liên quan đến Khai thác hệ chiếu sáng tín trên xe Ford 2018. Xây dựng hình hệ thống sáng trên ô",
+        "synthetic_relevant_urls": [
+          "https://thuvienso.ut.edu.vn/items/8374734e-3548-486d-ae61-dee1c8412bc2"
+        ],
+        "baseline": {
+          "id": "aba5141a1779fd20",
+          "within_query_budget": true,
+          "returned": [
+            "https://thuvienso.ut.edu.vn/items/8374734e-3548-486d-ae61-dee1c8412bc2",
+            "https://thuvienso.ut.edu.vn/items/8d85e3e9-454b-4626-a01d-c36ed67930b6",
+            "https://thuvienso.ut.edu.vn/items/49c37b8c-4f59-4cae-8f13-fe2822ebf932",
+            "https://thuvienso.ut.edu.vn/items/14ae748a-6b27-46da-ab7b-12ec4665d58c",
+            "https://thuvienso.ut.edu.vn/items/b6947b76-2836-4973-9551-d8b2ece6bf07"
+          ],
+          "elapsed_ms": 276.65,
+          "hit_at1": 1,
+          "hit_at5": 1,
+          "mrr_at5": 1.0,
+          "recall_at5": 1.0,
+          "ndcg_at5": 1.0
+        },
+        "candidate": {
+          "id": "aba5141a1779fd20",
+          "within_query_budget": true,
+          "returned": [
+            "https://thuvienso.ut.edu.vn/items/8d85e3e9-454b-4626-a01d-c36ed67930b6",
+            "https://thuvienso.ut.edu.vn/items/8374734e-3548-486d-ae61-dee1c8412bc2",
+            "https://thuvienso.ut.edu.vn/items/49c37b8c-4f59-4cae-8f13-fe2822ebf932",
+            "https://thuvienso.ut.edu.vn/items/337fc968-2711-4e91-894f-7f04c5ab4ca4",
+            "https://thuvienso.ut.edu.vn/items/9e2f5f19-eaad-4dc4-8a4a-6b35309e6969"
+          ],
+          "elapsed_ms": 215.9,
+          "hit_at1": 0,
+          "hit_at5": 1,
+          "mrr_at5": 0.5,
+          "recall_at5": 1.0,
+          "ndcg_at5": 0.6309297535714575
+        },
+        "staff_review": "pending; do not tune on frozen test"
+      },
+      {
+        "id": "aec79a10c844973b",
+        "query": "Tôi cần tài liệu liên quan đến Đánh giá hoạt giao nhận hàng xuất khẩu nguyên bằng đường biển công ty TNHH LOGISTICS Việt Nam",
+        "synthetic_relevant_urls": [
+          "https://thuvienso.ut.edu.vn/items/9014fa09-1b4f-43f9-b328-64a40ea25589"
+        ],
+        "baseline": {
+          "id": "aec79a10c844973b",
+          "within_query_budget": true,
+          "returned": [
+            "https://thuvienso.ut.edu.vn/items/9014fa09-1b4f-43f9-b328-64a40ea25589",
+            "https://thuvienso.ut.edu.vn/items/9d91a393-33ed-4061-8185-30d88b895596",
+            "https://thuvienso.ut.edu.vn/items/9def31d9-d3d0-40f0-b4a6-84adf18670a3",
+            "https://thuvienso.ut.edu.vn/items/d8c5bd10-8fb3-4998-9cf6-85030da9151d",
+            "https://thuvienso.ut.edu.vn/items/ea9216b4-eb75-473a-94cb-32bfd7a6146b"
+          ],
+          "elapsed_ms": 233.69,
+          "hit_at1": 1,
+          "hit_at5": 1,
+          "mrr_at5": 1.0,
+          "recall_at5": 1.0,
+          "ndcg_at5": 1.0
+        },
+        "candidate": {
+          "id": "aec79a10c844973b",
+          "within_query_budget": true,
+          "returned": [
+            "https://thuvienso.ut.edu.vn/items/9d91a393-33ed-4061-8185-30d88b895596",
+            "https://thuvienso.ut.edu.vn/items/d8c5bd10-8fb3-4998-9cf6-85030da9151d",
+            "https://thuvienso.ut.edu.vn/items/9014fa09-1b4f-43f9-b328-64a40ea25589",
+            "https://thuvienso.ut.edu.vn/items/739a2b8a-1003-46c7-a986-268901d77d15",
+            "https://thuvienso.ut.edu.vn/items/9def31d9-d3d0-40f0-b4a6-84adf18670a3"
+          ],
+          "elapsed_ms": 223.54,
+          "hit_at1": 0,
+          "hit_at5": 1,
+          "mrr_at5": 0.3333333333333333,
+          "recall_at5": 1.0,
+          "ndcg_at5": 0.5
+        },
+        "staff_review": "pending; do not tune on frozen test"
+      },
+      {
+        "id": "c77bac050e27392d",
+        "query": "Tôi cần tài liệu liên quan đến Kiểm soát chi vốn đầu tư dựng cơ bản nguồn vốn ngân Nhà nước tại bác Nhà nước Tre giai đoạn",
+        "synthetic_relevant_urls": [
+          "https://thuvienso.ut.edu.vn/items/01c0e60a-9c5b-4e49-8485-5f769859676d"
+        ],
+        "baseline": {
+          "id": "c77bac050e27392d",
+          "within_query_budget": true,
+          "returned": [
+            "https://thuvienso.ut.edu.vn/items/01c0e60a-9c5b-4e49-8485-5f769859676d",
+            "https://thuvienso.ut.edu.vn/items/56b2123d-f86c-4e37-b0e0-5d9cdcbebc30",
+            "https://thuvienso.ut.edu.vn/items/f071e1bb-a153-446a-b207-acd4c7b60034",
+            "https://thuvienso.ut.edu.vn/items/c746b2d9-34a4-4c51-a8dd-39b8e498242e",
+            "https://thuvienso.ut.edu.vn/items/d7ca9fcf-cf0e-43d3-97dc-d40a9580c1a6"
+          ],
+          "elapsed_ms": 233.11,
+          "hit_at1": 1,
+          "hit_at5": 1,
+          "mrr_at5": 1.0,
+          "recall_at5": 1.0,
+          "ndcg_at5": 1.0
+        },
+        "candidate": {
+          "id": "c77bac050e27392d",
+          "within_query_budget": true,
+          "returned": [
+            "https://thuvienso.ut.edu.vn/items/56b2123d-f86c-4e37-b0e0-5d9cdcbebc30",
+            "https://thuvienso.ut.edu.vn/items/01c0e60a-9c5b-4e49-8485-5f769859676d",
+            "https://thuvienso.ut.edu.vn/items/3577d7d2-f3e0-4071-910c-2b4b17ef26bc",
+            "https://thuvienso.ut.edu.vn/items/a8144407-e17d-4731-8252-9a9cc23fba5a",
+            "https://thuvienso.ut.edu.vn/items/0db8a1c0-7af3-4703-95e1-d70baaba4536"
+          ],
+          "elapsed_ms": 257.15,
+          "hit_at1": 0,
+          "hit_at5": 1,
+          "mrr_at5": 0.5,
+          "recall_at5": 1.0,
+          "ndcg_at5": 0.6309297535714575
+        },
+        "staff_review": "pending; do not tune on frozen test"
+      }
+    ],
+    "limits": [
+      "Vector subpath only: six chunk hits,0.45 threshold,source deduplication and384-byte query guard unchanged",
+      "Over-budget queries remain in all-case denominator with zero vector hits; normal app lexical fallback is separate",
+      "No model training/threshold tuning or LLM invocation; full-text training scores are not directly comparable",
+      "Existing index prep excluded; first lazy model load included in query timing; not a latency SLA"
+    ]
+  },
+  "candidate_preparation": {
+    "index": {
+      "configured": true,
+      "ready": true,
+      "model": "local/uth-minilm-a9169f2ae1251e199eda174c45fe64b234f0bf554bb59735ef9cc585ddd41e90",
+      "error": null,
+      "namespaces": {
+        "books": {
+          "sources": 5569,
+          "chunks": 18441,
+          "ready": true
+        },
+        "knowledge": {
+          "sources": 27,
+          "chunks": 126,
+          "ready": true
+        }
+      }
+    },
+    "preparation": "parity-checked FP32 CUDA cache; runtime queries use verified FastEmbed CPU",
+    "elapsed_seconds": 161.01,
+    "gpu_cache_report": {
+      "kind": "offline CUDA index preparation; sampled FastEmbed CPU parity, not bitwise whole-corpus proof",
+      "unique_texts": 13684,
+      "embedding_shape": [
+        13684,
+        384
+      ],
+      "elapsed_seconds": 23.27,
+      "sample_count": 32,
+      "max_abs_error": 1.4319084584712982e-07,
+      "min_cosine": 0.9999998807907104,
+      "tf32": false,
+      "model_identity": "local/uth-minilm-a9169f2ae1251e199eda174c45fe64b234f0bf554bb59735ef9cc585ddd41e90",
+      "texts_sha256": "93e891dac648fc503f66544fd9dbe713bffdc0910c3f76941b49db143b030504",
+      "cache_sha256": "b07b7a74f75520e6589ccd92eed1cf5712161d90acf40fd49bea48f6b06f9477",
+      "peak_allocated_bytes": 516385792
+    }
+  },
+  "public_snapshot": {
+    "source_hashes": {
+      "books": "eef7e017aeeb1a6289dc58d43324257bdc6f6008cf1501396341fa7318fa593d",
+      "knowledge": "542374772b2af0e087dba7c0760c9dc2a412f8cc8051f091086461b17033cf02",
+      "schedules": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "model": "local/uth-minilm-a9169f2ae1251e199eda174c45fe64b234f0bf554bb59735ef9cc585ddd41e90",
+    "copied_tables": [
+      "books",
+      "knowledge",
+      "schedules"
+    ],
+    "private_tables_copied": false
+  },
+  "snapshot_helper_actual_run": {
+    "schema_version": 2,
+    "counts": {
+      "books": 5569,
+      "knowledge": 27,
+      "schedules": 0
+    },
+    "source_hashes": {
+      "books": "eef7e017aeeb1a6289dc58d43324257bdc6f6008cf1501396341fa7318fa593d",
+      "knowledge": "542374772b2af0e087dba7c0760c9dc2a412f8cc8051f091086461b17033cf02",
+      "schedules": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "private_tables_copied": false,
+    "copied_tables": [
+      "books",
+      "knowledge",
+      "schedules"
+    ]
+  },
+  "live_chat": {
+    "baseline": {
+      "passed": 80,
+      "total": 80,
+      "groups": {
+        "catalog-author": {
+          "passed": 5,
+          "total": 5,
+          "recorded_at": "2026-10-31T15:44:44.054715+00:00"
+        },
+        "dspace": {
+          "passed": 8,
+          "total": 8,
+          "recorded_at": "2026-10-31T15:44:51.521650+00:00"
+        },
+        "library-conversation": {
+          "passed": 10,
+          "total": 10,
+          "recorded_at": "2026-10-31T15:45:06.923779+00:00"
+        },
+        "public-library": {
+          "passed": 10,
+          "total": 10,
+          "recorded_at": "2026-10-31T15:45:08.104381+00:00"
+        },
+        "questions": {
+          "passed": 45,
+          "total": 45,
+          "recorded_at": "2026-10-31T15:45:05.809200+00:00"
+        },
+        "semantic": {
+          "passed": 2,
+          "total": 2,
+          "recorded_at": "2026-10-31T15:45:09.663280+00:00"
+        }
+      }
+    },
+    "candidate": {
+      "passed": 80,
+      "total": 80,
+      "groups": {
+        "catalog-author": {
+          "passed": 5,
+          "total": 5,
+          "recorded_at": "2026-10-31T15:44:24.009964+00:00"
+        },
+        "dspace": {
+          "passed": 8,
+          "total": 8,
+          "recorded_at": "2026-10-31T15:44:31.740954+00:00"
+        },
+        "library-conversation": {
+          "passed": 10,
+          "total": 10,
+          "recorded_at": "2026-10-31T15:44:56.178309+00:00"
+        },
+        "public-library": {
+          "passed": 10,
+          "total": 10,
+          "recorded_at": "2026-10-31T15:44:57.216872+00:00"
+        },
+        "questions": {
+          "passed": 45,
+          "total": 45,
+          "recorded_at": "2026-10-31T15:44:55.095842+00:00"
+        },
+        "semantic": {
+          "passed": 2,
+          "total": 2,
+          "recorded_at": "2026-10-31T15:44:58.636411+00:00"
+        }
+      }
+    }
+  },
+  "provider_incident": "Initial sourced fallback occurred while Ollama was unreachable on both profiles; started provider and reran all 80 cases on each. No guard/test weakening.",
+  "admin_api": {
+    "candidate_model": "local/uth-minilm-a9169f2ae1251e199eda174c45fe64b234f0bf554bb59735ef9cc585ddd41e90",
+    "public_snapshot_only": true,
+    "admin_pages_distinct": true,
+    "total": 5569,
+    "page_size": 20,
+    "page1_payload_bytes": 15168,
+    "filtered_total": 1,
+    "profile_port": 8001,
+    "legacy_full_payload_bytes": 3673044,
+    "page1_wire_payload_bytes": 14722,
+    "payload_reduction_pct": 99.5992
+  },
+  "browser": {
+    "checked": [
+      "temporary candidate admin login",
+      "20 rows per page",
+      "page 2/279",
+      "filtered reset to 1/1",
+      "correct public source",
+      "logout"
+    ],
+    "screenshot": "tmp/candidate-admin-pagination.png",
+    "trial_server_and_tab_closed": true
+  },
+  "cleanup": {
+    "candidate_private_counts_after_qa": {
+      "users": 0,
+      "sessions": 0,
+      "messages": 0,
+      "conversations": 0,
+      "books": 5569,
+      "knowledge": 27
+    },
+    "qa_account_removed": true,
+    "main_accounts_modified": false,
+    "original_checkpoint_files_reverified": 9
+  },
+  "checks": {
+    "backend": {
+      "passed": 387,
+      "seconds": 53.77,
+      "warnings": 1,
+      "warning": "existing Starlette TestClient/httpx deprecation"
+    },
+    "frontend": {
+      "passed": 45,
+      "files": 7
+    },
+    "production_build": {
+      "modules": 42,
+      "javascript_kb": 304.36,
+      "javascript_gzip_kb": 91.58,
+      "css_kb": 27.48,
+      "css_gzip_kb": 6.82
+    },
+    "launcher_preflight": "passed",
+    "ollama_model_catalog": "ready/reachable; actual generation verified in live semantic checks",
+    "independent_review": {
+      "focused_backend": 44,
+      "focused_frontend": 10,
+      "loader_followup": 13,
+      "snapshot_followup": 2,
+      "fixed": "Unexpected unverified tokenizer-sidecar acceptance reproduced and rejected at registration and lazy load",
+      "remaining_important_or_critical": 0
+    }
+  },
+  "source_sha256": {
+    "backend/app/services/embedding_model.py": "bc493a87b9876526046ab7f855ec399e2f91f8493aba281b59967d74a860287c",
+    "backend/app/services/rag_service.py": "bbb4b01bb1b81a0e1fefd0b56485f336f60901d16e5e8348640745fd86013ba9",
+    "backend/app/api/catalog.py": "a31d5e2278f73bd4ca7b3f9f7e635670cae18e4245cd2d8e0706a868a09592c0",
+    "frontend/src/components/Admin.jsx": "dac7b12b7d6f9129490a20e731d0d2136ca1e0aa66d26de1bd1b26697c9734f1",
+    "frontend/src/components/BookAdmin.jsx": "d32afeafd1b02ea3fdf04379669f0ff6f8ed02f1ec06372e0dc732c009896e8d",
+    "frontend/src/style.css": "f09c6c6130f3aa7484ed85409a0d0226e22f968ccc094c9cdb28257dcc5c64ef",
+    "scripts/evaluate_vector_index.py": "a37c0230364e4cf57b4eb93db78af40bed6fc60a542ec916dda0424005042205",
+    "scripts/prepare_candidate.py": "d16c7af54e0a8816e70b1bcfa51eda5c91e94e47dde38817d643e44caa28af84",
+    "tests/test_local_embedding.py": "3d7337c8398b4a0f85822911a13d4c403154dd92802590fd08e01b71d7d93f5f",
+    "tests/test_rag_index.py": "9e384f8e7e547c08e1741b8d00ebb1bf3d7e5377462ddb5985c2d739a4f69caf",
+    "tests/test_admin_book_pagination.py": "f0fcff410792e84fe2a96f90b96b0e736ed77c2b1f69955ab00ad910dd3a1015",
+    "tests/test_candidate_snapshot.py": "ffe4099fe8b3ce234462fc7623ee6798f6fe63015dc8cabe990c19bf6a01ae5e",
+    "tests/test_vector_evaluation.py": "13b7ff29cb096b0ed47a3a88b3425681de07757927d8637717a372c5d083ec2f"
+  },
+  "remaining_gates": [
+    "Staff/user relevance pilot including seven frozen-query regressions before promotion",
+    "Printed holdings/current policies/real transactions require approved library data and credentials",
+    "Docker Linux Engine unavailable; no target host/domain, public TLS or capacity acceptance",
+    "Physical microphone/mobile acceptance and current branch remote CI not verified"
+  ],
+  "not_performed": [
+    "paid services",
+    "Hub/model upload",
+    "public deployment",
+    "Git push/merge",
+    "private reader-data copy",
+    "real library transactions",
+    "production embedding replacement"
+  ]
+}
