@@ -1,0 +1,252 @@
+{
+  "checked_at": "2026-10-31",
+  "purpose": "read-only public metadata access discovery; no bulk item harvest or application import",
+  "platform": {
+    "homepage": "https://thuvienso.ut.edu.vn/home",
+    "version_observed": "DSpace 7.6",
+    "rest_root": "https://thuvienso.ut.edu.vn/server/api",
+    "rest_root_status": 200
+  },
+  "sitemap": {
+    "index": "https://thuvienso.ut.edu.vn/sitemap_index.xml",
+    "file": "https://thuvienso.ut.edu.vn/sitemap0.xml",
+    "locations": 5721,
+    "item_urls": 5560,
+    "communities": 38,
+    "collections": 123,
+    "inventory_file": "tmp/dspace-sitemap-research.json",
+    "inventory_sha256": "2fe311f1226155a7f2cf709ba94f3d05f0fff1e13679fd0c5f780dd9e3706402"
+  },
+  "probes": [
+    {
+      "path": "/server/oai/request?verb=ListSets",
+      "status": 200,
+      "content_type": "text/xml;charset=UTF-8",
+      "redirect": "",
+      "root": "{http://www.openarchives.org/OAI/2.0/}OAI-PMH",
+      "errors": [],
+      "sets": 27,
+      "sitemaps": []
+    },
+    {
+      "path": "/server/api/core/items?size=1",
+      "status": 401,
+      "content_type": "application/json;charset=UTF-8",
+      "redirect": ""
+    },
+    {
+      "path": "/server/api/core/communities?size=1",
+      "status": 200,
+      "content_type": "application/hal+json;charset=UTF-8",
+      "redirect": "",
+      "page": {
+        "size": 1,
+        "totalElements": 38,
+        "totalPages": 38,
+        "number": 0
+      },
+      "links": {
+        "self": {
+          "href": "https://thuvienso.ut.edu.vn/server/api/core/communities?size=1"
+        },
+        "next": {
+          "href": "https://thuvienso.ut.edu.vn/server/api/core/communities?page=1&size=1"
+        }
+      },
+      "embedded_types": [
+        "communities"
+      ],
+      "first_record_links": {
+        "collections": {
+          "href": "https://thuvienso.ut.edu.vn/server/api/core/communities/022ffcd1-bc9a-475b-96ec-7a3b6b7e13aa/collections"
+        },
+        "logo": {
+          "href": "https://thuvienso.ut.edu.vn/server/api/core/communities/022ffcd1-bc9a-475b-96ec-7a3b6b7e13aa/logo"
+        },
+        "subcommunities": {
+          "href": "https://thuvienso.ut.edu.vn/server/api/core/communities/022ffcd1-bc9a-475b-96ec-7a3b6b7e13aa/subcommunities"
+        },
+        "parentCommunity": {
+          "href": "https://thuvienso.ut.edu.vn/server/api/core/communities/022ffcd1-bc9a-475b-96ec-7a3b6b7e13aa/parentCommunity"
+        },
+        "adminGroup": {
+          "href": "https://thuvienso.ut.edu.vn/server/api/core/communities/022ffcd1-bc9a-475b-96ec-7a3b6b7e13aa/adminGroup"
+        },
+        "self": {
+          "href": "https://thuvienso.ut.edu.vn/server/api/core/communities/022ffcd1-bc9a-475b-96ec-7a3b6b7e13aa"
+        }
+      }
+    },
+    {
+      "path": "/sitemap_index.xml",
+      "status": 200,
+      "content_type": "application/xml;charset=UTF-8",
+      "redirect": "",
+      "root": "{http://www.sitemaps.org/schemas/sitemap/0.9}sitemapindex",
+      "errors": [],
+      "sets": 0,
+      "sitemaps": [
+        "https://thuvienso.ut.edu.vn/sitemap0.xml"
+      ]
+    }
+  ],
+  "oai": [
+    {
+      "verb": "Identify",
+      "status": 200,
+      "errors": [],
+      "records": 0,
+      "formats": []
+    },
+    {
+      "verb": "ListMetadataFormats",
+      "status": 200,
+      "errors": [],
+      "records": 0,
+      "formats": [
+        "uketd_dc",
+        "qdc",
+        "didl",
+        "mods",
+        "ore",
+        "mets",
+        "oai_dc",
+        "rdf",
+        "marc",
+        "xoai",
+        "dim",
+        "etdms"
+      ]
+    },
+    {
+      "verb": "ListIdentifiers",
+      "status": 200,
+      "errors": [
+        {
+          "code": "noRecordsMatch",
+          "text": "No matches for the query"
+        }
+      ],
+      "records": 0,
+      "formats": []
+    },
+    {
+      "verb": "ListRecords",
+      "status": 200,
+      "errors": [
+        {
+          "code": "noRecordsMatch",
+          "text": "No matches for the query"
+        }
+      ],
+      "records": 0,
+      "formats": []
+    }
+  ],
+  "public_item_samples": [
+    {
+      "url": "https://thuvienso.ut.edu.vn/items/0009688f-12f3-4902-9b95-7a31e878ee77",
+      "endpoint": "https://thuvienso.ut.edu.vn/server/api/core/items/0009688f-12f3-4902-9b95-7a31e878ee77",
+      "status": 200,
+      "title": "Nghiên cứu XML và xây dựng trang Web hỗ trợ khách hàng",
+      "handle": "123456789/2074",
+      "metadata_fields": [
+        "creativework.keywords",
+        "dc.contributor.author",
+        "dc.date.accessioned",
+        "dc.date.available",
+        "dc.date.issued",
+        "dc.identifier.uri",
+        "dc.language.iso",
+        "dc.publisher",
+        "dc.relation.ispartofseries",
+        "dc.title",
+        "dc.title.alternative",
+        "dc.type"
+      ],
+      "authors": [
+        "Nguyễn Đại Dương",
+        "GVHD: ThS. Nguyễn Lương Anh Tuấn"
+      ],
+      "issued": [
+        "2006"
+      ],
+      "has_abstract": false,
+      "in_archive": true,
+      "withdrawn": false
+    },
+    {
+      "url": "https://thuvienso.ut.edu.vn/items/0028316f-de77-4ebc-80bb-eb1fb365d3f2",
+      "endpoint": "https://thuvienso.ut.edu.vn/server/api/core/items/0028316f-de77-4ebc-80bb-eb1fb365d3f2",
+      "status": 200,
+      "title": "Chung cư Phú Xuân (Thuyết minh)",
+      "handle": "123456789/5883",
+      "metadata_fields": [
+        "creativework.keywords",
+        "dc.contributor.author",
+        "dc.date.accessioned",
+        "dc.date.available",
+        "dc.date.issued",
+        "dc.identifier.uri",
+        "dc.language.iso",
+        "dc.publisher",
+        "dc.relation.ispartofseries",
+        "dc.title",
+        "dc.type"
+      ],
+      "authors": [
+        "Lê Nguyên Huy",
+        "GVHD. Phạm Quang Dũng, Nguyễn Anh Tuấn"
+      ],
+      "issued": [
+        "2011"
+      ],
+      "has_abstract": false,
+      "in_archive": true,
+      "withdrawn": false
+    },
+    {
+      "url": "https://thuvienso.ut.edu.vn/items/00300ee9-7118-44c9-a07b-89d9d765bdd4",
+      "endpoint": "https://thuvienso.ut.edu.vn/server/api/core/items/00300ee9-7118-44c9-a07b-89d9d765bdd4",
+      "status": 200,
+      "title": "Thiết kế tổ chức thi công và lập tác nghiệp công trình nhà phố lô R5, P. Hiệp Bình Phước, Quận Thủ Đức, TP. HCM",
+      "handle": "123456789/4610",
+      "metadata_fields": [
+        "creativework.keywords",
+        "dc.contributor.author",
+        "dc.date.accessioned",
+        "dc.date.available",
+        "dc.date.issued",
+        "dc.identifier.uri",
+        "dc.language.iso",
+        "dc.publisher",
+        "dc.relation.ispartofseries",
+        "dc.title",
+        "dc.title.alternative",
+        "dc.type"
+      ],
+      "authors": [
+        "Từ Thị Diễn",
+        "GVHD: ThS. Trần Phú Lộc"
+      ],
+      "issued": [
+        "2020"
+      ],
+      "has_abstract": false,
+      "in_archive": true,
+      "withdrawn": false
+    }
+  ],
+  "robots": {
+    "opac": "User-agent:*; Disallow:/; Crawl-delay:10; no catalog crawling performed",
+    "dspace": "Disallows UI search, administration and account/workflow paths; no credentials or private endpoint use",
+    "sitemap_configuration_note": "DSpace robots advertises localhost:4000 sitemap URLs; these were not followed. Public-origin sitemap_index.xml returned a valid sitemap index."
+  },
+  "interpretation": [
+    "5560 sitemap item URLs are not a verified full inventory or 5560 printed books",
+    "Three public item metadata endpoints returned200; no PDF/bitstream content was downloaded",
+    "OAI enabled does not establish populated harvest index; noRecordsMatch reason is unconfirmed",
+    "REST item enumeration returned401 and was not retried with authentication or other credentials",
+    "EMICLIB export/API, complete printed inventory and current loan availability remain unverified"
+  ]
+}
