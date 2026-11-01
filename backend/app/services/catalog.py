@@ -161,6 +161,8 @@ def search_books(state,query,kind='all',field='all'):
 
 def is_book_request(question):
     q=normalize(question)
+    if re.fullmatch(r'(?:tim|tra cuu) '+_DOCUMENT_TYPES+r'(?: (?:(?:va|hoac) )?'+_DOCUMENT_TYPES+r')*',q):
+        return False
     if re.search(r'\bco (sach|cuon|quyen)\b',q) and re.search(r'\b(qua han|phi|phat|han tra|gia han)\b',q):
         return False
     return bool(re.search(r'\b((?:tim|tra cuu) '+_DOCUMENT_TYPES+r'|co (?:sach|cuon|quyen) .+|sach ve|sach cua|sach tuong tu|goi y sach|sach danh cho)\b',q)) and not any(x in q for x in ('huong dan','cach tim','lam sao','nhu the nao','o dau','vao dau'))

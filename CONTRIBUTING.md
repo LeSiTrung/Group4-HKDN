@@ -19,6 +19,8 @@ Mỗi commit giải quyết một thay đổi có ý nghĩa, kèm caller, cấu 
 
 ```powershell
 backend/.venv/Scripts/python.exe -m pytest
+backend/.venv/Scripts/python.exe scripts/restore.py --self-test
+backend/.venv/Scripts/python.exe scripts/evaluate.py --output tmp/evaluation-offline.json
 Push-Location frontend
 npm ci
 npm test -- --run

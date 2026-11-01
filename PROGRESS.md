@@ -1,5 +1,11 @@
 # Technical progress
 
+## 2026-11-01 — incremental Git delivery and offline routing regression
+
+- Delivered16 meaningful Conventional Commits to origin/codex/rag-pipeline, each staged snapshot checked independently where code changed. Initial final snapshot:405backend/45frontend/build passed; source/config/tests/docs only, AGENTS.md/runtime/models/private backups excluded. Commit format and checks are documented in CONTRIBUTING.md.
+- First remote run41303107363 passed Linux backend405, restore and frontend45/build, but offline evaluation caught44/45: the generic request “Tìm luận văn khóa luận” was routed into catalog lookup instead of the seeded DSpace guidance. Reproduced locally; preserved the evaluation case and added3 RED→GREEN routing regressions. A full-match guard now recognizes document types without a topic; real title/author/topic lookup remains active.
+- Fix verification:408backend tests pass58.09s,37focused tests,45/45offline conversation cases and restore self-test pass. Independent review approved the two-line routing change. The follow-up source commit requires its own remote run; consult the branch's latest Actions result rather than inferring it from the initial run. Evidence: docs/validation/2026-11-01-git-delivery.json. No main merge, private-data upload or production change.
+
 ## 2026-11-01 — OPAC export/access follow-up
 
 - User asked whether ignoring robots could obtain the full OPAC. Revisited normal Edge homepage and clicked the visible traditional-book category once; origin returned Cloudflare522 (11:22:44UTC shown on error page), distinct from the earlier direct403. Back restored homepage. Public save/export inspection remains unverified because the category did not load;0records imported, no retries/pagination/authentication/identity changes. RFC9309 distinguishes robots instructions from authorization; omitting a check cannot repair the origin. No app/DB configuration changed. Evidence: docs/validation/2026-11-01-opac-export-followup.json. Actual bulk acquisition requires a usable public export or library-side feed/access/origin repair; no complete-catalog claim.

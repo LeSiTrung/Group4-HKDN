@@ -1,5 +1,9 @@
 # Kiểm chứng kỹ thuật
 
+## Kiểm chứng khi push và hồi quy offline — 01/11/2026
+
+[Đợt commit](validation/2026-11-01-git-delivery.json) ghi16 commit độc lập và lỗi được phát hiện bởi CI. Run41303107363 trên SHA b7dfdaec đạt backend405/restore/frontend45/build, nhưng evaluation offline chỉ44/45 vì câu chỉ nêu loại tài liệu bị chuyển sang tìm biểu ghi. Đã sửa phân luồng và thêm3 regression, giữ nguyên expected của evaluation:408backend/37focused/45offline và restore đạt local. Kết quả remote mới nhất cần xem ở Actions của nhánh; không coi run trước sửa là thành công toàn bộ.
+
 ## Nguồn LIC và Docker/Linux thực tế — 01/11/2026
 
 [Bằng chứng](validation/2026-11-01-data-container.json): **405 backend**, **45 frontend**, npm audit0, production build Node22 trong Docker thành công. **86/86** tình huống chat qua API trên cả Windows/baseline và Linux/candidate sau lần build/nhập dữ liệu cuối.25 kiểm tra ứng dụng/phân quyền/khởi động lại ở checkpoint ban đầu và10 kiểm tra HTTPS nội bộ/Caddy/cookie đạt; backup/restore SQLite thực tế trong Linux đạt. CA chỉ truyền cho client kiểm thử, không đổi trust store máy. Chưa nghiệm thu public DNS/ACME, sức tải hoặc toàn bộ Compose/Ollama.

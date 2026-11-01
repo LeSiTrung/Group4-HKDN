@@ -28,6 +28,16 @@ def test_digital_document_search_uses_public_catalog(client,kind):
     assert 'OPAC' not in result['answer']
 
 
+@pytest.mark.parametrize('message',['Tìm luận văn khóa luận','Tim luan van khoa luan','Tìm luận văn và khóa luận'])
+def test_document_types_without_a_topic_keep_the_digital_library_guide(client,monkeypatch,message):
+    searches=[]
+    monkeypatch.setattr(assistant,'search_books',lambda *args,**kwargs:searches.append(args[1]) or [])
+    response=client.post('/api/chat',json={'message':message}).json()
+    assert not searches
+    assert response['status']=='answered' and not response['books']
+    assert any(row['url']=='https://thuvienso.ut.edu.vn/home' for row in response['sources'])
+
+
 def test_large_chat_lookup_requests_narrower_query_before_expensive_catalog_scan(client,monkeypatch):
     monkeypatch.setattr(assistant,'search_books',lambda *args,**kwargs:pytest.fail('Oversized lookup must not scan the catalog'))
     result=client.post('/api/chat',json={'message':'Tìm tài liệu về '+'XML khách hàng '*80}).json()
