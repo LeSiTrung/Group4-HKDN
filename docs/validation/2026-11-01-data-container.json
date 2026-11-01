@@ -1,0 +1,363 @@
+{
+  "date": "2026-11-01",
+  "kind": "public-source coverage, reviewed content and local Windows/Linux/container verification; not production or staff acceptance",
+  "lic_collection": {
+    "evidence": "2026-11-01-lic-collection.json",
+    "sitemap_pages": 100,
+    "all_sitemap_loc": 349,
+    "nested_image_loc": 249,
+    "outcomes": 141,
+    "snapshots": 60,
+    "html": 58,
+    "missing404": 2,
+    "unique_review_candidates": 30,
+    "auto_published": false,
+    "limits": "Frontier sitemap/navigation with explicit scope/exclusions; not orphan pages, all PDFs/images, private content or all web information"
+  },
+  "opac_access": {
+    "evidence": "2026-11-01-opac-access.json",
+    "status": "BLOCKED_FOR_BULK_COLLECTION",
+    "browser_category_counts": {
+      "traditional": 10457,
+      "digital": 7510,
+      "theses": 3260,
+      "serials": 823,
+      "serials_fulltext_label": 670,
+      "cd_rom": 371,
+      "video": 3
+    },
+    "robots": "Disallow: /",
+    "direct_http_status": 403,
+    "imported_records": 0,
+    "unique_total_or_cross_repository_mapping": "unverified; category counts cannot be summed as unique records/copies"
+  },
+  "selected_public_guide": {
+    "url": "https://lic.ut.edu.vn/wp-content/uploads/2024/11/1.HD-su-dung-thu-vien-va-khai-thac-hieu-qua-cac-CSDL-tai-nguyen-thong-tin-thu-vien.pdf",
+    "status": 200,
+    "bytes": 7486705,
+    "sha256": "a2e1bfcb91744de396dbcc65e954583b6e684e5209d9853b73a0c0bfed89a6cc",
+    "operator_byte_limit": 16777216,
+    "application_crawler_limit_unchanged": true,
+    "pages": 33,
+    "page12_text_and_visual_checked": true,
+    "page12_hours": {
+      "monday_friday": "07:30-18:30",
+      "saturday": "08:30-16:30",
+      "sunday_holidays": "closed in this document; current applicability unverified"
+    },
+    "difference": "Conflicts with per-branch hours in2022guide; neither silently selected as current",
+    "raw_pdf_committed": false
+  },
+  "curated_pack": {
+    "file": "data/faq/public-library-2026-11-01.json",
+    "entries": 4,
+    "reviewed_public_services": 2,
+    "needs_confirmation_policy_or_hours": 2,
+    "main_imported": 4,
+    "main_repeat_skipped": 4,
+    "main_knowledge_before": 27,
+    "main_knowledge_after": 31,
+    "knowledge_chunks_after": 145,
+    "main_private_backup": "backups/2026-11-01-before-reviewed-services/library.sqlite3",
+    "no_real_accounts_or_loans_modified": true
+  },
+  "docker": {
+    "engine": {
+      "platform": "Docker Desktop 4.97.0 (244584)",
+      "version": "29.9.2",
+      "os": "linux",
+      "architecture": "amd64"
+    },
+    "context": "desktop-linux",
+    "build_native_exit": 0,
+    "image_id": "sha256:7e94e1e376094160f513ef242c2b30a620f049e0b164434d9332c2e374dce557",
+    "image_size_bytes": 619575877,
+    "image_user": "app",
+    "image_no_env_or_training_weights": true,
+    "loopback_trial_url": "http://127.0.0.1:8100",
+    "capabilities_dropped": [
+      "ALL"
+    ],
+    "security_opt": [
+      "no-new-privileges:true"
+    ],
+    "provider": "host.docker.internal Ollama/qwen3:1.7b; model catalog and real generation checked",
+    "local_export_readonly": true,
+    "production_baseline_changed": false,
+    "credential_helper": "Process PATH prefix only; credentials/settings not rewritten",
+    "compose_config": "passed",
+    "caddy_image_config_validation": "passed",
+    "http_application_smoke": {
+      "passed": 25,
+      "checks": [
+        "public_snapshot_27_knowledge",
+        "built_frontend",
+        "nonroot",
+        "image_no_env_or_training",
+        "guest_admin_rejected",
+        "register_0",
+        "register_1",
+        "reader_admin_rejected",
+        "foreign_origin_rejected",
+        "real_grounded_llm",
+        "owner_history",
+        "other_reader_history_hidden",
+        "other_reader_chat_hidden",
+        "other_reader_export_empty",
+        "session_history_persists_restart",
+        "delete_conversation",
+        "deleted_history_absent",
+        "delete_requires_password_0",
+        "delete_qa_account_0",
+        "delete_requires_password_1",
+        "delete_qa_account_1",
+        "deleted_account_revoked",
+        "fresh_named_volume_seed",
+        "fresh_frontend",
+        "fresh_no_default_admin"
+      ],
+      "main_users_modified": false,
+      "trial_accounts_deleted": true,
+      "stage": "Initial27-FAQ image checkpoint before hours conflict/source-data update; final rebuilt31-FAQ image reran86livechat cases and actual10TLS checks."
+    },
+    "local_https": {
+      "passed": 10,
+      "checks": [
+        "tls_health_with_explicit_ca",
+        "hsts",
+        "tls_frontend",
+        "tls_registration",
+        "secure_httponly_strict_cookie",
+        "tls_authenticated_cookie_roundtrip",
+        "foreign_origin_rejected",
+        "delete_requires_password",
+        "remove_qa_account",
+        "deleted_cookie_revoked"
+      ],
+      "certificate_trust": "explicit CA passed to test client only; no host trust-store change",
+      "scope": "loopback local TLS only; not public-domain certificate acceptance",
+      "qa_account_deleted": true
+    },
+    "backup_restore": {
+      "books": 5569,
+      "knowledge_at_checkpoint": 27,
+      "users": 0,
+      "sessions": 0,
+      "messages": 0,
+      "quick_check": "ok",
+      "restored_to_new_path": true
+    },
+    "trial_cleanup_current": {
+      "users": 0,
+      "sessions": 0,
+      "messages": 0,
+      "conversations": 0,
+      "books": 5569,
+      "knowledge": 31
+    },
+    "temporary_tls_containers": "stopped; synthetic account removed",
+    "native_and_http_trial": "running separately; distinct data/index paths"
+  },
+  "health": {
+    "native": {
+      "status": "ok",
+      "version": "1.0.0",
+      "knowledge_count": 31,
+      "capabilities": {
+        "accounts": true,
+        "history": true,
+        "admin": true,
+        "crawler": true,
+        "vectors": {
+          "configured": true,
+          "ready": true,
+          "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+          "error": null,
+          "namespaces": {
+            "knowledge": {
+              "sources": 31,
+              "chunks": 145,
+              "ready": true
+            }
+          }
+        },
+        "llm_provider": "ollama",
+        "library_configured": false,
+        "messenger_configured": false,
+        "zalo_configured": false
+      }
+    },
+    "docker": {
+      "status": "ok",
+      "version": "1.0.0",
+      "knowledge_count": 31,
+      "capabilities": {
+        "accounts": true,
+        "history": true,
+        "admin": true,
+        "crawler": true,
+        "vectors": {
+          "configured": true,
+          "ready": true,
+          "model": "local/uth-minilm-a9169f2ae1251e199eda174c45fe64b234f0bf554bb59735ef9cc585ddd41e90",
+          "error": null,
+          "namespaces": {
+            "knowledge": {
+              "sources": 31,
+              "chunks": 145,
+              "ready": true
+            }
+          }
+        },
+        "llm_provider": "ollama",
+        "library_configured": false,
+        "messenger_configured": false,
+        "zalo_configured": false
+      }
+    }
+  },
+  "live_chat_final": {
+    "native": {
+      "passed": 86,
+      "total": 86,
+      "groups": {
+        "catalog-author": {
+          "passed": 5,
+          "total": 5,
+          "recorded_at": "2026-11-01T09:17:16.887316+00:00"
+        },
+        "dspace": {
+          "passed": 8,
+          "total": 8,
+          "recorded_at": "2026-11-01T09:17:23.490605+00:00"
+        },
+        "library-conversation": {
+          "passed": 10,
+          "total": 10,
+          "recorded_at": "2026-11-01T09:17:13.924662+00:00"
+        },
+        "lic-services": {
+          "passed": 6,
+          "total": 6,
+          "recorded_at": "2026-11-01T09:17:25.913604+00:00"
+        },
+        "public-library": {
+          "passed": 10,
+          "total": 10,
+          "recorded_at": "2026-11-01T09:17:14.792695+00:00"
+        },
+        "questions": {
+          "passed": 45,
+          "total": 45,
+          "recorded_at": "2026-11-01T09:17:13.042040+00:00"
+        },
+        "semantic": {
+          "passed": 2,
+          "total": 2,
+          "recorded_at": "2026-11-01T09:17:25.025483+00:00"
+        }
+      }
+    },
+    "docker": {
+      "passed": 86,
+      "total": 86,
+      "groups": {
+        "catalog-author": {
+          "passed": 5,
+          "total": 5,
+          "recorded_at": "2026-11-01T09:18:07.371529+00:00"
+        },
+        "dspace": {
+          "passed": 8,
+          "total": 8,
+          "recorded_at": "2026-11-01T09:18:15.997095+00:00"
+        },
+        "library-conversation": {
+          "passed": 10,
+          "total": 10,
+          "recorded_at": "2026-11-01T09:18:02.843226+00:00"
+        },
+        "lic-services": {
+          "passed": 6,
+          "total": 6,
+          "recorded_at": "2026-11-01T09:18:19.640739+00:00"
+        },
+        "public-library": {
+          "passed": 10,
+          "total": 10,
+          "recorded_at": "2026-11-01T09:18:04.092454+00:00"
+        },
+        "questions": {
+          "passed": 45,
+          "total": 45,
+          "recorded_at": "2026-11-01T09:18:01.772134+00:00"
+        },
+        "semantic": {
+          "passed": 2,
+          "total": 2,
+          "recorded_at": "2026-11-01T09:18:18.408272+00:00"
+        }
+      }
+    }
+  },
+  "checks": {
+    "backend": {
+      "passed": 405,
+      "seconds": 54.78,
+      "warnings": 1,
+      "warning": "existing Starlette TestClient/httpx deprecation"
+    },
+    "frontend": {
+      "passed": 45,
+      "test_files": 7,
+      "seconds": 7.89
+    },
+    "npm_audit_vulnerabilities": 0,
+    "frontend_node22_image_build": "passed",
+    "independent_review": {
+      "tests_passed": 49,
+      "collector_findings_fixed": [
+        "budgeted resume progression",
+        "query shadowed canonical URL",
+        "cached metadata schema crash",
+        "redirect bypassed page scope"
+      ],
+      "hours_conflict_and_verified_schedule_priority": "reviewed",
+      "remaining_important_or_critical": 0
+    }
+  },
+  "browser": {
+    "target": "native baseline localhost8000",
+    "guest_only": true,
+    "checked": "two conflicting reference texts, needs_confirmation and both checked source links",
+    "screenshot": "tmp/library-hours-conflict-20261101.png"
+  },
+  "retrieval_quality": "Frozen354-query metrics from2026-10-31 are historical, not rerun/improved by this collection; no retraining, test tuning or model promotion",
+  "source_sha256": {
+    "scripts/collect_lic.py": "eb01f7caae717d6269a90aa851e47d820d2bf3163b97404df5d9c76298bafbf8",
+    "tests/test_lic_collection.py": "b6edf7df99518526c280df41b429befe06520fa1c484e6aafe1c4e43b2930310",
+    "backend/app/services/assistant.py": "d1fb4e633966b5c40215b559c0038408a890ccba6fb06a212967d27ce2043d7f",
+    "tests/test_public_library_data.py": "111c28f5f5804858fed3f097e4204fa6fe5a5432c81467c370eaf9242b7071cb",
+    "data/faq/public-library-2026-11-01.json": "4a9f0bdb9a5d1573510f1436986c527b42285b0b76e94e284916cde4042d93e6",
+    "tests/evaluation/lic-services.json": "c8eefcf7f5ab3c4df9a95797ca8dd299bf537ef4ce62f0173494a8a46e8d9d52",
+    "Dockerfile": "fb1c8cfb1a2ce0c38178047d376bfe46a9bc7a8b53aceedd2290006b98729453",
+    ".dockerignore": "05f094f128202d136965bd1e1ed7f7388fb782ecc09bdb52207a2ae50e42dfee",
+    "Caddyfile": "4745bd73b4906eb5cfe24d8d96fb2f38b8065c7c06f5a19bf730933931983f20",
+    "compose.yaml": "d4543f3bac625fa9017c7e3a1400541f801bacd41a4fe58f0d5d62b498772590"
+  },
+  "remaining": [
+    "Approved OPAC metadata export/feed and holdings crosswalk for complete catalog",
+    "Staff review of current hours/fees/policies and seven candidate retrieval regressions",
+    "Target-domain DNS/publicACME, capacity and uptime; Compose Ollama service not exercised in this host-Ollama trial",
+    "Authorized real transactions/channels, physical microphone/mobile checks, current branch remote CI"
+  ],
+  "not_performed": [
+    "OPAC bulk/robots/challenge bypass",
+    "all book full-text acquisition",
+    "paid API/GPU",
+    "model retraining/upload",
+    "public deployment",
+    "Git push/merge",
+    "host trust-store or WSL/security changes"
+  ]
+}
