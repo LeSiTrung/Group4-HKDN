@@ -1,6 +1,6 @@
 # Pipeline LLM / RAG thư viện
 
-Hệ thống dùng React/FastAPI/SQLite, FastEmbed multilingual MiniLM, Qdrant và Ollama `qwen3:4b` đã có trong dự án. Không huấn luyện lại model nền, không cần dịch vụ LLM trả phí, không trả lời kiến thức chung ngoài thư viện.
+Hệ thống dùng React/FastAPI/SQLite, FastEmbed multilingual MiniLM, Qdrant và Ollama `qwen3:1.7b` làm mặc định. Có thể đổi `LLM_MODEL` để so sánh với model đã cài khác; kết quả kiểm chứng cũ của `qwen3:4b` không đại diện cho model mới. Không huấn luyện lại model nền, không cần dịch vụ LLM trả phí, không trả lời kiến thức chung ngoài thư viện.
 
 ## Luồng xử lý
 

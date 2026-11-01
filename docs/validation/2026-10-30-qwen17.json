@@ -1,0 +1,40 @@
+{
+  "recorded_date": "2026-10-30",
+  "kind": "local development integration; not held-out accuracy or production capacity",
+  "model": "qwen3:1.7b",
+  "ollama_model_id_prefix": "8f68893c685c",
+  "runtime": {"provider": "ollama", "num_gpu": -1, "context": 8192, "timeout_seconds": 60, "think": false},
+  "model_catalog_check": {"ready": true, "reachable": true, "model_available": true},
+  "backend_tests": {"passed": 239, "seconds": 40.28, "warning": "Existing Starlette TestClient/httpx deprecation"},
+  "evaluation": {
+    "library": {"passed": 45, "total": 45, "report": "tmp/qwen17-library.json"},
+    "conversation": {"passed": 10, "total": 10, "report": "tmp/qwen17-conversation.json"},
+    "semantic": {"passed": 2, "total": 2, "report": "tmp/qwen17-semantic-green.json"}
+  },
+  "semantic_probe": {
+    "question": "Tôi muốn tìm sách theo người viết",
+    "elapsed_ms": 4915.23,
+    "mode": "rag",
+    "answer": "Trong OPAC của Thư viện UTH, bạn có thể tìm sách theo người viết bằng cách chọn trường 'Tác giả' trong menu tìm kiếm, nhập tên tác giả muốn tìm và thực hiện tìm kiếm. Điều này giúp phân biệt với tìm toàn bộ và nơi từ khóa có thể xuất hiện ở nhiều trường.",
+    "sources": [
+      "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=6",
+      "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=3",
+      "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=4"
+    ],
+    "source_checked_at": "2026-10-28"
+  },
+  "prompt_regression": {
+    "before": "Literal language placeholder returned as answer; strengthened semantic-author failed required fact check (1/2 probes passed)",
+    "red_report": "tmp/qwen17-semantic-red.json",
+    "after": "Removed ambiguous example value from system prompt; specific OPAC author-field guidance passed required fact and rag checks (2/2)"
+  },
+  "browser": "Guest chat visibly returned author-field guidance, AI source badge and OPAC page 6; no account created",
+  "screenshot": "tmp/qwen17-chat.png",
+  "launcher": "Dependency/build preflight and API startup passed",
+  "limits": [
+    "Only one semantic probe requires LLM generation; the other checks out-of-scope refusal",
+    "No broad model accuracy comparison, load test, paid provider call or public deployment",
+    "No frontend code changed or frontend suite rerun",
+    "Cold start may exceed existing timeout and trigger source fallback; citation guards are not semantic proof"
+  ]
+}

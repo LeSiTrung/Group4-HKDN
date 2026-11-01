@@ -144,7 +144,7 @@ def status(request:Request):
         pending = db.execute("SELECT count(*) FROM knowledge WHERE published=0").fetchone()[0]
         audit_rows = [dict(x) for x in db.execute('SELECT * FROM audit ORDER BY id DESC LIMIT 30')]
     return {'counts':counts,'drafts':pending,'vectors':request.app.state.vectors.status(),
-            'llm':{'provider':provider_name(),'model':os.getenv('LLM_MODEL','qwen3:4b'),'configured':provider_name()!='none'},
+            'llm':{'provider':provider_name(),'model':os.getenv('LLM_MODEL','qwen3:1.7b'),'configured':provider_name()!='none'},
             'library':{'configured':bool(os.getenv('LIBRARY_LOANS_URL') and os.getenv('LIBRARY_RENEW_URL'))},
             'channels':{'messenger':bool(os.getenv('MESSENGER_PAGE_ACCESS_TOKEN')),'zalo':bool(os.getenv('ZALO_ACCESS_TOKEN'))},'audit':audit_rows}
 
