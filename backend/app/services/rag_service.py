@@ -75,6 +75,11 @@ class VectorIndex:
         self.namespaces = {}
         self.error = None
         self.model_name = os.getenv('EMBEDDING_MODEL','sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')
+        self.local_export = None
+        if os.getenv('EMBEDDING_EXPORT','').strip():
+            from .embedding_model import verified_export
+            self.local_export=verified_export(os.environ['EMBEDDING_EXPORT'])
+            self.model_name=self.local_export['name']
         self.collection = self._collection('knowledge')
 
     def _collection(self, namespace):
@@ -88,8 +93,12 @@ class VectorIndex:
             url = os.getenv('QDRANT_URL')
             self.client = QdrantClient(url=url, api_key=os.getenv('QDRANT_API_KEY') or None) if url else QdrantClient(path=str(self.settings.data_dir/'vectors'))
         if model and self.model is None:
-            from fastembed import TextEmbedding
-            self.model = TextEmbedding(model_name=self.model_name, cache_dir=str(self.settings.data_dir/'models'), threads=2)
+            if self.local_export:
+                from .embedding_model import load_local_model
+                self.model=load_local_model(self.local_export)
+            else:
+                from fastembed import TextEmbedding
+                self.model = TextEmbedding(model_name=self.model_name, cache_dir=str(self.settings.data_dir/'models'), threads=2)
 
     def invalidate(self):
         with self.lock:
@@ -128,13 +137,16 @@ class VectorIndex:
                            if existing.get(chunk_id) != payload]
                 if changed:
                     self._init()
-                    vectors = list(self.model.embed([payload['text'] for _, payload in changed]))
-                    if len(vectors) != len(changed):
-                        raise ValueError('Incomplete embedding batch')
-                    if not exists:
-                        self.client.create_collection(collection, vectors_config=VectorParams(size=len(vectors[0]), distance=Distance.COSINE))
-                    self.client.upsert(collection, points=[PointStruct(id=chunk_id, vector=vector.tolist(), payload=payload)
-                                       for (chunk_id, payload), vector in zip(changed, vectors)], wait=True)
+                    for start in range(0,len(changed),64):
+                        batch=changed[start:start+64]
+                        vectors = list(self.model.embed([payload['text'] for _, payload in batch]))
+                        if len(vectors) != len(batch):
+                            raise ValueError('Incomplete embedding batch')
+                        if not exists:
+                            self.client.create_collection(collection, vectors_config=VectorParams(size=len(vectors[0]), distance=Distance.COSINE))
+                            exists=True
+                        self.client.upsert(collection, points=[PointStruct(id=chunk_id, vector=vector.tolist(), payload=payload)
+                                           for (chunk_id, payload), vector in zip(batch, vectors)], wait=True)
                 obsolete = list(existing.keys() - documents.keys())
                 if obsolete:
                     self.client.delete(collection, points_selector=PointIdsList(points=obsolete), wait=True)

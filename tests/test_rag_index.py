@@ -23,6 +23,58 @@ class Embedding:
         return np.array([1., 0.] if 'TAILMARKER' in text else [0., 1.])
 
 
+def test_large_rebuild_bounds_each_embedding_and_upsert_batch(tmp_path,monkeypatch):
+    index=index_at(tmp_path)
+    embed=index.model.embed
+    upsert=index.client.upsert
+    def bounded_embed(documents):
+        assert len(documents)<=64
+        return embed(documents)
+    def bounded_upsert(*args,**kwargs):
+        assert len(kwargs['points'])<=64
+        return upsert(*args,**kwargs)
+    monkeypatch.setattr(index.model,'embed',bounded_embed)
+    monkeypatch.setattr(index.client,'upsert',bounded_upsert)
+    try:
+        sources=[row(i,answer=f'New source {i}') for i in range(100)]
+        index.rebuild(sources)
+        assert len(points(index))==sum(len(rag.knowledge_chunks(source)) for source in sources)
+    finally:
+        index.close()
+
+
+def test_late_embedding_failure_preserves_old_points_and_resumes_completed_batches(tmp_path,monkeypatch):
+    index=index_at(tmp_path)
+    old=row(999,answer='Old source')
+    index.rebuild([old])
+    original_ids={p.id for p in points(index)}
+    embed=index.model.embed
+    calls=[]
+    def fail_second_batch(documents):
+        calls.append(len(documents))
+        if len(calls)==2:
+            raise RuntimeError('second batch failed')
+        return embed(documents)
+    monkeypatch.setattr(index.model,'embed',fail_second_batch)
+    sources=[row(i,answer=f'Replacement source {i}') for i in range(100)]
+    try:
+        with pytest.raises(RuntimeError,match='second batch'):
+            index.rebuild(sources)
+        assert original_ids<={p.id for p in points(index)}
+        assert index.status()['ready'] is False
+    finally:
+        index.close()
+    restarted=index_at(tmp_path)
+    try:
+        restarted.rebuild(sources)
+        total=sum(len(rag.knowledge_chunks(source)) for source in sources)
+        assert len(restarted.model.documents)==total-64
+        assert not original_ids&{p.id for p in points(restarted)}
+        assert restarted.status()['ready'] is True
+    finally:
+        restarted.close()
+
+
 def row(source_id=1, **changes):
     return {'id': source_id, 'question': 'Tra cứu thư viện', 'aliases': [],
             'answer': 'Thông tin nguồn thử nghiệm. ' * 30, **changes}
