@@ -104,3 +104,11 @@ def test_changed_evaluation_pairs_are_rejected_before_training(tmp_path):
     (output/'pairs.json').write_text('[]',encoding='utf-8')
     with pytest.raises(ValueError,match='Frozen dataset changed'):
         load_frozen_dataset(output)
+
+
+@pytest.mark.parametrize('smoke,verdict,delta',[(True,'WIN',0.1),(False,'MARGINAL',0.001),(False,'REGRESSION',-0.1)])
+def test_unqualified_candidate_is_not_exported(tmp_path,smoke,verdict,delta):
+    from training.export_onnx import check_candidate
+    (tmp_path/'metrics.json').write_text(json.dumps({'smoke':smoke,'verdict':verdict,'delta':delta}),encoding='utf-8')
+    with pytest.raises(ValueError,match='Only a completed WIN'):
+        check_candidate(tmp_path,tmp_path/'unused-dataset')
