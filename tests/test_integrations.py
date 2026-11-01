@@ -69,6 +69,17 @@ def test_crawl_robots_and_redirects(network):
         service.crawl_pages('https://library.example/')
 
 
+def test_disallowed_seed_reports_denial_before_long_delay(network):
+    def handler(request):
+        assert request.url.path=='/robots.txt'
+        return httpx.Response(200,text='User-agent: *\nDisallow: /\nCrawl-delay: 10\n')
+    network(handler)
+    with pytest.raises(service.IntegrationError) as error:
+        service.crawl_pages('https://library.example/')
+    assert error.value.status_code==403
+    assert 'không cho phép' in error.value.detail
+
+
 def test_crawl_bounds_extracts_and_pins_dns(network):
     calls = []
     def handler(request):

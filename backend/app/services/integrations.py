@@ -101,6 +101,8 @@ def crawl_pages(url, max_pages=3):
             robots.parse(raw.decode('utf-8', errors='replace').splitlines())
         else:
             raise IntegrationError('Không đọc được robots.txt; tạm dừng thu thập.')
+        if not robots.can_fetch(USER_AGENT,seed):
+            raise IntegrationError('Nguồn không cho phép thu thập đường dẫn này theo robots.txt.',403)
         delay = max(1, robots.crawl_delay(USER_AGENT) or robots.crawl_delay('*') or 1)
         rate = robots.request_rate(USER_AGENT) or robots.request_rate('*')
         if rate:
