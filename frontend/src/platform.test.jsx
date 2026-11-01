@@ -129,7 +129,7 @@ describe('reader workflows', () => {
 
 describe('administration', () => {
   it('supports keyboard navigation between administration tabs', async () => {
-    fetch.mockImplementation(async () => response([]))
+    fetch.mockImplementation(async url => response(url.includes('/admin/books') ? { items: [], total: 0, page: 1, page_size: 20 } : []))
     render(<Admin user={{ id: 1, role: 'admin' }} />)
     const first = screen.getByRole('tab', { name: 'Kho tri thức' })
     first.focus()
@@ -137,7 +137,7 @@ describe('administration', () => {
     const books = screen.getByRole('tab', { name: 'Danh mục' })
     expect(books.getAttribute('aria-selected')).toBe('true')
     expect(document.activeElement).toBe(books)
-    await waitFor(() => expect(fetch.mock.calls.some(call => call[0] === '/api/admin/books')).toBe(true))
+    await waitFor(() => expect(fetch.mock.calls.some(call => call[0] === '/api/admin/books?page=1&page_size=20')).toBe(true))
   })
   it('creates knowledge as unpublished draft and serializes aliases', async () => {
     fetch.mockImplementation(async (path, options) => response(options?.method === 'POST' ? { id: 8 } : []))

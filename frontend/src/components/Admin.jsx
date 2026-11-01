@@ -59,6 +59,7 @@ export default function Admin({ user }) {
   const [search, setSearch] = useState('')
   const [scheduleClosed, setScheduleClosed] = useState(false)
   const [feedbackQuery, setFeedbackQuery] = useState({ rating: '', page: 1 })
+  const [bookQuery, setBookQuery] = useState({ q: '', page: 1 })
   function selectTab(next) {
     if (next === tab) return
     setTab(next); setRows(null); setLoading(true); setNotice('')
@@ -72,10 +73,10 @@ export default function Admin({ user }) {
   useEffect(() => {
     let ignore = false
     setLoading(true); setRows(null); setError('')
-    const params = tab === 'feedback' ? `?${new URLSearchParams({ page: feedbackQuery.page, page_size: 20, ...(feedbackQuery.rating ? { rating: feedbackQuery.rating } : {}) })}` : ''
+    const params = tab === 'feedback' ? `?${new URLSearchParams({ page: feedbackQuery.page, page_size: 20, ...(feedbackQuery.rating ? { rating: feedbackQuery.rating } : {}) })}` : tab === 'books' ? `?${new URLSearchParams({ page: bookQuery.page, page_size: 20, ...(bookQuery.q ? { q: bookQuery.q } : {}) })}` : ''
     api(`/admin/${tab}${params}`).then(data => { if (!ignore) setRows(data) }).catch(err => { if (!ignore) setError(err.message) }).finally(() => { if (!ignore) setLoading(false) })
     return () => { ignore = true }
-  }, [tab, version, feedbackQuery])
+  }, [tab, version, feedbackQuery, bookQuery])
   async function mutate(path, { body, method = 'POST', message = 'Đã cập nhật dữ liệu.' } = {}) {
     setBusy(true); setError(''); setNotice('')
     try { const data = await api(`/admin/${path}`, { method, body }); setNotice(message); setVersion(current => current + 1); return data ?? true }
@@ -110,7 +111,7 @@ export default function Admin({ user }) {
     <ErrorNotice>{error}</ErrorNotice>{notice && <div className="notice success-notice" role="status"><Icon name="check" /><span>{notice}</span></div>}
     <section id={`panel-${tab}`} role="tabpanel" aria-labelledby={`tab-${tab}`}>
       <div className="section-heading"><h2>{tabs.find(item => item.id === tab).label}</h2><div className="inline-actions"><button className="secondary" onClick={() => setVersion(current => current + 1)} disabled={loading || busy}><Icon name="refresh" size={16} />Làm mới</button>{tab === 'knowledge' && <button className="primary" onClick={() => setEditing({})} disabled={busy}><Icon name="plus" size={16} />Thêm tri thức</button>}</div></div>
-      {tab === 'books' && <BookAdmin rows={rows} busy={busy} error={error} onMutate={mutate} />}
+      {tab === 'books' && <BookAdmin rows={rows} busy={busy || loading} error={error} query={bookQuery} onQuery={setBookQuery} onMutate={mutate} />}
       {tab === 'renewals' && <RenewalAdmin rows={rows} busy={busy} error={error} onMutate={mutate} />}
       {tab === 'feedback' && <FeedbackAdmin rows={rows} loading={loading} query={feedbackQuery} onQuery={setFeedbackQuery} />}
       {tab === 'knowledge' && <><Notice>Dữ liệu thu thập cần được đối chiếu trước khi xuất bản. Chính sách, phí và giờ phục vụ cần nguồn xác minh còn hiệu lực.</Notice><div className="filter-row"><label className="input-with-icon"><Icon name="search" /><input aria-label="Tìm trong kho tri thức" value={search} onChange={event => setSearch(event.target.value)} placeholder="Tìm tiêu đề, câu hỏi, danh mục…" /></label><select aria-label="Lọc trạng thái tri thức" value={filter} onChange={event => setFilter(event.target.value)}><option value="all">Tất cả trạng thái</option><option value="draft">Chưa xuất bản</option><option value="needs_confirmation">Cần xác nhận</option><option value="reviewed_public">Đã duyệt nguồn công khai</option><option value="verified">Đã xác minh</option></select></div>{!loading && <div className="knowledge-list">{knowledge.length ? knowledge.map(row => <article className="panel knowledge-card" key={row.id}><div><div className="inline-actions"><span className="eyebrow">{row.category || 'THÔNG TIN CHUNG'}</span><Status value={row.status} /><span className={`badge ${row.published ? '' : 'warning'}`}>{row.published ? 'Đã xuất bản' : 'Bản nháp'}</span></div><h3>{row.title}</h3><p>{row.question}</p><ExternalLink className="text-button" href={row.source_url}><Icon name="link" size={14} />{row.source_title || 'Nguồn tham khảo'}</ExternalLink><small className="block subtle">Đối chiếu: {displayDate(row.checked_at)}{row.valid_until ? ` · Hết hiệu lực: ${displayDate(row.valid_until)}` : ''}</small></div><div className="inline-actions"><button className="icon-button" aria-label={`Sửa ${row.title}`} onClick={() => setEditing(row)}><Icon name="edit" size={18} /></button><button className="icon-button destructive-text" aria-label={`Thu hồi ${row.title}`} onClick={() => setRemoving({ path: `knowledge/${row.id}`, title: row.title, kind: 'knowledge' })}><Icon name="trash" size={18} /></button></div></article>) : <Empty title="Không có mục phù hợp">Thêm mục tri thức hoặc thay đổi bộ lọc để tiếp tục.</Empty>}</div>}</>}

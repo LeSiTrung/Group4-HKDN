@@ -8,7 +8,7 @@ import ChatMessage from './components/ChatMessage.jsx'
 const response = (value, ok = true) => ({ ok, status: ok ? 200 : 503, json: async () => value })
 const item = { message_id: 7, question: '<script>question</script>', answer: '<img src=x onerror=alert(1)>', comment: 'Please correct', rating: -1, status: 'answered', mode: 'faq', sources: [{ title: 'Unsafe source', url: 'javascript:alert(1)' }, { title: 'Library source', url: 'https://lic.uth.edu.vn/' }] }
 const data = { items: [item], total: 21, page: 1, page_size: 20, summary: { positive: 3, negative: 18 } }
-beforeEach(() => vi.stubGlobal('fetch', vi.fn().mockImplementation(async url => response(url.includes('/feedback') ? data : []))))
+beforeEach(() => vi.stubGlobal('fetch', vi.fn().mockImplementation(async url => response(url.includes('/feedback') ? data : url.includes('/admin/books') ? { items: [], total: 0, page: 1, page_size: 20 } : []))))
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals() })
 
 it('loads feedback once, renders untrusted strings as text and blocks unsafe source URLs', async () => {
@@ -38,7 +38,7 @@ it('paginates and resets the page on rating changes without affecting other admi
     expect(fetch.mock.calls.at(-1)[0]).toContain('page=1')
   })
   fireEvent.click(screen.getByRole('tab', { name: 'Danh mục' }))
-  await waitFor(() => expect(fetch.mock.calls.at(-1)[0]).toBe('/api/admin/books'))
+  await waitFor(() => expect(fetch.mock.calls.at(-1)[0]).toBe('/api/admin/books?page=1&page_size=20'))
 })
 
 it('shows loading, empty feedback and recoverable API errors', async () => {

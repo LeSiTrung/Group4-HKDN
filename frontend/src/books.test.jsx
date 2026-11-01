@@ -50,7 +50,7 @@ it('searches the selected metadata field locally and keeps it on subsequent page
 
 it('creates an unpublished catalog record with source and review date', async () => {
   const mutate = vi.fn().mockResolvedValue({ id: 1 })
-  render(<BookAdmin rows={[]} onMutate={mutate} />)
+  render(<BookAdmin rows={{ items: [], total: 0, page: 1, page_size: 20 }} onMutate={mutate} />)
   fireEvent.click(screen.getByRole('button', { name: 'Thêm tài liệu' }))
   fireEvent.change(screen.getByLabelText('Nhan đề'), { target: { value: 'Tài liệu thử' } })
   fireEvent.change(screen.getByLabelText('URL biểu ghi / nguồn'), { target: { value: 'https://example.edu/book/1' } })
@@ -62,7 +62,7 @@ it('creates an unpublished catalog record with source and review date', async ()
 
 it('rejects invalid import JSON before network and imports a valid array atomically', async () => {
   const mutate = vi.fn().mockResolvedValue({ imported: 1 })
-  render(<BookAdmin rows={[]} onMutate={mutate} />)
+  render(<BookAdmin rows={{ items: [], total: 0, page: 1, page_size: 20 }} onMutate={mutate} />)
   fireEvent.click(screen.getByRole('button', { name: 'Nhập JSON' }))
   fireEvent.change(screen.getByLabelText('Dữ liệu JSON'), { target: { value: '{broken' } })
   fireEvent.click(screen.getByRole('button', { name: 'Nhập danh mục' }))
@@ -99,7 +99,7 @@ it('opens a local book detail with related records from the API', async () => {
 
 it('rejects imports larger than the 200-record backend limit', async () => {
   const mutate = vi.fn()
-  render(<BookAdmin rows={[]} onMutate={mutate} />)
+  render(<BookAdmin rows={{ items: [], total: 0, page: 1, page_size: 20 }} onMutate={mutate} />)
   fireEvent.click(screen.getByRole('button', { name: 'Nhập JSON' }))
   fireEvent.change(screen.getByLabelText('Dữ liệu JSON'), { target: { value: JSON.stringify(Array.from({ length: 201 }, () => ({ title: 'record' }))) } })
   fireEvent.click(screen.getByRole('button', { name: 'Nhập danh mục' }))
