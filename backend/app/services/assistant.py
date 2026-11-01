@@ -118,9 +118,12 @@ def answer_question(state, question, history=None):
         if re.search(r'\b(mai|ngay mot|ngay kia|hom qua|tuan sau|tuan truoc|ngay le|nghi le|tet|ngay \d+|thang \d+|thu hai|thu ba|thu tu|thu nam|thu sau|thu bay|chu nhat)\b',q) or re.search(r'\b\d{1,2}[/-]\d{1,2}\b',question):
             return result('Mình chưa xác nhận lịch theo ngày hoặc ngày lễ bạn hỏi. Bạn có thể xem lịch thường lệ để tham khảo hoặc hỏi “Giờ mở cửa hôm nay” kèm một cơ sở.', 'clarify', suggestions=['Giờ mở cửa thường lệ của thư viện'])
         references=[row for row in published_rows(state.db) if row['category']=='hours_reference']
-        reference=references[0] if len(references)==1 else None
-        if 'hom nay' not in q and reference:
-            return result(reference['answer'],'needs_confirmation',[source(reference)])
+        reference_answer=references[0]['answer'] if len(references)==1 else (
+            'Các tài liệu tham khảo có nội dung giờ phục vụ khác nhau; chưa có căn cứ chọn lịch hiện hành cho từng cơ sở. '
+            'Hãy xác nhận với thư viện trước khi đến. Không tự áp dụng lịch dưới đây cho hôm nay:\n\n'+
+            '\n\n'.join(row['source_title']+':\n'+row['answer'] for row in references))
+        if 'hom nay' not in q and references:
+            return result(reference_answer,'needs_confirmation',[source(row) for row in references])
         if not branches or 'hom nay' not in q:
             return result('Bạn muốn xem giờ phục vụ tại cơ sở nào? Vui lòng hỏi kèm cơ sở và ngày cần tra cứu.', 'clarify', suggestions=[f'Giờ mở cửa hôm nay cơ sở {i}' for i in (1,2,3)])
         branch=next(iter(branches))
@@ -136,8 +139,8 @@ def answer_question(state, question, history=None):
             notes = ' '.join(r['note'] for r in rows if r['note'])
             return result(f"Lịch đã xác nhận cho cơ sở {branch} ngày {now:%d/%m/%Y}: {windows}. {notes}".strip(),
                           sources=[{'title':r['source_title'],'url':r['source_url'],'checked_at':r['checked_at']} for r in rows])
-        if reference:
-            return result('Mình chưa có lịch đã xác nhận cho hôm nay tại cơ sở này. Dưới đây là lịch thường lệ tham khảo, không xác nhận đang mở cửa:\n\n'+reference['answer'], 'needs_confirmation',[source(reference)])
+        if references:
+            return result('Mình chưa có lịch đã xác nhận cho hôm nay tại cơ sở này. Dưới đây là lịch thường lệ tham khảo, không xác nhận đang mở cửa:\n\n'+reference_answer, 'needs_confirmation',[source(row) for row in references])
     if outside_definition(question):
         return library_redirect(question)
     rows = published_rows(state.db)

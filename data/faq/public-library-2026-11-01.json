@@ -1,0 +1,46 @@
+[
+  {
+    "title":"Lịch tham khảo trong hướng dẫn LIC được liên kết ở thư mục năm 2024",
+    "question":"Tài liệu hướng dẫn LIC năm 2024 ghi giờ phục vụ thế nào?",
+    "aliases":["Lịch trong hướng dẫn sử dụng thư viện năm 2024"],
+    "keywords":["giờ mở cửa","lịch phục vụ","hướng dẫn 2024"],
+    "answer":"Tài liệu hướng dẫn được LIC liên kết tại thư mục 2024/11, trang 12, ghi: thứ Hai–thứ Sáu 07:30–18:30; thứ Bảy 08:30–16:30; Chủ nhật và các ngày Lễ, Tết nghỉ theo tài liệu đó. Trang này không tách lịch theo cơ sở và không ghi khoảng ngày hiệu lực hiện tại. Nội dung khác bản hướng dẫn ở thư mục năm 2022 đã lưu, nên đây là lịch tham khảo cần đối chiếu với thư viện, không khẳng định lịch hôm nay hay tự chọn lịch áp dụng cho từng cơ sở.",
+    "category":"hours_reference",
+    "source_url":"https://lic.ut.edu.vn/wp-content/uploads/2024/11/1.HD-su-dung-thu-vien-va-khai-thac-hieu-qua-cac-CSDL-tai-nguyen-thong-tin-thu-vien.pdf#page=12",
+    "source_title":"LIC UTH — Hướng dẫn được liên kết ở thư mục 2024/11, trang 12",
+    "checked_at":"2026-11-01","status":"needs_confirmation","published":true
+  },
+  {
+    "title":"Thông báo đồng phục khi sinh viên đến thư viện",
+    "question":"Sinh viên đến thư viện có cần mặc đồng phục không?",
+    "aliases":["Đồng phục khi đến thư viện","Vào thư viện mặc áo gì?"],
+    "keywords":["đồng phục","áo sơ mi","áo thun","trang phục"],
+    "answer":"Thông báo của LIC ghi sinh viên đang học tại trường khi đến thư viện phải mặc đồng phục của trường (áo sơ mi, áo thun), bắt đầu từ 10/06/2024. Đây là nội dung của thông báo công khai; chưa có xác nhận riêng về hiệu lực hiện hành hoặc ngoại lệ. Bạn nên đối chiếu với thư viện trước khi áp dụng; không suy rộng yêu cầu này cho đối tượng ngoài sinh viên.",
+    "category":"policy",
+    "source_url":"https://lic.ut.edu.vn/thong-bao-v-v-sinh-vien-mac-dong-phuc-cua-truong-khi-den-thu-vien/",
+    "source_title":"LIC UTH — Thông báo sinh viên mặc đồng phục khi đến Thư viện",
+    "checked_at":"2026-11-01","status":"needs_confirmation","published":true
+  },
+  {
+    "title":"Hỗ trợ xuất bản và phát hành tài liệu",
+    "question":"Thư viện hỗ trợ xuất bản giáo trình và kỷ yếu hội thảo không?",
+    "aliases":["Dịch vụ xuất bản tài liệu của thư viện","Thư viện xin giấy phép xuất bản giáo trình thế nào?"],
+    "keywords":["xuất bản","phát hành","giáo trình","kỷ yếu","giấy phép"],
+    "answer":"Trang Xuất bản, phát hành tài liệu của LIC giới thiệu việc liên kết và xin giấy phép xuất bản kỷ yếu hội thảo, giáo trình đã nghiệm thu theo yêu cầu tác giả và quy trình, quy định của nhà xuất bản. Trang không công bố giá, thời hạn xử lý hoặc bộ hồ sơ tiếp nhận đầy đủ. Hãy liên hệ thư viện để xác nhận quy trình cho tài liệu cụ thể; chatbot không tự cấp phép hay gửi yêu cầu xuất bản.",
+    "category":"publishing",
+    "source_url":"https://lic.ut.edu.vn/dich-vu-thu-vien/xuat-ban-phat-hanh-tai-lieu/",
+    "source_title":"LIC UTH — Xuất bản, phát hành tài liệu",
+    "checked_at":"2026-11-01","status":"reviewed_public","published":true
+  },
+  {
+    "title":"Lớp giới thiệu và hướng dẫn sử dụng thư viện",
+    "question":"Thư viện có lớp hướng dẫn khai thác cơ sở dữ liệu cho sinh viên mới không?",
+    "aliases":["Lớp hướng dẫn sử dụng thư viện","Tập huấn sử dụng tài nguyên thư viện"],
+    "keywords":["lớp hướng dẫn","sinh viên đầu khóa","khai thác cơ sở dữ liệu","tập huấn"],
+    "answer":"LIC giới thiệu các lớp hướng dẫn sử dụng thư viện và khai thác hiệu quả cơ sở dữ liệu tài nguyên thông tin cho sinh viên đầu khóa và bạn đọc có nhu cầu, kèm tài liệu hướng dẫn để tham khảo. Nguồn không ghi lịch học, học phí hoặc cách đăng ký hiện hành; cần liên hệ thư viện để biết lớp phù hợp. Dù URL chứa chữ photo-scan, nội dung trang thực tế nói về đào tạo người dùng; không dùng trang này để suy ra dịch vụ hoặc giá photocopy, scan.",
+    "category":"orientation",
+    "source_url":"https://lic.ut.edu.vn/dich-vu-thu-vien/photo-scan-tai-lieu/",
+    "source_title":"LIC UTH — Đào tạo, hướng dẫn người dùng sử dụng thư viện",
+    "checked_at":"2026-11-01","status":"reviewed_public","published":true
+  }
+]

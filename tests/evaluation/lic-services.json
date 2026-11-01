@@ -1,0 +1,8 @@
+[
+  {"id":"hours-competing-guides","message":"Giờ mở cửa thường lệ của thư viện?","status":"needs_confirmation","source":"2024/11/","contains":"khác nhau"},
+  {"id":"today-competing-guides","message":"Giờ mở cửa hôm nay cơ sở 1","status":"needs_confirmation","source":"2024/11/","contains":"khác nhau"},
+  {"id":"uniform-notice","message":"Sinh viên đến thư viện có cần mặc đồng phục không?","status":"needs_confirmation","source":"mac-dong-phuc","contains":"10/06/2024"},
+  {"id":"uniform-no-accent","message":"Sinh vien den thu vien co can mac dong phuc khong?","status":"needs_confirmation","source":"mac-dong-phuc","contains":"10/06/2024"},
+  {"id":"publishing-service","message":"Thư viện hỗ trợ xuất bản giáo trình và kỷ yếu hội thảo không?","status":"answered","source":"xuat-ban-phat-hanh","contains":"đã nghiệm thu"},
+  {"id":"orientation-page-content","message":"Thư viện có lớp hướng dẫn khai thác cơ sở dữ liệu cho sinh viên mới không?","status":"answered","source":"photo-scan","contains":"sinh viên đầu khóa"}
+]

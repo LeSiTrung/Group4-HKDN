@@ -38,6 +38,26 @@ def test_today_without_verified_schedule_can_show_clearly_labelled_reference(cli
     assert result['sources'][0]['url'].endswith('#page=12')
 
 
+@pytest.mark.parametrize('message', ['Giờ mở cửa thường lệ của thư viện?', 'Giờ mở cửa hôm nay cơ sở 1'])
+def test_conflicting_hours_retain_both_references_without_selecting_a_current_rule(client, message):
+    with client.app.state.db() as db:
+        insert_knowledge(db, KnowledgeInput(title='Another public guide', question='Lịch tham khảo trong hướng dẫn mới',
+            answer='Tài liệu khác ghi 07:30–18:30. Chưa xác nhận lịch hiện hành.',
+            category='hours_reference', source_url='https://lic.ut.edu.vn/another-guide.pdf#page=12',
+            source_title='Another synthetic official guide', checked_at=today(), status='needs_confirmation', published=True))
+    response=client.post('/api/chat', json={'message':message}).json()
+    assert response['status']=='needs_confirmation' and response['mode']=='faq'
+    assert 'khác nhau' in response['answer']
+    assert '07:30–20:30' in response['answer'] and '07:30–18:30' in response['answer']
+    assert {row['url'] for row in response['sources']}=={'https://lic.ut.edu.vn/guide.pdf#page=12',
+        'https://lic.ut.edu.vn/another-guide.pdf#page=12'}
+    day=today()
+    with client.app.state.db() as db:
+        db.execute('INSERT INTO schedules(branch,weekday,opens,closes,valid_from,valid_until,verified_by,source_url,source_title,checked_at) VALUES (?,?,?,?,?,?,?,?,?,?)',
+            ('1',day.weekday(),'09:00','15:00',str(day),str(day),'Synthetic operator','https://lic.ut.edu.vn/current','Current',str(day)))
+    confirmed=client.post('/api/chat',json={'message':'Giờ mở cửa hôm nay cơ sở 1'}).json()
+    assert confirmed['status']=='answered' and '09:00' in confirmed['answer']
+    assert len(confirmed['sources'])==1 and confirmed['sources'][0]['url']=='https://lic.ut.edu.vn/current'
 
 
 @pytest.mark.parametrize('message', ['Giờ mở cửa hôm nay cơ sở 12', 'Giờ mở cửa hôm nay cơ sở 1 và cơ sở 2',
@@ -103,3 +123,21 @@ def test_dated_public_pack_validates_and_preserves_hours_uncertainty():
     assert 'Chủ nhật' in hours.answer and 'không tự hiểu là đóng cửa' in hours.answer
     assert hours.source_url.endswith('#page=12')
     assert not any(row.status=='verified' for row in rows)
+
+
+@pytest.mark.parametrize('question,source,status,fact', [
+    ('Giờ mở cửa thường lệ của thư viện?', '2024/11/', 'needs_confirmation', '08:30–16:30'),
+    ('Sinh viên đến thư viện có cần mặc đồng phục không?', 'mac-dong-phuc', 'needs_confirmation', '10/06/2024'),
+    ('Thư viện hỗ trợ xuất bản giáo trình và kỷ yếu hội thảo không?', 'xuat-ban-phat-hanh', 'answered', 'đã nghiệm thu'),
+    ('Thư viện có lớp hướng dẫn khai thác cơ sở dữ liệu cho sinh viên mới không?', 'photo-scan', 'answered', 'sinh viên đầu khóa'),
+])
+def test_new_reviewed_pack_answers_with_source_and_uncertainty(client,question,source,status,fact):
+    pack=Path(__file__).resolve().parents[1]/'data/faq/public-library-2026-11-01.json'
+    rows=[KnowledgeInput.model_validate(row) for row in json.loads(pack.read_text(encoding='utf-8'))]
+    assert len(rows)==4 and not any(row.status=='verified' or row.verified_by or row.valid_from for row in rows)
+    with client.app.state.db() as db:
+        for row in rows:
+            insert_knowledge(db,row)
+    response=client.post('/api/chat',json={'message':question}).json()
+    assert response['status']==status and fact in response['answer']
+    assert any(source in row['url'] for row in response['sources'])
