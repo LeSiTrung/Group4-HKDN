@@ -1,0 +1,538 @@
+{
+  "recorded_date": "2026-10-31",
+  "kind": "local development verification, not full catalog or staff acceptance",
+  "collection": {
+    "sitemap_locations": 349,
+    "selected_pages": 32,
+    "collected_pages": 30,
+    "empty_failures": 2,
+    "opac": "Disallow: /; no automatic catalog collection"
+  },
+  "import": {
+    "new_faq": 10,
+    "repeat_imported": 0,
+    "repeat_skipped": 10,
+    "total_faq": 27,
+    "indexed_chunks": 126,
+    "backup": "backups/2026-10-31-before-public-data"
+  },
+  "backend_tests": {
+    "passed": 253,
+    "seconds": 42.65,
+    "warning": "Existing Starlette TestClient/httpx deprecation"
+  },
+  "red_green": [
+    "Five initial hours/import failures became green",
+    "Robots deny+delay regression: prior503, corrected403 before any page request"
+  ],
+  "evaluation": {
+    "library": {
+      "passed": 45,
+      "total": 45,
+      "cases": [
+        {
+          "id": "hello",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "opac-unaccented",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "paper",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "author-field",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "rag"
+        },
+        {
+          "id": "advanced",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "ebook",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "loans",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "password",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "fees",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "loan-term",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "hours-branch",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "hours-missing-branch",
+          "passed": true,
+          "errors": [],
+          "status": "clarify",
+          "mode": "faq"
+        },
+        {
+          "id": "opac-empty",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "shelf-guidance",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "reserve-vs-renew",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "resources",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "digital-library",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "renewal",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "outside",
+          "passed": true,
+          "errors": [],
+          "status": "not_found",
+          "mode": "faq"
+        },
+        {
+          "id": "injection",
+          "passed": true,
+          "errors": [],
+          "status": "not_found",
+          "mode": "faq"
+        },
+        {
+          "id": "catalog",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "catalog-typo",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "catalog-missing",
+          "passed": true,
+          "errors": [],
+          "status": "not_found",
+          "mode": "faq"
+        },
+        {
+          "id": "author-followup",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "year-followup",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "availability-followup",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "branch-followup",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "natural-book",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "natural-unaccented",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "lookup-command",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "bare-author",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "bare-year",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "missing-isbn",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "missing-shelf",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "initial-availability",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "negative-condition",
+          "passed": true,
+          "errors": [],
+          "status": "clarify",
+          "mode": "faq"
+        },
+        {
+          "id": "mixed-book-hours",
+          "passed": true,
+          "errors": [],
+          "status": "clarify",
+          "mode": "faq"
+        },
+        {
+          "id": "invalid-branch",
+          "passed": true,
+          "errors": [],
+          "status": "clarify",
+          "mode": "faq"
+        },
+        {
+          "id": "multiple-branches",
+          "passed": true,
+          "errors": [],
+          "status": "clarify",
+          "mode": "faq"
+        },
+        {
+          "id": "different-date",
+          "passed": true,
+          "errors": [],
+          "status": "clarify",
+          "mode": "faq"
+        },
+        {
+          "id": "return-deadline",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "possessive-loan",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "new-topic",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "stale-context",
+          "passed": true,
+          "errors": [],
+          "status": "clarify",
+          "mode": "faq"
+        },
+        {
+          "id": "missing-context",
+          "passed": true,
+          "errors": [],
+          "status": "clarify",
+          "mode": "faq"
+        }
+      ]
+    },
+    "conversation": {
+      "passed": 10,
+      "total": 10,
+      "cases": [
+        {
+          "id": "greeting",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "thanks",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "topic-word",
+          "passed": true,
+          "errors": [],
+          "status": "clarify",
+          "mode": "faq"
+        },
+        {
+          "id": "scope-email",
+          "passed": true,
+          "errors": [],
+          "status": "not_found",
+          "mode": "faq"
+        },
+        {
+          "id": "scope-programming",
+          "passed": true,
+          "errors": [],
+          "status": "not_found",
+          "mode": "faq"
+        },
+        {
+          "id": "long-library-question",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "fallback"
+        },
+        {
+          "id": "unverified-fee",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "hours-followup",
+          "passed": true,
+          "errors": [],
+          "status": "clarify",
+          "mode": "faq"
+        },
+        {
+          "id": "multi-turn-day",
+          "passed": true,
+          "errors": [],
+          "status": "clarify",
+          "mode": "faq"
+        },
+        {
+          "id": "oversize-context",
+          "passed": true,
+          "errors": [],
+          "status": "clarify",
+          "mode": "faq"
+        }
+      ]
+    },
+    "semantic": {
+      "passed": 2,
+      "total": 2,
+      "cases": [
+        {
+          "id": "semantic-author",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "rag"
+        },
+        {
+          "id": "semantic-outside",
+          "passed": true,
+          "errors": [],
+          "status": "not_found",
+          "mode": "faq"
+        }
+      ]
+    },
+    "new_public_cases": {
+      "passed": 10,
+      "total": 10,
+      "cases": [
+        {
+          "id": "regular-hours",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "regular-hours-unaccented",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "today-reference",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "holiday-unknown",
+          "passed": true,
+          "errors": [],
+          "status": "clarify",
+          "mode": "faq"
+        },
+        {
+          "id": "future-unknown",
+          "passed": true,
+          "errors": [],
+          "status": "clarify",
+          "mode": "faq"
+        },
+        {
+          "id": "reading-room",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "computer-use",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "oer-vietnamese",
+          "passed": true,
+          "errors": [],
+          "status": "answered",
+          "mode": "faq"
+        },
+        {
+          "id": "group-room-unconfigured",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        },
+        {
+          "id": "interlibrary-unconfirmed",
+          "passed": true,
+          "errors": [],
+          "status": "needs_confirmation",
+          "mode": "faq"
+        }
+      ]
+    }
+  },
+  "review": "Fresh read-only review found no Important/Critical issue in import/hours scope",
+  "limits": [
+    "No complete OPAC catalog, full-text books or reader records collected",
+    "No verified current schedule seeded; hours are an official-document reference with unknown effective interval",
+    "Explicit future/weekday/holiday questions still clarify; refer to the regular table",
+    "Browser control unavailable for this milestone; API verified, frontend unchanged and not rerun",
+    "No production deployment, paid provider or library transaction"
+  ],
+  "source_hashes": {
+    "backend/app/services/assistant.py": "2549f5345a49bd9b1ead2abc9c054e78dbcc44b6e30198474d2593d3118d0c89",
+    "backend/app/cli.py": "89fa5fab73fc345309ed57fb44f63ca4ba37722bcdb38cdf578b5dff44ea8bf9",
+    "backend/app/services/integrations.py": "4ff50b46367694f352aa3ee15677c6935c420c06703c2a725b340864674f4265",
+    "data/faq/public-library-2026-10-31.json": "f94dc323a2d32969c8dba42bcb491370847287c9f2a81b21cfa192c759e5eb7f",
+    "data/documents/lic-source-manifest-2026-10-31.json": "cdd19487d699f0b4a346a9727772d4e3b015ff76a8818538ecef2b19b3d3923e"
+  }
+}

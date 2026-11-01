@@ -157,7 +157,8 @@ def test_index_cli_reports_chunk_totals_and_releases_lock(tmp_path, monkeypatch,
         closed = False
         def __init__(self, settings):
             pass
-        def rebuild(self, rows):
+        def rebuild(self, rows, namespace='knowledge'):
+            assert namespace=='knowledge'
             return 2
         def status(self):
             return {'ready': True, 'namespaces': {'knowledge': {'sources': 2, 'chunks': 6}}}
@@ -170,3 +171,32 @@ def test_index_cli_reports_chunk_totals_and_releases_lock(tmp_path, monkeypatch,
     result = json.loads(capsys.readouterr().out)
     assert result['indexed'] == 2 and result['namespaces']['knowledge'] == {'sources': 2, 'chunks': 6}
     assert Index.closed
+
+
+def test_index_cli_can_prebuild_only_published_book_metadata(tmp_path,monkeypatch,capsys):
+    from app.database.connection import Store
+    from app.services.catalog import BookInput,save_book
+    store=Store(tmp_path/'library.sqlite3')
+    with store.connect() as db:
+        for published in (True,False):
+            save_book(db,BookInput(title='Public' if published else 'Draft',author='Author',subjects='Subject',description='Description',
+                source_url='https://lic.ut.edu.vn/'+str(published),checked_at=today(),kind='digital',published=published))
+    class Index:
+        model_name='synthetic'
+        closed=False
+        def __init__(self,settings):
+            pass
+        def rebuild(self,rows,namespace='knowledge'):
+            assert namespace=='books' and len(rows)==1
+            assert rows[0]['question']=='Public' and rows[0]['aliases']==['Author','Subject'] and rows[0]['answer']=='Description'
+            return len(rows)
+        def status(self):
+            return {'ready':True,'namespaces':{'books':{'sources':1,'chunks':3}}}
+        def close(self):
+            Index.closed=True
+    monkeypatch.setattr(cli,'VectorIndex',Index)
+    monkeypatch.setenv('DATA_DIR',str(tmp_path))
+    monkeypatch.setattr(sys,'argv',['app.cli','index','--namespace','books'])
+    cli.main()
+    result=json.loads(capsys.readouterr().out)
+    assert result['indexed']==1 and result['namespaces']['books']['sources']==1 and Index.closed

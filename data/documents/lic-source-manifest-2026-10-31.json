@@ -1,0 +1,283 @@
+{
+  "checked_at": "2026-10-31",
+  "sitemap_locations": 349,
+  "unique_locations": 309,
+  "selection": "Library service/resource/branch/policy pages; excludes media, people profiles, IT services, unrelated/spam pages and general news",
+  "opac": {
+    "status": "blocked_by_robots",
+    "robots": "User-agent: *; Disallow: /; Crawl-delay: 10",
+    "automatic_catalog_collection": false
+  },
+  "sources": [
+    {
+      "url": "https://lic.ut.edu.vn/",
+      "status": "collected",
+      "title": "Trang chủ - Trung tâm Thông tin - Thư viện",
+      "characters": 1497,
+      "sha256": "edf795a620a208b6ef73bd318ef8f744da3328d635283234e751e43718913490",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/co-so-binh-thanh/",
+      "status": "collected",
+      "title": "Cơ sở Bình Thạnh - Trung tâm Thông tin - Thư viện",
+      "characters": 567,
+      "sha256": "0968d8a4e5cc1c92b6e12b45e93118ed0f4f3164a1f562d9262688269236b290",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/co-so-quan-12/",
+      "status": "collected",
+      "title": "Cơ sở Quận 12 - Trung tâm Thông tin - Thư viện",
+      "characters": 326,
+      "sha256": "63965fd99ec05c0c857255a32aee5314283efa43d86541c806c7a5cc3d02e398",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/co-so-tp-thu-duc/",
+      "status": "collected",
+      "title": "Cơ sở TP Thủ Đức - Trung tâm Thông tin - Thư viện",
+      "characters": 334,
+      "sha256": "fc908fe1bacf38ec66ec302d566a5934b4fb88aa9eb69a4778d44704233a71f3",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/",
+      "status": "collected",
+      "title": "Dịch vụ thư viện - Trung tâm Thông tin - Thư viện",
+      "characters": 12,
+      "sha256": "30e2495a09c9707d901ecfe4210f88d4f8fca7621947c0d1b7bd6bdd07ce5499",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/ho-tro-nhanh/",
+      "status": "collected",
+      "title": "Hỗ Trợ Nhanh - Trung tâm Thông tin - Thư viện",
+      "characters": 441,
+      "sha256": "2031267bbaa30ad90e175062c4f8cd077beb85fd368e0c71613daa5bbcf6c772",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/hoc-tap-ca-nhan-hoc-nhom/",
+      "status": "collected",
+      "title": "Học tập cá nhân, học nhóm - Trung tâm Thông tin - Thư viện",
+      "characters": 12,
+      "sha256": "30e2495a09c9707d901ecfe4210f88d4f8fca7621947c0d1b7bd6bdd07ce5499",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/huong-dan-su-dung-tai-nguyen-thu-vien/",
+      "status": "collected",
+      "title": "Khai thác tài nguyên số, cơ sở dữ liệu mở - Trung tâm Thông tin - Thư viện",
+      "characters": 274,
+      "sha256": "3d4da03244c0233c6a541c57e876748393f8946ad62e6b98cc0405a57e0c99e3",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/khai-thac-tai-nguyen-so-du-lieu-hoc-tap/",
+      "status": "collected",
+      "title": "Khai thác tài nguyên số, dữ liệu học tập - Trung tâm Thông tin - Thư viện",
+      "characters": 12,
+      "sha256": "30e2495a09c9707d901ecfe4210f88d4f8fca7621947c0d1b7bd6bdd07ce5499",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/photo-scan-tai-lieu/",
+      "status": "collected",
+      "title": "Đào tạo, hướng dẫn người dùng sử dụng thư viện - Trung tâm Thông tin - Thư viện",
+      "characters": 344,
+      "sha256": "c50dce4e90f6a562a66c5dc87f38858843fce207a87c804b4f3657010c51f3b3",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-muon-tra-tai-lieu/",
+      "status": "collected",
+      "title": "Phục vụ mượn - trả tài liệu - Trung tâm Thông tin - Thư viện",
+      "characters": 929,
+      "sha256": "b0c0f47ef725d381fbe774a60eb01e07bd4d95f8771685e9ccfdb4764ada3797",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-phong-doc/",
+      "status": "collected",
+      "title": "Phục vụ phòng đọc (Cá nhân/ Nhóm/ Nghiên cứu) - Trung tâm Thông tin - Thư viện",
+      "characters": 596,
+      "sha256": "0344a4b16d806a0026bdabeffa57cbc85afa1d208d63eeabe73c7f10e2d5d413",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/su-dung-may-tinh-internet/",
+      "status": "collected",
+      "title": "Sử dụng máy tính - Trung tâm Thông tin - Thư viện",
+      "characters": 464,
+      "sha256": "b512c8ac89afd213487432ad85398a4d617246a16c926b2e5ecdf5fa51c1daef",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/tra-cuu-tai-lieu-va-tim-kiem-thong-tin/",
+      "status": "collected",
+      "title": "Tra cứu tài liệu - Tìm kiếm thông tin OPAC - Trung tâm Thông tin - Thư viện",
+      "characters": 59,
+      "sha256": "b0d0d97300ce2ccf73e891cf02d4346fc5094f5648fcca218fb584cc29f6b915",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/xuat-ban-phat-hanh-tai-lieu/",
+      "status": "collected",
+      "title": "Xuất bản, phát hành tài liệu - Trung tâm Thông tin - Thư viện",
+      "characters": 197,
+      "sha256": "15a967330352d648d76faa9f9b37cfd9fb1f2a41158c3bb0d672e8ae69b53265",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/ho-tro-kich-hoat-the/",
+      "status": "collected",
+      "title": "HỖ TRỢ KÍCH HOẠT THẺ - Trung tâm Thông tin - Thư viện",
+      "characters": 1611,
+      "sha256": "129a505b494e9397e388a1ad534a6e1bd3b8e4995644bdcd14d74f04abcea18b",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/lien-he/",
+      "status": "collected",
+      "title": "Liên hệ - Trung tâm Thông tin - Thư viện",
+      "characters": 209,
+      "sha256": "cccbe4ed5ce929244863e588fa639a976fd2686d6abc15bc5d259aa438177176",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/nghiep-vu-thu-vien/",
+      "status": "failed",
+      "error": "Nguồn không chứa văn bản có thể nhập."
+    },
+    {
+      "url": "https://lic.ut.edu.vn/noi-quy-thu-vien-2/",
+      "status": "collected",
+      "title": "NỘI QUY THƯ VIỆN - Trung tâm Thông tin - Thư viện",
+      "characters": 4178,
+      "sha256": "625923c016ad376f9a7e99f32a90b618952bc58a7a72c6cc624a232dae32eb41",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/noi-quy-thu-vien/",
+      "status": "collected",
+      "title": "Nội quy thư viên - Trung tâm Thông tin - Thư viện",
+      "characters": 4240,
+      "sha256": "9599017d9dc146c8abbe1cf69fd7b933b4962f43fc015a68583b1d56a18ce102",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/phat-trien-tai-nguyen-thong-tin/",
+      "status": "failed",
+      "error": "Nguồn không chứa văn bản có thể nhập."
+    },
+    {
+      "url": "https://lic.ut.edu.vn/quy-dinh-muon-tra-tai-lieu/",
+      "status": "collected",
+      "title": "Quy định mượn - trả tài liệu - Trung tâm Thông tin - Thư viện",
+      "characters": 3126,
+      "sha256": "f7083d9023e0c9ef3642505f496dab41e7e0e190153b0e71a51785f301b74517",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/tai-nguyen-thong-tin-thu-vien/",
+      "status": "collected",
+      "title": "Tài nguyên thông tin thư viện - Trung tâm Thông tin - Thư viện",
+      "characters": 372,
+      "sha256": "c0e5d59908a6acf2f7048b40ff4444f7dd9897697f879ac86c543d8cef9dd387",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/tai-nguyen-thong-tin-thu-vien/nguon-tai-nguyen-mo/",
+      "status": "collected",
+      "title": "NGUỒN TÀI NGUYÊN MỞ - Trung tâm Thông tin - Thư viện",
+      "characters": 5953,
+      "sha256": "b7fc2b8508d973b6015ac4abd4af64d3114514359332d4e031bdd1933e283719",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/thong-bao-v-v-sinh-vien-mac-dong-phuc-cua-truong-khi-den-thu-vien/",
+      "status": "collected",
+      "title": "THÔNG BÁO V/v Sinh viên mặc đồng phục của trường khi đến Thư viện - Trung tâm Thông tin - Thư viện",
+      "characters": 1605,
+      "sha256": "58547bef031cc5279c008090ce551e265901650a4c955d6e925644ccb05dab15",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/thong-bao-ve-viec-khai-thac-cac-co-so-du-lieu/",
+      "status": "collected",
+      "title": "THÔNG BÁO Về việc khai thác các cơ sở dữ liệu - Trung tâm Thông tin - Thư viện",
+      "characters": 3659,
+      "sha256": "68907d7294ea38fea88de2b104c083b8e6ab958f405d99d8fec0a364d5c52515",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/thong-bao-ve-viec-mo-cua-phuc-vu-ban-doc-ngoai-gio/",
+      "status": "collected",
+      "title": "Thông báo về việc mở cửa phục vụ bạn đọc ngoài giờ - Trung tâm Thông tin - Thư viện",
+      "characters": 2777,
+      "sha256": "d8460efe0cfb2c2fcbe427de93f8b7dea2a8980bcc31d6e80252fece4578a33c",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/thong-tin-cac-tai-lieu-co-ban-quyen-da-duoc-xay-dung-va-trien-khai-tren-cac-he-thong-cua-nha-truong/",
+      "status": "collected",
+      "title": "Thông tin các tài liệu có bản quyền đã được xây dựng và triển khai trên các hệ thống của Nhà trường - Trung tâm Thông tin - Thư viện",
+      "characters": 3933,
+      "sha256": "160e3a34ac2b308ca8ca6234f8abcbfe4b4ce7b39f9f023c5b60c0f2f9b8e2ad",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/thu-vien-dien-tu/",
+      "status": "collected",
+      "title": "Thư viên điện tử - Trung tâm Thông tin - Thư viện",
+      "characters": 955,
+      "sha256": "f916fd1d190dfd86740866021197ed847c6382fd9cffb50bef050756117830f9",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/tong-quan/",
+      "status": "collected",
+      "title": "Tổng Quan - Trung tâm Thông tin - Thư viện",
+      "characters": 1344,
+      "sha256": "ab183b37ea9bc7408bdd68b5af4eca6ae6db73df0db83a095c71fe66443b88e1",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/trung-tam-thong-tin-thu-vien-uth-va-thu-vien-truong-dai-hoc-bach-khoa-dai-hoc-quoc-gia-tp-hcm-ky-ket-bien-ban-ghi-nho-hop-tac/",
+      "status": "collected",
+      "title": "UTH và ĐH Bách Khoa TP.HCM ký hợp tác Thư viện – Mở rộng dịch vụ và tài nguyên học thuật - Trung tâm Thông tin - Thư viện",
+      "characters": 2104,
+      "sha256": "4efeb0e7fc56db18e34027783349c98c557e494e4d1a3ac83aa6be355be4f4a2",
+      "use": "provenance inventory; raw text is not auto-published"
+    },
+    {
+      "url": "https://lic.ut.edu.vn/v-v-trien-khai-dich-vu-muon-lien-thu-vien-giua-trung-tam-thong-tin-thu-vien-truong-dh-giao-thong-van-tai-tp-hcm-va-thu-vien-truong-dh-bach-khoa-dhqg-hcm/",
+      "status": "collected",
+      "title": "V/v Triển khai Dịch vụ mượn liên thư viện giữa  Trung tâm Thông tin – Thư viện Trường ĐH Giao thông vận tải TP. HCM  và Thư viện Trường ĐH Bách Khoa-ĐHQG-HCM - Trung tâm Thông tin - Thư viện",
+      "characters": 1485,
+      "sha256": "463a118b9367d398fd40523bd975456de9894d4223ee3df9b318fab2de3998ce",
+      "use": "provenance inventory; raw text is not auto-published"
+    }
+  ],
+  "scope": "Public LIC library-service information only; not a full OPAC catalog, book full text or reader records",
+  "pdf": {
+    "url": "https://lic.ut.edu.vn/wp-content/uploads/2022/10/1.-HD-su-dung-thu-vien-va-khai-thac-hieu-qua-cac-CSDL-tai-nguyen-thong-tin-thu-vien.pdf",
+    "sha256": "a4fde70b0a2ccdc7b8b8a4acb72b78d9af2084301f15805bee6312758d507ff7",
+    "bytes": 4744147,
+    "pages": 33,
+    "hours_page": 12,
+    "effective_interval": "not confirmed",
+    "review": "page 12 text extracted and rendered for visual verification"
+  },
+  "curated_pack": "data/faq/public-library-2026-10-31.json",
+  "exclusions": [
+    "Media and student/staff profile material",
+    "Unrelated IT services and news",
+    "Casino/spam-like sitemap entries",
+    "Placeholder pages",
+    "Public example credentials in old notices",
+    "Unverified fees, loan periods, branch-room locations and current hours"
+  ],
+  "raw_snapshots": "Ignored local tmp/library-sources-2026-10-31; not imported into RAG or committed"
+}

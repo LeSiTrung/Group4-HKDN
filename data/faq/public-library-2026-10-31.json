@@ -1,0 +1,94 @@
+[
+  {
+    "title":"Lịch phục vụ thường lệ theo tài liệu hướng dẫn LIC",
+    "question":"Giờ mở cửa thường lệ của thư viện UTH là bao nhiêu?",
+    "aliases":["Giờ mở cửa mặc định","Lịch phục vụ thư viện","Thư viện mở cửa mấy giờ?"],
+    "keywords":["giờ mở cửa","thường lệ","mặc định","thời gian phục vụ"],
+    "answer":"Lịch thường lệ tham khảo theo tài liệu hướng dẫn chính thức của LIC, trang 12:\n• Cơ sở 1 (Bình Thạnh theo tên trong tài liệu): thứ Hai–thứ Sáu 07:30–20:30, phục vụ thông trưa; thứ Bảy 07:30–17:30.\n• Cơ sở 2 (TP. Thủ Đức theo tên trong tài liệu): thứ Hai–thứ Sáu 07:30–12:00 và 13:00–16:30, có nghỉ trưa.\n• Cơ sở 3 (Quận 12 theo tên trong tài liệu): thứ Hai–thứ Sáu và thứ Bảy 07:30–16:30, phục vụ thông trưa.\nTài liệu không ghi lịch Chủ nhật và lịch ngày lễ; không tự hiểu là đóng cửa. Chưa xác nhận khoảng ngày hiệu lực hiện tại, nên đây là lịch tham khảo, không khẳng định thư viện đang mở hôm nay. Hãy kiểm tra thông báo mới hoặc liên hệ thư viện trước khi đến; thông báo ngoài giờ năm 2022 có khung giờ khác.",
+    "category":"hours_reference",
+    "source_url":"https://lic.ut.edu.vn/wp-content/uploads/2022/10/1.-HD-su-dung-thu-vien-va-khai-thac-hieu-qua-cac-CSDL-tai-nguyen-thong-tin-thu-vien.pdf#page=12",
+    "source_title":"LIC UTH — Hướng dẫn sử dụng thư viện, trang 12",
+    "checked_at":"2026-10-31","status":"needs_confirmation","published":true
+  },
+  {
+    "title":"Sử dụng phòng đọc",
+    "question":"Cần làm gì khi sử dụng phòng đọc của thư viện?",
+    "aliases":["Quy tắc phòng đọc","Vào phòng đọc cần mang gì?"],
+    "keywords":["phòng đọc","đọc tại chỗ","dụng cụ học tập"],
+    "answer":"Theo trang Phục vụ phòng đọc của LIC, bạn đọc xuất trình thẻ cán bộ, giảng viên hoặc sinh viên; mang máy tính cá nhân, sách, tập vở và dụng cụ học tập. Có thể tìm tài liệu trên máy tính hoặc trong kho, xem sơ đồ kho và bảng chỉ dẫn kệ, rồi mang tài liệu đến quầy thủ thư làm thủ tục. Không tự mang tài liệu ra khỏi phòng đọc. Đọc xong, xếp ghế gọn và trả tài liệu đúng nơi quy định.",
+    "category":"reading_room","source_url":"https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-phong-doc/",
+    "source_title":"LIC UTH — Phục vụ phòng đọc","checked_at":"2026-10-31","status":"reviewed_public","published":true
+  },
+  {
+    "title":"Máy tính và Internet trong thư viện",
+    "question":"Tôi có thể sử dụng máy tính và Internet tại thư viện thế nào?",
+    "aliases":["Dùng máy tính thư viện","Thư viện có máy tính nối mạng không?"],
+    "keywords":["máy tính","internet","thiết bị","bàn phím"],
+    "answer":"Trang Sử dụng máy tính & Internet hướng dẫn xuất trình thẻ cán bộ, giảng viên hoặc sinh viên, rồi chọn máy để tra cứu và học tập. Chỉ dùng máy cho học tập, tìm thông tin phục vụ nghiên cứu; không tự điều chỉnh, di chuyển hoặc thay đổi thiết bị khi chưa được phép. Báo thủ thư khi phát hiện hư hỏng, mất mát. Trước khi ra về, tắt máy và xếp ghế, chuột, bàn phím ngay ngắn. Nguồn này không xác nhận số máy còn trống theo thời gian thực.",
+    "category":"computers","source_url":"https://lic.ut.edu.vn/dich-vu-thu-vien/su-dung-may-tinh-internet/",
+    "source_title":"LIC UTH — Sử dụng máy tính & Internet","checked_at":"2026-10-31","status":"reviewed_public","published":true
+  },
+  {
+    "title":"Các bước làm thủ tục mượn tại quầy",
+    "question":"Làm thủ tục mượn tài liệu tại quầy như thế nào?",
+    "aliases":["Mượn sách tại quầy thủ thư","Cần chuẩn bị gì để mượn sách?"],
+    "keywords":["thủ tục mượn","quầy thủ thư","xuất trình thẻ","mượn tại quầy"],
+    "answer":"Theo trang Phục vụ mượn–trả tài liệu, bạn đọc xuất trình thẻ, tra tìm tài liệu bằng máy tính hoặc trong kho, dùng sơ đồ và bảng chỉ dẫn kệ để xác định tài liệu, rồi mang sách ra quầy thủ thư làm thủ tục ghi mượn. Kiểm tra tình trạng tài liệu trước khi nhận; không tự mang tài liệu ra ngoài khi chưa làm thủ tục. Hạn mức, hạn trả, phí và quyền gia hạn hiện hành cần kiểm tra với thư viện vì các trang quy định công khai còn khác nhau.",
+    "category":"borrowing_guide","source_url":"https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-muon-tra-tai-lieu/",
+    "source_title":"LIC UTH — Phục vụ mượn–trả tài liệu","checked_at":"2026-10-31","status":"reviewed_public","published":true
+  },
+  {
+    "title":"Danh mục hướng dẫn cơ sở dữ liệu",
+    "question":"Tìm hướng dẫn sử dụng từng cơ sở dữ liệu thư viện ở đâu?",
+    "aliases":["Hướng dẫn Giant ebook","Hướng dẫn CSDL khoa học công nghệ Việt Nam","Tài liệu hướng dẫn STINET"],
+    "keywords":["hướng dẫn cơ sở dữ liệu","giant ebook","stinet","khoa học công nghệ","hướng dẫn từng nguồn"],
+    "answer":"Trang Hướng dẫn sử dụng tài nguyên thư viện tập hợp các hướng dẫn cho ProQuest Central, EBOOK UT–XD, Giant ebook, STINET, CSDL Công bố KH&CN Việt Nam, CSDL Nhiệm vụ KH&CN Việt Nam, thư viện số và Thư viện Viện Khoa học và Công nghệ GTVT. Mở nguồn bên dưới rồi chọn hướng dẫn đúng hệ thống. Việc có hướng dẫn không đồng nghĩa tài khoản của bạn có quyền truy cập hoặc tải mọi tài liệu.",
+    "category":"resources","source_url":"https://lic.ut.edu.vn/dich-vu-thu-vien/huong-dan-su-dung-tai-nguyen-thu-vien/",
+    "source_title":"LIC UTH — Hướng dẫn sử dụng tài nguyên thư viện","checked_at":"2026-10-31","status":"reviewed_public","published":true
+  },
+  {
+    "title":"Nguồn học liệu mở tiếng Việt",
+    "question":"Thư viện giới thiệu những nguồn học liệu mở tiếng Việt nào?",
+    "aliases":["Nguồn luận văn luận án tiếng Việt","Tra cứu VOER qua thư viện"],
+    "keywords":["học liệu mở tiếng Việt","voer","luận án tiếng Việt","thư viện quốc gia"],
+    "answer":"Danh mục Nguồn tài nguyên mở của LIC giới thiệu CSDL luận án tiến sĩ của Thư viện Quốc gia Việt Nam, thư viện luận văn–luận án của Bộ Giáo dục và Đào tạo, thư viện số Đại học Quốc gia Hà Nội và học liệu mở VOER, cùng những nguồn khác. Mở danh mục chính thức để chọn đúng nguồn. Số lượng tài liệu và điều kiện sử dụng trong giới thiệu có thể thay đổi; hãy kiểm tra giấy phép và quyền truy cập tại nguồn gốc trước khi tải hoặc tái sử dụng.",
+    "category":"resources","source_url":"https://lic.ut.edu.vn/tai-nguyen-thong-tin-thu-vien/nguon-tai-nguyen-mo/",
+    "source_title":"LIC UTH — Nguồn tài nguyên mở","checked_at":"2026-10-31","status":"reviewed_public","published":true
+  },
+  {
+    "title":"Nguồn học liệu mở ngoại văn",
+    "question":"Có nguồn sách và tạp chí mở ngoại văn nào do thư viện giới thiệu?",
+    "aliases":["DOAB DOAJ là nguồn nào trong thư viện?","Tìm Project Gutenberg qua thư viện"],
+    "keywords":["học liệu mở ngoại văn","doab","doaj","gutenberg","springer"],
+    "answer":"Danh mục tài nguyên mở của LIC có DOAB cho sách truy cập mở, DOAJ cho tạp chí truy cập mở, Project Gutenberg và Springer Open Journals. Bạn có thể mở danh mục của LIC để đến từng nguồn. Kiểm tra giấy phép của tài liệu cụ thể; một trang được giới thiệu là tài nguyên mở không bảo đảm mọi tài liệu đều được tải, chia sẻ hoặc dùng lại theo cùng điều kiện.",
+    "category":"resources","source_url":"https://lic.ut.edu.vn/tai-nguyen-thong-tin-thu-vien/nguon-tai-nguyen-mo/",
+    "source_title":"LIC UTH — Nguồn tài nguyên mở","checked_at":"2026-10-31","status":"reviewed_public","published":true
+  },
+  {
+    "title":"Hướng dẫn truy cập ProQuest theo thông báo công khai",
+    "question":"Vì sao tôi có thể cần dùng mạng của trường để truy cập ProQuest?",
+    "aliases":["ProQuest ở ngoài trường có dùng được không?","ProQuest yêu cầu mạng nội bộ"],
+    "keywords":["proquest","mạng nội bộ","ngoài trường","wifi trường"],
+    "answer":"Thông báo khai thác CSDL ngày 06/09/2022 của LIC hướng dẫn dùng mạng nội bộ của trường để truy cập ProQuest Central trong khuôn viên. Đây là hướng dẫn trong thông báo cũ, chưa xác nhận phương thức truy cập từ xa hoặc quyền thuê bao hiện nay. Hãy mở hướng dẫn mới nhất của LIC hoặc nhờ thư viện hỗ trợ; chatbot không cung cấp tài khoản hay mật khẩu dùng chung.",
+    "category":"resources","source_url":"https://lic.ut.edu.vn/thong-bao-ve-viec-khai-thac-cac-co-so-du-lieu/",
+    "source_title":"LIC UTH — Thông báo khai thác CSDL, 06/09/2022","checked_at":"2026-10-31","status":"needs_confirmation","published":true
+  },
+  {
+    "title":"Học nhóm và đặt phòng",
+    "question":"Có thể đặt phòng học nhóm trong thư viện qua chatbot không?",
+    "aliases":["Đặt phòng học nhóm thư viện","Đăng ký chỗ học nhóm"],
+    "keywords":["học nhóm","đặt phòng","đăng ký phòng"],
+    "answer":"Trang Học tập cá nhân, học nhóm của LIC hiện chỉ có nội dung chờ cập nhật, chưa cung cấp quy trình đặt phòng hoặc lịch trống. Chatbot chưa có kết nối đặt phòng nên không thể xác nhận chỗ hay thực hiện đăng ký. Bạn hãy liên hệ thư viện để hỏi điều kiện sử dụng thực tế.",
+    "category":"support","source_url":"https://lic.ut.edu.vn/dich-vu-thu-vien/hoc-tap-ca-nhan-hoc-nhom/",
+    "source_title":"LIC UTH — Học tập cá nhân, học nhóm","checked_at":"2026-10-31","status":"needs_confirmation","published":true
+  },
+  {
+    "title":"Dịch vụ mượn liên thư viện",
+    "question":"UTH có thông tin về dịch vụ mượn liên thư viện với Đại học Bách khoa không?",
+    "aliases":["Mượn liên thư viện","Mượn sách thư viện Bách khoa"],
+    "keywords":["liên thư viện","bách khoa","hợp tác thư viện"],
+    "answer":"Website LIC có thông báo triển khai dịch vụ mượn liên thư viện giữa UTH và Thư viện Trường Đại học Bách khoa–ĐHQG-HCM. Nội dung thủ tục nằm trong tệp đính kèm, chưa được đối chiếu đầy đủ trong kho chatbot. Hãy mở thông báo hoặc liên hệ LIC để xác nhận đối tượng, thủ tục, chi phí và thời điểm áp dụng; chatbot chưa thực hiện giao dịch mượn liên thư viện.",
+    "category":"support","source_url":"https://lic.ut.edu.vn/v-v-trien-khai-dich-vu-muon-lien-thu-vien-giua-trung-tam-thong-tin-thu-vien-truong-dh-giao-thong-van-tai-tp-hcm-va-thu-vien-truong-dh-bach-khoa-dhqg-hcm/",
+    "source_title":"LIC UTH — Thông báo dịch vụ mượn liên thư viện","checked_at":"2026-10-31","status":"needs_confirmation","published":true
+  }
+]

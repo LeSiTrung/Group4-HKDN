@@ -26,6 +26,8 @@ Checked 2026-10-28. The application provides contract-tested adapters. Public OP
 
 ## OPAC public search
 
+Rà soát31/10/2026: HTTP trực tiếp đọc được LIC và robots cho phép thu thập. OPAC robots trả `Disallow: /` và `Crawl-delay: 10`; yêu cầu từ chối phải được xử lý trước delay, không hiểu thành được phép nếu chạy chậm hơn. Đã dừng kế hoạch thu toàn bộ catalog tự động; cần nguồn xuất/API được cấp phép. Manifest nguồn LIC có tại `data/documents/lic-source-manifest-2026-10-31.json`. Được truy cập trang công khai không đồng nghĩa có quyền tải toàn văn sách hoặc dữ liệu bạn đọc.
+
 The parser uses the public search page observed in [the OPAC survey](khao-sat-opac-2026-10-28.md):
 
 `https://opacthuvien.ut.edu.vn/opac/Oshow.aspx?rdSearchOption=0&txtSearch=...`
