@@ -77,6 +77,7 @@ def detail(row_id:int,request:Request):
     row=public_book(request.app.state.db,row_id)
     if not row:
         raise HTTPException(404,'Không tìm thấy biểu ghi đã công bố.')
-    query=row['author'] or row['subjects'] or row['title']
-    related=[r for r in search_local(request.app.state.db,query) if r['id']!=row_id][:3]
+    author=next((value.strip() for value in row['author'].split(';') if value.strip()),'')
+    query=author or row['subjects'] or row['title']
+    related=[r for r in search_local(request.app.state.db,query,field='author' if author else 'all') if r['id']!=row_id][:3]
     return {**row,'related':related,'warning':'Metadata có nguồn và ngày rà soát; không phải trạng thái lưu thông hiện tại.'}

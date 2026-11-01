@@ -6,7 +6,7 @@ from .knowledge import published_rows, today
 from .rag_service import keyword_search, normalize
 from .retrieval import retrieve_knowledge
 from .llm_service import generate_answer, provider_name, MAX_MODEL_MESSAGE_CHARS
-from .catalog import contextual_question,is_book_request,book_query,search_books,book_attribute,book_followup
+from .catalog import contextual_question,is_book_request,book_query,search_books,book_attribute,book_followup,selected_title,author_query
 from urllib.parse import urlencode
 
 SUGGESTIONS = ['Hướng dẫn tra cứu OPAC','Thư viện mở cửa lúc mấy giờ hôm nay?','Tôi muốn gia hạn sách']
@@ -21,7 +21,7 @@ def result(answer,status='answered',sources=None,suggestions=None,mode='faq'):
 
 
 def library_subject(question):
-    return bool(re.search(r'\b(thu vien|opac|uth|lic|sach|tai lieu|gia han|qua han|han tra|muon tra|mo cua|dong cua|gio phuc vu|lich phuc vu|proquest|stinet|xep gia|isbn|ddc|ebook)\b',normalize(question)))
+    return bool(re.search(r'\b(thu vien|opac|uth|lic|sach|tai lieu|luan van|luan an|khoa luan|do an|giao trinh|bai giang|gia han|qua han|han tra|muon tra|mo cua|dong cua|gio phuc vu|lich phuc vu|proquest|stinet|xep gia|isbn|ddc|ebook)\b',normalize(question)))
 
 
 def outside_definition(question):
@@ -70,18 +70,36 @@ def answer_question(state, question, history=None):
         if re.search(r'\b(khong phai|ngoai tru|loai tru|mo cua|gio phuc vu|gia han|phi|phat|qua han|han tra)\b',q):
             return result('Câu hỏi có điều kiện loại trừ hoặc nhiều yêu cầu khác nhau. Bạn vui lòng hỏi riêng tên/chủ đề sách cần tìm, sau đó hỏi về dịch vụ để mình đối chiếu đúng từng nguồn.', 'clarify',suggestions=SUGGESTIONS)
         query=book_query(question)
+        if len(query)>200:
+            return result('Từ khóa tra cứu quá dài để đối chiếu danh mục trong một lượt. Bạn hãy gửi tên tài liệu, tác giả hoặc chủ đề ngắn hơn; tin nhắn đã nhận không bị cắt để tìm kiếm.', 'clarify')
         if query:
-            books=search_books(state,query)[:5]
+            if author_query(question):
+                books=search_books(state,query,field='author')
+                selection=selected_title([{'role':'user','content':question}])
+                titles=[b for b in search_books(state,selection,field='title') if normalize(b['title'])==selection] if selection else []
+                if books and titles:
+                    choices=list({b['id']:b for b in titles+books}.values())[:5]
+                    return {**result('Cụm từ có thể là nhan đề hoặc tên tác giả. Bạn hãy mở Tra cứu tài liệu và chọn “Nhan đề” hoặc “Tác giả” để xác định.','clarify'),
+                            'books':choices,'context_query':question}
+                books=titles or books
+            else:
+                books=search_books(state,query)
+            attribute=book_attribute(original_q)
+            if history and book_followup(original_q) and attribute:
+                selection=selected_title(history)
+                exact=[b for b in books if normalize(b['title'])==selection]
+                if exact:
+                    books=exact
+            books=books[:5]
             if books:
-                answer=f'Mình tìm được {len(books)} biểu ghi phù hợp trong danh mục đã rà soát. Xem tên sách, nguồn và ngày kiểm tra bên dưới. Đây là bản chụp metadata; để biết còn sách hoặc hạn mượn, hãy kiểm tra trực tiếp OPAC.'
+                answer=f'Mình tìm được {len(books)} biểu ghi phù hợp trong danh mục đã rà soát. Xem tên tài liệu, nguồn và ngày kiểm tra bên dưới. Đây là bản chụp metadata; quyền truy cập hoặc tình trạng mượn cần kiểm tra tại nguồn gốc.'
                 status='answered'
-                attribute=book_attribute(original_q)
                 if attribute=='availability':
-                    answer='Metadata đang có không xác nhận tình trạng còn bản sách theo thời gian thực. Hãy mở biểu ghi OPAC gốc bên dưới hoặc hỏi thư viện trước khi đến mượn.'
+                    answer='Metadata đang có không xác nhận tình trạng còn bản sách theo thời gian thực. Hãy mở biểu ghi nguồn bên dưới hoặc hỏi thư viện trước khi đến mượn.'
                     status='needs_confirmation'
                 elif history and book_followup(original_q) and attribute:
                     if len(books)>1:
-                        return {**result('Có nhiều tài liệu trong ngữ cảnh. Bạn vui lòng chọn nhan đề cụ thể.','clarify',suggestions=['Tìm sách '+b['title'] for b in books[:3]]),'books':books,'context_query':query}
+                        return {**result('Có nhiều tài liệu trong ngữ cảnh. Bạn vui lòng chọn nhan đề cụ thể.','clarify',suggestions=['Tìm sách '+b['title'] for b in books[:3]]),'books':books,'context_query':question}
                     if attribute in ('author','year') and books[0][attribute].strip():
                         label='tác giả' if attribute=='author' else 'năm xuất bản'
                         answer=f"Theo biểu ghi nguồn, {label} của “{books[0]['title']}” là {books[0][attribute]}."
@@ -89,10 +107,10 @@ def answer_question(state, question, history=None):
                         label={'isbn':'ISBN','shelf':'vị trí kệ / ký hiệu xếp giá','publisher':'nhà xuất bản','author':'tác giả','year':'năm xuất bản'}[attribute]
                         answer=f'Biểu ghi đang có chưa xác nhận {label}. Bạn hãy mở nguồn gốc hoặc hỏi thư viện; mình không tự suy đoán thông tin này.'
                         status='needs_confirmation'
-                return {**result(answer,status,sources=[{'title':b['title'],'url':b['url'],'checked_at':b['checked_at']} for b in books]),'books':books,'context_query':query}
+                return {**result(answer,status,sources=[{'title':b['title'],'url':b['url'],'checked_at':b['checked_at']} for b in books]),'books':books,'context_query':question}
             url='https://opacthuvien.ut.edu.vn/opac/Oshow.aspx?'+urlencode({'rdSearchOption':0,'txtSearch':query})
             return {**result('Chưa có biểu ghi phù hợp trong danh mục đã rà soát của chatbot. Điều này không chứng minh thư viện không có sách. Bạn có thể tìm tiếp trên OPAC hoặc nhập tên/tác giả cụ thể hơn.',
-                            'not_found',sources=[{'title':'Tìm trực tiếp trên OPAC','url':url,'checked_at':None}]),'books':[],'context_query':query}
+                            'not_found',sources=[{'title':'Tìm trực tiếp trên OPAC','url':url,'checked_at':None}]),'books':[],'context_query':question}
     if re.search(r'\b(mo cua|dong cua|lich phuc vu|gio phuc vu|thoi gian phuc vu)\b',q):
         branches=set(re.findall(r'\b(?:co so|cs)\s*(\d+)\b',q))
         if len(branches)!=1 or not branches<={'1','2','3'}:
