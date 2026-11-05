@@ -17,12 +17,13 @@ from app.api.channels import router as channels_router
 from app.services.knowledge import seed, published_rows
 from app.services.rag_service import VectorIndex
 from app.services.assistant import answer_question
-from app.services.llm_service import provider_name
+from app.services.llm_service import provider_name,check_model
 from app.api.catalog import router as catalog_router
 from app.services.catalog import seed_books
 from app.config import ROOT
 import asyncio
 import os
+import sqlite3
 from pathlib import Path
 from fastapi.staticfiles import StaticFiles
 
@@ -85,6 +86,19 @@ def create_app(data_dir=None, testing=False):
                                 'library_configured':bool(os.getenv('LIBRARY_RENEW_URL')),
                                 'messenger_configured':bool(os.getenv('MESSENGER_PAGE_ACCESS_TOKEN')),
                                 'zalo_configured':bool(os.getenv('ZALO_ACCESS_TOKEN'))}}
+
+    @app.get('/ready')
+    def ready():
+        database=False
+        try:
+            with app.state.db() as db:
+                database=db.execute('SELECT 1 FROM knowledge LIMIT 1').fetchone() is not None
+        except (OSError,sqlite3.Error):
+            pass
+        model=provider_name()=='none' or check_model()['ready']
+        available=database and model
+        return JSONResponse({'status':'ready' if available else 'unavailable',
+                             'checks':{'database':database,'model':model}},status_code=200 if available else 503)
 
     dist=ROOT.parent/'frontend'/'dist'
     if dist.is_dir():

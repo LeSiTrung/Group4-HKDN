@@ -17,9 +17,10 @@ services:
       proxy:
       model:
     depends_on:
-      - ollama
+      ollama:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=5).close()"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/ready',timeout=5).close()"]
       interval: 30s
       timeout: 10s
       start_period: 20s
@@ -51,12 +52,17 @@ services:
     logging:
       options: {max-size: "10m", max-file: "3"}
   ollama:
-    image: ollama/ollama:0.40.2
+    image: ollama/ollama:0.40.13
     restart: unless-stopped
     volumes:
       - ollama:/root/.ollama
     networks:
       - model
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 15s
+      timeout: 5s
+      retries: 4
     logging:
       options: {max-size: "10m", max-file: "3"}
 volumes:
