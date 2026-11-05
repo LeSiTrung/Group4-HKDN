@@ -181,13 +181,68 @@ def search_books(state,query,kind='all',field='all'):
     return results
 
 
+def is_borrowing_procedure(question):
+    q=normalize(unquoted_text(question))
+    borrowing=re.search(r'\bmuon '+_DOCUMENT_TYPES+r'\b',q)
+    if not borrowing:
+        return False
+    lookup=re.search(r'\b'+_FIND_DOCUMENT+r'\b',q)
+    if lookup:
+        # A completed lookup can be context for a new question about the desk.
+        previous_lookup = re.search(r'\b(?:da|sau khi) $', q[:lookup.start()])
+        desk = re.search(r'\b(?:tai|o|ra|den) quay\b', q[borrowing.end():])
+        if not (lookup.start() < borrowing.start() and previous_lookup and desk):
+            return False
+    return bool(re.search(r'\b(chuan bi|thu tuc|quy trinh|dieu kien|can (?:lam|mang|the)|lam gi|giay to|the sinh vien|cach|lam the nao|lam sao|(?:nhu )?the nao|ra sao|huong dan|online|truc tuyen|opac)\b',q))
+
+
+def unquoted_text(question):
+    # Quoted titles are data, even when they contain instructional phrases.
+    return re.sub(_QUOTED_TEXT,'chủ đề',question)
+
+
+def search_guidance(question):
+    """Resolve how-to lookup questions to reviewed FAQ topics, not book titles."""
+    if is_borrowing_procedure(question):
+        return None
+    q=normalize(unquoted_text(question))
+    quoted=re.split(r'["“\'‘«]',question,maxsplit=1)
+    if len(quoted)>1 and re.fullmatch(_SEARCH_LEAD+_FIND_DOCUMENT,normalize(quoted[0])):
+        return None
+    lookup=re.search(r'\b(tim|kiem|tra cuu|truy cap|tai (?:ebook|sach|tai lieu)|(?:su dung|dung) opac|opac (?:su dung|dung))\b',q)
+    if not lookup or not re.search(r'\b('+_DOCUMENT_TYPES+r'|opac|ebook|thu vien)\b',q):
+        return None
+    how=re.search(r'\b(huong dan|hdsd|cach|lam the nao|lam sao|quy trinh|cac buoc|chi (?:cho )?(?:toi|minh|em)|khong biet)\b',q)
+    ending=re.search(r'\b((?:nhu )?the nao|ra sao|bang cach nao|o dau|(?:can|phai) lam gi)(?: (?:a|vay|nhi|khong))?$',q)
+    missing=re.search(r'\b(khong (?:co|ra) ket qua|khong tim thay)\b',q)
+    # A leading search command may contain a title such as "Hướng dẫn lập trình".
+    if not (how and how.start()<lookup.start()) and not ending and not missing:
+        return None
+    if missing:
+        return 'OPAC không có kết quả thì làm sao?'
+    if re.search(r'\b(ebook|(?:tai lieu|sach) (?:so|dien tu))\b',q):
+        return 'Tìm tài liệu số và tải ebook thế nào?'
+    if re.search(r'\b(nang cao|and|or|not)\b',q):
+        return 'Dùng tìm kiếm nâng cao AND OR NOT thế nào?'
+    if re.search(r'\b(tac gia|nhan de|theo ten|nha xuat ban|nam xuat ban)\b',q):
+        return 'Tìm theo tác giả hoặc nhan đề như thế nào?'
+    if re.search(r'\bsach (?:truyen thong|giay|in)\b',q):
+        return 'Tìm sách truyền thống trên OPAC thế nào?'
+    return 'Hướng dẫn tra cứu OPAC'
+
+
 def is_book_request(question):
-    q=normalize(question)
+    q=normalize(unquoted_text(question))
+    if search_guidance(question) or is_borrowing_procedure(question) or (re.search(r'\bmuon '+_DOCUMENT_TYPES+r'\b',q) and re.search(r'\b(bao lau|bao nhieu ngay|han tra|thoi han)\b',q)):
+        return False
     if re.fullmatch(r'(?:tim|tra cuu) '+_DOCUMENT_TYPES+r'(?: (?:(?:va|hoac) )?'+_DOCUMENT_TYPES+r')*',q):
         return False
-    if re.search(r'\bco (sach|cuon|quyen)\b',q) and re.search(r'\b(qua han|phi|phat|han tra|gia han)\b',q):
+    if re.search(r'\bco (sach|cuon|quyen)\b',q) and re.search(r'\b(qua han|phi|'+PENALTY_WORD+r'|han tra|gia han)\b',q):
         return False
-    return bool(re.search(r'\b((?:tim|tra cuu) '+_DOCUMENT_TYPES+r'|co (?:sach|cuon|quyen) .+|sach ve|sach cua|sach tuong tu|goi y sach|sach danh cho)\b',q)) and not any(x in q for x in ('huong dan','cach tim','lam sao','nhu the nao','o dau','vao dau'))
+    if structured_book_query(question):
+        return True
+    explicit=re.match(r'^'+_SEARCH_LEAD+_FIND_DOCUMENT+r'\b',q)
+    return bool(re.search(r'\b('+_FIND_DOCUMENT+r'|co (?:sach|cuon|quyen) .+|sach ve|sach cua|sach tuong tu|sach danh cho|(?:nen|muon|can) (?:doc )?'+_DOCUMENT_TYPES+r'|'+_DOCUMENT_TYPES+r' (?:nao|gi))\b',q)) and (bool(explicit) or not any(x in q for x in ('huong dan','cach tim','lam sao','nhu the nao','o dau','vao dau')))
 
 
 def book_attribute(question):
@@ -205,7 +260,7 @@ def book_attribute(question):
 
 def book_followup(question):
     q=normalize(question)
-    return bool(re.search(r'^(co cuon|cuon nao|sach nay|sach do|cuon nay|cuon do|con khong|con ban|con sach|con muon|co san|danh cho|nguoi moi|nang cao|tuong tu|tac gia|ai viet|nam xuat ban|xuat ban|isbn|o ke|co bao nhieu ban)',q)) and not any(x in q for x in ('huong dan','cach tim','nhu the nao'))
+    return bool(re.search(r'^(co (?:cuon|quyen|sach)|cuon nao|sach nay|sach do|cuon nay|cuon do|con khong|con ban|con sach|con muon|co san|danh cho|cho nguoi moi|nguoi moi|nang cao|tuong tu|tac gia|ai viet|nam xuat ban|xuat ban|isbn|o ke|co bao nhieu ban)',q) or re.fullmatch(_TOPIC_REFINEMENT,q)) and not any(x in q for x in ('huong dan','cach tim','nhu the nao'))
 
 
 def author_query(question):
@@ -213,20 +268,46 @@ def author_query(question):
     return match[1] if match else None
 
 
+def structured_book_query(question):
+    quoted=re.search(r'('+_QUOTED_TEXT+r')\s*[?.!]?\s*$',question)
+    if quoted and re.fullmatch(_SEARCH_LEAD+_FIND_DOCUMENT,normalize(question[:quoted.start()])):
+        title=normalize(quoted[1][1:-1])
+        if title:
+            return 'title',title
+    match=re.fullmatch(_SEARCH_LEAD+r'(?:tim|tra cuu|kiem)(?: '+_DOCUMENT_TYPES+r')? theo (nhan de|ten|tac gia) (.+)',normalize(question))
+    if match:
+        return ('author' if match[1]=='tac gia' else 'title'),match[2]
+    return None
+
+
 def book_query(question):
+    structured=structured_book_query(question)
+    if structured:
+        return structured[1]
     author=author_query(question)
     if author:
         return author
     q=normalize(question)
-    q=re.sub(r'\b(?:tim|tra cuu) '+_DOCUMENT_TYPES+r'\b',' ',q,count=1)
+    q=re.sub(r'^(?:hay|vui long|lam on) ','',q)
+    interrogative=bool(re.match(r'^co '+_DOCUMENT_TYPES+r'\b',q))
+    wrapper=r'(?:(?:toi|minh|em|ban) )?(?:'+_FIND_DOCUMENT+r'|(?:(?:co|(?:nen|muon|can)(?: doc)?) )?'+_DOCUMENT_TYPES+r'(?: (?:nao|gi))?)'
+    q=re.sub(r'^'+wrapper+r'\b','',q,count=1).strip()
+    q=re.sub(r'^(?:ve|tuong tu|theo chu de|theo ten)\b','',q)
+    q=re.sub(r'\bco '+_DOCUMENT_TYPES+r' (?:nao|gi)\b',' ',q)
+    q=re.sub(r'\b(?:nen|can) doc '+_DOCUMENT_TYPES+r'(?: (?:gi|nao))?$','',q)
     q=re.split(r'\b(?:con muon|muon duoc|con ban|con sach|co san|bao nhieu ban|tinh trang)\b',q,maxsplit=1)[0]
-    q=re.sub(r'\b(toi|minh|ban|co|khong|tim|sach|tai lieu|tra cuu|ve|theo|cho|giup|quyen|cuon|nao|danh|nguoi|viet|muon|goi y|tuong tu|cua)\b',' ',q)
+    if interrogative:
+        q=re.sub(r'^giup (?:toi|minh|em|ban) (?:hieu )?','',q)
+        q=re.sub(r'\bkhong$','',q)
     return ' '.join(q.split())
 
 
 def contextual_question(question,history):
     q=normalize(question)
-    if is_book_request(question) and not re.search(r'^co (?:cuon|quyen|sach) (?:nao|do|nay)\b',q):
+    if search_guidance(question):
+        return question
+    new_topic=re.search(r'^co (?:cuon|quyen|sach) nao (?:.*\bve |hoc (?!co ban\b|nhap mon\b|nang cao\b|tu dau\b|khong\b))\S+',q)
+    if is_book_request(question) and (not re.search(r'^co (?:cuon|quyen|sach) (?:nao|do|nay)\b',q) or new_topic):
         return question
     if re.fullmatch(r'(?:co so|cs)\s*[123]',q):
         previous=next((m['content'] for m in reversed(history or []) if m['role']=='user'),None)
@@ -235,12 +316,17 @@ def contextual_question(question,history):
     if not book_followup(question):
         return question
     attribute=book_attribute(question)
+    refinement=re.fullmatch(_TOPIC_REFINEMENT,q)
     for turn in reversed(history or []):
         if turn.get('context_query'):
+            if refinement:
+                return 'Gợi ý sách '+refinement[1]
             context=turn['context_query']
             return (context if is_book_request(context) else 'Tìm sách về '+context)+('' if attribute else ' '+question)
         if turn['role']=='user':
             if is_book_request(turn['content']):
+                if refinement:
+                    return 'Gợi ý sách '+refinement[1]
                 return turn['content']+('' if attribute else ' '+question)
             if not book_followup(turn['content']):
                 break
@@ -252,6 +338,9 @@ def selected_title(history):
         if turn['role']!='user':
             continue
         if is_book_request(turn['content']):
+            structured=structured_book_query(turn['content'])
+            if structured:
+                return structured[1] if structured[0]=='title' else ''
             match=re.fullmatch(_BOOK_PREFIX+r' (.+)',normalize(turn['content']))
             return match[1] if match else ''
         if not book_followup(turn['content']):

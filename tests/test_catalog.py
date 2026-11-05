@@ -33,7 +33,7 @@ def test_semantic_kind_filter_keeps_complete_index_inventory(client,monkeypatch)
         return [(row,.9) for row in documents if row['id'] in (source_ids or set())]
     monkeypatch.setattr(state.vectors,'search',search)
     for kind in ('books','digital'):
-        result=search_books(state,'Unmatched term xzyq',kind)
+        result=search_books(state,'Python practical exercises',kind)
         assert result and all(row['kind']==kind for row in result)
         assert {row['id'] for row in rows}<={d['id'] for d in calls[-1][0]}
         with state.db() as db:
