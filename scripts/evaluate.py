@@ -52,6 +52,12 @@ def main():
             os.environ['ENABLE_VECTORS'] = 'false'
             from fastapi.testclient import TestClient
             from app.main import create_app
+            from app.services.integrations import IntegrationError
+            from collections import OrderedDict
+            from unittest.mock import patch
+            # Offline runs have no live observations, including cached OPAC counts.
+            stack.enter_context(patch('app.services.opac_availability._cache', OrderedDict()))
+            stack.enter_context(patch('app.services.opac_availability._fetch', side_effect=IntegrationError('Offline evaluation')))
             directory = stack.enter_context(tempfile.TemporaryDirectory())
             client = stack.enter_context(TestClient(create_app(Path(directory), testing=True), headers={'X-Requested-With': 'LibraryAssistant'}))
         health = client.get('/health')
@@ -69,7 +75,7 @@ def main():
             results.append({'id': case['id'], 'passed': not errors, 'errors': errors, 'elapsed_ms': elapsed, 'response': data})
             print(f"{'PASS' if not errors else 'FAIL'} {case['id']}: {elapsed} ms" + ('; ' + '; '.join(errors) if errors else ''), flush=True)
         report = {'recorded_at': datetime.now(timezone.utc).isoformat(), 'kind': 'development regression; not held-out or library-validated',
-                  'execution': args.base_url or 'isolated deterministic TestClient; vectors/LLM disabled',
+                  'execution': args.base_url or 'isolated deterministic TestClient; vectors/LLM disabled; live availability unavailable',
                   'capabilities': capabilities, 'passed': sum(r['passed'] for r in results), 'total': len(results), 'results': results}
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

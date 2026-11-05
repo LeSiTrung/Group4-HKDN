@@ -1,0 +1,14 @@
+[
+  {"id":"borrow-preparation","message":"Tôi cần chuẩn bị gì để mượn sách?","status":"answered","mode":"faq","no_books":true,"source":"phuc-vu-muon-tra-tai-lieu","contains":"xuất trình thẻ"},
+  {"id":"borrow-preparation-no-accent","message":"Toi can chuan bi gi de muon sach?","status":"answered","mode":"faq","no_books":true,"source":"phuc-vu-muon-tra-tai-lieu","contains":"xuất trình thẻ"},
+  {"id":"borrow-paperwork","message":"Mượn sách cần mang những giấy tờ gì?","status":"answered","mode":"faq","no_books":true,"source":"phuc-vu-muon-tra-tai-lieu","contains":"xuất trình thẻ"},
+  {"id":"borrow-after-search","message":"Tôi cần chuẩn bị gì để mượn sách?","history":[{"role":"user","content":"Tìm sách Python"}],"status":"answered","mode":"faq","no_books":true,"source":"phuc-vu-muon-tra-tai-lieu"},
+  {"id":"natural-it","message":"hãy tìm cho tôi những sách để học IT tốt hơn","status":"answered","book":"Bài giảng","source":"opacthuvien.ut.edu.vn"},
+  {"id":"natural-it-no-accent","message":"hay tim cho toi nhung sach de hoc CNTT tot hon","status":"answered","book":"Bài giảng","source":"opacthuvien.ut.edu.vn"},
+  {"id":"python-beginner","message":"Gợi ý cho mình vài cuốn Python cho người mới bắt đầu","status":"answered","book":"Python","source":"opacthuvien.ut.edu.vn"},
+  {"id":"beginner-followup","message":"Có cuốn nào cho người mới bắt đầu không?","history":[{"role":"user","content":"hãy tìm cho tôi những sách để học IT tốt hơn"}],"status":"answered","book":"nhập môn","source":"opacthuvien.ut.edu.vn"},
+  {"id":"refine-topic","message":"Mình muốn tập trung vào mạng máy tính","history":[{"role":"user","content":"Gợi ý sách Python"}],"status":"answered","book":"mạng máy tính"},
+  {"id":"mechanics-title","message":"Tìm sách Olympic cơ học","status":"answered","book":"Olympic cơ học"},
+  {"id":"missing-recommendation","message":"Gợi ý sách zzz999888777nosuch","status":"not_found","no_books":true},
+  {"id":"policy-kept","message":"Gợi ý sách Python và phí phạt là bao nhiêu?","status":"clarify","no_books":true}
+]

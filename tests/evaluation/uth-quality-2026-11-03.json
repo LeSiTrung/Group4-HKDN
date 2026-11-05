@@ -1,0 +1,10 @@
+[
+  {"id":"publishing-accented","message":"Thư viện hỗ trợ phát hành tài liệu không?","status":"answered","source":"xuat-ban-phat-hanh"},
+  {"id":"publishing-no-accent","message":"Thu vien ho tro phat hanh tai lieu khong?","status":"answered","source":"xuat-ban-phat-hanh"},
+  {"id":"development-title","message":"Tìm sách phát triển phần mềm","status":"answered"},
+  {"id":"development-no-accent","message":"Tim sach phat trien phan mem","status":"answered"},
+  {"id":"real-fee-still-unknown","message":"Phí phạt quá hạn hôm nay bao nhiêu?","status":"needs_confirmation"},
+  {"id":"printed-python-provenance","message":"Tìm sách Python","status":"answered","source":"opacthuvien.ut.edu.vn"},
+  {"id":"missing-title-no-invention","message":"Tìm sách zzzz999888777nosuch","status":"not_found","no_books":true},
+  {"id":"library-scope","message":"Thủ đô của Pháp là gì?","status":"not_found","no_books":true}
+]

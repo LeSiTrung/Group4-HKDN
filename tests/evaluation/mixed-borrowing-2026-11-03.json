@@ -1,0 +1,9 @@
+[
+  {"id":"desk-and-fee","message":"Tôi cần chuẩn bị gì để mượn sách và phí là bao nhiêu?","status":"needs_confirmation","source":"phuc-vu-muon-tra-tai-lieu","contains":"xuất trình thẻ","no_books":true},
+  {"id":"online-and-term","message":"Hướng dẫn mượn sách online và được mượn bao nhiêu ngày?","status":"needs_confirmation","source":"pdf#page=7","contains":"Đăng ký mượn","no_books":true},
+  {"id":"desk-and-return-date","message":"Làm thế nào để mượn sách tại quầy và khi nào phải trả?","status":"needs_confirmation","source":"phuc-vu-muon-tra-tai-lieu","contains":"Trang cá nhân trên OPAC","no_books":true},
+  {"id":"desk-and-renewal","message":"Tôi cần chuẩn bị gì để mượn sách và được gia hạn mấy lần?","status":"needs_confirmation","source":"phuc-vu-muon-tra-tai-lieu","contains":"Điều kiện và số lần gia hạn","no_books":true},
+  {"id":"reserve-versus-renew","message":"Đặt chỗ mượn sách khác gia hạn thế nào?","status":"answered","source":"pdf#page=7","contains":"gia hạn là kéo dài hạn trả","no_books":true},
+  {"id":"desk-after-opac","message":"Tôi đã tra cứu sách trên OPAC, giờ muốn mượn sách tại quầy thì làm gì?","status":"answered","source":"phuc-vu-muon-tra-tai-lieu","contains":"xuất trình thẻ","no_books":true},
+  {"id":"desk-after-search","message":"Sau khi tìm sách trên OPAC, làm thế nào để mượn sách tại quầy?","status":"answered","source":"phuc-vu-muon-tra-tai-lieu","contains":"xuất trình thẻ","no_books":true}
+]
