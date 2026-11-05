@@ -87,6 +87,11 @@ def _process(request, channel, events):
     for recipient, message_id, text in events:
         if not all(isinstance(value, str) and value.strip() for value in (recipient, message_id, text)) or len(recipient) > 200 or len(message_id) > 300 or len(text) > 4000:
             continue
+        try:
+            for value in (recipient,message_id,text):
+                value.encode('utf-8')
+        except UnicodeEncodeError:
+            continue
         event_key = _claim(request, channel, recipient, message_id)
         if event_key is None:
             continue

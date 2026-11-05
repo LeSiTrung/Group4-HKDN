@@ -91,6 +91,7 @@ def _generate(messages, schema):
         answer = result.get('answer')
         if not isinstance(answer,str) or not answer.strip() or len(answer)>6000:
             return None
+        answer.encode('utf-8')
         if re.search(r'đã (gia hạn|đặt mượn|đặt sách|đăng ký|hủy đặt)|(?:gia hạn|đặt mượn|đặt sách|hủy đặt) thành công|(?:I have|I\'ve|successfully) (?:renewed|reserved|cancelled|canceled|borrowed)',answer,re.I):
             return None
         result['answer'] = answer.strip()
