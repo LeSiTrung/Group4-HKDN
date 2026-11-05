@@ -128,7 +128,8 @@ class VectorIndex:
                 existing, offset = {}, None
                 if exists:
                     while True:
-                        page, offset = self.client.scroll(collection, offset=offset, limit=256,
+                        # Local Qdrant sorts the full ID set for each scroll page.
+                        page, offset = self.client.scroll(collection, offset=offset, limit=4096,
                                                           with_payload=True, with_vectors=False)
                         existing.update((str(point.id), point.payload) for point in page)
                         if offset is None:

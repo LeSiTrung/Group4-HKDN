@@ -10,8 +10,15 @@ from pydantic import BaseModel, Field, field_validator
 from .knowledge import KnowledgeInput, today
 from .rag_service import normalize, tokens
 
-_DOCUMENT_TYPES=r'(?:sach|tai lieu|cuon|quyen|luan van|luan an|khoa luan|do an|giao trinh|bai giang)'
+_DOCUMENT_TYPES=r'(?:sach|tai lieu|(?:cuon|quyen)(?: (?:sach|tai lieu))?|luan van|luan an|khoa luan|do an|giao trinh|bai giang)'
 _BOOK_PREFIX=r'(?:(?:tim|tra cuu) '+_DOCUMENT_TYPES+r'|sach)'
+_FIND_DOCUMENT=r'(?:tim|tra cuu|kiem|goi y|de xuat|tu van|gioi thieu)(?: (?:cho|giup|toi|minh|ban|nhung|cac|vai|mot|so|em|0*[1-9][0-9]*))* '+_DOCUMENT_TYPES
+_SEARCH_LEAD=r'(?:(?:hay|vui long|lam on) )?(?:(?:toi|minh|em|ban) )?'
+_QUOTED_TEXT=r'"[^"]*"|“[^”]*”|\'[^\']*\'|‘[^’]*’|«[^»]*»'
+_TOPIC_REFINEMENT=r'^(?:(?:toi|minh|em) )?(?:muon )?tap trung (?:vao|ve) (.+)$'
+_SEARCH_NOISE={'tim','sach','tai','lieu','theo','quyen','cuon','tac','gia','chu','de','nguoi'}
+# Accent folding merges "phạt" with "phát"; these library phrases are not penalties.
+PENALTY_WORD = r'phat(?! (?:hanh(?! (?:vi|chinh|khach)\b)|trien)\b)'
 
 
 class BookInput(BaseModel):
@@ -79,6 +86,12 @@ def _similar_words(word,token):
     return matcher.quick_ratio()>=0.83 and matcher.ratio()>=0.83
 
 
+@lru_cache(maxsize=65536)
+def _normalized_metadata(text):
+    # Content keys reuse Unicode work while edits and withdrawals stay visible.
+    return normalize(text)
+
+
 def search_local(db_factory,query,kind='all',field='all'):
     if field not in ('all','title','author'):
         raise ValueError('Unsupported catalog field')
@@ -92,17 +105,17 @@ def search_local(db_factory,query,kind='all',field='all'):
         matched=[]
         for row in rows:
             values=row[field].split(';') if field=='author' else [row[field]]
-            values=[normalize(value) for value in values]
+            values=[_normalized_metadata(value) for value in values]
             if any(pattern.search(value) for value in values):
                 matched.append((item(row),normalized in values))
         matched.sort(key=lambda pair:(not pair[1],pair[0]['id']))
         return [row for row,_ in matched]
-    words=tokens(query)-{'tim','sach','tai','lieu','theo','quyen','cuon','tac','gia','chu','de','nguoi','viet'}
+    words=tokens(query)-_SEARCH_NOISE
     if not words:
-        return []
+        return [item(row) for row in rows if _normalized_metadata(row['title'])==normalized]
     ranked=[]
     for row in rows:
-        text=normalize(' '.join(row[k] for k in ('title','author','year','subjects','description')))
+        text=_normalized_metadata(' '.join(row[k] for k in ('title','author','year','subjects','description')))
         corpus=set(text.split())
         matched=len(words&corpus)
         for word in words-corpus:
@@ -121,7 +134,7 @@ def search_local(db_factory,query,kind='all',field='all'):
         title_hits=len(words&tokens(row['title']))
         author_hits=len(words&tokens(row['author']))
         ranked.append((item(row),coverage+title_hits*0.15+author_hits*0.1))
-    ranked.sort(key=lambda pair:(normalize(pair[0]['title'])!=normalized,-pair[1],pair[0]['id']))
+    ranked.sort(key=lambda pair:(_normalized_metadata(pair[0]['title'])!=normalized,-pair[1],pair[0]['id']))
     return [r for r,_ in ranked]
 
 
@@ -138,6 +151,10 @@ def book_documents(rows):
 
 def search_books(state,query,kind='all',field='all'):
     matched=search_local(state.db,query,kind,field)
+    if field=='all' and matched:
+        phrase=re.compile(r'(?<!\w)'+re.escape(normalize(query))+r'(?!\w)')
+        precise=[b for b in matched if phrase.search(_normalized_metadata(b['title']+' '+b['subjects']))]
+        matched=precise or matched
     # Single-term identifiers need a lexical match, not an unrelated vector suggestion.
     if field!='all' or matched or len(tokens(query))<2 or state.settings.testing or os.getenv('ENABLE_VECTORS','true').lower()!='true':
         return matched
@@ -147,15 +164,20 @@ def search_books(state,query,kind='all',field='all'):
     if not documents:
         return []
     try:
-        source_ids={row['id'] for row in rows if kind=='all' or row['kind']==kind}
+        # All published rows already define the index; a huge MatchAny filter is redundant.
+        source_ids=None if kind=='all' else {row['id'] for row in rows if row['kind']==kind}
         hits=state.vectors.search(query,documents,namespace='books',source_ids=source_ids)
     except Exception:
         return []
+    words=tokens(query)-_SEARCH_NOISE
     results=[]
     for row,_ in hits:
         current=public_book(state.db,row['id'])
         if current and (kind=='all' or current['kind']==kind):
-            results.append(current)
+            corpus=set(_normalized_metadata(' '.join(current[k] for k in ('title','subjects','description'))).split())
+            # shortcut: synonyms without lexical evidence are omitted until semantic precision is validated.
+            if words&corpus or any(len(word)>=4 and any(len(token)>=4 and _similar_words(word,token) for token in corpus) for word in words):
+                results.append(current)
     return results
 
 

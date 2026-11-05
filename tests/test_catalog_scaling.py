@@ -81,3 +81,63 @@ def test_document_guidance_and_non_search_requests_are_not_catalog_search(questi
 
 def test_document_words_inside_a_title_are_not_removed_as_a_type_prefix():
     assert 'luan van' in catalog.book_query('Tìm sách hướng dẫn viết luận văn')
+
+
+def reference_search(store,query,kind='all'):
+    from app.services.rag_service import normalize,tokens
+    words=tokens(query)-{'tim','sach','tai','lieu','theo','quyen','cuon','tac','gia','chu','de','nguoi','viet'}
+    if not words:
+        return []
+    with store.connect() as db:
+        rows=db.execute('SELECT * FROM books WHERE published=1').fetchall()
+    ranked=[]
+    for row in rows:
+        if kind!='all' and row['kind']!=kind:
+            continue
+        corpus=set(normalize(' '.join(row[k] for k in ('title','author','year','subjects','description'))).split())
+        matched=len(words&corpus)
+        for word in words-corpus:
+            if len(word)>=4 and any(len(token)>=4 and SequenceMatcher(None,word,token).ratio()>=0.83 for token in corpus):
+                matched+=1
+        coverage=matched/len(words)
+        if coverage>=0.6:
+            score=coverage+len(words&tokens(row['title']))*0.15+len(words&tokens(row['author']))*0.1
+            ranked.append((row,score))
+    ranked.sort(key=lambda pair:(normalize(pair[0]['title'])!=normalize(query),-pair[1],pair[0]['id']))
+    return [row['id'] for row,_ in ranked]
+
+
+@pytest.mark.parametrize('query',['Python cơ bản','python co ban','pythom','nguyen van an','logistics','vận tải biển','sách','zzzzzz'])
+@pytest.mark.parametrize('kind',['all','books','digital'])
+def test_metadata_cache_preserves_reference_ranking(store,query,kind):
+    add(store,'Python cơ bản',subjects='Lập trình; logistics',description='Vận tải biển')
+    add(store,'Python cơ bản nâng cao',kind='digital',subjects='Logistics')
+    add(store,'Vận tải biển',description='Python cho người mới')
+    draft=add(store,'Python cơ bản')
+    with store.connect() as db:
+        db.execute('UPDATE books SET published=0 WHERE id=?',(draft['id'],))
+    expected=reference_search(store,query,kind)
+    for _ in range(2):
+        assert [r['id'] for r in catalog.search_local(store.connect,query,kind)]==expected
+
+
+@pytest.mark.parametrize('field',['all','title','author'])
+def test_unchanged_metadata_reuses_normalization_but_edits_are_immediate(store,monkeypatch,field):
+    row=add(store,'Python cơ bản')
+    calls=[]
+    original=catalog.normalize
+    def counted(value):
+        calls.append(value)
+        return original(value)
+    catalog._normalized_metadata.cache_clear()
+    monkeypatch.setattr(catalog,'normalize',counted)
+    query='Nguyễn Văn An' if field=='author' else 'Python'
+    assert catalog.search_local(store.connect,query,field=field)
+    calls.clear()
+    assert catalog.search_local(store.connect,query,field=field)
+    assert all(value==query for value in calls)
+    with store.connect() as db:
+        db.execute("UPDATE books SET title='Máy tính',author='Trần Bình' WHERE id=?",(row['id'],))
+    assert catalog.search_local(store.connect,query,field=field)==[]
+    replacement='Trần Bình' if field=='author' else 'Máy tính'
+    assert [r['id'] for r in catalog.search_local(store.connect,replacement,field=field)]==[row['id']]
