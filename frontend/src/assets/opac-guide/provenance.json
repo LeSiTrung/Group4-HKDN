@@ -1,0 +1,32 @@
+{
+  "source_url": "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf",
+  "source_sha256": "3eb7a16a5e30e61bb35a581aaa228ad32b3914a00c4ed52b1cf083b028953f56",
+  "source_bytes": 1821058,
+  "rendering": "pypdfium2 whole pages; longest edge1600; WebPquality92; no invented annotations or credentials pages",
+  "pages": [
+    {
+      "page": 3,
+      "file": "opac-page-3.webp",
+      "width": 1237,
+      "height": 1600,
+      "bytes": 134052,
+      "sha256": "02b546ea8bc5a37b972eb451ce1a3bd5885f6de2117d8b346982493be4e83d7c"
+    },
+    {
+      "page": 4,
+      "file": "opac-page-4.webp",
+      "width": 1237,
+      "height": 1600,
+      "bytes": 181256,
+      "sha256": "86b90cf1d2d8010ead7eaa673057c2be4edec3483e4b67a321d3384f542a8b8b"
+    },
+    {
+      "page": 6,
+      "file": "opac-page-6.webp",
+      "width": 1237,
+      "height": 1600,
+      "bytes": 120012,
+      "sha256": "3bf240d42e57e8044040e94321c8cd34acf249b8f3fae9ed3388f89c54fdb92d"
+    }
+  ]
+}

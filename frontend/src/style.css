@@ -141,6 +141,14 @@ input:focus, textarea:focus, select:focus { border-color: var(--primary); }
 .message-main { min-width: 0; flex: 1; }
 .message-meta { display: flex; align-items: center; gap: 10px; margin: 4px 0 10px; font-size: 11px; flex-wrap: wrap; }
 .message-content { font-size: 14px; line-height: 1.9; white-space: pre-wrap; overflow-wrap: anywhere; }
+.guide-image { max-width: 540px; margin: 18px 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.guide-preview { display: block; width: 100%; padding: 0; border: 0; background: #fff; cursor: zoom-in; }
+.guide-preview img { display: block; width: 100%; height: auto; max-height: 360px; object-fit: contain; }
+.guide-preview > span { display: flex; justify-content: center; align-items: center; gap: 7px; min-height: 44px; background: var(--surface); color: var(--primary); font-size: 12px; }
+.guide-image figcaption { padding: 12px; font-size: 12px; line-height: 1.7; }
+.guide-image figcaption > strong { display: block; }
+.guide-note { color: var(--muted); font-size: 12px; line-height: 1.7; margin: 7px 0; }
+.guide-full-image { display: block; width: 100%; height: auto; margin-bottom: 12px; }
 .user-message .message-content { background: #eef2eb; border: 1px solid #e1e7dc; border-radius: 0 12px 12px 12px; padding: 12px 16px; width: fit-content; max-width: 100%; }
 .message-status { margin-top: 14px; }
 .badge { font-size: 9px; font-weight: 500; line-height: 1.5; border-radius: 5px; padding: 4px 7px; color: #53685a; background: #edf2e9; display: inline-block; overflow-wrap: anywhere; }

@@ -14,6 +14,12 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals() })
 const response = value => ({ ok: true, status: 200, json: async () => value })
 
+it.each(['available', 'unavailable', 'unknown'])('distinguishes checked OPAC availability from unknown snapshots: %s', status => {
+  render(<ChatMessage item={{ role: 'assistant', content: 'Thông tin từ nguồn.', books: [{ id: 1, title: 'Sách thử nghiệm', url: 'https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1', availability_snapshot: { status } }] }} onSpeak={() => {}} />)
+  expect(screen.getByText(status === 'unknown' ? /chưa xác nhận tình trạng còn sách hiện tại/ : /tình trạng sách được ghi nhận tại thời điểm/)).toBeTruthy()
+  expect(fetch).not.toHaveBeenCalled()
+})
+
 it('labels local catalog snapshots and paginates the submitted query', async () => {
   fetch.mockResolvedValueOnce(response({ source: 'local', total: 21, page: 1, page_size: 20, items: [{ id: 1, title: 'Python từ nguồn thật', author: 'Tác giả', checked_at: '2026-10-28', url: 'https://example.edu/book/1' }] })).mockResolvedValueOnce(response({ source: 'local', total: 21, page: 2, page_size: 20, items: [{ id: 2, title: 'Biểu ghi trang hai', url: 'https://example.edu/book/2' }] }))
   render(<Catalog />)
@@ -77,7 +83,7 @@ it('rejects invalid import JSON before network and imports a valid array atomica
 it('renders only supplied book records in the chat answer', () => {
   render(<ChatMessage item={{ role: 'assistant', content: 'Tài liệu có trong danh mục đã đối chiếu.', books: [{ id: 1, title: 'Sách có nguồn', author: 'Tác giả thật', url: 'https://example.edu/real-record', checked_at: '2026-10-28' }] }} onSpeak={() => {}} />)
   expect(screen.getByRole('link', { name: /Sách có nguồn/ }).href).toBe('https://example.edu/real-record')
-  expect(screen.getByText(/không phải tình trạng mượn thời gian thực/)).toBeTruthy()
+  expect(screen.getByText(/chưa xác nhận tình trạng còn sách hiện tại/)).toBeTruthy()
 })
 
 it('does not imply that an unchecked search link has been verified', () => {

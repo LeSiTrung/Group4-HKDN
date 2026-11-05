@@ -22,6 +22,7 @@ from app.api.catalog import router as catalog_router
 from app.services.catalog import seed_books
 from app.config import ROOT
 import asyncio
+import mimetypes
 import os
 import sqlite3
 from pathlib import Path
@@ -102,6 +103,7 @@ def create_app(data_dir=None, testing=False):
 
     dist=ROOT.parent/'frontend'/'dist'
     if dist.is_dir():
+        mimetypes.add_type('image/webp', '.webp')
         app.mount('/',StaticFiles(directory=dist,html=True),name='frontend')
 
     return app
