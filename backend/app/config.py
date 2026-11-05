@@ -13,6 +13,7 @@ class Settings:
     testing: bool = False
     secure_cookies: bool = False
     origins: tuple = ('http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:8000', 'http://127.0.0.1:8000')
+    demo_reservations: bool = False
 
     @classmethod
     def load(cls, data_dir=None, testing=False):
@@ -25,4 +26,5 @@ class Settings:
             directory=anchored
         return cls(directory.resolve(), testing,
                    os.getenv('COOKIE_SECURE', 'false').lower() == 'true',
-                   tuple(x.strip().rstrip('/') for x in os.getenv('ALLOWED_ORIGINS', ','.join(cls.origins)).split(',') if x.strip()))
+                   tuple(x.strip().rstrip('/') for x in os.getenv('ALLOWED_ORIGINS', ','.join(cls.origins)).split(',') if x.strip()),
+                   os.getenv('ENABLE_DEMO_RESERVATIONS', 'false').lower() == 'true')

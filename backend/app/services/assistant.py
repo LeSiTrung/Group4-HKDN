@@ -56,6 +56,13 @@ def answer_question(state, question, history=None):
         return result('Mình đã nhận đầy đủ tin nhắn, nhưng nội dung vượt khả năng đọc trong một lượt của mô hình đang dùng. Bạn hãy chia thành các phần nhỏ hơn hoặc gửi riêng câu hỏi và đoạn cần hỗ trợ. Mình không âm thầm cắt nội dung để trả lời như đã đọc hết.', 'clarify')
     original_q=normalize(question)
     intent_q=normalize(unquoted_text(question))
+    reservation_request = re.match(r'^(?:(?:vay|the|ban|toi|minh|em|co|the|muon|hay|giup|vui|long) )*(?:dang k[iy] (?:muon|sach)|dat cho (?:muon|sach)|dat muon)\b', intent_q)
+    reservation_guidance = re.search(r'\b(?:khac|co phai|gia han|the nao|lam sao|opac)\b', intent_q)
+    if reservation_request and not reservation_guidance:
+        if getattr(state.settings, 'demo_reservations', False):
+            return result('Bạn có thể đăng ký mượn tại Thư viện mẫu. Hãy đăng nhập, chọn sách mẫu và xác nhận yêu cầu. Yêu cầu được lưu trong kho giả lập.', mode='demo_reservation')
+        return result('Bạn có thể đăng ký mượn trực tiếp trên OPAC. Hãy mở biểu ghi, đăng nhập bằng tài khoản thư viện và chọn “Đăng ký mượn” nếu có.',
+                      sources=[{'title':'Tra cứu và đăng ký trên OPAC','url':'https://opacthuvien.ut.edu.vn/opac/','checked_at':None}])
     for conjunction in re.finditer(r'\b(?:va|dong thoi|sau do)\b',intent_q):
         before,after=intent_q[:conjunction.start()].strip(),intent_q[conjunction.end():].strip()
         if (search_guidance(before) and is_book_request(after)) or (is_book_request(before) and re.match(r'^(?:huong dan|cach|lam the nao|lam sao)\b',after) and search_guidance(after)):

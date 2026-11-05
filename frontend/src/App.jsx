@@ -5,10 +5,12 @@ import Admin from './components/Admin.jsx'
 import Catalog from './components/Catalog.jsx'
 import ChatWindow from './components/ChatWindow.jsx'
 import Loans from './components/Loans.jsx'
+import DemoLibrary from './components/DemoLibrary.jsx'
 import { Empty, ErrorNotice, Icon, Modal } from './components/UI.jsx'
 
 const navigation = [{ id: 'chat', title: 'Trợ lý thư viện', icon: 'chat' }, { id: 'catalog', title: 'Tra cứu tài liệu', icon: 'search' }, { id: 'loans', title: 'Sách đang mượn', icon: 'book' }]
-const route = () => ['chat', 'catalog', 'loans', 'account', 'admin'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'chat'
+const demoLink = { id: 'demo-library', title: 'Thư viện mẫu', icon: 'book' }
+const route = () => ['chat', 'catalog', 'loans', 'account', 'admin', demoLink.id].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'chat'
 
 export default function App() {
   const [view, setView] = useState(route)
@@ -92,7 +94,9 @@ export default function App() {
     catch (err) { if (version === sessionVersion.current) setError(err.message) }
     finally { if (version === sessionVersion.current) setBusy(false) }
   }
-  const title = navigation.find(item => item.id === view)?.title || (view === 'admin' ? 'Quản trị thư viện' : 'Tài khoản')
+  const demoEnabled = health?.capabilities?.demo_reservations
+  const links = demoEnabled ? [...navigation, demoLink] : navigation
+  const title = [...navigation, demoLink].find(item => item.id === view)?.title || (view === 'admin' ? 'Quản trị thư viện' : 'Tài khoản')
   return <div className="app-shell">
     <a href="#main-content" className="skip-link" onClick={event => { event.preventDefault(); document.getElementById('main-content').focus() }}>Chuyển đến nội dung</a>
     {drawer && <button className="sidebar-backdrop" aria-label="Đóng điều hướng" onClick={() => setDrawer(false)} />}
@@ -101,7 +105,7 @@ export default function App() {
       <a className="brand" href="#chat" onClick={() => setDrawer(false)} aria-label="UTH Library, trang chủ"><span className="brand-symbol"><Icon name="book" size={26} /></span><span>UTH<span className="brand-light"> Library</span><small>THƯ VIỆN ĐẠI HỌC UTH</small></span></a>
       <button className="new-chat" onClick={() => openChat()}><Icon name="plus" size={18} />Cuộc trò chuyện mới</button>
       <span className="nav-label">KHÁM PHÁ</span>
-      <nav aria-label="Điều hướng chính">{navigation.map(item => <a key={item.id} href={`#${item.id}`} onClick={() => navigate(item.id)} className={`nav-link ${view === item.id ? 'active' : ''}`} aria-current={view === item.id ? 'page' : undefined}><Icon name={item.icon} /><span>{item.title}</span>{view === item.id && <span className="nav-active-dot" />}</a>)}{user?.role === 'admin' && <a href="#admin" onClick={() => navigate('admin')} className={`nav-link ${view === 'admin' ? 'active' : ''}`} aria-current={view === 'admin' ? 'page' : undefined}><Icon name="shield" /><span>Quản trị thư viện</span></a>}</nav>
+      <nav aria-label="Điều hướng chính">{links.map(item => <a key={item.id} href={`#${item.id}`} onClick={() => navigate(item.id)} className={`nav-link ${view === item.id ? 'active' : ''}`} aria-current={view === item.id ? 'page' : undefined}><Icon name={item.icon} /><span>{item.title}</span>{view === item.id && <span className="nav-active-dot" />}</a>)}{user?.role === 'admin' && <a href="#admin" onClick={() => navigate('admin')} className={`nav-link ${view === 'admin' ? 'active' : ''}`} aria-current={view === 'admin' ? 'page' : undefined}><Icon name="shield" /><span>Quản trị thư viện</span></a>}</nav>
       <div className="history-heading"><span className="nav-label">TRÒ CHUYỆN GẦN ĐÂY</span>{user && <button className="sidebar-icon" aria-label="Làm mới lịch sử" onClick={() => setHistoryVersion(current => current + 1)} disabled={historyLoading}><Icon name="refresh" size={14} /></button>}</div>
       <div className="history-list">{sessionLoading ? <p className="sidebar-note">Đang kiểm tra phiên…</p> : !user ? <div className="history-guest"><Icon name="clock" size={24} /><p>Giữ lại những điều<br />bạn đang khám phá.</p><button className="sidebar-text-button" onClick={() => { setDrawer(false); setAuth(true) }}>Đăng nhập để lưu lịch sử <Icon name="arrow" size={14} /></button></div> : <>{historyError && <p className="sidebar-note" role="alert">{historyError}</p>}{historyLoading && !history.length && <p className="sidebar-note">Đang tải lịch sử…</p>}{!historyLoading && !history.length && <p className="sidebar-note">Các cuộc trò chuyện của bạn sẽ xuất hiện ở đây.</p>}{history.map(item => <div className={`history-item ${activeId === item.id ? 'selected' : ''}`} key={item.id}><button className="history-open" onClick={() => openChat(item.id)} title={item.title}><Icon name="chat" size={15} /><span>{item.title}</span></button><button className="sidebar-icon history-delete" aria-label={`Xóa cuộc trò chuyện ${item.title}`} onClick={() => { setDrawer(false); setDeleting(item) }}><Icon name="trash" size={14} /></button></div>)}</>}</div>
       <div className="sidebar-bottom"><div className="sidebar-note source-assurance"><Icon name="shield" size={17} /><span>Khám phá tài liệu.<br />Tham khảo nguồn thư viện.</span></div>{user ? <button className="sidebar-account" onClick={() => navigate('account')}><span className="small-avatar">{user.name.slice(0, 1).toUpperCase()}</span><span><strong>{user.name}</strong><small>{user.role === 'admin' ? 'Quản trị viên' : 'Tài khoản bạn đọc'}</small></span><Icon name="arrow" size={16} /></button> : <button className="sidebar-account" disabled={sessionLoading} onClick={() => { setDrawer(false); setAuth(true) }}><span className="small-avatar"><Icon name="user" size={17} /></span><span><strong>Đăng nhập / Đăng ký</strong><small>Không gian dành riêng cho bạn</small></span><Icon name="arrow" size={16} /></button>}</div>
@@ -112,6 +116,7 @@ export default function App() {
         <div hidden={view !== 'chat'} className="chat-host"><ChatWindow key={`${user?.id || 'guest'}-${chatKey}`} user={user} conversationId={openedId} onCreated={id => { setActiveId(id); if (user) setHistoryVersion(current => current + 1) }} /></div>
         {view === 'catalog' && <Catalog />}
         {view === 'loans' && <Loans key={user?.id || 'guest'} user={user} onLogin={() => setAuth(true)} />}
+        {view === demoLink.id && <DemoLibrary key={user?.id || 'guest'} enabled={health ? Boolean(demoEnabled) : undefined} user={user} sessionLoading={sessionLoading} onLogin={() => setAuth(true)} />}
         {view === 'account' && user && <Account user={user} health={health} onLogout={() => logout().catch(() => {})} onDeleted={() => { resetSession(); navigate('chat') }} />}
         {view === 'admin' && user?.role === 'admin' && <Admin user={user} />}
         {(['account', 'admin'].includes(view) && (!user || (view === 'admin' && user.role !== 'admin'))) && <div className="content-page"><Empty icon="shield" title={sessionLoading ? 'Đang kiểm tra phiên…' : user ? 'Chỉ dành cho quản trị viên' : 'Vui lòng đăng nhập'}>{user ? 'Tài khoản của bạn không có quyền truy cập trang này.' : 'Đăng nhập để mở không gian của bạn.'}</Empty>{!user && !sessionLoading && <button className="primary center-button" onClick={() => setAuth(true)}>Đăng nhập</button>}</div>}

@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.chat import router as chat_router
+from app.api.demo_reservations import router as demo_reservations_router
 from app.api.auth import router as auth_router
 from app.api.history import router as history_router
 from app.api.feedback_review import router as feedback_review_router
@@ -78,11 +79,13 @@ def create_app(data_dir=None, testing=False):
     app.include_router(library_router, prefix='/api')
     app.include_router(channels_router, prefix='/api')
     app.include_router(catalog_router,prefix='/api')
+    if settings.demo_reservations:
+        app.include_router(demo_reservations_router, prefix='/api')
 
     @app.get('/health')
     def health():
         return {'status':'ok','version':'1.0.0','knowledge_count':len(published_rows(app.state.db)),
-                'capabilities':{'accounts':True,'history':True,'admin':True,'crawler':True,
+                'capabilities':{'accounts':True,'history':True,'admin':True,'crawler':True,'demo_reservations':settings.demo_reservations,
                                 'vectors':app.state.vectors.status(),'llm_provider':provider_name(),
                                 'library_configured':bool(os.getenv('LIBRARY_RENEW_URL')),
                                 'messenger_configured':bool(os.getenv('MESSENGER_PAGE_ACCESS_TOKEN')),
