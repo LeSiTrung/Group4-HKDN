@@ -20,12 +20,45 @@ from app.api import channels
 
 @pytest.fixture
 def network(monkeypatch):
+    monkeypatch.setattr(service,'wait_for_turn',lambda **kwargs:None)
     monkeypatch.setenv('CRAWL_ALLOWED_HOSTS', 'library.example')
     monkeypatch.setattr(service.socket, 'getaddrinfo', lambda *a, **k: [(socket.AF_INET, socket.SOCK_STREAM, 6, '', ('93.184.216.34', 443))])
     monkeypatch.setattr(service.time, 'sleep', lambda _: None)
     def install(handler):
         monkeypatch.setattr(service, '_client', lambda: httpx.Client(transport=httpx.MockTransport(handler), follow_redirects=False))
     return install
+
+
+def test_opac_pacing_failure_does_not_send_unpaced_request(network,monkeypatch):
+    def busy(**kwargs):
+        raise TimeoutError('busy')
+    monkeypatch.setattr(service,'wait_for_turn',busy)
+    network(lambda _:pytest.fail('Pacing failure must not send a request'))
+    with service._client() as client,pytest.raises(service.IntegrationError) as error:
+        service._fetch(client,service.OPAC,{'opacthuvien.ut.edu.vn'})
+    assert error.value.status_code==503
+
+
+def test_opac_queue_wait_does_not_consume_the_response_read_deadline(network,monkeypatch):
+    clock=[100.0]
+    monkeypatch.setattr(service.time,'monotonic',lambda:clock[0])
+    monkeypatch.setattr(service,'wait_for_turn',lambda **kwargs:clock.__setitem__(0,clock[0]+45))
+    network(lambda _:httpx.Response(200,text='Valid source response'))
+    with service._client() as client:
+        assert service._fetch(client,service.OPAC,{'opacthuvien.ut.edu.vn'},max_pacing_wait=None)[2]==b'Valid source response'
+
+
+def test_public_webform_keeps_dns_pinning_and_does_not_follow_post_redirect(network):
+    def handler(request):
+        assert request.method == 'POST' and request.url.host == '93.184.216.34'
+        assert request.headers['content-type'].startswith('application/x-www-form-urlencoded')
+        assert request.content == b'hidCurrentPage=2&raiseShowRecord=raiseShowRecord'
+        return httpx.Response(302, headers={'location': '/login'})
+    network(handler)
+    with service._client() as client, pytest.raises(service.IntegrationError) as error:
+        service._fetch(client, 'https://library.example/catalog', {'library.example'}, method='POST',
+                       form={'hidCurrentPage': '2', 'raiseShowRecord': 'raiseShowRecord'})
+    assert error.value.status_code == 409
 
 
 @pytest.mark.parametrize('url', ['http://library.example/', 'https://evil.example/', 'https://library.example:8443/', 'https://user:pass@library.example/', 'https://127.0.0.1/', 'https://library.example/\\evil'])

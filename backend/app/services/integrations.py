@@ -5,6 +5,7 @@ import json
 import os
 import re
 import socket
+import sqlite3
 import time
 from datetime import date
 from urllib.parse import parse_qs, urlencode, urljoin, urlsplit, urlunsplit
@@ -13,6 +14,7 @@ from urllib.robotparser import RobotFileParser
 import httpx
 from bs4 import BeautifulSoup
 from fastapi import HTTPException
+from .opac_pacing import wait_for_turn
 
 USER_AGENT = 'UTHLibraryBot/1.0'
 MAX_BYTES = 1_048_576
@@ -20,9 +22,10 @@ OPAC = 'https://opacthuvien.ut.edu.vn/opac/'
 
 
 class IntegrationError(HTTPException):
-    def __init__(self, detail, status_code=502, *, uncertain=False):
+    def __init__(self, detail, status_code=502, *, uncertain=False, retryable=False):
         super().__init__(status_code=status_code, detail=detail)
         self.uncertain = uncertain
+        self.retryable = retryable
 
 
 def _client():
@@ -53,7 +56,7 @@ def _public_ip(host):
         raise IntegrationError('Không thể xác minh địa chỉ mạng công khai của nguồn.', 502) from None
 
 
-def _fetch(client, url, allowed, permitted=None, *, method='GET', headers=None, payload=None):
+def _fetch(client, url, allowed, permitted=None, *, method='GET', headers=None, payload=None, form=None, minimum_gap=10, max_pacing_wait=20):
     """Pin DNS for each hop; preserve certificate verification through original SNI."""
     deadline = time.monotonic() + 30
     for _ in range(4):
@@ -62,10 +65,17 @@ def _fetch(client, url, allowed, permitted=None, *, method='GET', headers=None, 
             raise IntegrationError('Nguồn không cho phép thu thập đường dẫn này theo robots.txt.', 403)
         host = urlsplit(url).hostname
         ip = _public_ip(host)
+        if host=='opacthuvien.ut.edu.vn':
+            queued_at=time.monotonic()
+            try:
+                wait_for_turn(minimum_gap=minimum_gap,max_wait=max_pacing_wait)
+            except (OSError,sqlite3.Error,TimeoutError):
+                raise IntegrationError('Nguồn OPAC đang bận. Vui lòng thử lại sau.',503) from None
+            deadline+=time.monotonic()-queued_at
         pinned = httpx.URL(url).copy_with(host=ip)
         request_headers = {'User-Agent': USER_AGENT, 'Host': host, 'Accept': 'text/html,application/json,text/plain', **(headers or {})}
         try:
-            with client.stream(method, pinned, headers=request_headers, json=payload, extensions={'sni_hostname': host}) as response:
+            with client.stream(method, pinned, headers=request_headers, json=payload, data=form, extensions={'sni_hostname': host}) as response:
                 if response.status_code in (301, 302, 303, 307, 308):
                     if method != 'GET':
                         raise IntegrationError('Dịch vụ giao dịch trả về chuyển hướng; cần đối soát.', 409, uncertain=True)
@@ -78,7 +88,7 @@ def _fetch(client, url, allowed, permitted=None, *, method='GET', headers=None, 
                         raise IntegrationError('Phản hồi nguồn vượt giới hạn dung lượng.')
                 return url, response.status_code, bytes(content), response.headers.get('content-type', '')
         except httpx.HTTPError:
-            raise IntegrationError('Không thể kết nối dịch vụ nguồn. Vui lòng thử lại sau.') from None
+            raise IntegrationError('Không thể kết nối dịch vụ nguồn. Vui lòng thử lại sau.',retryable=method=='GET') from None
     raise IntegrationError('Nguồn chuyển hướng quá nhiều lần.')
 
 

@@ -15,6 +15,7 @@ WORKDIR /app/backend
 COPY --chown=app:app backend/app ./app
 COPY --chown=app:app data/faq /app/data/faq
 COPY --chown=app:app scripts/restore.py /app/scripts/restore.py
+COPY --chown=app:app scripts/collect_opac.py /app/scripts/collect_opac.py
 COPY --from=frontend --chown=app:app /build/dist /app/frontend/dist
 USER app
 ENV DATA_DIR=/var/lib/library
