@@ -1,8 +1,8 @@
 import json
 import os
 from datetime import date, time
-from typing import Literal
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
+from typing import Annotated, Literal
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Path, Request
 from pydantic import BaseModel, Field, field_validator, model_validator
 from .auth import require_admin
 from ..services.knowledge import KnowledgeInput, decode_row, insert_knowledge, published_rows, today
@@ -33,7 +33,7 @@ def add_knowledge(body: KnowledgeInput,request: Request,user=Depends(require_adm
 
 
 @router.put('/knowledge/{row_id}')
-def update_knowledge(row_id:int,body:KnowledgeInput,request:Request,user=Depends(require_admin)):
+def update_knowledge(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],body:KnowledgeInput,request:Request,user=Depends(require_admin)):
     with request.app.state.db() as db:
         if not db.execute('SELECT id FROM knowledge WHERE id=?',(row_id,)).fetchone():
             raise HTTPException(404,'Không tìm thấy nội dung.')
@@ -44,7 +44,7 @@ def update_knowledge(row_id:int,body:KnowledgeInput,request:Request,user=Depends
 
 
 @router.delete('/knowledge/{row_id}')
-def remove_knowledge(row_id:int,request:Request,user=Depends(require_admin)):
+def remove_knowledge(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],request:Request,user=Depends(require_admin)):
     with request.app.state.db() as db:
         if not db.execute('DELETE FROM knowledge WHERE id=?',(row_id,)).rowcount:
             raise HTTPException(404,'Không tìm thấy nội dung.')
@@ -160,7 +160,7 @@ class UserState(BaseModel):
 
 
 @router.patch('/users/{user_id}')
-def user_state(user_id:int,body:UserState,request:Request,user=Depends(require_admin)):
+def user_state(user_id:Annotated[int,Path(gt=0,le=9223372036854775807)],body:UserState,request:Request,user=Depends(require_admin)):
     if user_id==user['id']:
         raise HTTPException(409,'Không thể tự khóa tài khoản quản trị.')
     with request.app.state.db() as db:
@@ -218,7 +218,7 @@ def add_schedule(body:ScheduleInput,request:Request,user=Depends(require_admin))
 
 
 @router.delete('/schedules/{row_id}')
-def delete_schedule(row_id:int,request:Request,user=Depends(require_admin)):
+def delete_schedule(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],request:Request,user=Depends(require_admin)):
     with request.app.state.db() as db:
         if not db.execute('DELETE FROM schedules WHERE id=?',(row_id,)).rowcount:
             raise HTTPException(404,'Không tìm thấy lịch.')

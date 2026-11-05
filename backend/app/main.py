@@ -1,5 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.chat import router as chat_router
@@ -8,7 +10,7 @@ from app.api.history import router as history_router
 from app.api.feedback_review import router as feedback_review_router
 from app.config import Settings
 from app.database.connection import Store
-from app.security import RequestGate
+from app.security import RequestGate, validation_error
 from app.api.admin import router as admin_router, crawl_job
 from app.api.library import router as library_router
 from app.api.channels import router as channels_router
@@ -61,6 +63,7 @@ def create_app(data_dir=None, testing=False):
         app.state.vectors.close()
 
     app = FastAPI(title='UTH Library Assistant', version='1.0.0', lifespan=lifespan)
+    app.add_exception_handler(RequestValidationError, validation_error)
     app.state.settings = settings
     app.add_middleware(RequestGate, settings=settings)
     app.add_middleware(CORSMiddleware, allow_origins=list(settings.origins), allow_credentials=True,

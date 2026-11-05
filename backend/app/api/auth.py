@@ -40,14 +40,23 @@ def public_user(row):
     return {k: row[k] for k in ('id', 'email', 'name', 'role')}
 
 
+def expired_session():
+    expired_cookie = Response()
+    expired_cookie.delete_cookie('library_session', path='/')
+    return HTTPException(401, 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.',
+                         headers={'Set-Cookie': expired_cookie.headers['set-cookie']})
+
+
 def optional_user(request: Request):
     token = request.cookies.get('library_session')
-    if not token:
+    if token is None:
         return None
     with request.app.state.db() as db:
-        row = db.execute('SELECT u.* FROM users u JOIN sessions s ON s.user_id=u.id WHERE s.token_hash=? AND s.expires_at>? AND u.active=1',
+        row = db.execute('SELECT u.*,s.token_hash AS _session_token_hash FROM users u JOIN sessions s ON s.user_id=u.id WHERE s.token_hash=? AND s.expires_at>? AND u.active=1',
                          (hashlib.sha256(token.encode()).hexdigest(), int(time.time()))).fetchone()
-    return dict(row) if row else None
+    if not row:
+        raise expired_session()
+    return dict(row)
 
 
 def require_user(user=Depends(optional_user)):
@@ -67,6 +76,9 @@ def ensure_current_account(db,user):
         db.execute('BEGIN IMMEDIATE')
     if not db.execute('SELECT id FROM users WHERE id=? AND password_hash=? AND active=1',(user['id'],user['password_hash'])).fetchone():
         raise HTTPException(409,'Tài khoản đã thay đổi trong khi xử lý. Vui lòng đăng nhập lại.')
+    if '_session_token_hash' in user and not db.execute('SELECT 1 FROM sessions WHERE token_hash=? AND user_id=? AND expires_at>?',
+            (user['_session_token_hash'],user['id'],int(time.time()))).fetchone():
+        raise expired_session()
 
 
 def start_session(request, response, user_id, expected_hash):

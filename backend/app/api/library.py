@@ -27,7 +27,7 @@ def catalog(request:Request,q: str = Query(min_length=1,max_length=200),kind:Lit
             start=(page-1)*page_size
             return {'items':rows[start:start+page_size],'total':len(rows),'page':page,'page_size':page_size,'source':'local',
                     'search_url':'https://opacthuvien.ut.edu.vn/opac/',
-                    'warning':'Kết quả từ metadata đã rà soát, kèm ngày cập nhật. Không phải số bản rỗi hoặc tình trạng lưu thông hiện tại.'}
+                    'warning':'Thông tin tài liệu có ngày đối chiếu. Số bản còn và tình trạng mượn có thể thay đổi; hãy kiểm tra tại nguồn thư viện.'}
     if page!=1:
         raise HTTPException(422,'Bộ nối OPAC hiện chỉ trả trang đầu. Hãy mở trang mục lục gốc để xem trang tiếp theo.')
     try:
@@ -49,8 +49,13 @@ class Renewal(LibraryAccess):
 
 
 @router.post('/library/loans')
-def loans(body:LibraryAccess,user=Depends(require_user)):
-    return library_loans(body.access_token)
+def loans(body:LibraryAccess,request:Request,user=Depends(require_user)):
+    with request.app.state.db() as db:
+        ensure_current_account(db,user)
+    result=library_loans(body.access_token)
+    with request.app.state.db() as db:
+        ensure_current_account(db,user)
+    return result
 
 
 @router.post('/library/renew')
@@ -74,20 +79,25 @@ def renew(body:Renewal,request:Request,user=Depends(require_user)):
     except Exception as exc:
         uncertain = getattr(exc,'uncertain',True)
         with request.app.state.db() as db:
-            ensure_current_account(db,user)
+            # Record the already authorized attempt even if its caller logged out.
+            ensure_current_account(db,{'id':user['id'],'password_hash':user['password_hash']})
             changed=db.execute("UPDATE renewals SET state=? WHERE idempotency_key=? AND user_id=? AND state='pending'",('uncertain' if uncertain else 'failed',body.idempotency_key,user['id'])).rowcount
-            if not changed:
-                row=db.execute('SELECT * FROM renewals WHERE idempotency_key=? AND user_id=?',(body.idempotency_key,user['id'])).fetchone()
-                if row and row['state']=='succeeded':
-                    return json.loads(row['result'])
-                raise HTTPException(409,'Yêu cầu đã được đối soát. Hãy kiểm tra kết quả trước khi gửi lại.')
+            row=db.execute('SELECT * FROM renewals WHERE idempotency_key=? AND user_id=?',(body.idempotency_key,user['id'])).fetchone()
+        with request.app.state.db() as db:
+            ensure_current_account(db,user)
+        if not changed:
+            if row and row['state']=='succeeded':
+                return json.loads(row['result'])
+            raise HTTPException(409,'Yêu cầu đã được đối soát. Hãy kiểm tra kết quả trước khi gửi lại.')
         if isinstance(exc,IntegrationError):
             raise
         raise HTTPException(409,'Chưa xác định kết quả. Không gửi lại trước khi đối soát với thư viện.')
     with request.app.state.db() as db:
-        ensure_current_account(db,user)
+        ensure_current_account(db,{'id':user['id'],'password_hash':user['password_hash']})
         db.execute("UPDATE renewals SET state='succeeded',result=? WHERE idempotency_key=? AND user_id=? AND state='pending'",(json.dumps(result,ensure_ascii=False),body.idempotency_key,user['id']))
         row=db.execute('SELECT * FROM renewals WHERE idempotency_key=? AND user_id=?',(body.idempotency_key,user['id'])).fetchone()
-        if row and row['state']=='succeeded':
-            return json.loads(row['result'])
+    with request.app.state.db() as db:
+        ensure_current_account(db,user)
+    if row and row['state']=='succeeded':
+        return json.loads(row['result'])
     raise HTTPException(409,'Yêu cầu đã được đối soát. Hãy kiểm tra kết quả trước khi gửi lại.')

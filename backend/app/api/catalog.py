@@ -1,5 +1,6 @@
 import sqlite3
-from fastapi import APIRouter,Depends,HTTPException,Query,Request
+from typing import Annotated
+from fastapi import APIRouter,Depends,HTTPException,Path,Query,Request
 from pydantic import BaseModel,Field,model_validator
 from .auth import require_admin
 from .admin import audit
@@ -33,7 +34,7 @@ def create_book(body:BookInput,request:Request,user=Depends(require_admin)):
 
 
 @router.put('/admin/books/{row_id}')
-def update_book(row_id:int,body:BookInput,request:Request,user=Depends(require_admin)):
+def update_book(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],body:BookInput,request:Request,user=Depends(require_admin)):
     try:
         with request.app.state.db() as db:
             if not db.execute('SELECT 1 FROM books WHERE id=?',(row_id,)).fetchone():
@@ -47,7 +48,7 @@ def update_book(row_id:int,body:BookInput,request:Request,user=Depends(require_a
 
 
 @router.delete('/admin/books/{row_id}')
-def delete_book(row_id:int,request:Request,user=Depends(require_admin)):
+def delete_book(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],request:Request,user=Depends(require_admin)):
     with request.app.state.db() as db:
         if not db.execute('DELETE FROM books WHERE id=?',(row_id,)).rowcount:
             raise HTTPException(404,'Không tìm thấy biểu ghi.')
@@ -79,11 +80,11 @@ def import_books(body:ImportBooks,request:Request,user=Depends(require_admin)):
 
 
 @router.get('/catalog/{row_id}')
-def detail(row_id:int,request:Request):
+def detail(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],request:Request):
     row=public_book(request.app.state.db,row_id)
     if not row:
         raise HTTPException(404,'Không tìm thấy biểu ghi đã công bố.')
     author=next((value.strip() for value in row['author'].split(';') if value.strip()),'')
     query=author or row['subjects'] or row['title']
     related=[r for r in search_local(request.app.state.db,query,field='author' if author else 'all') if r['id']!=row_id][:3]
-    return {**row,'related':related,'warning':'Metadata có nguồn và ngày rà soát; không phải trạng thái lưu thông hiện tại.'}
+    return {**row,'related':related,'warning':'Thông tin có nguồn và ngày đối chiếu. Hãy kiểm tra tình trạng còn sách tại thư viện trước khi đến.'}

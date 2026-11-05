@@ -6,6 +6,11 @@ from starlette.datastructures import Headers
 from starlette.responses import JSONResponse
 
 
+async def validation_error(request, exc):
+    # Invalid input can contain secrets or lone surrogates that cannot be encoded.
+    return JSONResponse({'detail': [{key: error[key] for key in ('type', 'loc', 'msg')} for error in exc.errors()]}, 422)
+
+
 class RequestGate:
     def __init__(self, app, settings):
         self.app, self.settings = app, settings

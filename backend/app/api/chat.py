@@ -14,7 +14,7 @@ class HistoryTurn(BaseModel):
 
 class ChatRequest(BaseModel):
     message: str = Field(min_length=1, strict=True)
-    conversation_id: int | None = Field(default=None,gt=0)
+    conversation_id: int | None = Field(default=None,gt=0,le=9223372036854775807)
     history:list[HistoryTurn]=Field(default_factory=list,max_length=6)
 
     @field_validator('message')

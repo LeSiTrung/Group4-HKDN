@@ -1,5 +1,6 @@
 import json
-from fastapi import APIRouter, Depends, HTTPException, Request
+from typing import Annotated
+from fastapi import APIRouter, Depends, HTTPException, Path, Request
 from pydantic import BaseModel, Field
 from .auth import require_user, public_user, ensure_current_account
 
@@ -27,12 +28,12 @@ def conversations(request: Request, user=Depends(require_user)):
 
 
 @router.get('/conversations/{conversation_id}')
-def get_conversation(conversation_id: int, request: Request, user=Depends(require_user)):
+def get_conversation(conversation_id: Annotated[int, Path(gt=0, le=9223372036854775807)], request: Request, user=Depends(require_user)):
     return conversation(request, user, conversation_id)
 
 
 @router.delete('/conversations/{conversation_id}')
-def remove_conversation(conversation_id: int, request: Request, user=Depends(require_user)):
+def remove_conversation(conversation_id: Annotated[int, Path(gt=0, le=9223372036854775807)], request: Request, user=Depends(require_user)):
     with request.app.state.db() as db:
         ensure_current_account(db,user)
         count = db.execute('DELETE FROM conversations WHERE id=? AND user_id=?', (conversation_id, user['id'])).rowcount
@@ -50,7 +51,7 @@ def export(request: Request, user=Depends(require_user)):
 
 
 class Feedback(BaseModel):
-    message_id: int
+    message_id: int = Field(gt=0, le=9223372036854775807)
     rating: int
     comment: str = Field(default='', max_length=1000)
 
