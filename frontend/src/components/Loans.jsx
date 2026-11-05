@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { api } from '../services/chatApi.js'
 import { Empty, ErrorNotice, Field, Icon, Modal, Notice, Status } from './UI.jsx'
 
@@ -10,28 +10,36 @@ export default function Loans({ user, onLogin }) {
   const [confirm, setConfirm] = useState(null)
   const [outcome, setOutcome] = useState(null)
   const [blocked, setBlocked] = useState([])
+  const pending = useRef(false)
+  const requestVersion = useRef(0)
   async function load(event) {
-    event.preventDefault(); setBusy(true); setError(''); setOutcome(null)
-    try { const data = await api('/library/loans', { method: 'POST', body: { access_token: token } }); setLoans(data.loans || data.items || []); if (data.warning) setError(data.warning) }
-    catch (err) { setError(err.message) }
-    finally { setBusy(false) }
+    event.preventDefault()
+    if (pending.current || !token.trim()) return
+    const version = requestVersion.current
+    pending.current = true
+    setBusy(true); setError(''); setOutcome(null)
+    try { const data = await api('/library/loans', { method: 'POST', body: { access_token: token } }); if (version === requestVersion.current) { setLoans(data.loans || data.items || []); if (data.warning) setError(data.warning) } }
+    catch (err) { if (version === requestVersion.current) setError(err.message) }
+    finally { pending.current = false; setBusy(false) }
   }
   async function renew() {
-    if (busy || !confirm) return
+    if (pending.current || !confirm) return
     const selected = confirm
+    const version = requestVersion.current
+    pending.current = true
     setBusy(true); setError('')
     // An uncertain renewal must be reconciled; a new key must never blindly retry it.
     setBlocked(current => [...current, selected.id])
     try {
       const data = await api('/library/renew', { method: 'POST', body: { access_token: token, loan_id: String(selected.id), confirmation: true, idempotency_key: selected.key } })
-      setOutcome(data)
-    } catch (err) { setError(`${err.message} Không gửi lại gia hạn khoản mượn này; hãy kiểm tra với thư viện để đối soát.`) }
-    finally { setConfirm(null); setBusy(false) }
+      if (version === requestVersion.current) setOutcome(data)
+    } catch (err) { if (version === requestVersion.current) setError(`${err.message} Không gửi lại gia hạn khoản mượn này; hãy kiểm tra với thư viện để đối soát.`) }
+    finally { pending.current = false; if (version === requestVersion.current) setConfirm(null); setBusy(false) }
   }
   return <div className="content-page"><div className="page-heading"><span className="eyebrow">DỊCH VỤ BẠN ĐỌC</span><h1>Sách đang mượn</h1><p>Theo dõi khoản mượn và gửi yêu cầu gia hạn có xác nhận.</p></div>
     {!user ? <div className="panel"><Empty icon="user" title="Đăng nhập để tiếp tục">Tài khoản chatbot giúp bảo vệ thông tin khoản mượn của bạn.</Empty><button className="primary center-button" onClick={onLogin}>Đăng nhập</button></div> : <>
       <Notice>Kết nối chỉ hoạt động khi thư viện đã cấu hình dịch vụ tích hợp. Mã truy cập chỉ ở trong bộ nhớ của trang này và được xóa khi bạn rời trang. Không nhập mật khẩu thư viện.</Notice>
-      <form className="panel loan-connect" onSubmit={load}><Field label="Mã truy cập thư viện" hint="Dùng mã truy cập được hệ thống thư viện cấp."><input type="password" value={token} onChange={event => { setToken(event.target.value); setLoans(null) }} autoComplete="off" required maxLength={4096} /></Field><button className="primary" disabled={busy || !token.trim()}><Icon name="link" size={18} />{busy ? 'Đang xử lý…' : 'Xem sách đang mượn'}</button></form>
+      <form className="panel loan-connect" onSubmit={load}><Field label="Mã truy cập thư viện" hint="Dùng mã truy cập được hệ thống thư viện cấp."><input type="password" value={token} onChange={event => { requestVersion.current++; setToken(event.target.value); setLoans(null); setConfirm(null); setOutcome(null); setError('') }} autoComplete="off" required maxLength={4096} /></Field><button className="primary" disabled={busy || !token.trim()}><Icon name="link" size={18} />{busy ? 'Đang xử lý…' : 'Xem sách đang mượn'}</button></form>
       <ErrorNotice>{error}</ErrorNotice>
       {outcome && <div className="panel outcome"><Status value={outcome.status || 'pending'} /><h3>Kết quả từ dịch vụ thư viện</h3><p>{outcome.message || 'Yêu cầu đã nhận được phản hồi. Kiểm tra trạng thái trước khi thực hiện thao tác khác.'}</p>{(outcome.due_date || outcome.due_at) && <p>Hạn trả do thư viện phản hồi: {outcome.due_date || outcome.due_at}</p>}<small>Chỉ phản hồi xác nhận thực tế từ thư viện mới chứng minh gia hạn thành công.</small></div>}
       {loans !== null && <div className="results-list">{loans.length === 0 ? <Empty title="Chưa có khoản mượn">Dịch vụ thư viện không trả về khoản mượn nào cho mã truy cập này.</Empty> : loans.map((loan, index) => {

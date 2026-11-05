@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { api } from './services/chatApi.js'
+import { api, resetApiSession } from './services/chatApi.js'
 import Account, { AuthModal } from './components/Account.jsx'
 import Admin from './components/Admin.jsx'
 import Catalog from './components/Catalog.jsx'
@@ -31,12 +31,18 @@ export default function App() {
   const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 700px)').matches)
   const sidebar = useRef(null)
   const menuButton = useRef(null)
+  const sessionVersion = useRef(0)
 
   useEffect(() => {
     const media = window.matchMedia('(max-width: 700px)')
     const changed = () => { setIsMobile(media.matches); setDrawer(false) }
     media.addEventListener('change', changed)
     return () => media.removeEventListener('change', changed)
+  }, [])
+  useEffect(() => {
+    const expired = () => { resetSession(); navigate('chat'); setError('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại để mở lịch sử của bạn.') }
+    window.addEventListener('library-session-expired', expired)
+    return () => window.removeEventListener('library-session-expired', expired)
   }, [])
 
   useEffect(() => {
@@ -48,7 +54,7 @@ export default function App() {
     return () => { ignore = true; window.removeEventListener('hashchange', hashChanged) }
   }, [])
   useEffect(() => {
-    if (!user) { setHistory([]); setHistoryError(''); return }
+    if (!user) { setHistory([]); setHistoryError(''); setHistoryLoading(false); return }
     let ignore = false
     setHistoryLoading(true)
     api('/conversations').then(data => { if (!ignore) { setHistory(data); setHistoryError('') } }).catch(err => { if (!ignore) setHistoryError(err.message) }).finally(() => { if (!ignore) setHistoryLoading(false) })
@@ -72,17 +78,19 @@ export default function App() {
 
   function navigate(next) { location.hash = next; setView(next); setDrawer(false) }
   function openChat(id = null) { setOpenedId(id); setActiveId(id); setChatKey(current => current + 1); navigate('chat') }
-  function resetSession(nextUser = null) { setUser(nextUser); setOpenedId(null); setActiveId(null); setChatKey(current => current + 1); setAuth(false); setError(''); setHistory([]) }
+  function resetSession(nextUser = null) { sessionVersion.current++; resetApiSession(); setUser(nextUser); setOpenedId(null); setActiveId(null); setChatKey(current => current + 1); setAuth(false); setDeleting(null); setBusy(false); setError(''); setHistory([]); setHistoryError(''); setHistoryLoading(false) }
   async function logout() {
+    const version = sessionVersion.current
     setError('')
-    try { await api('/auth/logout', { method: 'POST' }); resetSession(); navigate('chat') }
-    catch (err) { setError(err.message); throw err }
+    try { await api('/auth/logout', { method: 'POST' }); if (version !== sessionVersion.current) return; resetSession(); navigate('chat') }
+    catch (err) { if (version === sessionVersion.current) setError(err.message); throw err }
   }
   async function deleteConversation() {
+    const version = sessionVersion.current
     setBusy(true); setError('')
-    try { await api(`/conversations/${deleting.id}`, { method: 'DELETE' }); if (activeId === deleting.id) openChat(); setHistoryVersion(current => current + 1); setDeleting(null) }
-    catch (err) { setError(err.message) }
-    finally { setBusy(false) }
+    try { await api(`/conversations/${deleting.id}`, { method: 'DELETE' }); if (version !== sessionVersion.current) return; if (activeId === deleting.id) openChat(); setHistoryVersion(current => current + 1); setDeleting(null) }
+    catch (err) { if (version === sessionVersion.current) setError(err.message) }
+    finally { if (version === sessionVersion.current) setBusy(false) }
   }
   const title = navigation.find(item => item.id === view)?.title || (view === 'admin' ? 'Quản trị thư viện' : 'Tài khoản')
   return <div className="app-shell">
@@ -96,9 +104,9 @@ export default function App() {
       <nav aria-label="Điều hướng chính">{navigation.map(item => <a key={item.id} href={`#${item.id}`} onClick={() => navigate(item.id)} className={`nav-link ${view === item.id ? 'active' : ''}`} aria-current={view === item.id ? 'page' : undefined}><Icon name={item.icon} /><span>{item.title}</span>{view === item.id && <span className="nav-active-dot" />}</a>)}{user?.role === 'admin' && <a href="#admin" onClick={() => navigate('admin')} className={`nav-link ${view === 'admin' ? 'active' : ''}`} aria-current={view === 'admin' ? 'page' : undefined}><Icon name="shield" /><span>Quản trị thư viện</span></a>}</nav>
       <div className="history-heading"><span className="nav-label">TRÒ CHUYỆN GẦN ĐÂY</span>{user && <button className="sidebar-icon" aria-label="Làm mới lịch sử" onClick={() => setHistoryVersion(current => current + 1)} disabled={historyLoading}><Icon name="refresh" size={14} /></button>}</div>
       <div className="history-list">{sessionLoading ? <p className="sidebar-note">Đang kiểm tra phiên…</p> : !user ? <div className="history-guest"><Icon name="clock" size={24} /><p>Giữ lại những điều<br />bạn đang khám phá.</p><button className="sidebar-text-button" onClick={() => { setDrawer(false); setAuth(true) }}>Đăng nhập để lưu lịch sử <Icon name="arrow" size={14} /></button></div> : <>{historyError && <p className="sidebar-note" role="alert">{historyError}</p>}{historyLoading && !history.length && <p className="sidebar-note">Đang tải lịch sử…</p>}{!historyLoading && !history.length && <p className="sidebar-note">Các cuộc trò chuyện của bạn sẽ xuất hiện ở đây.</p>}{history.map(item => <div className={`history-item ${activeId === item.id ? 'selected' : ''}`} key={item.id}><button className="history-open" onClick={() => openChat(item.id)} title={item.title}><Icon name="chat" size={15} /><span>{item.title}</span></button><button className="sidebar-icon history-delete" aria-label={`Xóa cuộc trò chuyện ${item.title}`} onClick={() => { setDrawer(false); setDeleting(item) }}><Icon name="trash" size={14} /></button></div>)}</>}</div>
-      <div className="sidebar-bottom"><div className="sidebar-note source-assurance"><Icon name="shield" size={17} /><span>Câu trả lời có nguồn.<br />Tri thức được kiểm duyệt.</span></div>{user ? <button className="sidebar-account" onClick={() => navigate('account')}><span className="small-avatar">{user.name.slice(0, 1).toUpperCase()}</span><span><strong>{user.name}</strong><small>{user.role === 'admin' ? 'Quản trị viên' : 'Tài khoản bạn đọc'}</small></span><Icon name="arrow" size={16} /></button> : <button className="sidebar-account" disabled={sessionLoading} onClick={() => { setDrawer(false); setAuth(true) }}><span className="small-avatar"><Icon name="user" size={17} /></span><span><strong>Đăng nhập / Đăng ký</strong><small>Không gian dành riêng cho bạn</small></span><Icon name="arrow" size={16} /></button>}</div>
+      <div className="sidebar-bottom"><div className="sidebar-note source-assurance"><Icon name="shield" size={17} /><span>Khám phá tài liệu.<br />Tham khảo nguồn thư viện.</span></div>{user ? <button className="sidebar-account" onClick={() => navigate('account')}><span className="small-avatar">{user.name.slice(0, 1).toUpperCase()}</span><span><strong>{user.name}</strong><small>{user.role === 'admin' ? 'Quản trị viên' : 'Tài khoản bạn đọc'}</small></span><Icon name="arrow" size={16} /></button> : <button className="sidebar-account" disabled={sessionLoading} onClick={() => { setDrawer(false); setAuth(true) }}><span className="small-avatar"><Icon name="user" size={17} /></span><span><strong>Đăng nhập / Đăng ký</strong><small>Không gian dành riêng cho bạn</small></span><Icon name="arrow" size={16} /></button>}</div>
     </aside>
-    <div className="main-shell" inert={isMobile && drawer}><header className="topbar"><div className="inline-actions"><button ref={menuButton} className="icon-button mobile-menu" aria-label="Mở điều hướng" aria-expanded={drawer} aria-controls="app-navigation" onClick={() => setDrawer(!drawer)}><Icon name="menu" /></button><div className="breadcrumb">Thư viện UTH<span>/</span><strong>{title}</strong></div></div><div className={`connection ${connected ? 'online' : ''}`} title={connected ? `Phiên bản ${health?.version || 'chưa xác định'}` : 'Chưa kết nối được máy chủ'}><span />{connected ? 'Đã kết nối' : 'Chưa kết nối'}</div></header>
+    <div className="main-shell" inert={isMobile && drawer}><header className="topbar"><div className="inline-actions"><button ref={menuButton} className="icon-button mobile-menu" aria-label="Mở điều hướng" aria-expanded={drawer} aria-controls="app-navigation" onClick={() => setDrawer(!drawer)}><Icon name="menu" /></button><div className="breadcrumb">Thư viện UTH<span>/</span><strong>{title}</strong></div></div><div className={`connection ${connected ? 'online' : ''}`} title={connected ? 'Đã kết nối dịch vụ thư viện' : 'Chưa kết nối được dịch vụ thư viện'}><span />{connected ? 'Đã kết nối' : 'Chưa kết nối'}</div></header>
       <main id="main-content" tabIndex={-1} className={`main-content ${view === 'chat' ? 'chat-page' : ''}`}>
         <div className="global-error"><ErrorNotice>{error}</ErrorNotice>{error && <button className="text-button" onClick={() => setError('')}>Đóng thông báo</button>}</div>
         <div hidden={view !== 'chat'} className="chat-host"><ChatWindow key={`${user?.id || 'guest'}-${chatKey}`} user={user} conversationId={openedId} onCreated={id => { setActiveId(id); if (user) setHistoryVersion(current => current + 1) }} /></div>

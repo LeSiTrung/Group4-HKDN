@@ -1,6 +1,9 @@
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '')
+let sessionVersion = 0
+export function resetApiSession() { sessionVersion++ }
 
 export async function api(path, { body, ...options } = {}) {
+  const version = sessionVersion
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), 90000)
   try {
@@ -11,8 +14,9 @@ export async function api(path, { body, ...options } = {}) {
       headers: { 'X-Requested-With': 'LibraryAssistant', ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }),
     })
-    const data = response.status === 204 ? null : await response.json().catch(() => null)
+    const data = response.status === 204 ? null : await response.json().catch(error => { if (error.name === 'AbortError') throw error; return null })
     if (!response.ok) {
+      if (response.status === 401 && version === sessionVersion && !['/auth/login', '/auth/register'].includes(path) && !(path === '/auth/me' && (options.method || 'GET').toUpperCase() === 'GET')) window.dispatchEvent(new Event('library-session-expired'))
       const detail = data?.detail
       const error = new Error(typeof detail === 'string' ? detail : Array.isArray(detail) ? detail.map(item => item.msg).join('. ') : `Yêu cầu chưa thực hiện được (${response.status}).`)
       error.status = response.status

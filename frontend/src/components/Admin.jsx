@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { api } from '../services/chatApi.js'
 import { displayDate, Empty, ErrorNotice, ExternalLink, Field, Icon, Modal, Notice, Status } from './UI.jsx'
 import BookAdmin from './BookAdmin.jsx'
@@ -51,6 +51,7 @@ export default function Admin({ user }) {
   const [version, setVersion] = useState(0)
   const [loading, setLoading] = useState(false)
   const [busy, setBusy] = useState(false)
+  const mutating = useRef(false)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [editing, setEditing] = useState(null)
@@ -78,10 +79,12 @@ export default function Admin({ user }) {
     return () => { ignore = true }
   }, [tab, version, feedbackQuery, bookQuery])
   async function mutate(path, { body, method = 'POST', message = 'Đã cập nhật dữ liệu.' } = {}) {
+    if (mutating.current) return false
+    mutating.current = true
     setBusy(true); setError(''); setNotice('')
     try { const data = await api(`/admin/${path}`, { method, body }); setNotice(message); setVersion(current => current + 1); return data ?? true }
     catch (err) { setError(err.message); return false }
-    finally { setBusy(false) }
+    finally { mutating.current = false; setBusy(false) }
   }
   async function saveKnowledge(event) {
     event.preventDefault()
