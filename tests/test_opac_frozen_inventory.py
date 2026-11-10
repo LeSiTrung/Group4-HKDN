@@ -30,6 +30,57 @@ def detail(identifier):
     return f'<input id="hidItemID" value="{identifier}"><div class="popup-modul"><div class="ClearFix">Ldr 00025nam<br>245 __ $aPython</div></div>'
 
 
+def test_missing_marc_can_be_deferred_without_claiming_completion(tmp_path,source,monkeypatch):
+    module,calls,_,_=source
+    path=pack(tmp_path,[listing('5712'),listing('5713')])
+    original=path.read_bytes()
+    empty=b'<input id="hidItemID" value="5712"><div class="popup-modul"><div class="ClearFix"></div></div>'
+    def handle(request):
+        calls.append(str(request.url))
+        if request.url.path=='/robots.txt':
+            return httpx.Response(200,text='User-agent: *\nDisallow:')
+        raw=empty if request.url.params['intItemId']=='5712' else detail('5713').encode()
+        return httpx.Response(200,content=raw,headers={'content-type':'text/html'})
+    monkeypatch.setattr(module['network'],'_client',lambda:httpx.Client(transport=httpx.MockTransport(handle)))
+    stopped=module['collect'](tmp_path,details_from_pack=path)
+    assert stopped['blocked']=='detail_marc_missing' and not stopped['complete']
+    assert not (tmp_path/'records/5713.json').exists() and len(calls)==2
+    calls.clear()
+    result=module['collect'](tmp_path,details_from_pack=path,defer_missing_marc=True)
+    assert not result['complete'] and result['phase']=='details_deferred'
+    assert result['detail_records']==1 and result['blocked']=='detail_marc_missing'
+    assert result['deferred_details'][0]['id']=='5712'
+    assert result['deferred_details'][0]['response_sha256']==hashlib.sha256(empty).hexdigest()
+    assert not (tmp_path/'records/5712.json').exists()
+    cached=tmp_path/'records/5713.json'
+    saved=cached.read_bytes()
+    assert module['read_snapshot'](cached,BASE+'5713')
+    assert path.read_bytes()==original
+    calls.clear()
+    def recovered(request):
+        calls.append(str(request.url))
+        return httpx.Response(200,text='User-agent: *\nDisallow:' if request.url.path=='/robots.txt' else detail('5712'),headers={'content-type':'text/html'})
+    monkeypatch.setattr(module['network'],'_client',lambda:httpx.Client(transport=httpx.MockTransport(recovered)))
+    result=module['collect'](tmp_path,details_from_pack=path,defer_missing_marc=True)
+    assert result['complete'] and result['detail_records']==2 and not result.get('deferred_details')
+    assert len(calls)==2 and cached.read_bytes()==saved
+
+
+@pytest.mark.parametrize('status,identity,blocked',[(403,'5712','source_http_403'),(200,'9999','detail_record_identity')])
+def test_deferred_marc_does_not_skip_denials_or_wrong_identity(tmp_path,source,monkeypatch,status,identity,blocked):
+    module,calls,_,_=source
+    path=pack(tmp_path,[listing('5712'),listing('5713')])
+    def handle(request):
+        calls.append(str(request.url))
+        if request.url.path=='/robots.txt':
+            return httpx.Response(200,text='User-agent: *\nDisallow:')
+        return httpx.Response(status,text=detail(identity),headers={'content-type':'text/html'})
+    monkeypatch.setattr(module['network'],'_client',lambda:httpx.Client(transport=httpx.MockTransport(handle)))
+    result=module['collect'](tmp_path,details_from_pack=path,defer_missing_marc=True)
+    assert result['blocked']==blocked and not result['complete']
+    assert len(calls)==2 and not result.get('deferred_details')
+
+
 @pytest.fixture
 def source(monkeypatch):
     module=run_path(str(SCRIPT))

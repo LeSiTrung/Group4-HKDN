@@ -170,12 +170,12 @@ def read_snapshot(path, url, page=None):
     return None
 
 
-def collect(directory, categories=None, max_pages=None, details=True, acknowledge_robots=False, details_from_pack=None):
+def collect(directory, categories=None, max_pages=None, details=True, acknowledge_robots=False, details_from_pack=None, defer_missing_marc=False):
     with collection_lock(Path(directory)):
-        return _collect(directory,categories,max_pages,details,acknowledge_robots,details_from_pack)
+        return _collect(directory,categories,max_pages,details,acknowledge_robots,details_from_pack,defer_missing_marc)
 
 
-def _collect(directory, categories=None, max_pages=None, details=True, acknowledge_robots=False, details_from_pack=None):
+def _collect(directory, categories=None, max_pages=None, details=True, acknowledge_robots=False, details_from_pack=None, defer_missing_marc=False):
     directory = Path(directory)
     pages, records = directory / 'pages', directory / 'records'
     pages.mkdir(parents=True, exist_ok=True)
@@ -327,13 +327,27 @@ def _collect(directory, categories=None, max_pages=None, details=True, acknowled
                 for identifier, url in found.items():
                     path = records / (identifier + '.json')
                     if not read_snapshot(path, url):
-                        save(path, url, parse_detail(request(url), identifier))
+                        raw = request(url)
+                        try:
+                            record = parse_detail(raw, identifier)
+                        except ValueError as error:
+                            if not defer_missing_marc or str(error) != 'detail_marc_missing':
+                                raise
+                            deferred = {'id':identifier,'source_url':url,'checked_at':datetime.now(timezone.utc).isoformat(),
+                                        'reason':'detail_marc_missing','response_sha256':hashlib.sha256(raw).hexdigest()}
+                            report.setdefault('deferred_details',[]).append(deferred)
+                            checkpoint()
+                            print(json.dumps({'deferred_detail':deferred}),flush=True)
+                            continue
+                        save(path, url, record)
                     report['detail_records'] += 1
                     checkpoint()
                     if report['detail_records'] % 20 == 0:
                         print(json.dumps({'detail_records': report['detail_records'], 'total': len(found)}), flush=True)
-            report['complete'] = True
-            report['phase'] = 'complete'
+            report['complete'] = not report.get('deferred_details')
+            report['phase'] = 'complete' if report['complete'] else 'details_deferred'
+            if not report['complete']:
+                report['blocked'] = 'detail_marc_missing'
         except (ValueError, network.IntegrationError) as error:
             report['blocked'] = str(error) if isinstance(error, ValueError) else 'safe_network_error'
             if isinstance(error,network.IntegrationError):
@@ -350,6 +364,7 @@ if __name__ == '__main__':
     parser.add_argument('--max-pages', type=int)
     parser.add_argument('--listings-only', action='store_true')
     parser.add_argument('--details-from-pack', type=Path, help='Collect missing MARC for a validated frozen catalog-listings.jsonl pack; do not refresh listings.')
+    parser.add_argument('--defer-missing-marc', action='store_true', help='Record identity-validated pages missing MARC and continue; deferred pages keep the harvest incomplete.')
     parser.add_argument('--acknowledge-robots-disallow', action='store_true', help='Explicit operator direction to read public metadata despite REP; never bypasses authentication or HTTP denials.')
     args = parser.parse_args()
     if args.details_from_pack is not None and args.listings_only:
@@ -357,7 +372,7 @@ if __name__ == '__main__':
     if args.details_from_pack is None and args.max_pages is not None and args.max_pages < len(args.categories):
         parser.error('max-pages must allow at least one seed per category')
     try:
-        result = collect(args.output, args.categories, args.max_pages, not args.listings_only, args.acknowledge_robots_disallow, args.details_from_pack)
+        result = collect(args.output, args.categories, args.max_pages, not args.listings_only, args.acknowledge_robots_disallow, args.details_from_pack, args.defer_missing_marc)
     except (OSError,ValueError) as error:
         parser.exit(1,'Collection rejected: '+str(error)+'\n')
     raise SystemExit(0 if result['complete'] else 1)
