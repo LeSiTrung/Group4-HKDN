@@ -53,7 +53,8 @@ export default function ChatWindow({ user, conversationId, onCreated }) {
     setMessages(current => [...current, turn])
     setMessage('')
     try {
-      const history = user ? undefined : messages.filter(item => ['user', 'assistant'].includes(item.role)).slice(-6).map(item => ({ role: item.role, content: item.content.length > 2000 ? `${item.content.slice(0, 2000 - contextExcerptMarker.length)}${contextExcerptMarker}` : item.content }))
+      const history = user ? undefined : messages.filter(item => ['user', 'assistant'].includes(item.role)).slice(-6).map(item => ({ role: item.role, content: item.content.length > 2000 ? `${item.content.slice(0, 2000 - contextExcerptMarker.length)}${contextExcerptMarker}` : item.content,
+        ...(item.role === 'assistant' && item.books?.length ? { book_ids: item.books.filter(book => Number.isSafeInteger(book.id) && book.id > 0).slice(0, 5).map(book => book.id) } : {}) }))
       const result = await sendMessage(question, activeId.current, history)
       if (!mounted.current || version !== conversationVersion.current) return
       activeId.current = result.conversation_id

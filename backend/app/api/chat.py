@@ -2,7 +2,7 @@ import json
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field, field_validator
 from .auth import optional_user,ensure_current_account
-from typing import Literal
+from typing import Annotated, Literal
 
 router = APIRouter(tags=["chat"])
 
@@ -10,6 +10,7 @@ router = APIRouter(tags=["chat"])
 class HistoryTurn(BaseModel):
     role:Literal['user','assistant']
     content:str
+    book_ids:list[Annotated[int,Field(strict=True,gt=0,le=9223372036854775807)]]=Field(default_factory=list,max_length=5)
 
 
 class ChatRequest(BaseModel):
@@ -39,13 +40,15 @@ class ChatResponse(BaseModel):
 @router.post("/chat", response_model=ChatResponse)
 def chat(payload: ChatRequest,request:Request,user=Depends(optional_user)):
     cid = payload.conversation_id
-    history=[] if user else [turn.model_dump() for turn in payload.history]
+    history=[] if user else [turn.model_dump(exclude_defaults=True) for turn in payload.history]
     if cid:
         with request.app.state.db() as db:
             if not user or not db.execute('SELECT id FROM conversations WHERE id=? AND user_id=?',(cid,user['id'])).fetchone():
                 raise HTTPException(404,'Không tìm thấy hội thoại.')
             ensure_current_account(db,user)
-            history = [dict(x) for x in db.execute('SELECT role,content,context_query FROM messages WHERE conversation_id=? ORDER BY id DESC LIMIT 6',(cid,))][::-1]
+            history = [dict(x) for x in db.execute('SELECT role,content,context_query,books FROM messages WHERE conversation_id=? ORDER BY id DESC LIMIT 6',(cid,))][::-1]
+            for turn in history:
+                turn['book_ids']=[book['id'] for book in json.loads(turn.pop('books'))[:5]]
     result = request.app.state.answer(payload.message,history)
     mid = None
     if user:

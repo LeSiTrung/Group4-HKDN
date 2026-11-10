@@ -34,7 +34,7 @@ def test_borrowing_procedure_never_searches_book_titles(tmp_path,monkeypatch,que
             source_title='Unrelated fixture',source_url='https://lic.ut.edu.vn/synthetic-unrelated/',
             checked_at=today(),status='reviewed_public',published=True))
     state=SimpleNamespace(db=store.connect,settings=SimpleNamespace(testing=False))
-    monkeypatch.setattr(assistant,'search_books',lambda *args,**kwargs:pytest.fail('Procedure routed to catalog'))
+    monkeypatch.setattr('app.services.catalog.search_local',lambda *args,**kwargs:pytest.fail('Procedure routed to catalog'))
     monkeypatch.setattr(assistant,'generate_answer',lambda *args,**kwargs:pytest.fail('Procedure must use the reviewed guide, not free generation'))
     history=[{'role':'user','content':'Tìm sách Python'},{'role':'assistant','content':'Các sách Python','context_query':'Tìm sách Python'}] if with_history else []
     response=assistant.answer_question(state,question,history)

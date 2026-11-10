@@ -63,7 +63,7 @@ it('offers a digital-library starter that submits a library question', async () 
   expect(screen.queryByText('NGUỒN THAM KHẢO')).toBeNull()
 })
 
-it('sends six plain guest context excerpts with explicit markers while preserving full visible messages', async () => {
+it('sends six guest context excerpts with bounded book references while preserving full visible messages', async () => {
   const longQuestion = 'Tìm sách về Python '.repeat(350)
   const longAnswer = 'Nội dung chi tiết '.repeat(400)
   fetch.mockResolvedValueOnce(response({ ...answer, answer: 'Lượt cũ.' }))
@@ -80,7 +80,8 @@ it('sends six plain guest context excerpts with explicit markers while preservin
   const payload = JSON.parse(fetch.mock.calls[4][1].body)
   expect(payload.message).toBe('Câu hỏi tiếp nối')
   expect(payload.history).toHaveLength(6)
-  for (const item of payload.history) expect(Object.keys(item).sort()).toEqual(['content', 'role'])
+  for (const [index, item] of payload.history.entries()) expect(Object.keys(item).sort()).toEqual(index === 1 ? ['book_ids', 'content', 'role'] : ['content', 'role'])
+  expect(payload.history[1].book_ids).toEqual([8])
   expect(payload.history[0].role).toBe('user')
   expect(payload.history[1].role).toBe('assistant')
   for (const item of payload.history.slice(0, 2)) {

@@ -190,9 +190,10 @@ def test_all_catalog_semantic_search_does_not_send_redundant_id_filter(state,mon
     state.settings.testing=False
     monkeypatch.setenv('ENABLE_VECTORS','true')
     calls=[]
-    def search(query,documents,namespace,source_ids):
+    def search(query,documents,namespace,source_ids,*,ready_only=False):
+        assert ready_only
         calls.append(source_ids)
         return [(next(d for d in documents if 'Python' in d['question']),.9)]
-    state.vectors=SimpleNamespace(search=search)
+    state.vectors=SimpleNamespace(search=search,prepare_books=lambda load:'ready')
     assert catalog.search_books(state,'Python practical exercises')
     assert calls==[None]

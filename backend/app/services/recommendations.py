@@ -1,8 +1,8 @@
 """Recommendations from published catalog metadata, never model-created books."""
 import re
 
-from .catalog import book_query, search_books
-from .rag_service import normalize, tokens
+from .catalog import book_query, search_books_with_status, normalize_catalog, catalog_tokens
+from .rag_service import normalize
 from .llm_service import extract_book_topic
 
 BEGINNER=r'nguoi moi(?: bat dau)?|moi(?: bat dau)? hoc|tu dau|nhap mon|co ban|beginner|introduction|introductory|fundamentals'
@@ -15,7 +15,7 @@ def is_recommendation_request(question):
 
 
 def recommendation_topic(question):
-    q=normalize(question)
+    q=normalize_catalog(question)
     level='beginner' if re.search(r'\b(?:'+BEGINNER+r')\b',q) else 'advanced' if re.search(r'\b(?:'+ADVANCED+r')\b',q) else None
     q=re.sub(r'\b(?:(?:danh )?cho )?(?:hoc )?(?:'+BEGINNER+'|'+ADVANCED+r')\b',' ',q)
     q=re.sub(r'\b(?:(?:de|muon|can|nen|dang|toi|minh|em) hoc|sach nao hoc|tu hoc)\b',' ',q)
@@ -34,10 +34,10 @@ def recommend_books(state,question):
     expanded=re.sub(r'\b(?:it|cntt)\b','công nghệ thông tin',question,flags=re.I)
     planned=extract_book_topic(expanded) if not state.settings.testing else None
     planned=recommendation_topic(planned)[0] if planned else None
-    books=search_books(state,planned or query)
+    books,semantic_status=search_books_with_status(state,planned or query)
     if planned and not books:
         planned=None
-        books=search_books(state,query)
+        books,semantic_status=search_books_with_status(state,query)
     query=planned or query
     preferred=[]
     for book in books:
@@ -52,22 +52,22 @@ def recommend_books(state,question):
         # Unlabelled books remain related suggestions, not verified level matches.
         opposite=ADVANCED if level=='beginner' else BEGINNER
         books=[b for b in books if not re.search(r'\b(?:'+opposite+r')\b',normalize(b['title']+' '+b['description']))]
-    words=tokens(query)
+    words=catalog_tokens(query)
     books.sort(key=lambda b:(-bool(re.search(r'\b(?:'+TEACHING+r')\b',normalize(b['title']))),
-                             -len(words&tokens(b['title'])),b['id']))
+                             -len(words&catalog_tokens(b['title'])),b['id']))
     selected=[]
     seen=set()
     requested=re.search(r'\b0*([1-9][0-9]*) (?:cuon|quyen|sach|tai lieu)\b',normalize(question))
     # Two significant digits suffice for the five-book cap, even for huge inputs.
     limit=min(int(requested[1][:2]),5) if requested else 5
     for book in books:
-        key=(normalize(book['title']),normalize(book['author']))
+        key=(normalize_catalog(book['title']),normalize(book['author']))
         if key in seen:
             continue
         seen.add(key)
         title=book['title']
         reason='Nhan đề: “'+title+'”.'
-        if not words&tokens(title) and book['subjects']:
+        if not words&catalog_tokens(title) and book['subjects']:
             reason+=' Từ khóa trong biểu ghi: '+book['subjects'][:240]+'.'
         if re.search(r'\b(?:'+TEACHING+r')\b',normalize(title)):
             reason+=' Ưu tiên tài liệu học tập vì nhan đề ghi giáo trình/bài giảng hoặc tự học.'
@@ -76,4 +76,5 @@ def recommend_books(state,question):
         selected.append({**book,'recommendation_reason':reason})
         if len(selected)==limit:
             break
-    return {'books':selected, 'query':query, 'level':level, 'level_unconfirmed':bool(level and not preferred), 'used_model':bool(planned)}
+    return {'books':selected, 'query':query, 'level':level, 'level_unconfirmed':bool(level and not preferred),
+            'used_model':bool(planned),'semantic_status':semantic_status}

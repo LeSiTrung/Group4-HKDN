@@ -67,7 +67,7 @@ def test_followup_retains_library_evidence_boundary(client,monkeypatch,question,
 
 
 def test_large_history_is_bounded_before_catalog_search(client,monkeypatch):
-    monkeypatch.setattr(assistant,'search_books',lambda *args: pytest.fail('Context limit precedes expensive search'))
+    monkeypatch.setattr('app.services.catalog.search_local',lambda *args: pytest.fail('Context limit precedes expensive search'))
     result=client.post('/api/chat',json={'message':'Có cuốn nào dành cho người mới?','history':[{'role':'user','content':'Tìm sách về '+'python '*6000}]}).json()
     assert result['status']=='clarify' and 'ngữ cảnh' in result['answer']
 
