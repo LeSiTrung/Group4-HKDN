@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { displayDate, Empty, ErrorNotice, ExternalLink, Field, Icon, Modal, Notice } from './UI.jsx'
+import IndexingReview from './IndexingReview.jsx'
 
 export default function BookAdmin({ rows, busy = false, error = '', query = { q: '', page: 1 }, onQuery, onMutate }) {
   const [editing, setEditing] = useState(null)
+  const [indexing, setIndexing] = useState(null)
   const [removing, setRemoving] = useState(null)
   const [importing, setImporting] = useState(false)
   const [importError, setImportError] = useState('')
@@ -16,6 +18,7 @@ export default function BookAdmin({ rows, busy = false, error = '', query = { q:
     event.preventDefault()
     const body = Object.fromEntries(new FormData(event.currentTarget))
     body.published = body.published === 'on'
+    if (editing.revision) body.revision = editing.revision
     const result = await onMutate(`books${editing.id ? `/${editing.id}` : ''}`, { method: editing.id ? 'PUT' : 'POST', body, message: 'Đã lưu biểu ghi tài liệu cùng nguồn đối chiếu.' })
     if (result) setEditing(null)
   }
@@ -31,10 +34,11 @@ export default function BookAdmin({ rows, busy = false, error = '', query = { q:
     if (result) { setImportResult(result.imported); setImporting(false) }
   }
   return <>
+    {indexing && <IndexingReview key={indexing.id} book={indexing} busy={busy} error={error} onMutate={onMutate} onClose={() => setIndexing(null)} />}
     <Notice>Danh mục lưu bản ghi đã đối chiếu và nguồn gốc. Không nhập số lượng hay tình trạng lưu thông phỏng đoán. Bản ghi mới mặc định chưa xuất bản.</Notice>
     <div className="catalog-admin-toolbar"><form className="input-with-icon" onSubmit={event => { event.preventDefault(); onQuery({ q: search, page: 1 }) }}><Icon name="search" /><input aria-label="Tìm trong danh mục quản trị" value={search} maxLength={500} onChange={event => setSearch(event.target.value)} placeholder="Tìm nhan đề, tác giả, chủ đề…" /><button className="secondary" disabled={busy}>Tìm danh mục</button></form><div className="inline-actions"><button className="secondary" disabled={busy} onClick={() => { setImporting(true); setImportError('') }}><Icon name="download" size={16} />Nhập JSON</button><button className="primary" disabled={busy} onClick={() => setEditing({})}><Icon name="plus" size={16} />Thêm tài liệu</button></div></div>
     {importResult !== null && <p className="subtle" role="status">Đã nhập {importResult} biểu ghi.</p>}
-    {rows && <div className="knowledge-list">{books.length ? books.map(book => <article className="panel knowledge-card" key={book.id}><div><div className="inline-actions"><span className="badge">{book.kind === 'digital' ? 'Tài liệu số' : 'Sách / loại khác'}</span><span className={`badge ${book.published ? '' : 'warning'}`}>{book.published ? 'Đã xuất bản' : 'Bản nháp'}</span></div><h3>{book.title}</h3><p>{book.author || 'Chưa có tác giả'}{book.year ? ` · ${book.year}` : ''}</p>{book.subjects && <p>Chủ đề: {book.subjects}</p>}<ExternalLink className="text-button" href={book.source_url || book.url}><Icon name="link" size={14} />Biểu ghi / nguồn gốc</ExternalLink><small className="block subtle">Đối chiếu: {displayDate(book.checked_at)}</small></div><div className="inline-actions"><button className="icon-button" aria-label={`Sửa tài liệu ${book.title}`} onClick={() => setEditing(book)} disabled={busy}><Icon name="edit" size={18} /></button><button className="icon-button destructive-text" aria-label={`Xóa tài liệu ${book.title}`} onClick={() => setRemoving(book)} disabled={busy}><Icon name="trash" size={18} /></button></div></article>) : <Empty title="Chưa có biểu ghi phù hợp">Thêm hoặc nhập tài liệu có nguồn đối chiếu để bạn đọc tra cứu.</Empty>}</div>}
+    {rows && <div className="knowledge-list">{books.length ? books.map(book => <article className="panel knowledge-card" key={book.id}><div><div className="inline-actions"><span className="badge">{book.kind === 'digital' ? 'Tài liệu số' : 'Sách / loại khác'}</span><span className={`badge ${book.published ? '' : 'warning'}`}>{book.published ? 'Đã xuất bản' : 'Bản nháp'}</span></div><h3>{book.title}</h3><p>{book.author || 'Chưa có tác giả'}{book.year ? ` · ${book.year}` : ''}</p>{book.subjects && <p>Chủ đề: {book.subjects}</p>}<ExternalLink className="text-button" href={book.source_url || book.url}><Icon name="link" size={14} />Biểu ghi / nguồn gốc</ExternalLink><small className="block subtle">Đối chiếu: {displayDate(book.checked_at)}</small></div><div className="inline-actions"><button className="secondary" aria-label={`Gợi ý biên mục ${book.title}`} onClick={() => setIndexing(book)} disabled={busy}>Gợi ý biên mục</button><button className="icon-button" aria-label={`Sửa tài liệu ${book.title}`} onClick={() => setEditing(book)} disabled={busy}><Icon name="edit" size={18} /></button><button className="icon-button destructive-text" aria-label={`Xóa tài liệu ${book.title}`} onClick={() => setRemoving(book)} disabled={busy}><Icon name="trash" size={18} /></button></div></article>) : <Empty title="Chưa có biểu ghi phù hợp">Thêm hoặc nhập tài liệu có nguồn đối chiếu để bạn đọc tra cứu.</Empty>}</div>}
     {rows && <nav className="inline-actions" aria-label="Phân trang danh mục quản trị"><button className="secondary" disabled={busy || currentPage <= 1} onClick={() => onQuery({ ...query, page: currentPage - 1 })}>Trang trước</button><span aria-live="polite">Trang {currentPage} / {pages}</span><button className="secondary" disabled={busy || currentPage >= pages} onClick={() => onQuery({ ...query, page: currentPage + 1 })}>Trang sau</button><small className="subtle">{rows.total} biểu ghi</small></nav>}
     {editing && <Modal title={editing.id ? 'Sửa biểu ghi tài liệu' : 'Thêm tài liệu vào danh mục'} onClose={() => { if (!busy) setEditing(null) }}><form className="stack" onSubmit={save}>
       <Field label="Nhan đề"><input name="title" defaultValue={editing.title || ''} required maxLength={500} /></Field>
