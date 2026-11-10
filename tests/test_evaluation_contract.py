@@ -12,6 +12,16 @@ def test_evaluation_rejects_wrong_answer_provenance_mode():
     assert not check(case,{'status':'answered','answer':'A response','mode':'rag'})
 
 
+def test_evaluation_can_require_the_exact_source_record():
+    check=run_path(str(Path(__file__).resolve().parents[1]/'scripts/evaluate.py'))['failures']
+    url='https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1'
+    case={'status':'answered','source_url':url}
+    response={'status':'answered','answer':'A response'}
+    assert check(case,{**response,'sources':[{'url':url+'0'}]})
+    assert check(case,{**response,'sources':[{'url':'https://example.test/?url='+url}]})
+    assert not check(case,{**response,'sources':[{'url':url}]})
+
+
 def test_offline_evaluation_never_contacts_live_opac(tmp_path, monkeypatch):
     from app.services import opac_availability
     monkeypatch.setenv('LLM_PROVIDER', 'none')

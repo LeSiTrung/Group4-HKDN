@@ -1,0 +1,45 @@
+[
+  {
+    "id": "guide-exact-source",
+    "message": "Làm thế nào để tra cứu sách tại thư viện?",
+    "status": "answered",
+    "mode": "faq",
+    "no_books": true,
+    "source_url": "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=3"
+  },
+  {
+    "id": "summary-exact-record",
+    "message": "Tóm tắt tài liệu “Thiết kế web với CSS”",
+    "status": "answered",
+    "mode": "catalog",
+    "book": "Thiết kế web với CSS",
+    "contains": "Theo biểu ghi OPAC",
+    "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100"
+  },
+  {
+    "id": "summary-missing-record",
+    "message": "Tóm tắt tài liệu “quuxzzcatalog987”",
+    "status": "not_found",
+    "no_books": true,
+    "source_url": "https://opacthuvien.ut.edu.vn/opac/Oshow.aspx?rdSearchOption=0&txtSearch=quuxzzcatalog987"
+  },
+  {
+    "id": "outside-library-scope",
+    "message": "Viết code trò chơi cho tôi",
+    "status": "not_found",
+    "no_books": true
+  },
+  {
+    "id": "guest-author-after-switching-to-direct-summary",
+    "message": "Tác giả là ai?",
+    "history": [
+      {"role": "user", "content": "Tìm sách Olympic cơ học"},
+      {"role": "user", "content": "Tóm tắt tài liệu “Thiết kế web với CSS”"}
+    ],
+    "status": "answered",
+    "mode": "catalog",
+    "book": "Thiết kế web với CSS",
+    "contains": "tác giả",
+    "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100"
+  }
+]

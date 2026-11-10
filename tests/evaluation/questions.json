@@ -324,5 +324,41 @@
     "message": "Cuốn đó của tác giả nào?",
     "status": "clarify",
     "no_books": true
+  },
+  {
+    "id": "guide-exact-pdf-page",
+    "message": "Làm thế nào để tra cứu sách tại thư viện?",
+    "status": "answered",
+    "mode": "faq",
+    "source_url": "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=3",
+    "no_books": true
+  },
+  {
+    "id": "direct-summary-unknown-title",
+    "message": "Tóm tắt tài liệu “quuxzzcatalog987”",
+    "status": "not_found",
+    "source_url": "https://opacthuvien.ut.edu.vn/opac/Oshow.aspx?rdSearchOption=0&txtSearch=quuxzzcatalog987",
+    "no_books": true
+  },
+  {
+    "id": "guest-followup-after-direct-summary",
+    "message": "Tác giả là ai?",
+    "history": [
+      {"role": "user", "content": "Tóm tắt tài liệu “10 năm Olympic cơ học toàn quốc 1989 - 1998”"}
+    ],
+    "status": "answered",
+    "mode": "catalog",
+    "book": "10 năm Olympic cơ học toàn quốc 1989 - 1998",
+    "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967"
+  },
+  {
+    "id": "guest-summary-context-ended-by-renewal",
+    "message": "Tác giả là ai?",
+    "history": [
+      {"role": "user", "content": "Tóm tắt tài liệu “10 năm Olympic cơ học toàn quốc 1989 - 1998”"},
+      {"role": "user", "content": "Tôi muốn gia hạn sách"}
+    ],
+    "status": "clarify",
+    "no_books": true
   }
 ]

@@ -24,6 +24,8 @@ def failures(case, response):
         errors.append('empty answer')
     if case.get('source') and not any(case['source'] in s.get('url', '') for s in response.get('sources', [])):
         errors.append('expected source missing')
+    if case.get('source_url') and not any(case['source_url']==s.get('url') for s in response.get('sources', [])):
+        errors.append('exact source URL missing')
     if case.get('book') and not any(case['book'] in b.get('title', '') for b in response.get('books', [])):
         errors.append('expected catalog record missing')
     if case.get('no_books') and response.get('books'):
