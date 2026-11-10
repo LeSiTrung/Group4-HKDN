@@ -1,0 +1,430 @@
+{
+  "checked_at": "2026-11-01T13:49:34.962123+00:00",
+  "stored_page_snapshots_verified": 89,
+  "stored_unique_ids_verified": 1726,
+  "stored_detail_snapshots_verified": 8,
+  "previous_worker_found": false,
+  "previous_checkpoint": {
+    "source": "https://opacthuvien.ut.edu.vn/opac/",
+    "recorded_at": "2026-11-01T13:30:15.032670+00:00",
+    "complete": false,
+    "blocked": null,
+    "categories": {
+      "10": {
+        "name": "Video",
+        "total": 3,
+        "pages": 1,
+        "unique_records": 3,
+        "complete": true
+      },
+      "36": {
+        "name": "Khóa luận",
+        "total": 1,
+        "pages": 1,
+        "unique_records": 1,
+        "complete": true
+      },
+      "11-7": {
+        "name": "Báo / Tạp chí điện tử",
+        "total": 2,
+        "pages": 1,
+        "unique_records": 2,
+        "complete": true
+      },
+      "23": {
+        "name": "CD-ROM",
+        "total": 371,
+        "pages": 18,
+        "unique_records": 360,
+        "complete": false
+      },
+      "9": {
+        "name": "Báo / Tạp chí",
+        "total": 823,
+        "pages": 17,
+        "unique_records": 340,
+        "complete": false
+      },
+      "3": {
+        "name": "Luận văn",
+        "total": 3259,
+        "pages": 17,
+        "unique_records": 340,
+        "complete": false
+      },
+      "32": {
+        "name": "Tài liệu số",
+        "total": 7487,
+        "pages": 17,
+        "unique_records": 340,
+        "complete": false
+      },
+      "1": {
+        "name": "Sách truyền thống",
+        "total": 10457,
+        "pages": 17,
+        "unique_records": 340,
+        "complete": false
+      }
+    },
+    "listing_records": 1726,
+    "detail_records": 0,
+    "phase": "listing",
+    "details_requested": true,
+    "session_refreshes": 5,
+    "minimum_request_gap_seconds": 10,
+    "robots_disallow_acknowledged": true,
+    "scope": "public bibliographic metadata; no login, full text, reader data or current availability claim",
+    "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6",
+    "last_recovery": {
+      "category": "3",
+      "page": 17,
+      "response_sha256": "5810fea668a111b682b9ddc3d443df4d38c7e0742e93bc04e2d3ee7a777d236b"
+    }
+  },
+  "previous_stop_cause": "unknown; no final error or exit record",
+  "restart": {
+    "output": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101",
+    "scope": "public metadata; eight browse routes then MARC; no login/full text",
+    "pid": 29468,
+    "launch": "WMI-created hidden supervisor; no scheduled task or service configuration",
+    "supervisor_pid": 19152,
+    "started_at": "2026-11-01T13:48:04.9450710+00:00"
+  },
+  "manifest_after_restart": {
+    "source": "https://opacthuvien.ut.edu.vn/opac/",
+    "recorded_at": "2026-11-01T13:49:34.275239+00:00",
+    "complete": false,
+    "blocked": null,
+    "categories": {
+      "10": {
+        "name": "Video",
+        "total": 3,
+        "pages": 1,
+        "unique_records": 3,
+        "complete": true
+      },
+      "36": {
+        "name": "Khóa luận",
+        "total": 1,
+        "pages": 1,
+        "unique_records": 1,
+        "complete": true
+      },
+      "11-7": {
+        "name": "Báo / Tạp chí điện tử",
+        "total": 2,
+        "pages": 1,
+        "unique_records": 2,
+        "complete": true
+      },
+      "23": {
+        "name": "CD-ROM",
+        "total": 371,
+        "pages": 18,
+        "unique_records": 360,
+        "complete": false
+      },
+      "9": {
+        "name": "Báo / Tạp chí",
+        "total": 823,
+        "pages": 17,
+        "unique_records": 340,
+        "complete": false
+      },
+      "3": {
+        "name": "Luận văn",
+        "total": 3259,
+        "pages": 17,
+        "unique_records": 340,
+        "complete": false
+      },
+      "32": {
+        "name": "Tài liệu số",
+        "total": 7487,
+        "pages": 17,
+        "unique_records": 340,
+        "complete": false
+      },
+      "1": {
+        "name": "Sách truyền thống",
+        "total": 10457,
+        "pages": 17,
+        "unique_records": 340,
+        "complete": false
+      }
+    },
+    "listing_records": 1726,
+    "detail_records": 0,
+    "phase": "listing",
+    "details_requested": true,
+    "session_refreshes": 0,
+    "minimum_request_gap_seconds": 10,
+    "robots_disallow_acknowledged": true,
+    "scope": "public bibliographic metadata; no login, full text, reader data or current availability claim",
+    "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6"
+  },
+  "verified_parent_chain": [
+    "WmiPrvSE.exe:14244",
+    "powershell.exe:19152",
+    "venv-python:29468",
+    "python:19224"
+  ],
+  "complete": false,
+  "product_changes": false,
+  "note": "Resume seed counters temporarily exclude old cached pages until reloaded; all stored snapshots preserved. No multi-day uptime guarantee.",
+  "progress_after_resume_verified_at": "2026-11-01T13:50:25.722108+00:00",
+  "progress_after_resume": {
+    "recorded_at": "2026-11-01T13:50:21.087800+00:00",
+    "listing_records": 1817,
+    "phase": "listing",
+    "complete": false,
+    "blocked": null
+  },
+  "new_pages_observed": true,
+  "followup_checks": [
+    {
+      "checked_at": "2026-11-01T14:39:23.527853+00:00",
+      "before_restart": {
+        "source": "https://opacthuvien.ut.edu.vn/opac/",
+        "recorded_at": "2026-11-01T14:00:27.301862+00:00",
+        "complete": false,
+        "blocked": "safe_network_error",
+        "categories": {
+          "10": {
+            "name": "Video",
+            "total": 3,
+            "pages": 1,
+            "unique_records": 3,
+            "complete": true
+          },
+          "36": {
+            "name": "Khóa luận",
+            "total": 1,
+            "pages": 1,
+            "unique_records": 1,
+            "complete": true
+          },
+          "11-7": {
+            "name": "Báo / Tạp chí điện tử",
+            "total": 2,
+            "pages": 1,
+            "unique_records": 2,
+            "complete": true
+          },
+          "23": {
+            "name": "CD-ROM",
+            "total": 371,
+            "pages": 19,
+            "unique_records": 371,
+            "complete": true
+          },
+          "9": {
+            "name": "Báo / Tạp chí",
+            "total": 823,
+            "pages": 31,
+            "unique_records": 620,
+            "complete": false
+          },
+          "3": {
+            "name": "Luận văn",
+            "total": 3259,
+            "pages": 31,
+            "unique_records": 620,
+            "complete": false
+          },
+          "32": {
+            "name": "Tài liệu số",
+            "total": 7487,
+            "pages": 31,
+            "unique_records": 620,
+            "complete": false
+          },
+          "1": {
+            "name": "Sách truyền thống",
+            "total": 10457,
+            "pages": 30,
+            "unique_records": 600,
+            "complete": false
+          }
+        },
+        "listing_records": 2836,
+        "detail_records": 0,
+        "phase": "listing",
+        "details_requested": true,
+        "session_refreshes": 4,
+        "minimum_request_gap_seconds": 10,
+        "robots_disallow_acknowledged": true,
+        "scope": "public bibliographic metadata; no login, full text, reader data or current availability claim",
+        "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6",
+        "last_recovery": {
+          "category": "9",
+          "page": 24,
+          "response_sha256": "542ab83525c6735409035cf7709d9c7be6e9bf54ff1817243a9364dab0e7fca6"
+        }
+      },
+      "verified_page_snapshots": 145,
+      "verified_unique_ids": 2836,
+      "verified_detail_samples": 8,
+      "restart": {
+        "output": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101",
+        "scope": "public metadata; eight browse routes then MARC; no login/full text",
+        "pid": 25412,
+        "launch": "WMI-created hidden supervisor; no scheduled task or service configuration",
+        "supervisor_pid": 34184,
+        "started_at": "2026-11-01T14:38:19.7500720+00:00"
+      },
+      "previous_supervisor_exit_code": null,
+      "note": "Previous manifest reports safe_network_error; supervisor exit code is null and not evidence of success. Existing snapshots validated before resume."
+    },
+    {
+      "checked_at": "2026-11-01T15:52:40.011357+00:00",
+      "before_restart": {
+        "source": "https://opacthuvien.ut.edu.vn/opac/",
+        "recorded_at": "2026-11-01T15:41:04.290606+00:00",
+        "complete": false,
+        "blocked": "source_http_520",
+        "categories": {
+          "10": {
+            "name": "Video",
+            "total": 3,
+            "pages": 1,
+            "unique_records": 3,
+            "complete": true
+          },
+          "36": {
+            "name": "Khóa luận",
+            "total": 1,
+            "pages": 1,
+            "unique_records": 1,
+            "complete": true
+          },
+          "11-7": {
+            "name": "Báo / Tạp chí điện tử",
+            "total": 2,
+            "pages": 1,
+            "unique_records": 2,
+            "complete": true
+          },
+          "23": {
+            "name": "CD-ROM",
+            "total": 371,
+            "pages": 19,
+            "unique_records": 371,
+            "complete": true
+          },
+          "9": {
+            "name": "Báo / Tạp chí",
+            "total": 823,
+            "pages": 42,
+            "unique_records": 823,
+            "complete": true
+          },
+          "3": {
+            "name": "Luận văn",
+            "total": 3259,
+            "pages": 122,
+            "unique_records": 2440,
+            "complete": false
+          },
+          "32": {
+            "name": "Tài liệu số",
+            "total": 7487,
+            "pages": 121,
+            "unique_records": 2420,
+            "complete": false
+          },
+          "1": {
+            "name": "Sách truyền thống",
+            "total": 10457,
+            "pages": 121,
+            "unique_records": 2420,
+            "complete": false
+          }
+        },
+        "listing_records": 8478,
+        "detail_records": 0,
+        "phase": "listing",
+        "details_requested": true,
+        "session_refreshes": 9,
+        "minimum_request_gap_seconds": 10,
+        "robots_disallow_acknowledged": true,
+        "scope": "public bibliographic metadata; no login, full text, reader data or current availability claim",
+        "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6",
+        "last_recovery": {
+          "category": "1",
+          "page": 91,
+          "response_sha256": "c09861d1b00f242eb90bcb46a054f1a88bf42fdb3956e092daecc68038574233"
+        }
+      },
+      "verified_page_snapshots": 428,
+      "verified_unique_ids": 8478,
+      "restart": {
+        "output": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101",
+        "scope": "public metadata; eight browse routes then MARC; no login/full text",
+        "pid": 32400,
+        "launch": "WMI-created hidden supervisor; no scheduled task or service configuration",
+        "supervisor_pid": 26760,
+        "started_at": "2026-11-01T15:52:10.9839349+00:00"
+      },
+      "reason": "source_http_520; user requested resume; no collector active before start",
+      "product_code_changes": false
+    }
+  ],
+  "windows_checkpoint_fix": {
+    "recorded_at": "2026-11-01T14:42:39.392115+00:00",
+    "failure": "PermissionError WinError5 at atomic manifest replacement during live resume",
+    "old_snapshots_preserved": true,
+    "replacement_attempts": 8,
+    "total_backoff_seconds": 6.35,
+    "transient_and_permanent_lock_tests_passed": 2,
+    "focused_tests_passed": 94,
+    "real_windows_lock_seconds": 0.3,
+    "real_recovery_seconds": 0.343,
+    "collector_sha256": "04b2f1e68b43d89ea6034991133f546dfa26d5e9f1674b9beb8e432dcb6057af",
+    "restart": {
+      "output": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101",
+      "scope": "public metadata; eight browse routes then MARC; no login/full text",
+      "pid": 34560,
+      "launch": "WMI-created hidden supervisor; no scheduled task or service configuration",
+      "supervisor_pid": 30620,
+      "started_at": "2026-11-01T14:41:36.4848823+00:00"
+    },
+    "progress_after_fix": {
+      "recorded_at": "2026-11-01T14:43:33.424742+00:00",
+      "listing_records": 2896,
+      "phase": "listing",
+      "complete": false,
+      "blocked": null
+    },
+    "new_page_1_31_hash_verified": true
+  },
+  "grouped_ordinal_fix": {
+    "recorded_at": "2026-11-01T15:00:55.461008+00:00",
+    "stored_ids_verified": 4138,
+    "pages_verified": 211,
+    "cause": "OPAC ordinal 1.000. rejected by digits-only ordinal parser",
+    "focused_tests_passed": 97,
+    "actual_source_page_verified": {
+      "category": "3",
+      "page": 50,
+      "first": 981,
+      "last": 1000,
+      "records": 20
+    },
+    "restart": {
+      "output": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101",
+      "scope": "public metadata; eight browse routes then MARC; no login/full text",
+      "pid": 32476,
+      "launch": "WMI-created hidden supervisor; no scheduled task or service configuration",
+      "supervisor_pid": 19088,
+      "started_at": "2026-11-01T15:00:22.1059002+00:00"
+    },
+    "progress_after_resume": {
+      "recorded_at": "2026-11-01T15:02:09.816058+00:00",
+      "listing_records": 4178,
+      "blocked": null,
+      "complete": false
+    }
+  }
+}

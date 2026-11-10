@@ -1,0 +1,273 @@
+{
+  "recorded_at": "2026-11-03T07:12:51.233071+00:00",
+  "kind": "developer regression evidence, not exhaustive or independent library acceptance",
+  "bug": {
+    "question": "Làm thế nào để tra cứu sách tại thư viện?",
+    "before": "Reproduced against old native8000: catalog branch, unrelated books and missing OPAC guide source",
+    "after": {
+      "answer": "Mở OPAC của Thư viện UTH. Nhập tên tài liệu hoặc từ khóa vào ô tìm kiếm, chọn loại tài liệu phù hợp rồi nhấn kính lúp hoặc Enter. Chọn nhan đề trong kết quả để xem thông tin chi tiết. Có thể dùng Tìm kiếm nâng cao khi cần kết hợp nhiều điều kiện.",
+      "status": "answered",
+      "sources": [
+        {
+          "title": "Thư viện UTH",
+          "url": "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=3",
+          "checked_at": "2026-10-28"
+        }
+      ],
+      "suggestions": [],
+      "mode": "faq",
+      "conversation_id": null,
+      "message_id": null,
+      "books": []
+    }
+  },
+  "backend": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "891",
+    "time": "109.804",
+    "timestamp": "2026-11-03T14:09:45.892231+07:00",
+    "hostname": "Junn"
+  },
+  "backend_warning": "1 existing Starlette TestClient/httpx deprecation; not suppressed",
+  "new_guidance_cases": 65,
+  "new_offline_harness_regressions": 1,
+  "tdd": "Observed intended failures before each production fix: how-to routing, framing variants, literal quotes, reservation comparison, offline transport",
+  "frontend": {
+    "passed": 110,
+    "files": 11,
+    "build": "Vite6.4.5,42modules,passed",
+    "product_changes": false
+  },
+  "live": {
+    "passed": 33,
+    "total": 33,
+    "cases": "tests/evaluation/search-guidance-2026-11-03.json",
+    "results": [
+      {
+        "id": "starter-search",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 20.42
+      },
+      {
+        "id": "starter-borrow",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 17.31
+      },
+      {
+        "id": "starter-hours",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 12.72
+      },
+      {
+        "id": "starter-digital",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 13.36
+      },
+      {
+        "id": "unaccented",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 14.05
+      },
+      {
+        "id": "uppercase-whitespace",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 14.53
+      },
+      {
+        "id": "short-how",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 13.43
+      },
+      {
+        "id": "trailing-how",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 13.99
+      },
+      {
+        "id": "trailing-ra-sao",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 14.58
+      },
+      {
+        "id": "polite",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 15.96
+      },
+      {
+        "id": "show-me",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 11.0
+      },
+      {
+        "id": "unfamiliar",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 12.34
+      },
+      {
+        "id": "hdsd",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 12.23
+      },
+      {
+        "id": "opac-usage",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 12.73
+      },
+      {
+        "id": "after-books",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 12.89
+      },
+      {
+        "id": "digital-unaccented",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 12.08
+      },
+      {
+        "id": "download-rights",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 12.21
+      },
+      {
+        "id": "printed",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 12.95
+      },
+      {
+        "id": "author-fields",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 12.23
+      },
+      {
+        "id": "title-fields",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 12.37
+      },
+      {
+        "id": "advanced",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 12.06
+      },
+      {
+        "id": "no-results-help",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 11.11
+      },
+      {
+        "id": "mixed-search-first",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 2.88
+      },
+      {
+        "id": "mixed-guide-first",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 2.71
+      },
+      {
+        "id": "actual-catalog",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 4579.91
+      },
+      {
+        "id": "what-to-do",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 10.27
+      },
+      {
+        "id": "need-to-do",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 10.34
+      },
+      {
+        "id": "steps",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 10.86
+      },
+      {
+        "id": "quoted-advanced-title",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 10.73
+      },
+      {
+        "id": "quoted-missing-title",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 10.55
+      },
+      {
+        "id": "mixed-quoted-title",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 2.89
+      },
+      {
+        "id": "mixed-quoted-how-title",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 2.7
+      },
+      {
+        "id": "reserve-versus-renew",
+        "passed": true,
+        "errors": [],
+        "elapsed_ms": 12.83
+      }
+    ]
+  },
+  "existing_offline": {
+    "passed": 45,
+    "total": 45,
+    "frozen_cases_changed": false,
+    "initial_failures": {
+      "reserve-vs-renew": "Fixed procedural routing to source page7",
+      "availability-followup": "Offline harness was contacting live OPAC; now deterministic unknown, no network/cache observations",
+      "initial-availability": "Same offline transport defect; frozen expected needs_confirmation retained"
+    }
+  },
+  "runtime": {
+    "native_api": "http://127.0.0.1:8000",
+    "restarted_with_fix": true,
+    "runtime_book_rows_modified": false,
+    "private_rows_modified": false,
+    "docker_rebuilt_for_this_fix": false
+  },
+  "limits": [
+    "No guarantee of 100 percent accuracy on every natural-language input",
+    "Needs independent reader/staff relevance labels",
+    "Browser automation disabled in Work settings; no new visual browser check",
+    "No public production deployment, real transaction or paid provider call",
+    "LLM/vector and cold-load performance were not re-evaluated by FAQ guidance checks"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "checked_at": "2026-11-07T07:02:11.423Z",
+  "browser": "ChatGPT in-app browser",
+  "url": "http://127.0.0.1:8000/#chat",
+  "kind": "Observed developer walkthrough; not exhaustive user acceptance",
+  "checks": [
+    "author/year combined with one title",
+    "multiple unknown fields share one warning",
+    "explicit CSS book replaces Python context; both review dates retained",
+    "OPAC guide stays guidance after book discussion",
+    "PDF image modal opens, Escape closes it and returns focus",
+    "C++ local catalog returns 34 results; first page inspected, not full-corpus relevance grading",
+    "guest loans page requires login",
+    "chat messages survive catalog/loans navigation",
+    "reselected Python book and concise follow-up work after navigation"
+  ],
+  "console": [],
+  "last_state": "Browser tab: 1, Title: \"UTH Library · Trợ lý Thư viện UTH\", URL: \"http://127.0.0.1:8000/#chat\".\nThe following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\n+\t\t\t\t106 text Bạn\n+\t\t\t\t107 text Cuốn đó do ai viết và xuất bản năm nào?\n+\t\t\t\t108 text Trợ lý Thư viện\n+\t\t\t\t109 text Theo biểu ghi thư viện, “PYTHON  CRASH COURSE : A HANDS-ON, PROJECT-BASED INTRODUCTION TO PROGRAMMING” có tác giả là Eric Matthes, xuất bản năm 2019.\n+\t\t\t\t110 text Thông tin tài liệu có nguồn đối chiếu; chưa xác nhận tình trạng còn sách hiện tại.\n+\t\t\t\t111 container\n+\t\t\t\t\t112 link Description: PYTHON CRASH COURSE : A HANDS-ON, PROJECT-BASED INTRODUCTION TO PROGRAMMING, Value: opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970\n+\t\t\t\t\t113 text Eric Matthes  · 2019 Thông tin xuất bản: New York : No Starch Press , 2019 Dạng tài liệu: Tài liệu số (Toàn văn) Chỉ số Phân loại thập phân Dewey: 005 Đối chiếu:  2/11/2026\n+\t\t\t\t114 text NGUỒN THAM KHẢO\n+\t\t\t\t115 link Description: 1 PYTHON CRASH COURSE : A HANDS-ON, PROJECT-BASED INTRODUCTION TO PROGRAMMING Đối chiếu: 2/11/2026, Value: opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970\n+\t\t\t\t116 button Đọc câu trả lời\nThe focused UI element is 90 text entry area (settable) Câu hỏi của bạn, ID: chat-question",
+  "limits": [
+    "Desktop viewport only",
+    "No authenticated account or real library transaction",
+    "Source MARC text retained verbatim, including original wording"
+  ]
+}

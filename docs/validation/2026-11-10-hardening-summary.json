@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-10",
+  "backend_suite": {
+    "tests": 1236,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "frontend_passed": 150,
+  "frontend_build": "passed",
+  "live_versioned_edit": {
+    "scope": "Synthetic book in copied-data local API",
+    "indexing_http": 200,
+    "stale_edit_http": 409,
+    "approved_keywords_preserved": true,
+    "book_title_preserved": true
+  },
+  "code_review": "Read-only review found no actionable issues in revision checks and background warmup",
+  "browser": "Aborted before dispatch in this session; no browser verification claimed",
+  "main_activation": "Port 8000 still serves previous backend after earlier blocked restart. Port 8015 uses a separate copied corpus."
+}

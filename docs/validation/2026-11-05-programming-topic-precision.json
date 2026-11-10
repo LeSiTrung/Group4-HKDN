@@ -1,0 +1,1321 @@
+{
+  "recorded_at": "2026-11-05T06:29:50.918347+00:00",
+  "kind": "Developer topic-precision regressions using stored public metadata; not independent relevance labels",
+  "problem": "Literal C matched road endpoints, equipment codes, author initials and MARC $c labels; the old symbol-only assertion was insufficient",
+  "behavior": [
+    "Bare C/C++/C# and explicit programming questions require programming-topic evidence",
+    "Evidence is taken from title, subjects and public MARC subjects/summary, excluding author initials and raw subfield labels",
+    "The same guard applies to lexical, title, smart search and semantic candidates",
+    "Explicit author searches and non-programming queries such as Vitamin C or a full road-design title are preserved"
+  ],
+  "checks": {
+    "backend": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "1072",
+      "time": "150.058",
+      "timestamp": "2026-11-05T13:23:23.231639+07:00",
+      "hostname": "Junn"
+    },
+    "new_topic_tests": {
+      "total": 16,
+      "initial_failures": 11
+    },
+    "topic_and_existing_reader_tests": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "56",
+      "time": "9.885",
+      "timestamp": "2026-11-05T13:20:40.999852+07:00",
+      "hostname": "Junn"
+    },
+    "frontend": {
+      "passed": 141,
+      "failed": 0
+    },
+    "build_exit_code": 0,
+    "live_updated_criteria": {
+      "passed": 21,
+      "total": 21,
+      "criteria": "Symbol boundaries plus manually reviewed positive/negative catalog IDs; first page up to 50 records"
+    },
+    "offline": {
+      "passed": 49,
+      "total": 49
+    }
+  },
+  "snapshot_comparison": [
+    {
+      "language": "C",
+      "before_count": 282,
+      "after_count": 43,
+      "kept_records": [
+        {
+          "id": 5602,
+          "title": "101 thuật toán và chương trình bài toán khoa học kỹ thuật và kinh tế bắng ngôn ngữ C",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung gồm 11 chương: Thông qua các chương trình mẫu tài liệu cung cấp những thuật toán và chương trình của nhiều loại bài toán khoa học kỹ thuật và kinh tế thường gặp.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 5635,
+          "title": "231 Bài tập lập trình ngôn ngữ C",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung: Sách gồm 14 chương từ phần cơ bản nhất đến phần nâng cao. Và để kiểm tra các kết quả đạt được sẽ có phần lời giải cho một số bài tập mẫu.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6237,
+          "title": "Bài tập lập trình ngôn ngữ C : Giáo trình dùng cho các trường Đại học",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 7 chương: Các khái niệm cơ bản về ngôn ngữ C - Hàm và cấu trúc chương trình - Các cấu trúc dữ liệu cơ bản - Kỹ thuật con trỏ trong C - Cấp phát bộ nhớ động và danh sách móc nối - Đồ họa - Các bài tập tổng hợp.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6238,
+          "title": "Bài tập lập trình ngôn ngữ C : Giáo trình dùng cho các trường Đại học",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 7 chương: Các khái niệm cơ bản về ngôn ngữ C - Hàm và cấu trúc chương trình - Các cấu trúc dữ liệu cơ bản - Kỹ thuật con trỏ trong C - Cấp phát bộ nhớ động và danh sách móc nối - Đồ họa - Các bài tập tổng hợp.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6239,
+          "title": "Bài tập lập trình ngôn ngữ C : Giáo trình dùng cho các trường Đại học",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 7 chương: Các khái niệm cơ bản về ngôn ngữ C - Hàm và cấu trúc chương trình - Các cấu trúc dữ liệu cơ bản - Kỹ thuật con trỏ trong C - Cấp phát bộ nhớ động và danh sách móc nối - Đồ họa - Các bài tập tổng hợp.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6270,
+          "title": "Bài tập nâng cao cấu trúc dữ liệu, cài đặt bằng C",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 7 chương: Các bài tập về mảng, tìm kiếm, phân loại và tạo băm (hash) - Các bài tập về ngăn xếp và hàng đợi - Các bài tập về danh sách liên kết - Các bài tập về chuỗi - Các bài tập về cây (Tree) - Các bài tập về đồ thị - Các bài tập khác.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6271,
+          "title": "Bài tập ngôn ngữ C : Từ A đến Z",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung cuốn sách giới thiệu các vấn đề sau: Lập trình căn bản - Đồ họa máy tính - Cấu trúc dữ liệu - Lập trình hệ thống - Phương pháp tính .",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 7065,
+          "title": "Cẩm nang lập trình hệ thống cho máy vi tính IBM - PC bằng Pascal, C, Assembler và Basic . Tập 1",
+          "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí;",
+          "marc": {
+            "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí",
+            "summary": "Cuốn sách này với nội dung là diễn giả các tính năng điện tử cũng như hệ thống điều hành của máy tính PC với đồng thời cả 4 ngôn ngữ lập trình là Basic, Assembler, Pascal và C.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 8418,
+          "title": "Elementry Programming With C C0056",
+          "subjects": "Information Technology; TA Công nghệ thông tin; TA Hệ thống thông tin quản lý; TA Mạng máy tính và truyền thông dữ liệu; TA Ngành công nghệ thông tin; Tiếng Anh;",
+          "marc": {
+            "subjects": "Information Technology; TA Công nghệ thông tin; TA Hệ thống thông tin quản lý; TA Mạng máy tính và truyền thông dữ liệu; TA Ngành công nghệ thông tin; Tiếng Anh",
+            "summary": "Sách tiếng Anh chuyên ngành Công nghệ thông tin.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 9065,
+          "title": "Giáo trình kỹ thuật lập trình C : Căn bản và nâng cao",
+          "subjects": "TV Công nghệ thông tin; TV Điện; TV Điện tử viễn thông; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Điện; TV Điện tử viễn thông; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 12 chương: Các khái niệm cơ bản - Biến, mảng và biểu thức - Vào ra - Cấu trúc rẽ nhánh - Cấu trúc vòng lặp - Hàm và cấu trúc chương trình - Cấu trúc và hợp - Quản lý màn hình và cửa sổ - Đồ họa - Thao tác trên các tệp tin - Lưu trữ dữ liệu và tổ chức bộ nhờ chương trình - Các chỉ thị tiền xử lý.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 9066,
+          "title": "Giáo trình kỹ thuật lập trình C : Dùng cho sinh viên hệ CĐ",
+          "subjects": "TV Điện; TV Điện tử viễn thông; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Điện; TV Điện tử viễn thông; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 12 chương:Các khái niệm cơ bản - Biểu thức và các phép toán trong C = Nhập, xuất dữ liệu trong C - Hàm và cấu trúc chương trình - Dữ liệu kiểu mảng - Chuỗi ký tự - Con trỏ và địa chỉ - Cấp phát và giải phóng bộ nhớ động - Hàm MAIN có tham số- con trỏ - Dữ liệu kiểu cấu trúc - Thao tác với tệp tin FILE.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 9067,
+          "title": "Giáo trình kỹ thuật lập trình C: Căn bản và nâng cao",
+          "subjects": "TV Điện; TV Điện tử viễn thông; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Nganh công nghệ thông tin; TV ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Điện; TV Điện tử viễn thông; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Nganh công nghệ thông tin; TV ngành công nghệ thông tin",
+            "summary": "Sách gồm 12 chương: Các khái niệm cơ bản - Biến, mảng và biểu thức - Vào ra - Cấu trúc rẽ nhánh - Cấu trúc vòng lặp - Hàm và cấu trúc chương trình - Cấu trúc và hợp - Quản lý màn hình và cửa sổ - Đồ họa - Thao tác trên các tệp tin - Lưu trữ dữ liệu và tổ chức bộ nhờ chương trình - Các chỉ thị tiền xử lý.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 9118,
+          "title": "Giáo trình lập trình C . Tập 1",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Gồm 4 chương: Các khái niệm cơ bản - Lập trình với cấu trúc rẽ nhánh - Chương trình con - Vòng lặp và cấu trúc mảng.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 9119,
+          "title": "Giáo trình lập trình C . Tập 2",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Gồm 4 chương: Các khái niệm cơ bản - Lập trình với cấu trúc rẽ nhánh - Chương trình con - Vòng lặp và cấu trúc mảng.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 9120,
+          "title": "Giáo trình lập trình C/C++ trên LINUX",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Gồm 12 chương: Môi trường và các công cụ lập trình-Thao tác vào/ra với hệ thống-Làm việc với tiến trình-Truyền thông liên kết tiến trình-Làm việc với luồng-Thao tác hệ thống-Thư viện liên kết-Giao tiếp với quản trị CSDL-Lập trình giao diện đồ hoạ-Bảo mật-Đóng gói...",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 9191,
+          "title": "Giáo trình lý thuyết và bài tập ngôn ngữ C . Tập 1",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 8 chương: Tổng quan về TURBO C - Các thành phần của ngôn ngữ C - Biểu thức và các phép toán - Các bước lập trình và giải thuật - Các lệnh cấu trúc - Hàm - Kiểu mảng - Biến con trỏ.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 9192,
+          "title": "Giáo trình lý thuyết và bài tập ngôn ngữ C . Tập 1",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 8 chương: Tổng quan về TURBO C - Các thành phần của ngôn ngữ C - Biểu thức và các phép toán - Các bước lập trình và giải thuật - Các lệnh cấu trúc - Hàm - Kiểu mảng - Biến con trỏ.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 9193,
+          "title": "Giáo trình lý thuyết và bài tập ngôn ngữ C . Tập 1",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 8 chương: Tổng quan về TURBO C - Các thành phần của ngôn ngữ C - Biểu thức và các phép toán - Các bước lập trình và giải thuật - Các lệnh cấu trúc - Hàm - Kiểu mảng - Biến con trỏ.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 9194,
+          "title": "Giáo trình lý thuyết và bài tập ngôn ngữ C . Tập 1",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 8 chương: Tổng quan về TURBO C - Các thành phần của ngôn ngữ C - Biểu thức và các phép toán - Các bước lập trình và giải thuật - Các lệnh cấu trúc - Hàm - Kiểu mảng - Biến con trỏ.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 9243,
+          "title": "Giáo trình ngôn ngữ lập trình C",
+          "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công ngệ thông tin; TV Viện Cơ khí;",
+          "marc": {
+            "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công ngệ thông tin; TV Viện Cơ khí",
+            "summary": "Nội dung: Tổng quan về ngôn ngữ lập trình C; Các kiểu dữ liệu cơ bản; Nhập xuất dữ liệu, khối lệnh, chuyển đổi kiểu dữ liệu; Các cấu trúc điều khiển; con trỏ, mảng và xâu kí tự; Hàm; Các kiểu dữ liệu nâng cao; Lập trình C với vi điều khiển 8051.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 9244,
+          "title": "Giáo trình ngôn ngữ lập trình C : Sách dùng cho các trường đào tạo hệ THCN",
+          "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí;",
+          "marc": {
+            "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí",
+            "summary": "Sách gồm 7 chương: Tổng quan về ngôn ngữ lập trình C - Biểu thức - Tổ chức chương trình về mặt dữ liệu - Hàm và tổ chức chương trình về mặt cấu trúc - Tệp và các thao tác vào ra - Đồ họa - Các bài tập tổng hợp.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 9245,
+          "title": "Giáo trình ngôn ngữ lập trình C/C++",
+          "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí;",
+          "marc": {
+            "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí",
+            "summary": "Sách gồm 7 chương: Giới thiệu C/C++ - Sử dụng các phép toán của C/C++ - Sử dụng các lệnh của C/C++ - Mảng và con trỏ - Cấu trúc và vào/ra tệp - Kỹ thuật đồ họa trong C/C++ - Giới thiệu lập trình hướng đối tượng.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 10982,
+          "title": "Kỹ thuật lập trình C : Cơ sở và nâng cao",
+          "subjects": "; TV Công nghệ thông tin; TV Điện; TV Điện tử viễn thông; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Điện; TV Điện tử viễn thông; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung: Các khái niệm cơ bản; Hằng biến và mảng; Biểu thức; Vào ra; Thao tác trên các tệp in; Lưu trữ dữ liệu và tổ chức bộ nhớ chương trình; Các chỉ thị tiền xử lý; Sử dụng ngắt trong C; Truy nhập trực tiếp vào bộ nhớ; Hàm xử lý ngắt và chương trình thướng trú; Âm thanh, âm nhạc; Lập trình theo thời gian, theo sự kiện và trò chơi; giao diện giữa C và Assembler.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11211,
+          "title": "Lập trình C trên Microsoft Windows",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 8 chương:Tổng quát về lập trình trên Windows - Thực đơn và hộp hội thoại - Giao diện GDI và in ấn - Quản lý bộ nhớ và sử lý tập tin - Ảnh BITMAP ;Nhập dữ liệu - Thư viện liên kết động - Nhúng và liên kết đối tượng.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11212,
+          "title": "Lập trình C trong kỹ thuật điện tử : C for Electronic Engineering",
+          "subjects": "Tiếng Việt; TV Cơ giới hóa xếp dỡ; TV Cơ khí ô tô; TV Cơ khí tự động; TV Công nghệ thông tin; TV Công trình giao thông; TV Điện; TV Điện tử viễn thông; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Kỹ thuật xây dựng công trình giao thông; TV Mạng máy tính và truyền thông dữ liệu; TV Máy xây dựng; TV Ngành công nghệ thông tin; TV Viện Cơ khí;",
+          "marc": {
+            "subjects": "Tiếng Việt; TV Cơ giới hóa xếp dỡ; TV Cơ khí ô tô; TV Cơ khí tự động; TV Công nghệ thông tin; TV Công trình giao thông; TV Điện; TV Điện tử viễn thông",
+            "summary": "Nội dung cuốn sách gồm 12 chương: Mở đầu - Nhập vào và xuất ra - Các lệnh tự chọn - Lệnh lặp - Các hàm - Con trỏ - Mảng - Xâu - Các cấu trúc - Nhập/ Xuất tệp - Lập trình hệ thống - Các đề án.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11213,
+          "title": "Lập trình C trong kỹ thuật điện tử : C for Electronic Engineering",
+          "subjects": "TV Cơ giới hóa xếp dỡ; TV Cơ khí ô tô; TV Cơ khí tự động; TV Công nghệ thông tin; TV Công trình giao thông; TV Điện; TV Điện tử viễn thông; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Kỹ thuật xây dựng công trình giao thông; TV Mạng máy tính và truyền thông dữ liệu; TV Máy xây dựng; TV Ngành công nghệ thông tin; TV Viện Cơ khí;",
+          "marc": {
+            "subjects": "TV Cơ giới hóa xếp dỡ; TV Cơ khí ô tô; TV Cơ khí tự động; TV Công nghệ thông tin; TV Công trình giao thông; TV Điện; TV Điện tử viễn thông; TV Hệ thống thông tin quản lý",
+            "summary": "Nội dung cuốn sách gồm 14 chương: Mở đầu - Nhập vào và xuất ra - Các lệnh tự chọn - Lệnh lặp - Các hàm - Con trỏ - Mảng - Xâu - Các cấu trúc - Nhập/ Xuất tệp - Lập trình hệ thống - Các đề án.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11214,
+          "title": "Lập trình C và C ++ trong Windows 95",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 12 chương: Tổng quan về Windows - Xử lý nhấn phím - Cửa sổ thông báo menu - Hộp thoại - Biểu tượng, con trỏ và ảnh BITMAP - Một số phần tử điều khiển khác - Làm việc với văn bản - Làm việc với đồ họa - Các phần tử điều khiển chung - Console - Đa nhiệm tiến trình và nhánh - Các khả năng API mở rộng.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11238,
+          "title": "Lập trình trên ngôn ngữ C",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung cuốn sách gồm 14 chương: Cấu trúc chương trình C - Các thành phần cơ bản của ngôn ngữ C - Các kiểu dữ liệu chuẩn - Các biểu thức - Các câu lệnh - Kiểu dữ liệu tự định nghĩa - Kiểu mảng - Kiểu xâu - Con trỏ và phân phối bộ nhớ động - Kiểu cấu trúc - Các hàm - Kiểu tập - Kỹ thuật đồ họa - Bộ tiền xử lý.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11252,
+          "title": "Lập trình Windows dùng Visual C ++ 5.0 và MFC . Tập 1",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11253,
+          "title": "Lập trình Windows dùng Visual C ++ 5.0 và MFC . Tập 2",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11254,
+          "title": "Lập trình Windows dùng Visual C ++ 5.0 và MFC . Tập 3",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11255,
+          "title": "Lập trình Windows dùng Visual C ++ 5.0 và MFC . Tập 4",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11256,
+          "title": "Lập trình Windows dùng Visual C ++ 5.0 và MFC . Tập 5",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11257,
+          "title": "Lập trình WINDOWS với C #. Net",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung: Tìm hiểu kiến trúc .NET qua C#, Tạo ứng dụng Windows Forms, ADO.NET, Web Service, ASP.NET. GDI+, COM, Assembly trong .NET",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 12430,
+          "title": "Ngôn ngữ lập trình C",
+          "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí;",
+          "marc": {
+            "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí",
+            "summary": "Sách gồm 19 chương: Mở đầu - Các phần tử cơ bản của ngôn ngữ C - Các kiểu dữ liệu cơ sở - Biểu thức, câu lệnh và các phép toán - Vào/ ra dữ liệu - Các câu lệnh điều kiện - Thực hành Turbo C++ 3.0 và 4.5 - Vòng lặp xác định for và không xác định while - hàm function và lệnh Macro - kiểu mảng (arry) và con trỏ .",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 12431,
+          "title": "Ngôn ngữ lập trình C học và sử dụng",
+          "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí;",
+          "marc": {
+            "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí",
+            "summary": "Sách gồm 9 chương: Những khái niệm cơ bản của ngôn ngữ C - Các phép toán và biểu thức - Các toán lệnh có điều kiện - Hàm và các cấp lưu trữ biến; bộ tiền xử lý - Con trỏ và các phép toán trên con trỏ - Con trỏ và hàm = Các kiểu dữ liệu phức tạp - Các hàm kết xuất thông tin vào ra(INPUT/OUTPUT).",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 12560,
+          "title": "Nhập môn lập trình ngôn ngữ C : Lý thuyết, Ví dụ, Bài tập mẫu, Bài tập",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 8 chương: Tổng quan về ngôn ngữ C ; Các yếu tố cơ bản của ngôn ngữ C ;Mảng và con trỏ ; Hàm ; Cấu trúc ;Tệp và thao tác vào ra ;Đồ họa ; Bộ tiền xử lý.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 19287,
+          "title": "Thiết kế tối ưu chân vịt tàu thủy bằng ngôn ngữ C và C++ : Luận văn Kỹ thuật tàu thủy",
+          "subjects": "Luận văn; LV Kỹ thuật cơ khí động lực; LV Kỹ thuật tàu thủy; LV Viện Cơ khí;",
+          "marc": null
+        },
+        {
+          "id": 19652,
+          "title": "Xây dựng WEBSITE đánh giá các chương trình giải thuật được viết trên ngôn ngữ C/C++ : Khóa luận Công nghệ thông tin",
+          "subjects": "Khóa luận; KL Công nghệ thông tin;",
+          "marc": null
+        },
+        {
+          "id": 19702,
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "subjects": "Ebook Công nghệ thông tin; Ebook Hệ thống thông tin quản lý; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Springer; Ebook Tiếng Anh; Ebook Tủ sách online;",
+          "marc": {
+            "subjects": "Ebook Công nghệ thông tin; Ebook Hệ thống thông tin quản lý; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Springer; Ebook Tiếng Anh; Ebook Tủ sách online",
+            "summary": "",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 22671,
+          "title": "Kỹ thuật lập trình C : Cơ sở và nâng cao",
+          "subjects": "Ebook Điện; Ebook Điện tử viễn thông; Ebook Hệ thống thông tin quản lý; Ebook Kỹ thuật lập trình; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Tiếng Việt; Ebook Tin học đại cương;",
+          "marc": null
+        },
+        {
+          "id": 22672,
+          "title": "Kỹ thuật lập trình C : Cơ sở và nâng cao",
+          "subjects": "Ebook Công nghệ thông tin; Ebook Hệ thống thông tin quản lý; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Tiếng Việt;",
+          "marc": null
+        },
+        {
+          "id": 24101,
+          "title": "Ngôn ngữ lập trình C và Cấu trúc dữ liệu",
+          "subjects": "Ebook Cơ khí tự động; Ebook Công nghệ thông tin; Ebook Hệ thống thông tin quản lý; Ebook Kỹ thuật cơ khí; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Tiếng Việt; Ebook Viện cơ khí;",
+          "marc": null
+        }
+      ],
+      "excluded_examples": [
+        {
+          "id": 19,
+          "title": "Thiết kế tuyến đường mới qua hai điểm A - C",
+          "subjects": "Công trình giao thông; Đồ án tốt nghiệp; Kỹ thuật xây dựng công trình giao thông; Xây dựng cầu đường; Thesis",
+          "marc": null
+        },
+        {
+          "id": 93,
+          "title": "Thiết kế quy trình công nghệ đóng mới tàu kéo đẩy GT=262, công suất máy 3200HP thi công tại công ty TNHH MTV đóng tàu An Phú :$bKhóa luận Công nghệ đóng tàu thủy /$c",
+          "subjects": "Khóa luận; Viện Hàng hải; Kỹ thuật tàu thủy; Công nghệ đóng tàu thủy; Thesis",
+          "marc": null
+        },
+        {
+          "id": 253,
+          "title": "Thiết kế tuyến đường mới qua 2 điểm C - T",
+          "subjects": "Công trình giao thông; Đồ án tốt nghiệp; Kỹ thuật xây dựng công trình giao thông; Xây dựng đường bộ; Viện xây dựng; Thesis",
+          "marc": null
+        },
+        {
+          "id": 434,
+          "title": "Lập quy trình hướng dẫn sử dụng thiết bị chưng cất nước ngọt JWP - 26 - C của hãng ALFA LAVAL",
+          "subjects": "Khóa luận; Viện Hàng hải; Khoa học Hàng hải; Máy tàu thủy; Thesis",
+          "marc": null
+        },
+        {
+          "id": 517,
+          "title": "Thiết kế mới tuyến đường đi qua hai điểm C - D: Phần đường",
+          "subjects": "Viện Nghiên cứu đào tạo Đèo Cả; Công trình giao thông; Đồ án tốt nghiệp; Kỹ thuật xây dựng công trình giao thông; Xây dựng cầu đường; Thesis",
+          "marc": null
+        },
+        {
+          "id": 539,
+          "title": "Hoàn thiện công tác thanh quyết toán hợp đồng xây dựng tại công ty cổ phần xây dựng Trung Nam 18 E&C",
+          "subjects": "Luận văn thạc sỹ; Quản lý xây dựng; Thesis",
+          "marc": null
+        },
+        {
+          "id": 561,
+          "title": "Thiết kế tuyến đường mới đi qua hai điểm C-D",
+          "subjects": "Đồ án tốt nghiệp; Viện Đèo Cả; Kỹ thuật xây dựng công trình giao thông; Xây dựng đường bộ; Thesis",
+          "marc": null
+        },
+        {
+          "id": 731,
+          "title": "Khai thác và sử dụng hải đồ điện tử C-MAP",
+          "subjects": "Điều khiển tàu biển; Viện Hàng hải; Khóa luận; Thesis",
+          "marc": null
+        },
+        {
+          "id": 764,
+          "title": "Thiết kế tuyến đường mới qua hai điểm A - C",
+          "subjects": "Đồ án tốt nghiệp; Kỹ thuật xây dựng công trình giao thông; Viện xây dựng; Xây dựng đường bộ; Thesis",
+          "marc": null
+        },
+        {
+          "id": 818,
+          "title": "Thiết kế mới tuyến đường qua 2 điểm C - N",
+          "subjects": "Công trình giao thông; Đồ án tốt nghiệp; Kỹ thuật xây dựng công trình giao thông; Xây dựng đường bộ; Thesis",
+          "marc": null
+        },
+        {
+          "id": 853,
+          "title": "Tòa Soạn báo Newday :$bĐồ án Kết cấu Công trình (Chính quy - KC16) /$c",
+          "subjects": "Kỹ thuật kết cấu công trình; Viện Nghiên cứu đào tạo Đèo Cả; Đồ án tốt nghiệp; Kỹ thuật công trình xây dựng; Thesis",
+          "marc": null
+        },
+        {
+          "id": 999,
+          "title": "Thiết kế tuyến đường mới đi qua hai điểm C - D",
+          "subjects": "Viện Nghiên cứu đào tạo Đèo Cả; Công trình giao thông; Đồ án tốt nghiệp; Kỹ thuật xây dựng công trình giao thông; Xây dựng cầu đường; Thesis",
+          "marc": null
+        }
+      ]
+    },
+    {
+      "language": "C++",
+      "before_count": 31,
+      "after_count": 31,
+      "kept_records": [
+        {
+          "id": 5637,
+          "title": "247 bài tập lập trình hướng đối tượng với C++",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung: Sách gồm 14 chương: Các vấm đề cơ bản trong C++ - Lệnh điều kiện và những kiểu số nguyên - Hàm - Mảng - Con trỏ và tham chiếu - Kiểu chuỗi - Lớp - Sự nạp chồng toán tử - Lớp String - Sự tích hợp và thừa kế - Dòng xuất/nhập = Các mẫu và bộ lặp = Thư viện.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 5660,
+          "title": "455 Bài tập cấu trúc dữ liệu ứng dụng và cài đặt bằng C++",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung: Tổng quan về C++ - Pointer và mảng - Các lớp - Phép đệ quy - Ngăn xếp; Hàng đợi - Danh sách - TABLE - Cây - Cây nhị phân - Cây tìm kiếm - Heap và hàng đợi ưu tiên - Phân loại.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6234,
+          "title": "Bài tập lập trình hướng đối tượng với C++ : Bài tập mẫu, câu hỏi trắc nghiệm, bài tập tự giải",
+          "subjects": "TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung cuốn sách gồm: Những mở rộng của C++ - Lớp và đối tượng - Toán tử cho lớp - Kỹ thuật kế thừa - Khuôn hình (Template) - Vào ra trong C++ - Phân tích thiết kế đối tượng trong C++ và các phụ lục.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6235,
+          "title": "Bài tập lập trình hướng đối tượng với C++ : Bài tập mẫu, câu hỏi trắc nghiệm, bài tập tự giải",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung cuốn sách gồm: Những mở rộng của C++ - Lớp và đối tượng - Toán tử cho lớp - Kỹ thuật kế thừa - Khuôn hình (Template) - Vào ra trong C++ - Phân tích thiết kế đối tượng trong C++ và các phụ lục.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6236,
+          "title": "Bài tập lập trình hướng đối tượng với C++ : Bài tập mẫu, câu hỏi trắc nghiệm, bài tập tự giải",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung cuốn sách gồm: Những mở rộng của C++ - Lớp và đối tượng - Toán tử cho lớp - Kỹ thuật kế thừa - Khuôn hình (Template) - Vào ra trong C++ - Phân tích thiết kế đối tượng trong C++ và các phụ lục.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6503,
+          "title": "Bạn sẽ thành thạo C++ chỉ trong 21 ngày : Dùng cho học sinh - Kỹ thuật viên - Sinh viên",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6882,
+          "title": "C++ và lập trình hướng đối tượng",
+          "subjects": "; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công ngệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công ngệ thông tin",
+            "summary": "Nội dung cuốn sách gồm 11 chương: C++ và lập trình hướng đối tượng - Hàm trong C++ - Khái niệm về lớp - Truy nhập trực tiếp vào bộ nhớ - Hàm tao, hàm hủy và các vấn đề liên quan - Dẫn xuất và thừa kế - Tương ứng bội và phương thức ảo - Các dòng tin - Đồ họa - Khuôn hình - Một số chương trình hướng đối tượng trên C++.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 8792,
+          "title": "Giáo trình C++ và lập trình hướng đối tượng",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung: C++ & lập trình hướng đối tượng; Hàm trong C++; Khái niệm về lớp; Hàm tạo, hàm hủy và các vấn đề liên quan; Dẫn xuất và thừa kế; Tương ứng bội và phương thức ảo; Thao tác trên các tệp pin; Các dòng tin (Stream); Đồ họa; Truy nhập trực tếp vào bộ nhớ; Khuôn hình (Template).",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 8793,
+          "title": "Giáo trình C++ và lập trình hướng đối tượng",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung sách trình bày một cách hệ thống các khái niệm của lập trình hướng đối tượng được cài đặt trong C++ như lớp, đối tượng, sự thừa kế, tính tương ứng bội, các khả năng mới trong xây dựng, sử dụng hàm. Cách xây dựng hàm với số đối bất dịnh trong C cũng sẽ được giới thiệu.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 9120,
+          "title": "Giáo trình lập trình C/C++ trên LINUX",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Gồm 12 chương: Môi trường và các công cụ lập trình-Thao tác vào/ra với hệ thống-Làm việc với tiến trình-Truyền thông liên kết tiến trình-Làm việc với luồng-Thao tác hệ thống-Thư viện liên kết-Giao tiếp với quản trị CSDL-Lập trình giao diện đồ hoạ-Bảo mật-Đóng gói...",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 9245,
+          "title": "Giáo trình ngôn ngữ lập trình C/C++",
+          "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí;",
+          "marc": {
+            "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí",
+            "summary": "Sách gồm 7 chương: Giới thiệu C/C++ - Sử dụng các phép toán của C/C++ - Sử dụng các lệnh của C/C++ - Mảng và con trỏ - Cấu trúc và vào/ra tệp - Kỹ thuật đồ họa trong C/C++ - Giới thiệu lập trình hướng đối tượng.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 9246,
+          "title": "Giáo trình ngôn ngữ lập trình C++",
+          "subjects": "Tiếng Việt; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công ngệ thông tin;",
+          "marc": {
+            "subjects": "Tiếng Việt; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công ngệ thông tin",
+            "summary": "Nội dung: Tổng quan về ngôn ngữ lập trình C++; Các khái niệm cơ bản trong C++; Các câu lệnh điều kiện; Các câu lệnh lặp; Hàm trong C++; Kiểu mảng; Xâu ký tự; Lập trình hướng đối tượng với C++; Kiểu con trỏ và kiểu cấu trúc.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 10291,
+          "title": "Hướng dẫn từng bước tự học và thực hành Visual C++ 2008 : Kèm theo các bài tập ứng dụng . Toàn tập",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung gồm: Hợp lý hóa phương tiện và cơ cấu của OOP - Làm việc với bộ tiền xử lý - Các kiểu dữ liệu - Các lớp - Các Array và Template - Nhập và xuật - Sử dụng chức năng cài sẵn - Các tiện ích.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 10875,
+          "title": "Kỹ năng lập trình Windows bằng Visual C++ 6",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung: Môi trường phát triển và thiết lập ứng dụng Visual C++; Sử dụng chức năng điều khiển trong ứng dụng; Cho người dùng tương tác- tích hợp chuột và bán phím vào ứng dụng; Làm việc với các bộ định giờ; Nhận phản hồi của người dùng- bổ sung các hộp thoại vào ứng dụng; Tạo các menu cho ứng dụng; Làm việc với văn bản và các font; Phối hợp ứng dụng với đối tượng đồ họa, hình ảnh và các ảnh bitmap...",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 10983,
+          "title": "Kỹ thuật lập trình C++",
+          "subjects": "TV Công nghệ thông tin; TV Điện; TV Điện tử viễn thông; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Điện; TV Điện tử viễn thông; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung sách gồm 13 chương: Máy tính điện tử và lập chương trình - Những yếu tố cơ sở của C++ - Lập trình nhập - xuất dữ liệu - Kỹ thuật lập chương trình phân nhánh - Kỹ thuật lập chương trình có chu trình .",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11225,
+          "title": "Lập trình hướng đối tượng với C++",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung cuốn sách gồm 6 chương và 4 phụ lục: Lập trình hướng đối tượng, phương pháp giải quyết bài toán mới - Những mở rộng của C++ - Đối tượng và lớp - Định nghĩa toán tử trên lớp - Kỹ thuật thừa kế - Khuôn hình.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11226,
+          "title": "Lập trình hướng đối tượng với C++",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung cuốn sách gồm 6 chương và 4 phụ lục: Lập trình hướng đối tượng, phương pháp giải quyết bài toán mới - Những mở rộng của C++ - Đối tượng và lớp - Định nghĩa toán tử trên lớp - Kỹ thuật thừa kế - Khuôn hình.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11227,
+          "title": "Lập trình hướng đối tượng với C++",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung cuốn sách gồm 6 chương và 4 phụ lục: Lập trình hướng đối tượng, phương pháp giải quyết bài toán mới - Những mở rộng của C++ - Đối tượng và lớp - Định nghĩa toán tử trên lớp - Kỹ thuật thừa kế - Khuôn hình.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11241,
+          "title": "Lập trình trong kỹ thuật với ngôn ngữ C++",
+          "subjects": "Tiếng Việt; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công ngệ thông tin;",
+          "marc": {
+            "subjects": "Tiếng Việt; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công ngệ thông tin",
+            "summary": "Nội dung: Giới thiệu chương trình máy tính và cách phát triển phần mềm; Phép gán, định dạng và các thao tác nhập, xuất dữ liệu; Cấu trúc điều kiện; Cấu trúc lặp; Hàm trong C++; Dữ liệu kiểu mảng; Xây ký tự trong C++; Tệp dữ liệu.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 12432,
+          "title": "Ngôn ngữ lập trình C++",
+          "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí;",
+          "marc": {
+            "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí",
+            "summary": "Sách gồm 22 chương: Mở đầu - Các phần tử cơ bản của ngôn ngữ C ++ - Các kiểu dữ kiện cơ sở - Biểu thức, câu lệnh và các phép toán - Vào ra dữ liệu - Các câu lệnh điều kiện - Thực hành tubor C ++ 3.0 VÀ bORLAND C ++ 4.5, Viual C ++ - vòng lặp xác định for và không xác định while - Hàm function và lệnh gộp macro = Kiểu mảng và con trỏ - Kiểu xâu kí tự - Kiểu dữ liệucấu trúc - Kiểu dữ liệu định nghĩa - Tham chiếu - Class và objects - Dữ liệu kiểu tệp - Tạo thêm phương án thực hiện cho toán tử - Cấu trúc động của dữ liệu - Các mô hình bộ nhớ củ C ++ - Màn hình chế độ GRAPHIC; Project; Preprocesor - Bộ tiền xử lý.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 12433,
+          "title": "Ngôn ngữ lập trình C++ : Từ cơ bản đến hướng đối tượng",
+          "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí;",
+          "marc": {
+            "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí",
+            "summary": "Nội dung cuốn sách gồm 2 phần: C++, lập trình cơ bản - Lập trình hướng đối tượng",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 14786,
+          "title": "Tự học lập trình cơ sở dữ liệu Visual C++. NET một cách nhanh chóng và có hiệu quả qua các chương trình mẫu",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; Visual C++.net;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; Visual C++.net",
+            "summary": "Sách gồm 3 phần : Tìm hiểu cửa sổ thiết kế MS Deverlopment environment ; Lập trình cơ sở dữ liệu access 2003 và Visual C++.NET ; Lập trình cơ sở dữ liệu SQL Server 2000 và Visual C++.NET",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 14789,
+          "title": "Tự học ngôn ngữ lập trình C++ : Dành cho học sinh - sinh viên",
+          "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí;",
+          "marc": {
+            "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí",
+            "summary": "Sách gồm 9 chương: Làm quen với C ++ ; Các bộ tạo, bộ thủy và toán tử gán ; Quản lý tài nguyên ; Thiết kế và khai báo ; Các phần thực thi ; Sự thừa kế và thiết kế hướng đối tượng ; Các Template và lập trình chung ; Tùy biến new và delete ; Những vấm đề khác.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 14836,
+          "title": "Từng bước học lập trình Visual C++.net",
+          "subjects": "Tiếng Việt; TV Công nghệ thông tin;",
+          "marc": {
+            "subjects": "Tiếng Việt; TV Công nghệ thông tin",
+            "summary": "Nội dung cuốn sách gồm 24 chương: Biến và các toán tử - Mở rộng lớp và đối tượng - Điều khiển chu trình sống của các đối tượng...",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 15401,
+          "title": "Thực hành Visual C++ 6.0",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung cuốn sách gồm 14 chương: Một thoáng với chương trình - Lập trình với C++ - Dữ liệu - Điều khiển - Mảng - Con trỏ - Tạo thư viện liên kết động - Tạo phần khiển theo sở thích...",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 19287,
+          "title": "Thiết kế tối ưu chân vịt tàu thủy bằng ngôn ngữ C và C++ : Luận văn Kỹ thuật tàu thủy",
+          "subjects": "Luận văn; LV Kỹ thuật cơ khí động lực; LV Kỹ thuật tàu thủy; LV Viện Cơ khí;",
+          "marc": null
+        },
+        {
+          "id": 19652,
+          "title": "Xây dựng WEBSITE đánh giá các chương trình giải thuật được viết trên ngôn ngữ C/C++ : Khóa luận Công nghệ thông tin",
+          "subjects": "Khóa luận; KL Công nghệ thông tin;",
+          "marc": null
+        },
+        {
+          "id": 20378,
+          "title": "Big C++",
+          "subjects": "Ebook Công nghệ thông tin; Ebook Hệ thống thông tin quản lý; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Tiếng Anh; Tủ sách ngoại văn;",
+          "marc": null
+        },
+        {
+          "id": 23034,
+          "title": "Lập trình hướng đối tượng với C++",
+          "subjects": "Ebook Công nghệ thông tin; Ebook Hệ thống thông tin quản lý; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Tiếng Việt;",
+          "marc": null
+        },
+        {
+          "id": 26624,
+          "title": "Thinking in C++ . Volume 1",
+          "subjects": "Ebook Công nghệ thông tin; Ebook Hệ thống thông tin quản lý; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin;",
+          "marc": null
+        },
+        {
+          "id": 26625,
+          "title": "Thinking in C++ : Standard Libraries & Advanced Topics . Volume 2",
+          "subjects": "Ebook Công nghệ thông tin; Ebook Hệ thống thông tin quản lý; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook NCKH Công nghệ thông tin; Ebook Ngành công nghệ thông tin; Ebook Tiếng Anh;",
+          "marc": null
+        }
+      ],
+      "excluded_examples": []
+    },
+    {
+      "language": "C#",
+      "before_count": 30,
+      "after_count": 30,
+      "kept_records": [
+        {
+          "id": 638,
+          "title": "Mô phỏng hệ thống ADSL dựa trên công nghệ ATM bằng Visual C#",
+          "subjects": "Kỹ thuật điện; Viện Công nghệ thông tin và Điện, điện tử; Điện tử viễn thông; Khóa luận; Thesis",
+          "marc": null
+        },
+        {
+          "id": 5804,
+          "title": "Advanced Technologies in Windows Form Using C# Class Notes WIN 0099",
+          "subjects": "Information Technology; TA Công nghệ thông tin; TA Hệ thống thông tin quản lý; TA Mạng máy tính và truyền thông dữ liệu; TA Ngành công nghệ thông tin; Tiếng Anh;",
+          "marc": {
+            "subjects": "Information Technology; TA Công nghệ thông tin; TA Hệ thống thông tin quản lý; TA Mạng máy tính và truyền thông dữ liệu; TA Ngành công nghệ thông tin; Tiếng Anh",
+            "summary": "Sách tiếng Anh chuyên ngành Công nghệ thông tin.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 5805,
+          "title": "Advanced Technologies in Windows Form Using C#",
+          "subjects": "Information Technology; TA Công nghệ thông tin; TA Hệ thống thông tin quản lý; TA Mạng máy tính và truyền thông dữ liệu; TA Ngành công nghệ thông tin; Tiếng Anh;",
+          "marc": {
+            "subjects": "Information Technology; TA Công nghệ thông tin; TA Hệ thống thông tin quản lý; TA Mạng máy tính và truyền thông dữ liệu; TA Ngành công nghệ thông tin; Tiếng Anh",
+            "summary": "Sách tiếng Anh chuyên ngành Công nghệ thông tin.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6817,
+          "title": "C# 2005 - Lập trình ASP. NET 2.0 . Tập 5 - Quyển 1 , Điều khiển lập trình chủ ASP.NET 2.0",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách trình bày những kiến thức từ cơ bản đến nâng cao liên quan đên cách xây dựng ứng dụng Web Site, điều khiển trình chủ mới trong phiên bản ASP.NET 2.0.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6818,
+          "title": "C# 2005 - Lập trình ASP. NET 2.0 . Tập 5 - Quyển 2 , Điều khiển trình chủ đặt biệt và đối tượng ASP.NET 2.0",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 5 chương: Điều khiển trình chủ đặc biệt - Điều khiển trình chủ dạng mẫu - Điều khiển trình chủ kiểm tra dữ liệu - Đối tượng RESPONSE, REQUEST và SERVER...- Đối tượng APPLICATION, SESSION và HTTPCOOKIE.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6819,
+          "title": "C# 2005 - Lập trình ASP. NET 2.0 . Tập 5 - Quyển 3 , Điều khiển kết nối cơ sở dữ liệu",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách giới thiệu một số điều khiển trình chủ mới trong ASP.NET 2.0 dùng để trình bày dữ liệu : GridView, DetailsView, FormView, DataList, và Repeater.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6820,
+          "title": "C# 2005 - Lập trình ASP. NET 2.0 . Tập 5 - Quyển 4 , Đối tượng ADO. NET 2.0 và XML",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 6 chương: Giới thiệu ADO.NET 2.0 trong ASP.NET 2.0 - Xây dựng lớp dùng chung - Làm việc với điều khiển trình chủ - Làm việc với XML = Chức năng giỏ hàng và đơn đặt hàng = User control và Masterpage.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6821,
+          "title": "C# 2005 - Lập trình cơ bản",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 9 chương : Giới thiệu NET 2005& C # - Làm việc với VISUAL STUDI .NET 2005 - Chưong trình C # 2005 - Kiểu dữ liệu trong C # .NET - Phép toán và chuyển đổi kiểu dữ liệu - Kiểu dữ liệu mảng và kiểu ARRAYLIST - Định nghĩa và sử dụng kiểu GENERIC - Phát biểu điều kiện - Kiểm soát ngoại lệ và gỡ lỗi chưong trình C #.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6822,
+          "title": "C# 2005 . Tập 2 , Lập trình WINDOWS FORM",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 10 chưong: Xuyên suốt từ giới thiệu các loại Form, hình dạng Form, các thuộc tính, phưong thức và thuộc tính Form, các loại điều khiển thừong dùng, điều khiển đặc biệt, điều khiển xây dựng menu, điều khiển do ngừoi sử dụng định nghĩa, hộp thoại và in ấn, thông tin màn hình, hệ thống và ứng dụng.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6823,
+          "title": "C# 2005 . Tập 3 , Lập trình hướng đối tượng",
+          "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí;",
+          "marc": {
+            "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí",
+            "summary": "Cung cấp những kiến thức cơ bản liên quan đến việc định nghĩa và cài đặt hướng đối tượng bằng ngôn ngữ lập trình C#.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6824,
+          "title": "C# 2005 . Tập 4 - Quyển 1 , Lập trình cơ sở dữ liệu",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách gồm 6 chương: Giới thiệu lập trình cơ sở dữ liệu - Đối tượng SQLCONNECTION - Đối tượng OLEDBCONNECTION - Đối tượng SQLCOMMAND và OLEDBCOMMAND - Đối tượng SQLPARAMETER và PARAMETERS COLLECTION - Đối tượng SQLDATAREADER và ứng dụng quản lý nhân sự và tiền lương.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 6825,
+          "title": "C# 2005 . Tập 4 - Quyển 2 , Lập trình cơ sở dữ liệu Report Visual SourceSafe 2005",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Sách giới thiệu những kiến thức từ cơ bàn đến nâng cao liên quan đến các đối tượng thuộc kiến trúc không kết nối cơ sỡ dữ liệu như: Dataset, Datatable, Datatablereader, Data View, quá trình kết nối, thao tác dữ liệu trên nhiều loại cơ sở khác.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 11215,
+          "title": "Lập trình C# từ cơ bản đến nâng cao",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung gồm: Các nét cơ bản của C# - Xuất nhập dữ liệu - Các lệnh diều khiển - Phương thức (method) - Lớp trong lập trình hướng đối tượng C# (class) - Tính thừa kế trong C# (inheritance) - Tính đa dạng (polymorphinsm) - Files - Chuỗi ký tự (string),MULTITHREADING (đa luồng).",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11219,
+          "title": "Lập trình cơ sở dữ liệu với C# mô hình nhiều tầng",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung: Tổng quan - Phân tích thiết kế cơ sở dữ liệu ứng dụng - Tầng 1-viết lớp truy xuất dữ liệu - tầng 2-viết các lớp xử lý nghiệp vụ - Tàng 3-xây dựng giao diện - Hoàn thiện ứng dụng.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 11237,
+          "title": "Lập trình Silverlight 3.0 và Expression Blend 3 : ASP.NET 3.5, C# và Silverlight 3.0",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung gồm 8 chương sau: Giới thiệu công nghệ Silverlight - Ứng dụng Silverlight - Điều khiển Silverlight - Điều khiển nhập liệu - Khám phá Microsoft Expression Blend 3 - Hình ảnh, đồ họa và hiệu ứng - Đa truyền thông - Ứng dụng Silverlight và ASP.net.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 12832,
+          "title": "Programming in C# C0057",
+          "subjects": "Information Technology; TA Công nghệ thông tin; TA Hệ thống thông tin quản lý; TA Mạng máy tính và truyền thông dữ liệu; TA Ngành công nghệ thông tin; Tiếng Anh;",
+          "marc": {
+            "subjects": "Information Technology; TA Công nghệ thông tin; TA Hệ thống thông tin quản lý; TA Mạng máy tính và truyền thông dữ liệu; TA Ngành công nghệ thông tin; Tiếng Anh",
+            "summary": "Sách tiếng Anh chuyên ngành Công nghệ thông tin.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 12833,
+          "title": "Programming in C# Class Notes C0062",
+          "subjects": "Information Technology; TA Công nghệ thông tin; TA Hệ thống thông tin quản lý; TA Mạng máy tính và truyền thông dữ liệu; TA Ngành công nghệ thông tin; Tiếng Anh;",
+          "marc": {
+            "subjects": "Information Technology; TA Công nghệ thông tin; TA Hệ thống thông tin quản lý; TA Mạng máy tính và truyền thông dữ liệu; TA Ngành công nghệ thông tin; Tiếng Anh",
+            "summary": "Sách tiếng Anh chuyên ngành Công nghệ thông tin.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 13722,
+          "title": "Sổ tay kỹ thuật VISUAL C# . Tập 8 , Giải đáp các ứng dụng mẫu - phần B",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung: Làm việc với các ứng dụng console - Tương tác với hệ điều hành -Làm việc với.NET Framework,NET Framework cao cấp GDI+ - Xây dựng những ứng dụng dịch vụ xí nghiệp,COM Interop/PInvoke,Víual Studio.NET - Bảo dảm an toàn các ứng dụng.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 13827,
+          "title": "SQL Server 2005 xây dựng ứng dụng quản lí kế toán bằng C# 2005",
+          "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Giới thiệu ứng dụng; giao diện ứng dụng; phần kế toán thu và chi; công nợ phải thu; công nợ phải trả; xuất- nhập- tồn; phần đóng sổ kế toán; phần báo cáo (report); phần phân quyền sử dụng; lớp và danh mục dùng chung.",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 14787,
+          "title": "Tự học lập trình hướng đối tượng và lập trình cơ sở dữ liệu C# : Một cách nhanh chóng và có hiệu quả nhất",
+          "subjects": "Ebook Hệ thống thông tin quản lý; Ebook Ngành công nghệ thông tin; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+          "marc": {
+            "subjects": "Ebook Hệ thống thông tin quản lý; Ebook Ngành công nghệ thông tin; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin",
+            "summary": "Nội dung: Cách vào MS Deverlopment tìm hiểu cửa sổ thiết kế-MS Development,Dùng Visual C# Prject và console Appiication,Lập trình Visual C# dùng cơ sở dữ liệu Access,Lập trình Visual C# dùng cơ sở dữ liệu SQL SERVERR 2000 cách cài đặt SQL SERVERR 2000",
+            "audience": "",
+            "checked_at": "2026-11-04"
+          }
+        },
+        {
+          "id": 15906,
+          "title": "Windows Form Programming With C# WIN0095",
+          "subjects": "Information Technology; TA Công nghệ thông tin; TA Hệ thống thông tin quản lý; TA Mạng máy tính và truyền thông dữ liệu; TA Ngành công nghệ thông tin; Tiếng Anh;",
+          "marc": {
+            "subjects": "Information Technology; TA Công nghệ thông tin; TA Hệ thống thông tin quản lý; TA Mạng máy tính và truyền thông dữ liệu; TA Ngành công nghệ thông tin; Tiếng Anh",
+            "summary": "Sách tiếng Anh chuyên ngành Công nghệ thông tin.",
+            "audience": "",
+            "checked_at": "2026-11-05"
+          }
+        },
+        {
+          "id": 15907,
+          "title": "Windows Forms Programming With C# Class Notes C0063",
+          "subjects": "Information Technology; TA Công nghệ thông tin; TA Hệ thống thông tin quản lý; TA Mạng máy tính và truyền thông dữ liệu; TA Ngành công nghệ thông tin; Tiếng Anh;",
+          "marc": {
+            "subjects": "Information Technology; TA Công nghệ thông tin; TA Hệ thống thông tin quản lý; TA Mạng máy tính và truyền thông dữ liệu; TA Ngành công nghệ thông tin; Tiếng Anh",
+            "summary": "Sách tiếng Anh chuyên ngành Công nghệ thông tin.",
+            "audience": "",
+            "checked_at": "2026-11-05"
+          }
+        },
+        {
+          "id": 16357,
+          "title": "SQL Server 2005 xây dựng ứng dụng quản lí kế toán bằng C# 2005",
+          "subjects": "Đĩa CD - ROM; Đĩa CD Công nghệ thông tin; Đĩa CD Mạng máy tính và truyền thông dữ liệu; Đĩa CD Tiếng Việt;",
+          "marc": null
+        },
+        {
+          "id": 18742,
+          "title": "Tìm hiểu .NET (C#) xây dựng ứng dụng quản lý trung tâm đào tạo tin học Chánh Nghiệp : Khóa luận Công nghệ thông tin",
+          "subjects": "Khóa luận; KL Công nghệ thông tin;",
+          "marc": null
+        },
+        {
+          "id": 18818,
+          "title": "Tìm hiểu ngôn ngữ C#, lập trình .NET viết ứng dụng FTP minh họa : Khóa luận Công nghệ thông tin",
+          "subjects": "Khóa luận; KL Công nghệ thông tin;",
+          "marc": null
+        },
+        {
+          "id": 19661,
+          "title": ".NET toàn tập . Tập 1 , C# căn bản và Visual Studio.NET IDE",
+          "subjects": "Ebook  Hệ thống thông tin quản lý; Ebook Công nghệ thông tin; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Tiếng Việt;",
+          "marc": {
+            "subjects": "Ebook Hệ thống thông tin quản lý; Ebook Công nghệ thông tin; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Tiếng Việt",
+            "summary": "Nội dung: Visual C# và .NET Framemwork; Bắt đầu từ đây ta tiến lên; Sử dụng Debugger như thế nào; Căn bản ngôn ngữ C#; Lớp và đối tượng; Kế thừa và đa hình; Nạp chồng tác tử; Cấu trúc Struct; Giao diện; Bản dãy Indexers và Collections; Chuỗi chữ và biểu thức regular; Thụ lý các biệt lệ; Ủy thác và tình huống; Lập trình trên môi trường .NET",
+            "audience": "",
+            "checked_at": "2026-11-01"
+          }
+        },
+        {
+          "id": 19662,
+          "title": ".NET toàn tập . Tập 2 , C#  và .NET Framework",
+          "subjects": "Ebook  Hệ thống thông tin quản lý; Ebook Công nghệ thông tin; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Tiếng Việt;",
+          "marc": {
+            "subjects": "Ebook Hệ thống thông tin quản lý; Ebook Công nghệ thông tin; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Tiếng Việt",
+            "summary": "Nội dung: Xuất nhập dữ liệu và sản sinh hàng loạt đối tượng; Xây dựng một ứng dụng Windows; Tìm hiểu về Assemply và Version; Tìm hiểu về Type Astributes và Reflection; Marshaling và Remoting; Mạch trình và đồng bộ hóa; Tương tác với Unmanaged Code; Lập trình ứng dụng Web với Web Forms và ASP.NET; Lập trình Web Services.",
+            "audience": "",
+            "checked_at": "2026-11-03"
+          }
+        },
+        {
+          "id": 20359,
+          "title": "Beginning C# 7 Programming with Visual Studio 2017",
+          "subjects": "Ebook Công nghệ phần mềm; Ebook Công nghệ thông tin; Ebook Hệ thống thông tin quản lý; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Tiếng Anh; Ebook Tương tác người và máy;",
+          "marc": null
+        },
+        {
+          "id": 20430,
+          "title": "Các giải pháp lập trình C#",
+          "subjects": "Ebook; Ebook  Ngành công nghệ thông tin; Ebook Công nghệ thông tin; Ebook Hệ thống thông tin quản lý; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Tiếng Việt;",
+          "marc": null
+        },
+        {
+          "id": 22219,
+          "title": "Hands-On Network Programming with C# and .NET Core : Build robust network applications with C# and .NET Core",
+          "subjects": "Ebook Công nghệ thông tin; Ebook Hệ thống thông tin; Ebook Hệ thống thông tin quản lý; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Quản trị doanh nghiệp CNTT; Ebook Tiếng Anh; Tủ sách ngoại văn;",
+          "marc": null
+        }
+      ],
+      "excluded_examples": []
+    }
+  ],
+  "live_checks": [
+    {
+      "id": "title-symbol-C",
+      "passed": true,
+      "elapsed_ms": 1333.71
+    },
+    {
+      "id": "title-symbol-C++",
+      "passed": true,
+      "elapsed_ms": 465.43
+    },
+    {
+      "id": "title-symbol-C#",
+      "passed": true,
+      "elapsed_ms": 469.76
+    },
+    {
+      "id": "correction-0",
+      "passed": true,
+      "elapsed_ms": 3995.28
+    },
+    {
+      "id": "correction-1",
+      "passed": true,
+      "elapsed_ms": 1203.4
+    },
+    {
+      "id": "correction-2",
+      "passed": true,
+      "elapsed_ms": 1224.83
+    },
+    {
+      "id": "correction-3",
+      "passed": true,
+      "elapsed_ms": 1145.22
+    },
+    {
+      "id": "python-search",
+      "passed": true,
+      "elapsed_ms": 1355.22
+    },
+    {
+      "id": "author-year",
+      "passed": true,
+      "elapsed_ms": 7.16
+    },
+    {
+      "id": "author-year-isbn",
+      "passed": true,
+      "elapsed_ms": 6.03
+    },
+    {
+      "id": "author-summary",
+      "passed": true,
+      "elapsed_ms": 6.12
+    },
+    {
+      "id": "negation-0",
+      "passed": true,
+      "elapsed_ms": 2.39
+    },
+    {
+      "id": "negation-1",
+      "passed": true,
+      "elapsed_ms": 2.21
+    },
+    {
+      "id": "negation-2",
+      "passed": true,
+      "elapsed_ms": 2.01
+    },
+    {
+      "id": "no-results-guide",
+      "passed": true,
+      "elapsed_ms": 10.88
+    },
+    {
+      "id": "lookup-guide",
+      "passed": true,
+      "elapsed_ms": 10.69
+    },
+    {
+      "id": "borrowing-guide",
+      "passed": true,
+      "elapsed_ms": 12.07
+    },
+    {
+      "id": "invalid-branch",
+      "passed": true,
+      "elapsed_ms": 3.31
+    },
+    {
+      "id": "future-hours",
+      "passed": true,
+      "elapsed_ms": 4.47
+    },
+    {
+      "id": "outside",
+      "passed": true,
+      "elapsed_ms": 19.77
+    },
+    {
+      "id": "private-history",
+      "passed": true,
+      "elapsed_ms": 10.43
+    }
+  ],
+  "source_sha256": {
+    "backend/app/services/catalog.py": "af14a6cf9366ccfaf77450588a2753a6b43b167c9b781b19a8c08d9167dd89e4",
+    "tests/test_programming_topic_precision.py": "a0ca80f550f4f4de7712f82f8d00ad86805a295eb90757e8e1957edb35403d58"
+  },
+  "limits": [
+    "Sparse metadata may omit relevant books; this is a conservative topic guard, not a full subject ontology",
+    "Filtered counts are record counts, not precision percentages or unique-work counts",
+    "No physical mobile/browser UI or target production load retest in this pass",
+    "The earlier 21/21 report remains a historical measurement under weaker criteria and is annotated accordingly"
+  ]
+}

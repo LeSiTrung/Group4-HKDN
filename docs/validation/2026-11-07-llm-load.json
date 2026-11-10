@@ -1,0 +1,185 @@
+{
+  "recorded_at": "2026-11-07T06:08:07.799246+00:00",
+  "base_url": "http://127.0.0.1:8000",
+  "profile": "llm",
+  "client_cpu_count": 16,
+  "capabilities": {
+    "accounts": true,
+    "history": true,
+    "admin": true,
+    "crawler": true,
+    "demo_reservations": false,
+    "vectors": {
+      "configured": true,
+      "ready": true,
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "error": null,
+      "namespaces": {
+        "knowledge": {
+          "sources": 31,
+          "chunks": 145,
+          "ready": true
+        }
+      }
+    },
+    "llm_provider": "ollama",
+    "library_configured": false,
+    "messenger_configured": false,
+    "zalo_configured": false
+  },
+  "scope": "closed-loop synthetic guest clients on one local host; shared IP; no OPAC reads, account writes or transactions",
+  "limits": "Small samples; not a production capacity guarantee. LLM warm-up is reported separately; inspect modes/fallbacks.",
+  "warmup": [
+    {
+      "case": "llm",
+      "http_status": 200,
+      "mode": "rag",
+      "ok": true,
+      "elapsed_ms": 6753.92
+    }
+  ],
+  "phases": [
+    {
+      "concurrency": 1,
+      "elapsed_seconds": 2.574,
+      "requests": 4,
+      "successful": 4,
+      "failed": 0,
+      "p50_ms": 637.92,
+      "p95_ms": 674.3,
+      "max_ms": 678.91,
+      "requests_per_second": 1.554,
+      "http_statuses": {
+        "200": 4
+      },
+      "modes": {
+        "rag": 4
+      },
+      "results": [
+        {
+          "case": "llm",
+          "http_status": 200,
+          "mode": "rag",
+          "ok": true,
+          "elapsed_ms": 617.7
+        },
+        {
+          "case": "llm",
+          "http_status": 200,
+          "mode": "rag",
+          "ok": true,
+          "elapsed_ms": 627.69
+        },
+        {
+          "case": "llm",
+          "http_status": 200,
+          "mode": "rag",
+          "ok": true,
+          "elapsed_ms": 678.91
+        },
+        {
+          "case": "llm",
+          "http_status": 200,
+          "mode": "rag",
+          "ok": true,
+          "elapsed_ms": 648.15
+        }
+      ]
+    },
+    {
+      "concurrency": 2,
+      "elapsed_seconds": 6.952,
+      "requests": 4,
+      "successful": 4,
+      "failed": 0,
+      "p50_ms": 3200.84,
+      "p95_ms": 5740.4,
+      "max_ms": 5853.17,
+      "requests_per_second": 0.575,
+      "http_statuses": {
+        "200": 4
+      },
+      "modes": {
+        "rag": 4
+      },
+      "results": [
+        {
+          "case": "llm",
+          "http_status": 200,
+          "mode": "rag",
+          "ok": true,
+          "elapsed_ms": 5853.17
+        },
+        {
+          "case": "llm",
+          "http_status": 200,
+          "mode": "rag",
+          "ok": true,
+          "elapsed_ms": 1300.28
+        },
+        {
+          "case": "llm",
+          "http_status": 200,
+          "mode": "rag",
+          "ok": true,
+          "elapsed_ms": 5101.39
+        },
+        {
+          "case": "llm",
+          "http_status": 200,
+          "mode": "rag",
+          "ok": true,
+          "elapsed_ms": 1098.15
+        }
+      ]
+    },
+    {
+      "concurrency": 4,
+      "elapsed_seconds": 1.716,
+      "requests": 4,
+      "successful": 4,
+      "failed": 0,
+      "p50_ms": 703.75,
+      "p95_ms": 1653.41,
+      "max_ms": 1714.92,
+      "requests_per_second": 2.33,
+      "http_statuses": {
+        "200": 4
+      },
+      "modes": {
+        "fallback": 2,
+        "rag": 2
+      },
+      "results": [
+        {
+          "case": "llm",
+          "http_status": 200,
+          "mode": "fallback",
+          "ok": true,
+          "elapsed_ms": 102.68
+        },
+        {
+          "case": "llm",
+          "http_status": 200,
+          "mode": "rag",
+          "ok": true,
+          "elapsed_ms": 1714.92
+        },
+        {
+          "case": "llm",
+          "http_status": 200,
+          "mode": "rag",
+          "ok": true,
+          "elapsed_ms": 1304.83
+        },
+        {
+          "case": "llm",
+          "http_status": 200,
+          "mode": "fallback",
+          "ok": true,
+          "elapsed_ms": 96.67
+        }
+      ]
+    }
+  ]
+}

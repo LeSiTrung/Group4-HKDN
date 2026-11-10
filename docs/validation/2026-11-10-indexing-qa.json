@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-10",
+  "execution": "Live loopback HTTP against a separate synthetic SQLite database, LLM and vectors disabled",
+  "readiness": {
+    "status": "ready",
+    "checks": {
+      "database": true,
+      "model": true
+    }
+  },
+  "anonymous_preview_http": 401,
+  "cross_origin_approval_http": 403,
+  "parallel_approval_http": [
+    200,
+    409
+  ],
+  "draft_remains_unpublished": true,
+  "summary_occurrences_after_approval": 1,
+  "initial_suggestions": [
+    {
+      "field": "subjects",
+      "value": "Python; Lập trình",
+      "source_field": "MARC — chủ đề",
+      "checked_at": "2026-11-10"
+    },
+    {
+      "field": "summary",
+      "value": "Tóm tắt mẫu về biến, vòng lặp và hàm.",
+      "source_field": "MARC — tóm tắt",
+      "checked_at": "2026-11-10"
+    }
+  ],
+  "remaining_suggestions": [],
+  "classification": "005.133",
+  "loans_configured": false,
+  "browser": "Blocked by Work settings: Local browser use is disabled. No browser acceptance claimed.",
+  "limits": [
+    "Source excerpts only; no trained classifier or generated summaries",
+    "DDC display reads existing source text and does not assign a new code",
+    "No real library transaction acceptance"
+  ],
+  "verification": {
+    "backend": {
+      "tests": 1228,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "frontend_passed": 149,
+    "frontend_test_files": 15,
+    "frontend_build": "passed",
+    "focused_backend_passed": 23,
+    "code_review": "Read-only reviewer found no actionable findings in the scoped additions"
+  },
+  "main_runtime": "Port 8000 remains the previous backend. Automatic approval review rejected the verified process restart with reason blocked by policy. Isolated sample on 8014 runs the new backend."
+}

@@ -1,0 +1,1448 @@
+{
+  "checked_at": "2026-11-06T12:57:20.912297+00:00",
+  "task_id": "MARC-CHECKPOINT-20261106",
+  "status": "IN_PROGRESS; one existing-scope worker resumed; project not complete",
+  "before_process_state": {
+    "last_boot": "2026-11-06T12:31:44.5000000Z",
+    "checked_at": "2026-11-06T12:44:16.9365810+00:00",
+    "processes": [
+      {
+        "ProcessId": 24556,
+        "ParentProcessId": 8332,
+        "CreationDate": "/Date(1793968988596)/",
+        "ExecutablePath": "D:\\Github\\Group4-HKDN\\backend\\.venv\\Scripts\\python.exe",
+        "CommandLine": "\"D:\\Github\\Group4-HKDN\\backend\\.venv\\Scripts\\python.exe\" tmp/audit-marc-20261106.py before"
+      },
+      {
+        "ProcessId": 16204,
+        "ParentProcessId": 24556,
+        "CreationDate": "/Date(1793968988822)/",
+        "ExecutablePath": "C:\\Users\\phiha\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe",
+        "CommandLine": "\"C:\\Users\\phiha\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe\"  tmp/audit-marc-20261106.py before"
+      },
+      {
+        "ProcessId": 25856,
+        "ParentProcessId": 11456,
+        "CreationDate": "/Date(1793969034817)/",
+        "ExecutablePath": "D:\\Github\\Group4-HKDN\\backend\\.venv\\Scripts\\python.exe",
+        "CommandLine": "\"D:\\Github\\Group4-HKDN\\backend\\.venv\\Scripts\\python.exe\" tmp/check-opac-totals-20261106.py"
+      },
+      {
+        "ProcessId": 22744,
+        "ParentProcessId": 25856,
+        "CreationDate": "/Date(1793969035001)/",
+        "ExecutablePath": "C:\\Users\\phiha\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe",
+        "CommandLine": "\"C:\\Users\\phiha\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe\"  tmp/check-opac-totals-20261106.py"
+      }
+    ]
+  },
+  "before": {
+    "checked_at": "2026-11-06T12:43:11.927334+00:00",
+    "inventory": {
+      "discovered": 22401,
+      "accepted": 22396,
+      "rejected": [
+        {
+          "id": "18560",
+          "reason": "field_limits:subjects"
+        },
+        {
+          "id": "20921",
+          "reason": "field_limits:subjects"
+        },
+        {
+          "id": "24199",
+          "reason": "field_limits:subjects"
+        },
+        {
+          "id": "9566",
+          "reason": "field_limits:subjects"
+        },
+        {
+          "id": "13971",
+          "reason": "field_limits:subjects"
+        }
+      ],
+      "pack_sha256": "99b543d717c846b6bebab9c5d37087df9c563419f5ad164ad038f0b21f53752a"
+    },
+    "pack_file_sha256": "99b543d717c846b6bebab9c5d37087df9c563419f5ad164ad038f0b21f53752a",
+    "pack_manifest_sha256": "c53b8d4caf041597425b9452cd71ef12cea0a8048a0f962a2b93265ff91a7b1a",
+    "manifest_file_sha256": "608931585ca601b913f0a8e8bec8759dcf9a5832f7c63d8adf56a1f030896c05",
+    "manifest": {
+      "source": "https://opacthuvien.ut.edu.vn/opac/",
+      "recorded_at": "2026-11-05T10:20:00.930852+00:00",
+      "complete": false,
+      "blocked": null,
+      "categories": {},
+      "listing_records": 22401,
+      "detail_records": 12262,
+      "phase": "details",
+      "details_requested": true,
+      "session_refreshes": 0,
+      "transport_retries": 24,
+      "minimum_request_gap_seconds": 10,
+      "robots_disallow_acknowledged": true,
+      "scope": "MARC details for frozen inventory only, not current full-site inventory; public bibliographic metadata; no login, full text, reader data or current availability claim",
+      "frozen_inventory": {
+        "pack": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101\\catalog-listings.jsonl",
+        "pack_sha256": "99b543d717c846b6bebab9c5d37087df9c563419f5ad164ad038f0b21f53752a",
+        "records": 22401
+      },
+      "last_request_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18103",
+      "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6",
+      "deferred_details": [
+        {
+          "id": "23229",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=23229",
+          "checked_at": "2026-11-05T06:09:14.953471+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "7d065bd252dcb3f24db253ce09fba920695c59c6facc4caacf67044d0c360e5c"
+        },
+        {
+          "id": "10643",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10643",
+          "checked_at": "2026-11-05T06:15:54.699618+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "9fa4d9c131428af76261fad7ffd51c8adbdb4b7cb766cf6b571c6d01d8cdd3ad"
+        },
+        {
+          "id": "10962",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10962",
+          "checked_at": "2026-11-05T06:32:35.388964+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "ddc3626e9c9160122b36e124ec9e39a5826a3b456d68b94e4af949695ea9d3c0"
+        },
+        {
+          "id": "16222",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16222",
+          "checked_at": "2026-11-05T06:45:05.670965+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "6be35840e57f6249e20c61242fbbb4ffc8743bda7357be61e58d08af9996c602"
+        },
+        {
+          "id": "22499",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=22499",
+          "checked_at": "2026-11-05T06:46:05.238561+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "9ef17305dc23c3de7bbdf75c77caebd2b5f69c2f5dae6cafdf972423594b5aec"
+        },
+        {
+          "id": "16142",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16142",
+          "checked_at": "2026-11-05T06:49:55.453056+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "0bfbc30756e68d079f7e18c34ceb727e5b8b571c90f87c75707d0ed2c1824ca2"
+        },
+        {
+          "id": "16224",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16224",
+          "checked_at": "2026-11-05T06:51:35.626000+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "98a607e018523343d3d8be5f26a20c6a723fbab27fceea6bafbfffa4ac8f4fe3"
+        },
+        {
+          "id": "16226",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16226",
+          "checked_at": "2026-11-05T06:56:56.248228+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "0d4df1b1cb9ece54e1e464d666c726d8ec11c749dd8636da17f09f0d75a17cc1"
+        },
+        {
+          "id": "17902",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=17902",
+          "checked_at": "2026-11-05T06:58:46.199468+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "27465b42fdb2de5e7516ed3ea997fe50e600a36e961176df66bc74c4063086a0"
+        },
+        {
+          "id": "17900",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=17900",
+          "checked_at": "2026-11-05T07:01:06.621908+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "803dbf60344c4a5846041aa08e4157b10d1799c55d3812fbcf2c07331402ea17"
+        },
+        {
+          "id": "22690",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=22690",
+          "checked_at": "2026-11-05T07:01:56.482869+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "2f963176ea7a28a240ba3f4176b714133d03e9e05fb993f2d3dc25a3277e7c22"
+        },
+        {
+          "id": "10442",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10442",
+          "checked_at": "2026-11-05T07:08:06.507176+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "b8f96e3beb87ee2778fdaf160a75291564306add42718bb0602a7494678ddb08"
+        },
+        {
+          "id": "9789",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=9789",
+          "checked_at": "2026-11-05T07:08:16.329393+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "beb8dd63fd49b5220c7b44f20527a87128367089a65830e739d8529939c97bf9"
+        },
+        {
+          "id": "16230",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16230",
+          "checked_at": "2026-11-05T07:08:56.458331+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "f1458f42593e667667eb41f6db93d37a17cd9271a7fdb24f3d18d409ceef2028"
+        },
+        {
+          "id": "10446",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10446",
+          "checked_at": "2026-11-05T07:09:06.502249+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "9e35568be30480e7a6680f567f6c62fdbfbf114f68156cd1b4c2712cd0472af7"
+        },
+        {
+          "id": "16232",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16232",
+          "checked_at": "2026-11-05T07:10:36.589153+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "8e97031d984f67d1fb9d82959fd1cd05e9048e4f13b4ecaf141b91300bb3c947"
+        },
+        {
+          "id": "16115",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16115",
+          "checked_at": "2026-11-05T07:11:58.854723+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "adb0117ae9dd69c1e6c84867993ce28fb91207a8a5df86b6fe2d99378e14ef45"
+        },
+        {
+          "id": "16118",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16118",
+          "checked_at": "2026-11-05T07:12:26.679051+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "da0b30d6215e0f76cc1f4c3c6f45016abbaaf521f5821d77793a22d0e468731c"
+        },
+        {
+          "id": "16145",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16145",
+          "checked_at": "2026-11-05T07:12:46.693574+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "e6f8ac352fce419785459965fd684156c510ba08808c375b2fe2988eff430e03"
+        },
+        {
+          "id": "16150",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16150",
+          "checked_at": "2026-11-05T07:14:06.586497+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "961184c1e8f9b9eb90730d17221fec2fd74b2b4d55d992c56f26fd6af78061a1"
+        },
+        {
+          "id": "16167",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16167",
+          "checked_at": "2026-11-05T07:14:26.738973+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "693db8576b26e51c8f84ffe719b1c2a5ed8affbf2a5146d03d5f2c6d6127cb0d"
+        },
+        {
+          "id": "22712",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=22712",
+          "checked_at": "2026-11-05T07:14:36.628079+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "ed5f90683e311abf53700bc3cfac69cf3e8d4bdfbc55f2a4339aaa43c0c0a741"
+        },
+        {
+          "id": "9786",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=9786",
+          "checked_at": "2026-11-05T07:15:36.753786+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "5620d12e361de63fb8543431824b58d523de1b8ff17ae687b6622c9e9a324400"
+        },
+        {
+          "id": "17899",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=17899",
+          "checked_at": "2026-11-05T07:18:26.712972+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "db24503b277adbdc29658b7b61cd0d065372397944621a7caabeac545206dc5a"
+        },
+        {
+          "id": "20175",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=20175",
+          "checked_at": "2026-11-05T07:18:56.644047+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "f0648d8551c55487272404ae39bea3e62451c1089a3ffc55d4159d26ddb1b205"
+        },
+        {
+          "id": "10425",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10425",
+          "checked_at": "2026-11-05T07:20:57.203845+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "b1b4ed4288a04c5b24f6db064fb24819828172224349567e40fd091e4f3ec342"
+        },
+        {
+          "id": "18480",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18480",
+          "checked_at": "2026-11-05T07:25:34.826624+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "ae495483307fac1f4641f948813414f2889ecd58dc1d3440d148fb0ca9971cfc"
+        },
+        {
+          "id": "14628",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=14628",
+          "checked_at": "2026-11-05T07:25:37.214169+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "5c668ab7ffa8ac0e5d3d849076d4fd2845c5ae648db1ea5d55b296d67c2737e1"
+        },
+        {
+          "id": "14886",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=14886",
+          "checked_at": "2026-11-05T07:29:09.132681+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "08e52c90eaa12357e03d4fcd57f4b2d4a15147744eee09ef0cdba528e4554fa4"
+        },
+        {
+          "id": "15215",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15215",
+          "checked_at": "2026-11-05T07:29:17.718346+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "4590598cb4913903c28aa3a6458dde428a2209ce56e33cbb5a384d21aba1610c"
+        },
+        {
+          "id": "16132",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16132",
+          "checked_at": "2026-11-05T07:50:59.541430+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "f2a0b253de7521326138ff2a652ed2ad81f89d5e00f046836e61183fd9b8899b"
+        },
+        {
+          "id": "16151",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16151",
+          "checked_at": "2026-11-05T08:24:29.462098+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "46aa92ba548af49f6d1dfb558a5a06b06cafdb96ac1e1b30360b60239d6b29f0"
+        },
+        {
+          "id": "22561",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=22561",
+          "checked_at": "2026-11-05T08:54:58.543477+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "4324471e8d50a679b127871c5a5c61fb5dbb0df99b6928445f0f72e9bbd4ca86"
+        },
+        {
+          "id": "11074",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=11074",
+          "checked_at": "2026-11-05T08:55:18.833867+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "6b194ca57876a6830e3fd9891afd2ca2e32ee4dadf52ac2573ae703757b97fce"
+        },
+        {
+          "id": "10919",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10919",
+          "checked_at": "2026-11-05T09:55:32.480256+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "cdaf9be8e1a3121da80c9a590ddf0a5a921e1260c8a5b0170185ace9175c3dd4"
+        }
+      ]
+    },
+    "pages": 1125,
+    "listing_snapshot_digest": "5acc97fc79cc20720711dd7e8f654784548ce4a5fb49dc7170c7b1af070f69de",
+    "valid_snapshots": 12425,
+    "invalid_snapshots": [],
+    "outside_scope_snapshots": [],
+    "snapshot_digest": "7748697e725090d8fa95bbf7b571689690d75f00678c20b7825c05bb06296168",
+    "missing_marc_count": 9976,
+    "marc_tag_counts": {
+      "001": 12425,
+      "020": 7859,
+      "022": 5,
+      "040": 12405,
+      "041": 11113,
+      "082": 12400,
+      "100": 10251,
+      "110": 741,
+      "245": 12425,
+      "250": 3311,
+      "260": 12356,
+      "300": 12187,
+      "490": 181,
+      "500": 9,
+      "520": 8787,
+      "650": 24,
+      "653": 82847,
+      "700": 7436,
+      "710": 13,
+      "852": 120252,
+      "856": 169,
+      "Ldr": 12425
+    },
+    "missing_leader_ids": [],
+    "missing_001_ids": [],
+    "stored_route_coverage": {
+      "1": {
+        "name": "Sách truyền thống",
+        "pages": 523,
+        "stored_ids": 10457,
+        "snapshot_listing_total": 10457,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 10457,
+        "missing_marc": 0
+      },
+      "10": {
+        "name": "Video",
+        "pages": 1,
+        "stored_ids": 3,
+        "snapshot_listing_total": 3,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 3,
+        "missing_marc": 0
+      },
+      "11-7": {
+        "name": "Báo / Tạp chí điện tử",
+        "pages": 1,
+        "stored_ids": 2,
+        "snapshot_listing_total": 2,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 2,
+        "missing_marc": 0
+      },
+      "23": {
+        "name": "CD-ROM",
+        "pages": 19,
+        "stored_ids": 371,
+        "snapshot_listing_total": 371,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 371,
+        "missing_marc": 0
+      },
+      "3": {
+        "name": "Luận văn",
+        "pages": 163,
+        "stored_ids": 3259,
+        "snapshot_listing_total": 3259,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 1430,
+        "missing_marc": 1829
+      },
+      "32": {
+        "name": "Tài liệu số",
+        "pages": 375,
+        "stored_ids": 7487,
+        "snapshot_listing_total": 7487,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 160,
+        "missing_marc": 7327
+      },
+      "36": {
+        "name": "Khóa luận",
+        "pages": 1,
+        "stored_ids": 1,
+        "snapshot_listing_total": 1,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 1,
+        "missing_marc": 0
+      },
+      "9": {
+        "name": "Báo / Tạp chí",
+        "pages": 42,
+        "stored_ids": 823,
+        "snapshot_listing_total": 823,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 3,
+        "missing_marc": 820
+      }
+    },
+    "hash_inventory": {
+      "path": "tmp\\marc-before-hashes-20261106.json",
+      "sha256": "39f072f9ca90f51d3aea51ca9a9d3bc88192da5f20fb232db873e46d441e6ca4"
+    },
+    "missing_inventory": {
+      "path": "tmp\\marc-before-missing-20261106.json",
+      "sha256": "d6b3bf3d8899cf52521b47792effce0d8fe911e872b5bd8a0519b4dbf4ecaa48"
+    },
+    "preservation_since_before": null,
+    "validation_scope": "Existing public MARC field snapshots: identity, source, timezone/date, canonical record hash, tag/value schema, nonempty245 and exclusion of9xx; not ISO2709/MARC21 conformance or independent source re-fetch."
+  },
+  "live_listings": {
+    "started_at": "2026-11-06T12:43:56.829902+00:00",
+    "routes": {
+      "1": {
+        "url": "https://opacthuvien.ut.edu.vn/opac/OShow.aspx?DicID=10&BrowseId=1",
+        "attempted_at": "2026-11-06T12:43:57.390076+00:00",
+        "status": 200,
+        "checked_at": "2026-11-06T12:44:11.698401+00:00",
+        "response_sha256": "7a3186acede47727e9c1cc36f365d7d15f9b8b4edcfc276add1d4e719475ab16",
+        "name": "Sách truyền thống",
+        "current_total": 10460,
+        "stored_total": 10457,
+        "total_delta": 3,
+        "seed_record_equal": false,
+        "current_seed_ids": [
+          "5712",
+          "14473",
+          "24465",
+          "4149",
+          "15818",
+          "7512",
+          "4151",
+          "1967",
+          "6770",
+          "5707",
+          "14333",
+          "7509",
+          "5595",
+          "9176",
+          "5708",
+          "8551",
+          "27083",
+          "27011",
+          "4157",
+          "509"
+        ],
+        "seed_ids_added": [],
+        "seed_ids_removed": [],
+        "parsed_snapshot_path": "tmp\\opac-current-1-20261106.json",
+        "parsed_snapshot_file_sha256": "b96a7bcb210df0d3dc991605902bbc26c9917ed611f5f8b830e0d13aee9b9dab"
+      },
+      "32": {
+        "url": "https://opacthuvien.ut.edu.vn/opac/OShow.aspx?DicID=10&BrowseId=32",
+        "attempted_at": "2026-11-06T12:44:12.077008+00:00",
+        "status": 200,
+        "checked_at": "2026-11-06T12:44:23.720362+00:00",
+        "response_sha256": "b1a8cfb2e023beef9c49d87beac61b8f3914a248c36e79cedf5dc8e3f309204c",
+        "name": "Tài liệu số",
+        "current_total": 7487,
+        "stored_total": 7487,
+        "total_delta": 0,
+        "seed_record_equal": true,
+        "current_seed_ids": [
+          "22237",
+          "22238",
+          "14318",
+          "22163",
+          "22160",
+          "22211",
+          "22161",
+          "22245",
+          "22164",
+          "5853",
+          "20567",
+          "23691",
+          "5448",
+          "14236",
+          "5489",
+          "5294",
+          "4538",
+          "12355",
+          "5252",
+          "5293"
+        ],
+        "seed_ids_added": [],
+        "seed_ids_removed": [],
+        "parsed_snapshot_path": "tmp\\opac-current-32-20261106.json",
+        "parsed_snapshot_file_sha256": "7a57a8e7b9ec7508ec502b3a7d26cee3e529cd9ad00c2e85fd2c7413953bf76c"
+      }
+    },
+    "scope": "Two public first-page reads only, through shared DATA_DIR host pacing; frozen listing pack and pages are never overwritten. Equal totals/seed do not prove full current ID equality.",
+    "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6",
+    "minimum_request_gap_seconds": 10,
+    "robots_disallow_acknowledged": true,
+    "finished_at": "2026-11-06T12:44:23.842566+00:00",
+    "raw_response_retention": "Only response SHA256 and parsed bibliographic fields retained; anonymous form/viewstate/cookies not persisted."
+  },
+  "reconciliation": {
+    "1": {
+      "name": "Sách truyền thống",
+      "pages": 523,
+      "stored_ids": 10457,
+      "snapshot_listing_total": 10457,
+      "listing_complete_against_snapshot": true,
+      "valid_marc": 10457,
+      "missing_marc": 0,
+      "current_listing_total": 10460,
+      "live_checked_at": "2026-11-06T12:44:11.698401+00:00",
+      "listing_total_delta": 3,
+      "stored_marc_percent_of_frozen_route": 100.0,
+      "stored_marc_percent_of_current_total_count_only": 99.9713,
+      "current_full_id_reconciliation": "NOT_VERIFIED; first-page/totals only"
+    },
+    "32": {
+      "name": "Tài liệu số",
+      "pages": 375,
+      "stored_ids": 7487,
+      "snapshot_listing_total": 7487,
+      "listing_complete_against_snapshot": true,
+      "valid_marc": 160,
+      "missing_marc": 7327,
+      "current_listing_total": 7487,
+      "live_checked_at": "2026-11-06T12:44:23.720362+00:00",
+      "listing_total_delta": 0,
+      "stored_marc_percent_of_frozen_route": 2.137,
+      "stored_marc_percent_of_current_total_count_only": 2.137,
+      "current_full_id_reconciliation": "NOT_VERIFIED; first-page/totals only"
+    }
+  },
+  "resume": {
+    "worker": {
+      "output": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101",
+      "scope": "missing MARC for frozen validated22401-ID inventory; shared host pacing; no login/full text",
+      "stderr": "collector-shared-20261106T124641Z.stderr.log",
+      "pid": 22452,
+      "supervisor_pid": 26704,
+      "stdout": "collector-shared-20261106T124641Z.stdout.log",
+      "started_at": "2026-11-06T12:46:42.0807278+00:00"
+    },
+    "process_state": {
+      "supervisor_processes": [
+        {
+          "ProcessId": 26704,
+          "ParentProcessId": 5708,
+          "CreationDate": "/Date(1793969200951)/",
+          "ExecutablePath": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+          "CommandLine": "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"D:\\Github\\Group4-HKDN\\tmp\\supervise-opac-shared-20261103.ps1\""
+        }
+      ],
+      "checked_at": "2026-11-06T12:57:19.8859102+00:00",
+      "collector_lock_held": true,
+      "collector_processes": [
+        {
+          "ProcessId": 22452,
+          "ParentProcessId": 26704,
+          "CreationDate": "/Date(1793969201765)/",
+          "ExecutablePath": "D:\\Github\\Group4-HKDN\\backend\\.venv\\Scripts\\python.exe",
+          "CommandLine": "\"D:\\Github\\Group4-HKDN\\backend\\.venv\\Scripts\\python.exe\" -u scripts/collect_opac.py --output backend/runtime/opac-public-20261101 --details-from-pack backend/runtime/opac-public-20261101/catalog-listings.jsonl --acknowledge-robots-disallow --defer-missing-marc "
+        },
+        {
+          "ProcessId": 29296,
+          "ParentProcessId": 22452,
+          "CreationDate": "/Date(1793969202143)/",
+          "ExecutablePath": "C:\\Users\\phiha\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe",
+          "CommandLine": "\"C:\\Users\\phiha\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe\"  -u scripts/collect_opac.py --output backend/runtime/opac-public-20261101 --details-from-pack backend/runtime/opac-public-20261101/catalog-listings.jsonl --acknowledge-robots-disallow --defer-missing-marc "
+        }
+      ]
+    },
+    "launch": {
+      "ProcessId": 26704,
+      "ReturnValue": 0,
+      "PSComputerName": null
+    },
+    "latest_manifest": {
+      "source": "https://opacthuvien.ut.edu.vn/opac/",
+      "recorded_at": "2026-11-06T12:57:18.276209+00:00",
+      "complete": false,
+      "blocked": null,
+      "categories": {},
+      "listing_records": 22401,
+      "detail_records": 12293,
+      "phase": "details",
+      "details_requested": true,
+      "session_refreshes": 0,
+      "transport_retries": 0,
+      "minimum_request_gap_seconds": 10,
+      "robots_disallow_acknowledged": true,
+      "scope": "MARC details for frozen inventory only, not current full-site inventory; public bibliographic metadata; no login, full text, reader data or current availability claim",
+      "frozen_inventory": {
+        "pack": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101\\catalog-listings.jsonl",
+        "pack_sha256": "99b543d717c846b6bebab9c5d37087df9c563419f5ad164ad038f0b21f53752a",
+        "records": 22401
+      },
+      "last_request_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15227",
+      "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6",
+      "deferred_details": [
+        {
+          "id": "23229",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=23229",
+          "checked_at": "2026-11-06T12:47:07.382219+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "7d065bd252dcb3f24db253ce09fba920695c59c6facc4caacf67044d0c360e5c"
+        },
+        {
+          "id": "10643",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10643",
+          "checked_at": "2026-11-06T12:47:16.892190+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "9fa4d9c131428af76261fad7ffd51c8adbdb4b7cb766cf6b571c6d01d8cdd3ad"
+        },
+        {
+          "id": "10962",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10962",
+          "checked_at": "2026-11-06T12:47:26.897972+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "ddc3626e9c9160122b36e124ec9e39a5826a3b456d68b94e4af949695ea9d3c0"
+        },
+        {
+          "id": "16222",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16222",
+          "checked_at": "2026-11-06T12:47:36.830295+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "6be35840e57f6249e20c61242fbbb4ffc8743bda7357be61e58d08af9996c602"
+        },
+        {
+          "id": "22499",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=22499",
+          "checked_at": "2026-11-06T12:47:47.227120+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "9ef17305dc23c3de7bbdf75c77caebd2b5f69c2f5dae6cafdf972423594b5aec"
+        },
+        {
+          "id": "16142",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16142",
+          "checked_at": "2026-11-06T12:47:57.349741+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "0bfbc30756e68d079f7e18c34ceb727e5b8b571c90f87c75707d0ed2c1824ca2"
+        },
+        {
+          "id": "16224",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16224",
+          "checked_at": "2026-11-06T12:48:07.054941+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "98a607e018523343d3d8be5f26a20c6a723fbab27fceea6bafbfffa4ac8f4fe3"
+        },
+        {
+          "id": "16226",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16226",
+          "checked_at": "2026-11-06T12:48:17.288799+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "0d4df1b1cb9ece54e1e464d666c726d8ec11c749dd8636da17f09f0d75a17cc1"
+        },
+        {
+          "id": "17902",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=17902",
+          "checked_at": "2026-11-06T12:48:26.821899+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "27465b42fdb2de5e7516ed3ea997fe50e600a36e961176df66bc74c4063086a0"
+        },
+        {
+          "id": "17900",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=17900",
+          "checked_at": "2026-11-06T12:48:36.950595+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "803dbf60344c4a5846041aa08e4157b10d1799c55d3812fbcf2c07331402ea17"
+        },
+        {
+          "id": "22690",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=22690",
+          "checked_at": "2026-11-06T12:48:46.951516+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "2f963176ea7a28a240ba3f4176b714133d03e9e05fb993f2d3dc25a3277e7c22"
+        },
+        {
+          "id": "10442",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10442",
+          "checked_at": "2026-11-06T12:48:56.875429+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "b8f96e3beb87ee2778fdaf160a75291564306add42718bb0602a7494678ddb08"
+        },
+        {
+          "id": "9789",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=9789",
+          "checked_at": "2026-11-06T12:49:06.949901+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "beb8dd63fd49b5220c7b44f20527a87128367089a65830e739d8529939c97bf9"
+        },
+        {
+          "id": "16230",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16230",
+          "checked_at": "2026-11-06T12:49:17.009059+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "f1458f42593e667667eb41f6db93d37a17cd9271a7fdb24f3d18d409ceef2028"
+        },
+        {
+          "id": "10446",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10446",
+          "checked_at": "2026-11-06T12:49:26.826292+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "9e35568be30480e7a6680f567f6c62fdbfbf114f68156cd1b4c2712cd0472af7"
+        },
+        {
+          "id": "16232",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16232",
+          "checked_at": "2026-11-06T12:49:37.007304+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "8e97031d984f67d1fb9d82959fd1cd05e9048e4f13b4ecaf141b91300bb3c947"
+        },
+        {
+          "id": "16115",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16115",
+          "checked_at": "2026-11-06T12:49:47.124465+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "adb0117ae9dd69c1e6c84867993ce28fb91207a8a5df86b6fe2d99378e14ef45"
+        },
+        {
+          "id": "16118",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16118",
+          "checked_at": "2026-11-06T12:49:56.953823+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "da0b30d6215e0f76cc1f4c3c6f45016abbaaf521f5821d77793a22d0e468731c"
+        },
+        {
+          "id": "16145",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16145",
+          "checked_at": "2026-11-06T12:50:07.052071+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "e6f8ac352fce419785459965fd684156c510ba08808c375b2fe2988eff430e03"
+        },
+        {
+          "id": "16150",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16150",
+          "checked_at": "2026-11-06T12:50:17.034812+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "961184c1e8f9b9eb90730d17221fec2fd74b2b4d55d992c56f26fd6af78061a1"
+        },
+        {
+          "id": "16167",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16167",
+          "checked_at": "2026-11-06T12:50:26.938060+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "693db8576b26e51c8f84ffe719b1c2a5ed8affbf2a5146d03d5f2c6d6127cb0d"
+        },
+        {
+          "id": "22712",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=22712",
+          "checked_at": "2026-11-06T12:50:36.948307+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "ed5f90683e311abf53700bc3cfac69cf3e8d4bdfbc55f2a4339aaa43c0c0a741"
+        },
+        {
+          "id": "9786",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=9786",
+          "checked_at": "2026-11-06T12:50:47.021615+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "5620d12e361de63fb8543431824b58d523de1b8ff17ae687b6622c9e9a324400"
+        },
+        {
+          "id": "17899",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=17899",
+          "checked_at": "2026-11-06T12:50:57.035703+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "db24503b277adbdc29658b7b61cd0d065372397944621a7caabeac545206dc5a"
+        },
+        {
+          "id": "20175",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=20175",
+          "checked_at": "2026-11-06T12:51:06.959648+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "f0648d8551c55487272404ae39bea3e62451c1089a3ffc55d4159d26ddb1b205"
+        },
+        {
+          "id": "10425",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10425",
+          "checked_at": "2026-11-06T12:51:16.959357+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "b1b4ed4288a04c5b24f6db064fb24819828172224349567e40fd091e4f3ec342"
+        },
+        {
+          "id": "16132",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16132",
+          "checked_at": "2026-11-06T12:52:07.014551+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "f2a0b253de7521326138ff2a652ed2ad81f89d5e00f046836e61183fd9b8899b"
+        },
+        {
+          "id": "16151",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16151",
+          "checked_at": "2026-11-06T12:52:16.913837+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "46aa92ba548af49f6d1dfb558a5a06b06cafdb96ac1e1b30360b60239d6b29f0"
+        },
+        {
+          "id": "22561",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=22561",
+          "checked_at": "2026-11-06T12:52:27.437696+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "4324471e8d50a679b127871c5a5c61fb5dbb0df99b6928445f0f72e9bbd4ca86"
+        },
+        {
+          "id": "11074",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=11074",
+          "checked_at": "2026-11-06T12:52:36.856947+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "6b194ca57876a6830e3fd9891afd2ca2e32ee4dadf52ac2573ae703757b97fce"
+        },
+        {
+          "id": "10919",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10919",
+          "checked_at": "2026-11-06T12:52:46.789389+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "cdaf9be8e1a3121da80c9a590ddf0a5a921e1260c8a5b0170185ace9175c3dd4"
+        }
+      ]
+    },
+    "method": "Existing hidden supervisor, unchanged frozen pack, missing-only resume and output lock; shared10s DATA_DIR clock.",
+    "logical_collector_count": 1,
+    "python_process_note": "One venv launcher and its uv interpreter child are a single logical collector, verified by process parent chain and occupied output lock.",
+    "stopped_cause": "Unknown: old PIDs absent, stale checkpoint, empty stderr and no supervisor exit record. Later host boot is recorded but does not establish termination time/cause."
+  },
+  "after": {
+    "checked_at": "2026-11-06T12:53:37.990171+00:00",
+    "scan_finished_at": "2026-11-06T12:54:37.266585+00:00",
+    "observation_scope": "Manifest captured at scan start; record file set scanned afterwards. Active worker may append after enumeration; counts are a verified file set, not an atomic live manifest total.",
+    "inventory": {
+      "discovered": 22401,
+      "accepted": 22396,
+      "rejected": [
+        {
+          "id": "18560",
+          "reason": "field_limits:subjects"
+        },
+        {
+          "id": "20921",
+          "reason": "field_limits:subjects"
+        },
+        {
+          "id": "24199",
+          "reason": "field_limits:subjects"
+        },
+        {
+          "id": "9566",
+          "reason": "field_limits:subjects"
+        },
+        {
+          "id": "13971",
+          "reason": "field_limits:subjects"
+        }
+      ],
+      "pack_sha256": "99b543d717c846b6bebab9c5d37087df9c563419f5ad164ad038f0b21f53752a"
+    },
+    "pack_file_sha256": "99b543d717c846b6bebab9c5d37087df9c563419f5ad164ad038f0b21f53752a",
+    "pack_manifest_sha256": "c53b8d4caf041597425b9452cd71ef12cea0a8048a0f962a2b93265ff91a7b1a",
+    "manifest_file_sha256": "f2fbadad73031e8e4f0f13208239689ca342770da5d9015b83b1fca0f68d3bae",
+    "manifest": {
+      "source": "https://opacthuvien.ut.edu.vn/opac/",
+      "recorded_at": "2026-11-06T12:53:37.406628+00:00",
+      "complete": false,
+      "blocked": null,
+      "categories": {},
+      "listing_records": 22401,
+      "detail_records": 12271,
+      "phase": "details",
+      "details_requested": true,
+      "session_refreshes": 0,
+      "transport_retries": 0,
+      "minimum_request_gap_seconds": 10,
+      "robots_disallow_acknowledged": true,
+      "scope": "MARC details for frozen inventory only, not current full-site inventory; public bibliographic metadata; no login, full text, reader data or current availability claim",
+      "frozen_inventory": {
+        "pack": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101\\catalog-listings.jsonl",
+        "pack_sha256": "99b543d717c846b6bebab9c5d37087df9c563419f5ad164ad038f0b21f53752a",
+        "records": 22401
+      },
+      "last_request_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10667",
+      "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6",
+      "deferred_details": [
+        {
+          "id": "23229",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=23229",
+          "checked_at": "2026-11-06T12:47:07.382219+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "7d065bd252dcb3f24db253ce09fba920695c59c6facc4caacf67044d0c360e5c"
+        },
+        {
+          "id": "10643",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10643",
+          "checked_at": "2026-11-06T12:47:16.892190+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "9fa4d9c131428af76261fad7ffd51c8adbdb4b7cb766cf6b571c6d01d8cdd3ad"
+        },
+        {
+          "id": "10962",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10962",
+          "checked_at": "2026-11-06T12:47:26.897972+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "ddc3626e9c9160122b36e124ec9e39a5826a3b456d68b94e4af949695ea9d3c0"
+        },
+        {
+          "id": "16222",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16222",
+          "checked_at": "2026-11-06T12:47:36.830295+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "6be35840e57f6249e20c61242fbbb4ffc8743bda7357be61e58d08af9996c602"
+        },
+        {
+          "id": "22499",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=22499",
+          "checked_at": "2026-11-06T12:47:47.227120+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "9ef17305dc23c3de7bbdf75c77caebd2b5f69c2f5dae6cafdf972423594b5aec"
+        },
+        {
+          "id": "16142",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16142",
+          "checked_at": "2026-11-06T12:47:57.349741+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "0bfbc30756e68d079f7e18c34ceb727e5b8b571c90f87c75707d0ed2c1824ca2"
+        },
+        {
+          "id": "16224",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16224",
+          "checked_at": "2026-11-06T12:48:07.054941+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "98a607e018523343d3d8be5f26a20c6a723fbab27fceea6bafbfffa4ac8f4fe3"
+        },
+        {
+          "id": "16226",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16226",
+          "checked_at": "2026-11-06T12:48:17.288799+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "0d4df1b1cb9ece54e1e464d666c726d8ec11c749dd8636da17f09f0d75a17cc1"
+        },
+        {
+          "id": "17902",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=17902",
+          "checked_at": "2026-11-06T12:48:26.821899+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "27465b42fdb2de5e7516ed3ea997fe50e600a36e961176df66bc74c4063086a0"
+        },
+        {
+          "id": "17900",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=17900",
+          "checked_at": "2026-11-06T12:48:36.950595+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "803dbf60344c4a5846041aa08e4157b10d1799c55d3812fbcf2c07331402ea17"
+        },
+        {
+          "id": "22690",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=22690",
+          "checked_at": "2026-11-06T12:48:46.951516+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "2f963176ea7a28a240ba3f4176b714133d03e9e05fb993f2d3dc25a3277e7c22"
+        },
+        {
+          "id": "10442",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10442",
+          "checked_at": "2026-11-06T12:48:56.875429+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "b8f96e3beb87ee2778fdaf160a75291564306add42718bb0602a7494678ddb08"
+        },
+        {
+          "id": "9789",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=9789",
+          "checked_at": "2026-11-06T12:49:06.949901+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "beb8dd63fd49b5220c7b44f20527a87128367089a65830e739d8529939c97bf9"
+        },
+        {
+          "id": "16230",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16230",
+          "checked_at": "2026-11-06T12:49:17.009059+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "f1458f42593e667667eb41f6db93d37a17cd9271a7fdb24f3d18d409ceef2028"
+        },
+        {
+          "id": "10446",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10446",
+          "checked_at": "2026-11-06T12:49:26.826292+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "9e35568be30480e7a6680f567f6c62fdbfbf114f68156cd1b4c2712cd0472af7"
+        },
+        {
+          "id": "16232",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16232",
+          "checked_at": "2026-11-06T12:49:37.007304+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "8e97031d984f67d1fb9d82959fd1cd05e9048e4f13b4ecaf141b91300bb3c947"
+        },
+        {
+          "id": "16115",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16115",
+          "checked_at": "2026-11-06T12:49:47.124465+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "adb0117ae9dd69c1e6c84867993ce28fb91207a8a5df86b6fe2d99378e14ef45"
+        },
+        {
+          "id": "16118",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16118",
+          "checked_at": "2026-11-06T12:49:56.953823+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "da0b30d6215e0f76cc1f4c3c6f45016abbaaf521f5821d77793a22d0e468731c"
+        },
+        {
+          "id": "16145",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16145",
+          "checked_at": "2026-11-06T12:50:07.052071+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "e6f8ac352fce419785459965fd684156c510ba08808c375b2fe2988eff430e03"
+        },
+        {
+          "id": "16150",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16150",
+          "checked_at": "2026-11-06T12:50:17.034812+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "961184c1e8f9b9eb90730d17221fec2fd74b2b4d55d992c56f26fd6af78061a1"
+        },
+        {
+          "id": "16167",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16167",
+          "checked_at": "2026-11-06T12:50:26.938060+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "693db8576b26e51c8f84ffe719b1c2a5ed8affbf2a5146d03d5f2c6d6127cb0d"
+        },
+        {
+          "id": "22712",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=22712",
+          "checked_at": "2026-11-06T12:50:36.948307+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "ed5f90683e311abf53700bc3cfac69cf3e8d4bdfbc55f2a4339aaa43c0c0a741"
+        },
+        {
+          "id": "9786",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=9786",
+          "checked_at": "2026-11-06T12:50:47.021615+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "5620d12e361de63fb8543431824b58d523de1b8ff17ae687b6622c9e9a324400"
+        },
+        {
+          "id": "17899",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=17899",
+          "checked_at": "2026-11-06T12:50:57.035703+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "db24503b277adbdc29658b7b61cd0d065372397944621a7caabeac545206dc5a"
+        },
+        {
+          "id": "20175",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=20175",
+          "checked_at": "2026-11-06T12:51:06.959648+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "f0648d8551c55487272404ae39bea3e62451c1089a3ffc55d4159d26ddb1b205"
+        },
+        {
+          "id": "10425",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10425",
+          "checked_at": "2026-11-06T12:51:16.959357+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "b1b4ed4288a04c5b24f6db064fb24819828172224349567e40fd091e4f3ec342"
+        },
+        {
+          "id": "16132",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16132",
+          "checked_at": "2026-11-06T12:52:07.014551+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "f2a0b253de7521326138ff2a652ed2ad81f89d5e00f046836e61183fd9b8899b"
+        },
+        {
+          "id": "16151",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=16151",
+          "checked_at": "2026-11-06T12:52:16.913837+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "46aa92ba548af49f6d1dfb558a5a06b06cafdb96ac1e1b30360b60239d6b29f0"
+        },
+        {
+          "id": "22561",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=22561",
+          "checked_at": "2026-11-06T12:52:27.437696+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "4324471e8d50a679b127871c5a5c61fb5dbb0df99b6928445f0f72e9bbd4ca86"
+        },
+        {
+          "id": "11074",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=11074",
+          "checked_at": "2026-11-06T12:52:36.856947+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "6b194ca57876a6830e3fd9891afd2ca2e32ee4dadf52ac2573ae703757b97fce"
+        },
+        {
+          "id": "10919",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=10919",
+          "checked_at": "2026-11-06T12:52:46.789389+00:00",
+          "reason": "detail_marc_missing",
+          "response_sha256": "cdaf9be8e1a3121da80c9a590ddf0a5a921e1260c8a5b0170185ace9175c3dd4"
+        }
+      ]
+    },
+    "pages": 1125,
+    "listing_snapshot_digest": "5acc97fc79cc20720711dd7e8f654784548ce4a5fb49dc7170c7b1af070f69de",
+    "valid_snapshots": 12435,
+    "invalid_snapshots": [],
+    "outside_scope_snapshots": [],
+    "snapshot_digest": "6ec1ff2d55b398767625bd83a7e502bf616aba61962c6d0b6be02b98a2eb8480",
+    "missing_marc_count": 9966,
+    "marc_tag_counts": {
+      "001": 12435,
+      "020": 7862,
+      "022": 5,
+      "040": 12415,
+      "041": 11117,
+      "082": 12410,
+      "100": 10261,
+      "110": 741,
+      "245": 12435,
+      "250": 3311,
+      "260": 12366,
+      "300": 12197,
+      "490": 181,
+      "500": 9,
+      "520": 8788,
+      "650": 24,
+      "653": 82880,
+      "700": 7444,
+      "710": 13,
+      "852": 120263,
+      "856": 169,
+      "Ldr": 12435
+    },
+    "missing_leader_ids": [],
+    "missing_001_ids": [],
+    "stored_route_coverage": {
+      "1": {
+        "name": "Sách truyền thống",
+        "pages": 523,
+        "stored_ids": 10457,
+        "snapshot_listing_total": 10457,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 10457,
+        "missing_marc": 0
+      },
+      "10": {
+        "name": "Video",
+        "pages": 1,
+        "stored_ids": 3,
+        "snapshot_listing_total": 3,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 3,
+        "missing_marc": 0
+      },
+      "11-7": {
+        "name": "Báo / Tạp chí điện tử",
+        "pages": 1,
+        "stored_ids": 2,
+        "snapshot_listing_total": 2,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 2,
+        "missing_marc": 0
+      },
+      "23": {
+        "name": "CD-ROM",
+        "pages": 19,
+        "stored_ids": 371,
+        "snapshot_listing_total": 371,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 371,
+        "missing_marc": 0
+      },
+      "3": {
+        "name": "Luận văn",
+        "pages": 163,
+        "stored_ids": 3259,
+        "snapshot_listing_total": 3259,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 1440,
+        "missing_marc": 1819
+      },
+      "32": {
+        "name": "Tài liệu số",
+        "pages": 375,
+        "stored_ids": 7487,
+        "snapshot_listing_total": 7487,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 160,
+        "missing_marc": 7327
+      },
+      "36": {
+        "name": "Khóa luận",
+        "pages": 1,
+        "stored_ids": 1,
+        "snapshot_listing_total": 1,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 1,
+        "missing_marc": 0
+      },
+      "9": {
+        "name": "Báo / Tạp chí",
+        "pages": 42,
+        "stored_ids": 823,
+        "snapshot_listing_total": 823,
+        "listing_complete_against_snapshot": true,
+        "valid_marc": 3,
+        "missing_marc": 820
+      }
+    },
+    "hash_inventory": {
+      "path": "tmp\\marc-after-hashes-20261106.json",
+      "sha256": "34974906cc64ef277d44b22bb53518db2c92915b0ac30bbc6e788297b5b09f25"
+    },
+    "missing_inventory": {
+      "path": "tmp\\marc-after-missing-20261106.json",
+      "sha256": "a1a106a6c6601165c19013dd7246db596da7ea4ce5644c7f6b371bfc5ee092ab"
+    },
+    "preservation_since_before": {
+      "page_files": 1125,
+      "detail_files": 12425,
+      "all_previous_bytes_unchanged": true,
+      "new_valid_detail_ids": [
+        "10667",
+        "14628",
+        "14886",
+        "15215",
+        "18480",
+        "20410",
+        "20436",
+        "20814",
+        "27215",
+        "27216"
+      ]
+    },
+    "validation_scope": "Existing public MARC field snapshots: identity, source, timezone/date, canonical record hash, tag/value schema, nonempty245 and exclusion of9xx; not ISO2709/MARC21 conformance or independent source re-fetch."
+  },
+  "new_validated_snapshots": [
+    {
+      "id": "10667",
+      "fetched_at": "2026-11-06T12:53:37.405618+00:00",
+      "record_sha256": "ac46127596cad145eb0c3f9f4c95c37927c4fcc368f34857012d9eb47ce7697d",
+      "file_sha256": "7f506ea6f5184e45c6bb93bbebb63827f1432a121818680e1a038708b8a5d548"
+    },
+    {
+      "id": "14628",
+      "fetched_at": "2026-11-06T12:51:37.424436+00:00",
+      "record_sha256": "ff1f0c26b81eab6865614cca678934cc06bac1a2750ab8e32f22178a9e1c249d",
+      "file_sha256": "da2a3fb61a842a51cb0896a3aa4d3b31afbaca8c5cf1baf13fbf8c1923c7fa1d"
+    },
+    {
+      "id": "14886",
+      "fetched_at": "2026-11-06T12:51:47.510062+00:00",
+      "record_sha256": "785e6322a7ca93a03ccb144a823e679c3e86c8d3f4e60c13a8d26faf2f0b8728",
+      "file_sha256": "af7a7a0396dbdc5d6f2a9f5d33159df00565ac21442824ae464bbc17d5a2e81c"
+    },
+    {
+      "id": "15215",
+      "fetched_at": "2026-11-06T12:51:57.455521+00:00",
+      "record_sha256": "910a0be903d9be463ec3b692a1073c2a77903899559259569891e84ebc6f6717",
+      "file_sha256": "5b8ae3c04a0675379c60c13df47f4bc03ea242cc4a469882cc2e7922f8faaa2e"
+    },
+    {
+      "id": "18480",
+      "fetched_at": "2026-11-06T12:51:27.609607+00:00",
+      "record_sha256": "0dad22ab1f5d52eb657263ff0eac5e749b72766fe5d266088a92a65960297814",
+      "file_sha256": "6ec7286b9e979f29c78b11eedcaeb33d0fea6bb268a3a8f62bff8f4388bc6cff"
+    },
+    {
+      "id": "20410",
+      "fetched_at": "2026-11-06T12:53:27.652479+00:00",
+      "record_sha256": "59f97cda102969b21e59b96a767a5813b73c493671eb121b002285a7b4d151c3",
+      "file_sha256": "61e8c67c2987725dea761b8a88408d27a214eabe7ef34b108ce46ba0eb02feb7"
+    },
+    {
+      "id": "20436",
+      "fetched_at": "2026-11-06T12:52:57.706159+00:00",
+      "record_sha256": "e0a69238d8639a1f0f15ddf86378c4d8e4a21647425c512bb80aa0eacc53477f",
+      "file_sha256": "231f2a621504628e10ca97fe22c34cad708c9fef74bf05183fc3f56a1cefd6a9"
+    },
+    {
+      "id": "20814",
+      "fetched_at": "2026-11-06T12:53:47.415429+00:00",
+      "record_sha256": "f526affd752351f67fd6a137ec105c21190931ac2ab1da300a3277796f22fbbc",
+      "file_sha256": "f389d029236b96df2ab750bdb4aae93e27fbc3c90b5a76d6a127d3319afe225e"
+    },
+    {
+      "id": "27215",
+      "fetched_at": "2026-11-06T12:53:07.431803+00:00",
+      "record_sha256": "15678a664e5c3aad4e6040d7f013f802ee2da1cb4768afa91da62c2acf0cdfb3",
+      "file_sha256": "fefa20052d2e4b94a77d05085f074d137118c76ea6f034e810ca5047c27d26ef"
+    },
+    {
+      "id": "27216",
+      "fetched_at": "2026-11-06T12:53:17.287103+00:00",
+      "record_sha256": "53f2948be0b9e8f7f3e38325303b8227a5f9c0547d98191c758bdf8767facadb",
+      "file_sha256": "7f91d394cedbcab8a1b24c76c88a4822ac21a154e815652006389cb44336cf58"
+    }
+  ],
+  "audit_notes": [
+    "The first active-worker scan incorrectly compared fetched_at to scan start; ID14886 was created during that scan. Direct read_snapshot verification passed. The temporary auditor now compares to actual read time; the full rerun passed. Collector code was unchanged."
+  ],
+  "prior_deferred_reconciliation": {
+    "previous_count": 35,
+    "now_valid_ids": [
+      "14628",
+      "14886",
+      "15215",
+      "18480"
+    ],
+    "still_missing_ids": [
+      "9786",
+      "9789",
+      "10425",
+      "10442",
+      "10446",
+      "10643",
+      "10919",
+      "10962",
+      "11074",
+      "16115",
+      "16118",
+      "16132",
+      "16142",
+      "16145",
+      "16150",
+      "16151",
+      "16167",
+      "16222",
+      "16224",
+      "16226",
+      "16230",
+      "16232",
+      "17899",
+      "17900",
+      "17902",
+      "20175",
+      "22499",
+      "22561",
+      "22690",
+      "22712",
+      "23229"
+    ],
+    "note": "Current manifest deferred list is only the rechecked prefix until the run ends."
+  },
+  "logs": {
+    "collector-shared-20261106T124641Z.stdout.log": {
+      "bytes": 34805,
+      "sha256": "2d06d06ceddc1d85e42ff4c9402eb3be00bd7eca48551e648d7e3fb844674ea4",
+      "tail": [
+        "{\"detail_records\": 12200, \"total\": 22401}",
+        "{\"detail_records\": 12220, \"total\": 22401}",
+        "{\"detail_records\": 12240, \"total\": 22401}",
+        "{\"detail_records\": 12260, \"total\": 22401}",
+        "{\"detail_records\": 12280, \"total\": 22401}"
+      ]
+    },
+    "collector-shared-20261106T124641Z.stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tail": []
+    },
+    "collector-shared-20261105T060851Z.stdout.log": {
+      "bytes": 35918,
+      "sha256": "16d27cb0850aa63df7b36906632cb63873f687b27145d4024462e433b60d5b87",
+      "tail": [
+        "{\"detail_records\": 12180, \"total\": 22401}",
+        "{\"detail_records\": 12200, \"total\": 22401}",
+        "{\"detail_records\": 12220, \"total\": 22401}",
+        "{\"detail_records\": 12240, \"total\": 22401}",
+        "{\"detail_records\": 12260, \"total\": 22401}"
+      ]
+    },
+    "collector-shared-20261105T060851Z.stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tail": []
+    }
+  },
+  "tests": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "48",
+    "time": "3.513",
+    "timestamp": "2026-11-06T19:43:57.005280+07:00",
+    "hostname": "Junn"
+  },
+  "verification_file_sha256": {
+    "scripts\\collect_opac.py": "71246167d1dabc1438bafc50158c703133c9f5118c00ecebcd9a538903a62130",
+    "backend\\app\\services\\opac_catalog.py": "443ef6694bbd1a7f41a9c1be34a758813dc299c0160cfd68840ef8b2a32879e4",
+    "backend\\app\\services\\opac_pacing.py": "6193d9813402bc4f5e90a17790c31c91867864e2e8303cc4d64dbbb01dfc9970",
+    "tmp\\supervise-opac-shared-20261103.ps1": "ffae0dc9740535252fad62df98ca833b02ee019952b2e7dfd2cb095618ce7560",
+    "tmp\\audit-marc-20261106.py": "537920f5d5568241301f7cc00c4f2a22eb61e387fc96206ab5dc8f9152f9bd55",
+    "tmp\\check-opac-totals-20261106.py": "f02d5bc74879c20e4d15bdea504cca4472b62f6f430bf9d22e71ea00c1e7393e",
+    "tmp\\marc-checkpoint-tests-20261106.xml": "b0b6fef12e563eaab0f62e85735b44cbbdfcf995db3afe0c33329ca4f1a232d0"
+  },
+  "remaining_gaps": [
+    "9966 frozen-scope IDs still lack valid stored MARC at after.checked_at; includes deferred empty panels, not successes.",
+    "Printed live listing10460 versus frozen10457: net+3, exact current additions/removals unknown; no expansion or overwrite of frozen22401scope.",
+    "Digital live total7487 and first-page snapshot match; current full ID equality not proven without separate full listing refresh.",
+    "Other six routes validated against stored snapshots only; current live totals/IDs and historical serial seed drift remain unreconciled.",
+    "Field snapshots pass existing parser/hash checks, not independent MARC21/ISO2709 conformance or full live source recertification.",
+    "No full-text acquisition, catalog/enrichment import, training, reader transaction, production deployment or uptime guarantee."
+  ]
+}

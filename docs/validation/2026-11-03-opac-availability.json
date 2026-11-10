@@ -1,0 +1,161 @@
+{
+  "recorded_at": "2026-11-03T02:06:21.505188+00:00",
+  "backend_tests": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "558",
+    "time": "69.798",
+    "timestamp": "2026-11-03T09:02:56.223879+07:00",
+    "hostname": "Junn"
+  },
+  "frontend_tests_passed": 48,
+  "frontend_build": "passed42modules",
+  "actual_original_question_check": {
+    "question": "vậy thư viện hiện tại có những sách python nào có thể đăng kí mượn và có thể hướng dẫn tôi quá trình đăng kí mượn được khongi",
+    "response": {
+      "answer": "• Giáo trình lập trình python: OPAC hiển thị 1/1 bản rỗi (kiểm tra 2026-11-03T09:03:30+07:00).\n\nCó bản rỗi là thông tin OPAC tại thời điểm kiểm tra; chưa phải xác nhận đặt mượn thành công hay bảo đảm đủ điều kiện mượn. Những biểu ghi khác bên dưới chưa được kiểm tra trạng thái. Tài liệu số không được suy ra là sách có thể mượn bản in.\n\nĐăng ký mượn: mở liên kết biểu ghi gốc, xem Thông tin xếp giá và nút “Đăng ký mượn”. Nếu OPAC yêu cầu, đăng nhập trực tiếp tại OPAC bằng tài khoản thư viện của bạn rồi thực hiện các bước và kiểm tra thông báo kết quả trên màn hình. Nếu không có nút hoặc không gửi được yêu cầu, liên hệ thư viện. Không gửi mật khẩu vào chat; chatbot chưa gửi giao dịch thay bạn.",
+      "status": "answered",
+      "sources": [
+        {
+          "title": "Giáo trình lập trình python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        },
+        {
+          "title": "Practical Discrete Mathematics : Discover math principles that fuel algorithms for computer science and machine learning with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18886",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "Practical Programming : An Introduction to Computer Science Using Python 3.6",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18984",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "PYTHON  CRASH COURSE : A HANDS-ON, PROJECT-BASED INTRODUCTION TO PROGRAMMING",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970",
+          "checked_at": "2026-11-02"
+        }
+      ],
+      "suggestions": [],
+      "mode": "faq",
+      "conversation_id": null,
+      "message_id": null,
+      "books": [
+        {
+          "id": 9125,
+          "title": "Giáo trình lập trình python",
+          "author": "Trần Đăng Hưng (chủ biên); Đặng Thành Trung, Nguyễn Thị Thanh Hiền",
+          "year": "2024",
+          "kind": "books",
+          "subjects": "Tiếng Việt; TV Công nghệ thông tin; TV Lập trình python; TV Ngành công ngệ thông tin;",
+          "description": "Thông tin xuất bản: Hà Nội : Đai học Sư phạm , 2024\nDạng tài liệu: Sách truyền thống\nChỉ số Phân loại thập phân Dewey: 005.133  GI108TR",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+          "checked_at": "2026-11-02",
+          "published": true,
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+          "availability_snapshot": {
+            "status": "available",
+            "available": 1,
+            "total": 1,
+            "checked_at": "2026-11-03T02:03:30.043735+00:00",
+            "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521"
+          }
+        },
+        {
+          "id": 19702,
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "author": "Hans Petter Langtangen, Timothy J. Barth, Michael Griebel, David E. Keyes, Risto M. Nieminen, Dirk Roose, Tamar Schlick",
+          "year": "2016",
+          "kind": "digital",
+          "subjects": "Ebook Công nghệ thông tin; Ebook Hệ thống thông tin quản lý; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Springer; Ebook Tiếng Anh; Ebook Tủ sách online;",
+          "description": "Thông tin xuất bản: Norway : Springer , 2016\nDạng tài liệu: Tài liệu số (Toàn văn)\nChỉ số Phân loại thập phân Dewey: 005",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01",
+          "published": true,
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965"
+        },
+        {
+          "id": 24212,
+          "title": "Practical Discrete Mathematics : Discover math principles that fuel algorithms for computer science and machine learning with Python",
+          "author": "Ryan T. White, Archana Tikayat Ray",
+          "year": "2021",
+          "kind": "digital",
+          "subjects": "Ebook Công nghệ phần mềm; Ebook Công nghệ thông tin; Ebook Hệ thống thông tin quản lý; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Tiếng Anh;",
+          "description": "Thông tin xuất bản: MUMBAI : Packt , 2021\nDạng tài liệu: Tài liệu số (Toàn văn)",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18886",
+          "checked_at": "2026-11-02",
+          "published": true,
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18886"
+        },
+        {
+          "id": 24214,
+          "title": "Practical Programming : An Introduction to Computer Science Using Python 3.6",
+          "author": "Paul Gries, Jennifer Campbell, Jason Montojo",
+          "year": "2017",
+          "kind": "digital",
+          "subjects": "Ebook Công nghệ phần mềm; Ebook Công nghệ thông tin; Ebook Hệ thống thông tin quản lý; Ebook Kỹ thuật truyền số liệu; Ebook Ngành công nghệ thông tin; Ebook Tiếng Anh; Tủ sách ngoại văn;",
+          "description": "Thông tin xuất bản: United State : The Pragmatic Programmers , 2017\nDạng tài liệu: Tài liệu số (Toàn văn)\nChỉ số Phân loại thập phân Dewey: 005",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18984",
+          "checked_at": "2026-11-02",
+          "published": true,
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18984"
+        },
+        {
+          "id": 24249,
+          "title": "PYTHON  CRASH COURSE : A HANDS-ON, PROJECT-BASED INTRODUCTION TO PROGRAMMING",
+          "author": "Eric Matthes",
+          "year": "2019",
+          "kind": "digital",
+          "subjects": "Ebook Công nghệ thông tin; Ebook Hệ thống thông tin quản lý; Ebook Kỹ thuật truyền số liệu; Ebook Mạng máy tính và truyền thông dữ liệu; Ebook Ngành công nghệ thông tin; Ebook Tiếng Anh; Tủ sách ngoại văn;",
+          "description": "Thông tin xuất bản: New York : No Starch Press , 2019\nDạng tài liệu: Tài liệu số (Toàn văn)\nChỉ số Phân loại thập phân Dewey: 005",
+          "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970",
+          "checked_at": "2026-11-02",
+          "published": true,
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970"
+        }
+      ]
+    }
+  },
+  "source_probe": {
+    "status": "available",
+    "available": 1,
+    "total": 1,
+    "checked_at": "2026-11-03T02:00:19.267644+00:00",
+    "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521"
+  },
+  "api_process": {
+    "pid": 33208,
+    "mode": "lexical while indexing",
+    "started_at": "2026-11-03T02:03:20.9336713+00:00"
+  },
+  "review": "sourceidentity/unknownzero/HTTPboundarieschecked; omittedduration/multipletopic guards reproducedREDthenfixedGREEN",
+  "scope": {
+    "max_detail_reads_per_turn": 2,
+    "cache_ttl_seconds": 60,
+    "cache_max_entries": 128,
+    "gap_seconds_within_process": 10,
+    "authentication": false,
+    "transactions": false,
+    "reader_data": false
+  },
+  "bulk_marc_collector": "paused during on-demand availability; shared cross-process host scheduling remains pending",
+  "vector_index": "independent writer continues; dense readiness not claimed",
+  "ui_recheck": "not performed; Work browser automation disabled on prior attempt",
+  "project_complete": false,
+  "limitations": [
+    "Public idle counts can change after fetch",
+    "Subset of printed candidates checked; others explicitly unverified",
+    "Digital document is not inferred borrowable in print",
+    "Source errors unknown not zero",
+    "No circulation transaction or eligibility guarantee",
+    "Process-only pacing: coordinate independent crawler or multiple web workers before deployment"
+  ]
+}

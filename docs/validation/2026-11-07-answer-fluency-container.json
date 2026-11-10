@@ -1,0 +1,33 @@
+{
+  "recorded_at": "2026-11-07T07:02:49.731344+00:00",
+  "image": "uth-library:answer-fluency-20261107",
+  "image_id": "sha256:158e9d8ba9a9f7da9af756d218796837c8ee6adba68fba1468170074c55741d6",
+  "container_id": "fa1234cfdc7aa42a15b84c7fdbd1243baf9dec1aa4b25d30eb579766263900e2",
+  "network": "none",
+  "bind_mounts": false,
+  "production_data_accessed": false,
+  "scope": "Fresh ephemeral Linux container, seed corpus, model and vectors disabled; not Compose/HTTPS/model or production acceptance",
+  "checks": {
+    "non_root_uid10001": true,
+    "ready_http200": true,
+    "database_ready": true,
+    "health_http200": true,
+    "model_disabled": true,
+    "vectors_disabled": true,
+    "frontend_index": true,
+    "frontend_assets": true,
+    "chat_guide": true,
+    "pdf_source_page3": true,
+    "anonymous_admin_denied": true,
+    "compact_book_title_once": true,
+    "compact_book_fields": true
+  },
+  "ready": {
+    "status": "ready",
+    "checks": {
+      "database": true,
+      "model": true
+    }
+  },
+  "knowledge_count": 17
+}

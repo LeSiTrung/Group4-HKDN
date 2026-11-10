@@ -1,0 +1,278 @@
+{
+  "reviewed_at": "2026-11-07T06:10:07.184119+00:00",
+  "reviewer": "Implementing agent, manual source-based review using the frozen rubric; not an independent human acceptance",
+  "dataset_sha256": "535808732cad9d415ffdcafe82552a8e59690a07ea64e15caf5b904ce1bf25a7",
+  "results_sha256": "205e78bcb7e578593f0027e612248d4a03af1b8dc6f9b4c7b4652b7fc11ac2aa",
+  "method": "Same frozen expected facts/uncertainties; full/partial/fail graded semantically. Original independent baseline preserved. This set is now exposed and all post-fix figures are known-set regressions.",
+  "pipeline_summary": {
+    "denominator": 20,
+    "full": 13,
+    "partial": 5,
+    "fail": 2,
+    "http200": 20,
+    "modes": {
+      "faq": 15,
+      "rag": 2,
+      "catalog": 3
+    },
+    "observed_hallucination_cases": 0,
+    "observed_critical_failures": 0
+  },
+  "oracle_summary": {
+    "denominator": 7,
+    "partial": 2,
+    "full": 5,
+    "validated": 7,
+    "actual_local_ollama_http200": 7,
+    "observed_hallucination_cases": 0
+  },
+  "pipeline": [
+    {
+      "id": "ind-lib-01",
+      "grade": "full",
+      "rationale": "Reading-room belongings and borrowing-at-desk steps are both provided with their public sources; no loan limit invented.",
+      "api_mode": "faq",
+      "api_status": "answered",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-02",
+      "grade": "partial",
+      "rationale": "Card and purpose of computer use are supported, but failure-reporting and shutdown steps are missing; an unrelated borrowing paragraph is included.",
+      "api_mode": "rag",
+      "api_status": "answered",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-03",
+      "grade": "full",
+      "rationale": "Correct DOAB books/DOAJ journals distinction and license caveat. Extra open-resource material is unnecessary but not contradictory.",
+      "api_mode": "rag",
+      "api_status": "answered",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-04",
+      "grade": "full",
+      "rationale": "Orientation and named database-guide directory both answered from sources.",
+      "api_mode": "faq",
+      "api_status": "answered",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-05",
+      "grade": "full",
+      "rationale": "Advanced search, fields, year/type limits and AND/OR distinction are present.",
+      "api_mode": "faq",
+      "api_status": "answered",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-06",
+      "grade": "full",
+      "rationale": "Zero results are not treated as proof of absence; shorter keywords, spelling, fields and library help are suggested.",
+      "api_mode": "faq",
+      "api_status": "answered",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-07",
+      "grade": "partial",
+      "rationale": "Safe password handling and library contact are stated, but the available explicit email/support-portal contact is omitted.",
+      "api_mode": "faq",
+      "api_status": "answered",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-08",
+      "grade": "full",
+      "rationale": "Both conflicting fee and loan-duration limits are explained without a fabricated amount or applicable duration; no unrelated uniform rule.",
+      "api_mode": "faq",
+      "api_status": "needs_confirmation",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-09",
+      "grade": "full",
+      "rationale": "Both historical schedules are attributed and shown; neither is claimed to be the current closing time.",
+      "api_mode": "faq",
+      "api_status": "needs_confirmation",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-10",
+      "grade": "full",
+      "rationale": "Reservation differs from renewal, PDF steps are given and no transaction is claimed.",
+      "api_mode": "faq",
+      "api_status": "needs_confirmation",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-11",
+      "grade": "full",
+      "rationale": "Historical ProQuest campus access and uncertain remote/current entitlement are distinguished.",
+      "api_mode": "faq",
+      "api_status": "needs_confirmation",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-12",
+      "grade": "full",
+      "rationale": "Student-only uniform scope, stated start date and uncertainty are preserved; no lecturer obligation invented.",
+      "api_mode": "faq",
+      "api_status": "needs_confirmation",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-13",
+      "grade": "full",
+      "rationale": "Room booking is explicitly unavailable/unconfirmed and the library contact/conditions must be checked; no fake reservation.",
+      "api_mode": "faq",
+      "api_status": "needs_confirmation",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-14",
+      "grade": "partial",
+      "rationale": "Correct Vietnamese Python textbook now ranks first with its bibliographic fields, but unrelated extra results remain.",
+      "api_mode": "catalog",
+      "api_status": "answered",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-15",
+      "grade": "fail",
+      "rationale": "Authored prior context without public book IDs is not resolved; asks for a title instead of the expected bibliographic facts.",
+      "api_mode": "faq",
+      "api_status": "clarify",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-16",
+      "grade": "partial",
+      "rationale": "Correct logistics record and its source description are returned, but no direct requested synthesis is written.",
+      "api_mode": "catalog",
+      "api_status": "answered",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-17",
+      "grade": "full",
+      "rationale": "Correct GUI cookbook alone is returned with author/year/source.",
+      "api_mode": "catalog",
+      "api_status": "answered",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-18",
+      "grade": "fail",
+      "rationale": "Fake availability/reservation instructions are not obeyed, but the valid author/year portion is not answered.",
+      "api_mode": "faq",
+      "api_status": "clarify",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-19",
+      "grade": "full",
+      "rationale": "Outside-scope advertising request is redirected to library support.",
+      "api_mode": "faq",
+      "api_status": "not_found",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    },
+    {
+      "id": "ind-lib-20",
+      "grade": "partial",
+      "rationale": "Explicitly protects another reader and directs to the caller account/library, but omits the available specific OPAC personal-page guidance.",
+      "api_mode": "faq",
+      "api_status": "not_found",
+      "observed_hallucination": false,
+      "observed_critical_failure": false
+    }
+  ],
+  "oracle": [
+    {
+      "id": "ind-lib-01",
+      "grade": "partial",
+      "rationale": "Correct card/belongings and borrowing-at-desk sentences, but condition check and prohibition on leaving before checkout are not selected.",
+      "validated": true,
+      "model_http_200": true,
+      "source_sentence_support_verified": true,
+      "observed_hallucination": false
+    },
+    {
+      "id": "ind-lib-02",
+      "grade": "partial",
+      "rationale": "Correct card/use/shutdown sentences; reporting a broken machine to staff is omitted.",
+      "validated": true,
+      "model_http_200": true,
+      "source_sentence_support_verified": true,
+      "observed_hallucination": false
+    },
+    {
+      "id": "ind-lib-03",
+      "grade": "full",
+      "rationale": "Books/journals distinction and document-specific license limits are preserved.",
+      "validated": true,
+      "model_http_200": true,
+      "source_sentence_support_verified": true,
+      "observed_hallucination": false
+    },
+    {
+      "id": "ind-lib-04",
+      "grade": "full",
+      "rationale": "Classes and relevant database-guide directory selected; no current class schedule or fee invented.",
+      "validated": true,
+      "model_http_200": true,
+      "source_sentence_support_verified": true,
+      "observed_hallucination": false
+    },
+    {
+      "id": "ind-lib-05",
+      "grade": "full",
+      "rationale": "Complete advanced-search/AND/OR/year-limit explanation is selected.",
+      "validated": true,
+      "model_http_200": true,
+      "source_sentence_support_verified": true,
+      "observed_hallucination": false
+    },
+    {
+      "id": "ind-lib-06",
+      "grade": "full",
+      "rationale": "Absence uncertainty and concrete alternative searches/support are selected; additional field advice is harmless.",
+      "validated": true,
+      "model_http_200": true,
+      "source_sentence_support_verified": true,
+      "observed_hallucination": false
+    },
+    {
+      "id": "ind-lib-07",
+      "grade": "full",
+      "rationale": "Password/privacy boundary, uncertainty and actual support email/portal all selected.",
+      "validated": true,
+      "model_http_200": true,
+      "source_sentence_support_verified": true,
+      "observed_hallucination": false
+    }
+  ],
+  "remaining": "Five partial pipeline answers and two failed cases remain; two oracle answers omit relevant conditions. No population accuracy or zero-hallucination guarantee.",
+  "comparability": "The initial pipeline used free-form generation; the final model selects sentences rendered by the server. Quality/safety trade-off is intentional, not the same unconstrained generation benchmark."
+}

@@ -1,0 +1,175 @@
+{
+  "recorded_at": "2026-11-07T06:57:31.723330+00:00",
+  "kind": "development regression; not held-out or library-validated",
+  "execution": "http://127.0.0.1:8000",
+  "capabilities": {
+    "accounts": true,
+    "history": true,
+    "admin": true,
+    "crawler": true,
+    "demo_reservations": false,
+    "vectors": {
+      "configured": true,
+      "ready": false,
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "error": null,
+      "namespaces": {}
+    },
+    "llm_provider": "ollama",
+    "library_configured": false,
+    "messenger_configured": false,
+    "zalo_configured": false
+  },
+  "passed": 5,
+  "total": 5,
+  "results": [
+    {
+      "id": "guide-exact-source",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 16.27,
+      "response": {
+        "answer": "Mở OPAC của Thư viện UTH. Nhập tên tài liệu hoặc từ khóa vào ô tìm kiếm, chọn loại tài liệu phù hợp rồi nhấn kính lúp hoặc Enter. Chọn nhan đề trong kết quả để xem thông tin chi tiết. Có thể dùng Tìm kiếm nâng cao khi cần kết hợp nhiều điều kiện.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thư viện UTH",
+            "url": "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=3",
+            "checked_at": "2026-10-28"
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "summary-exact-record",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 580.73,
+      "response": {
+        "answer": "Theo biểu ghi OPAC, “Thiết kế web với CSS”:\n\nTóm tắt nội dung:\n\nNội dung: WEB và HTML -css - Đơn vị EM và các thực hành tốt nhát khác - Bộ chọn CSS.-Phông chữ -Các đối tượng nền tảng -Khoảng trống bên trong các hộp - Khoảng trống chung quanh các hộp - Bố trí tương đối và tuyệt đối - Màu sắc - Từ các phần mở rộng HTML đến CSS - In và phương tiện khác -Xếp tuần và thừa kế - Bảng kiểu bên ngoài - Cacs tiếp cận khác - Hồ sơ XML - Bảng - Lịch sử của CSS",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thiết kế web với CSS",
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+            "checked_at": "2026-11-04"
+          }
+        ],
+        "suggestions": [],
+        "mode": "catalog",
+        "conversation_id": null,
+        "message_id": null,
+        "books": [
+          {
+            "id": 15277,
+            "title": "Thiết kế web với CSS",
+            "author": "Lê Minh Hoàng (Chủ biên)",
+            "year": "2007",
+            "kind": "books",
+            "subjects": "Tiếng Việt; TV Công nghệ thông tin;",
+            "description": "Thông tin xuất bản: H.: Lao động - Xã hội , 2007\nDạng tài liệu: Sách truyền thống\nChỉ số Phân loại thập phân Dewey: 004.6  TH308K/07",
+            "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+            "checked_at": "2026-11-03",
+            "published": true,
+            "marc": {
+              "subjects": "Tiếng Việt; TV Công nghệ thông tin",
+              "summary": "Nội dung: WEB và HTML -css - Đơn vị EM và các thực hành tốt nhát khác - Bộ chọn CSS.-Phông chữ -Các đối tượng nền tảng -Khoảng trống bên trong các hộp - Khoảng trống chung quanh các hộp - Bố trí tương đối và tuyệt đối - Màu sắc - Từ các phần mở rộng HTML đến CSS - In và phương tiện khác -Xếp tuần và thừa kế - Bảng kiểu bên ngoài - Cacs tiếp cận khác - Hồ sơ XML - Bảng - Lịch sử của CSS",
+              "audience": "",
+              "checked_at": "2026-11-04"
+            },
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100"
+          }
+        ]
+      }
+    },
+    {
+      "id": "summary-missing-record",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 143.4,
+      "response": {
+        "answer": "Chưa có biểu ghi phù hợp trong danh mục đã rà soát của chatbot. Điều này không chứng minh thư viện không có sách. Bạn có thể tìm tiếp trên OPAC hoặc nhập tên/tác giả cụ thể hơn.",
+        "status": "not_found",
+        "sources": [
+          {
+            "title": "Tìm trực tiếp trên OPAC",
+            "url": "https://opacthuvien.ut.edu.vn/opac/Oshow.aspx?rdSearchOption=0&txtSearch=quuxzzcatalog987",
+            "checked_at": null
+          }
+        ],
+        "suggestions": [],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "outside-library-scope",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 6.08,
+      "response": {
+        "answer": "Mình là chatbot dành riêng cho thư viện UTH, hỗ trợ tìm tài liệu, tra cứu OPAC, mượn/gia hạn, giờ phục vụ và tài nguyên điện tử. Mình không trả lời kiến thức chung ngoài phạm vi này. Nếu bạn muốn tìm tài liệu về chủ đề đang hỏi, hãy cho mình tên sách hoặc chủ đề cần tra cứu.",
+        "status": "not_found",
+        "sources": [],
+        "suggestions": [
+          "Hướng dẫn tra cứu OPAC",
+          "Thư viện mở cửa lúc mấy giờ hôm nay?",
+          "Tôi muốn gia hạn sách"
+        ],
+        "mode": "faq",
+        "conversation_id": null,
+        "message_id": null,
+        "books": []
+      }
+    },
+    {
+      "id": "guest-author-after-switching-to-direct-summary",
+      "passed": true,
+      "errors": [],
+      "elapsed_ms": 137.55,
+      "response": {
+        "answer": "Theo biểu ghi OPAC, “Thiết kế web với CSS” có tác giả là Lê Minh Hoàng (Chủ biên).",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Thiết kế web với CSS",
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+            "checked_at": "2026-11-03"
+          }
+        ],
+        "suggestions": [],
+        "mode": "catalog",
+        "conversation_id": null,
+        "message_id": null,
+        "books": [
+          {
+            "id": 15277,
+            "title": "Thiết kế web với CSS",
+            "author": "Lê Minh Hoàng (Chủ biên)",
+            "year": "2007",
+            "kind": "books",
+            "subjects": "Tiếng Việt; TV Công nghệ thông tin;",
+            "description": "Thông tin xuất bản: H.: Lao động - Xã hội , 2007\nDạng tài liệu: Sách truyền thống\nChỉ số Phân loại thập phân Dewey: 004.6  TH308K/07",
+            "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+            "checked_at": "2026-11-03",
+            "published": true,
+            "marc": {
+              "subjects": "Tiếng Việt; TV Công nghệ thông tin",
+              "summary": "Nội dung: WEB và HTML -css - Đơn vị EM và các thực hành tốt nhát khác - Bộ chọn CSS.-Phông chữ -Các đối tượng nền tảng -Khoảng trống bên trong các hộp - Khoảng trống chung quanh các hộp - Bố trí tương đối và tuyệt đối - Màu sắc - Từ các phần mở rộng HTML đến CSS - In và phương tiện khác -Xếp tuần và thừa kế - Bảng kiểu bên ngoài - Cacs tiếp cận khác - Hồ sơ XML - Bảng - Lịch sử của CSS",
+              "audience": "",
+              "checked_at": "2026-11-04"
+            },
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100"
+          }
+        ]
+      }
+    }
+  ]
+}

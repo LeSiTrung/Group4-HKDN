@@ -1,0 +1,118 @@
+{
+  "recorded_at": "2026-11-07T07:05:19.336363+00:00",
+  "task": "QA-ANSWER-FLUENCY-20261107",
+  "overall": "Verified focused local improvements and desktop browser flows; project not complete",
+  "trigger": "User annotated repeated full title/source framing in a combined author/year answer.",
+  "changes": [
+    "Combine supported author/year facts into one paragraph with the title named once.",
+    "Use labeled sections for source MARC content and one uncertainty message for all missing fields; preserve raw facts and distinct review dates.",
+    "Deduplicate identical LLM-selected source sentences while preserving both source IDs and grounding/transaction guards."
+  ],
+  "verification": {
+    "backend": {
+      "tests": 1180,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "new_regressions": 8,
+    "observed_red": {
+      "book_style": {
+        "tests": 7,
+        "failures": 5,
+        "errors": 0,
+        "skipped": 0
+      },
+      "model_cross_source_duplicate": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "note": "Six failing regressions plus two already-passing missing-field controls; no original tests removed."
+    },
+    "frontend": {
+      "tests": 144,
+      "test_files": 14,
+      "build": "passed"
+    },
+    "offline": {
+      "passed": 49,
+      "total": 49,
+      "scope": "isolated deterministic fixture, model/vectors disabled"
+    },
+    "public_api_metadata_variants": {
+      "passed": 6,
+      "total": 6,
+      "scope": "same public book, natural/unaccented/polite/reversed/missing-field variants; not held-out evaluation"
+    },
+    "opac_api_smoke": {
+      "passed": 5,
+      "total": 5
+    },
+    "model_probe": {
+      "http_status": 200,
+      "mode": "rag",
+      "source_sentence_membership_checked": true,
+      "note": "One actual local Ollama API response. Real-world duplicate frequency and completeness are not measured."
+    },
+    "browser": {
+      "name": "ChatGPT in-app browser",
+      "url": "http://127.0.0.1:8000/#chat",
+      "observed_checks": [
+        "author/year combined with one title",
+        "multiple unknown fields share one warning",
+        "explicit CSS book replaces Python context; both review dates retained",
+        "OPAC guide stays guidance after book discussion",
+        "PDF image modal opens, Escape closes it and returns focus",
+        "C++ local catalog returns 34 results; first page inspected, not full-corpus relevance grading",
+        "guest loans page requires login",
+        "chat messages survive catalog/loans navigation",
+        "reselected Python book and concise follow-up work after navigation"
+      ],
+      "warning_error_console": [],
+      "scope": "Observed developer walkthrough; not exhaustive user acceptance",
+      "viewport": "existing desktop viewport; no mobile override or physical-device claim",
+      "recovery": "Label-based catalog locator returned no matches; DOM snapshot and observed role/name locators succeeded without source changes."
+    },
+    "readiness": {
+      "status": "ready",
+      "checks": {
+        "database": true,
+        "model": true
+      }
+    },
+    "docker": {
+      "image": "uth-library:answer-fluency-20261107",
+      "image_id": "sha256:158e9d8ba9a9f7da9af756d218796837c8ee6adba68fba1468170074c55741d6",
+      "build": "passed",
+      "isolated_checks": 13,
+      "all_passed": true,
+      "temporary_container_removed": true,
+      "scope": "Fresh ephemeral Linux container, seed corpus, model and vectors disabled; not Compose/HTTPS/model or production acceptance"
+    },
+    "diff_check": "passed"
+  },
+  "remaining": [
+    "Valid bibliography inside mixed unsafe instructions still needs better handling without accepting fabricated availability/transactions.",
+    "Fresh independent/staff evaluation and general LLM completeness remain open; these developer regressions are not a new accuracy score.",
+    "Source MARC wording/typos are retained, and absent structured publisher/ISBN/shelf values remain unconfirmed.",
+    "Native Qdrant cold-start latency, full Compose/model/HTTPS, target-host load, physical devices and multi-day uptime are not revalidated here.",
+    "Real library transactions remain BLOCKED by the user-confirmed absence of permission/API; zero attempted.",
+    "Existing TestClient Starlette/httpx deprecation warning remains; no dependency upgrade, database migration, MARC/account-data change, paid provider, commit/push or production deployment."
+  ],
+  "sha256": {
+    "backend/app/services/assistant.py": "a081157f667cf835983006094d886b07881ffa51310bf7b8add21a06ea73d2e9",
+    "backend/app/services/llm_service.py": "5aabc8d106517c053069816adb4a52afa25d169df1c3b469292d6aecf8cb87ed",
+    "tests/test_book_answer_style.py": "adab7c0874323dc729c1cf0feb746bee931e54972312c4166c9821d35a4466a8",
+    "tests/test_grounded_sentence_selection.py": "36c629cbe3ce70d6e760d218ac32b979d9e7be46c08ebfeecd47779d0c5fc705",
+    "docs/validation/2026-11-07-answer-fluency-junit.xml": "b35dd755d54defd55a4e9bed4eca2beb2329755eaadd1237701fd1df1796cdd6",
+    "docs/validation/2026-11-07-answer-fluency-offline.json": "db85888f4b3f783f8a0e8f068f7ce703355c579e5099064d03af85c3218e66ca",
+    "docs/validation/2026-11-07-answer-fluency-opac-smoke.json": "4e6753487648d5aa4fa6f575a09bd9a10c3e8b8a797ab1e420214afe6c3c0a19",
+    "docs/validation/2026-11-07-answer-fluency-live.json": "e37e271dec64c1185ccd5bc046f10a6196a0c9c6d57a38c8fa7cfed6665c674e",
+    "docs/validation/2026-11-07-answer-fluency-model.json": "ce19eceaf31f1d3f5c0c0f6e6885427b6dc8ee6000ccc6b463103630cfaf0b55",
+    "docs/validation/2026-11-07-answer-fluency-browser.json": "76341ddd0388cad8dadc7179fb770b54ce86d80d3135a1f95fa2f394848d3ace",
+    "docs/validation/2026-11-07-answer-fluency-desktop.jpg": "343f9b7dab027e90d8bee0109580ee740e91134c63cac77207c1f3cee336f8b1",
+    "docs/validation/2026-11-07-answer-fluency-container.json": "c1a99a890192b984b15e8b168c076ca311ff946d36294a8513276a04c63c1e1c"
+  }
+}

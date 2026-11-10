@@ -1,0 +1,293 @@
+{
+  "recorded_at": "2026-11-03T02:56:20.474384+00:00",
+  "kind": "local development regressions; not held-out, library-approved, or production acceptance",
+  "scope": [
+    "natural catalog recommendations",
+    "borrowing procedure routing",
+    "metadata-grounded reasons",
+    "vector handoff"
+  ],
+  "backend": {
+    "tests": "608",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "67.890",
+    "timestamp": "2026-11-03T09:52:08.506995+07:00"
+  },
+  "frontend": {
+    "passed": 51,
+    "files": 8,
+    "production_build": "passed; Vite6.4.5,42modules"
+  },
+  "strict_live_api": {
+    "passed": 13,
+    "total": 13,
+    "cases": [
+      {
+        "id": "borrow-preparation",
+        "passed": true,
+        "seconds": 0.018,
+        "status": "answered",
+        "mode": "faq",
+        "book_ids": [],
+        "answer_sha256": "d5dba5ba56646ba1ef468bb883deff117e61169514cb7f27577acc2936995efc",
+        "source_urls": [
+          "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-muon-tra-tai-lieu/"
+        ]
+      },
+      {
+        "id": "borrow-preparation-no-accent",
+        "passed": true,
+        "seconds": 0.01,
+        "status": "answered",
+        "mode": "faq",
+        "book_ids": [],
+        "answer_sha256": "d5dba5ba56646ba1ef468bb883deff117e61169514cb7f27577acc2936995efc",
+        "source_urls": [
+          "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-muon-tra-tai-lieu/"
+        ]
+      },
+      {
+        "id": "borrow-paperwork",
+        "passed": true,
+        "seconds": 0.009,
+        "status": "answered",
+        "mode": "faq",
+        "book_ids": [],
+        "answer_sha256": "d5dba5ba56646ba1ef468bb883deff117e61169514cb7f27577acc2936995efc",
+        "source_urls": [
+          "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-muon-tra-tai-lieu/"
+        ]
+      },
+      {
+        "id": "borrow-card",
+        "passed": true,
+        "seconds": 0.01,
+        "status": "answered",
+        "mode": "faq",
+        "book_ids": [],
+        "answer_sha256": "d5dba5ba56646ba1ef468bb883deff117e61169514cb7f27577acc2936995efc",
+        "source_urls": [
+          "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-muon-tra-tai-lieu/"
+        ]
+      },
+      {
+        "id": "borrow-after-search",
+        "passed": true,
+        "seconds": 0.009,
+        "status": "answered",
+        "mode": "faq",
+        "book_ids": [],
+        "answer_sha256": "d5dba5ba56646ba1ef468bb883deff117e61169514cb7f27577acc2936995efc",
+        "source_urls": [
+          "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-muon-tra-tai-lieu/"
+        ]
+      },
+      {
+        "id": "natural-it",
+        "passed": true,
+        "seconds": 10.143,
+        "status": "answered",
+        "mode": "catalog_ai",
+        "book_ids": [
+          5931,
+          5982,
+          7347,
+          8996,
+          9121
+        ],
+        "answer_sha256": "c517c9ec1efa7d95db897dad61d66223b8a3a98457c9ff51cb11fa5e1089c821",
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26460",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26461",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=464",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26446",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26746"
+        ]
+      },
+      {
+        "id": "natural-it-no-accent",
+        "passed": true,
+        "seconds": 4.156,
+        "status": "answered",
+        "mode": "catalog_ai",
+        "book_ids": [
+          5931,
+          5982,
+          7347,
+          8996,
+          9121
+        ],
+        "answer_sha256": "c517c9ec1efa7d95db897dad61d66223b8a3a98457c9ff51cb11fa5e1089c821",
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26460",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26461",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=464",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26446",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26746"
+        ]
+      },
+      {
+        "id": "python-beginner",
+        "passed": true,
+        "seconds": 1.917,
+        "status": "answered",
+        "mode": "catalog_ai",
+        "book_ids": [
+          24214,
+          24249
+        ],
+        "answer_sha256": "38f4a04c78ff0f78cf55fd591a8a63f60422983fd9de680a68214cc9415412ca",
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18984",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970"
+        ]
+      },
+      {
+        "id": "beginner-followup",
+        "passed": true,
+        "seconds": 2.501,
+        "status": "answered",
+        "mode": "catalog",
+        "book_ids": [
+          9282,
+          12557,
+          9281,
+          9283,
+          9637
+        ],
+        "answer_sha256": "38f4a04c78ff0f78cf55fd591a8a63f60422983fd9de680a68214cc9415412ca",
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=27269",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=183",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=365",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=487",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=409"
+        ]
+      },
+      {
+        "id": "refinement",
+        "passed": true,
+        "seconds": 2.415,
+        "status": "answered",
+        "mode": "catalog_ai",
+        "book_ids": [
+          8955,
+          8956,
+          8996,
+          9058,
+          9421
+        ],
+        "answer_sha256": "c517c9ec1efa7d95db897dad61d66223b8a3a98457c9ff51cb11fa5e1089c821",
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=346",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=352",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26446",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=27253",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=24333"
+        ]
+      },
+      {
+        "id": "one-logistics",
+        "passed": true,
+        "seconds": 1.964,
+        "status": "answered",
+        "mode": "catalog",
+        "book_ids": [
+          6011
+        ],
+        "answer_sha256": "c517c9ec1efa7d95db897dad61d66223b8a3a98457c9ff51cb11fa5e1089c821",
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26452"
+        ]
+      },
+      {
+        "id": "mechanics",
+        "passed": true,
+        "seconds": 1.345,
+        "status": "answered",
+        "mode": "catalog",
+        "book_ids": [
+          1,
+          5617,
+          5618,
+          5628,
+          5629
+        ],
+        "answer_sha256": "bcd615b1f44f1746d882820348a0dc7c25aefde3763ee010064a43ea538c27bb",
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1967",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=4105",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=6906",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=4103",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=4104"
+        ]
+      },
+      {
+        "id": "no-invented-book",
+        "passed": true,
+        "seconds": 2.507,
+        "status": "not_found",
+        "mode": "faq",
+        "book_ids": [],
+        "answer_sha256": "02fddea2bbfc0bad46963ff9701a96f47bbde7e81d96c5815fd502c5a89d190e",
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/Oshow.aspx?rdSearchOption=0&txtSearch=zzz999888777nosuch"
+        ]
+      }
+    ]
+  },
+  "repeatable_live_suite": {
+    "passed": 12,
+    "total": 12,
+    "cases": "tests/evaluation/natural-library-2026-11-03.json"
+  },
+  "final_live_smoke": {
+    "passed": 2,
+    "vectors": {
+      "configured": true,
+      "ready": true,
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "error": null,
+      "namespaces": {
+        "books": {
+          "sources": 27964,
+          "chunks": 108133,
+          "ready": true
+        }
+      }
+    }
+  },
+  "vector_transport_probe": {
+    "status": 200,
+    "cold_seconds": 65.008,
+    "sources": 27964,
+    "chunks": 108133,
+    "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "earlier_attempts": "HTTP read timeout at120s; no success inferred",
+    "negative_probe_query": "quuxzzvector zzzyyintegration",
+    "returned_hits": 6,
+    "relevance_pass": false,
+    "remaining_task": "SEARCH-02: semantic negative-query confidence/abstention"
+  },
+  "source_sha256": {
+    "backend/app/services/assistant.py": "63d1e54531c4343ce2bdb5cddeab99767084296f3e9328239934ed79d22b0de1",
+    "backend/app/services/catalog.py": "4c0959e55460d2f9946343e56350fff0832b30b97bf1f462a8347cc0e100212e",
+    "backend/app/services/recommendations.py": "80796b16189e790a03eadd6750b9c5f428946459fbee11c44be9e0df79e5bc88",
+    "backend/app/services/llm_service.py": "7537bba259e9d0cd61f15a1de4314292e1daeca29c972cff1843528006c43eb1",
+    "backend/app/services/rag_service.py": "8e4bc913fd913245718c9066e57336d585a48b7c825d27e25e7d629cecd8bcdb",
+    "tests/test_recommendations.py": "1ebf88e3ba3751731fa5607e5065ae727cc7e0b56df8deb90ce09ea5db22af07",
+    "tests/test_procedure_routing.py": "5f3cc8482468829636b244729959e8621a9ab6b1678b09343d94a9ebca889743",
+    "frontend/src/components/ChatMessage.jsx": "62a426f3fe3a01c728b833e4915d4edf82363cca04c4d8501e85b1edaf30a88c",
+    "frontend/src/components/UI.jsx": "7003c6d5bf58a52075720c3ab57ad9cd6db4c318a73e85712938a93ff26ebed8",
+    "frontend/src/naturalRecommendations.test.jsx": "3ce878e951d6aa9011363fb8676350b1697b85f722d90cbc64105f4134add893"
+  },
+  "limits": [
+    "No browser visual recheck; Work browser use disabled",
+    "Metadata signals do not establish staff-reviewed pedagogical suitability",
+    "Local Qdrant cold latency and concurrent/target-host acceptance remain open",
+    "Actual loan/renewal bridge, authoritative current policy and channels remain unverified",
+    "No paid calls, training, full-text ingestion, transaction, public deployment, commit or push in this task"
+  ]
+}

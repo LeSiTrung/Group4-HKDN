@@ -1,0 +1,471 @@
+{
+  "recorded_at": "2026-11-03T06:26:18.914996+00:00",
+  "local_time": "2026-11-03T13:26:18.914996+07:00",
+  "kind": "TDD bugfix validation; no exhaustive, independent library or publicproduction acceptance claim",
+  "backend": {
+    "tests": "825",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "time": "111.104",
+    "timestamp": "2026-11-03T13:21:50.140448+07:00"
+  },
+  "backend_warning": "1 existing StarletteDeprecationWarning: httpx with starlette.testclient is deprecated; not suppressed",
+  "new_backend_cases": {
+    "tests.test_loans_session": 4,
+    "tests.test_model_output_contract": 3,
+    "tests.test_renewal_receipt_session": 7,
+    "tests.test_session_revocation": 20,
+    "tests.test_webhook_text_validation": 8
+  },
+  "frontend": {
+    "passed": 110,
+    "files": 11,
+    "new_regressions": 9,
+    "build": "Vite6.4.5,42modules,passed"
+  },
+  "red_before_implementation": [
+    {
+      "bug": "Ended request session still reads/mutates private data",
+      "observed_failures": 18,
+      "cause": "HTTP200 instead of401"
+    },
+    {
+      "bug": "Ended session can fetch/receive private library loans",
+      "observed_failures": 4,
+      "cause": "HTTP200 and bridge/private data after revoke/expiry"
+    },
+    {
+      "bug": "Authorized provider result lost after session end",
+      "observed_failures": 6,
+      "cause": "ledgerpending instead ofsucceeded/uncertain/failed"
+    },
+    {
+      "bug": "Late receipt changes new account with reusednumericID/key",
+      "observed_failures": 1,
+      "cause": "replacementpending overwritten succeeded"
+    },
+    {
+      "bug": "Invalid Unicode model answer accepted",
+      "observed_failures": 2,
+      "cause": "unencodable text returned instead offallback"
+    },
+    {
+      "bug": "Signed invalid Unicode channel event not rejected",
+      "observed_failures": 6,
+      "cause": "serverUnicodeEncodeError or eventprocessed"
+    },
+    {
+      "bug": "Loans stale token/duplicate requests and old outcomes",
+      "observed_failures": 5,
+      "cause": "stale data/status or duplicate outbound requests"
+    },
+    {
+      "bug": "Double admin submit writes twice",
+      "observed_failures": 1,
+      "cause": "two createPOSTs"
+    },
+    {
+      "bug": "Pending renewal confirmation/results survive tokenedit",
+      "observed_failures": 3,
+      "cause": "stale confirmation/ack/error appears"
+    }
+  ],
+  "native": {
+    "ready": {
+      "status": "ready",
+      "checks": {
+        "database": true,
+        "model": true
+      }
+    },
+    "api_contracts": {
+      "passed": 19,
+      "total": 19,
+      "results": [
+        {
+          "id": "empty-message",
+          "passed": true,
+          "status": 422,
+          "seconds": 0.579
+        },
+        {
+          "id": "blank-message",
+          "passed": true,
+          "status": 422,
+          "seconds": 0.002
+        },
+        {
+          "id": "numeric-message",
+          "passed": true,
+          "status": 422,
+          "seconds": 0.003
+        },
+        {
+          "id": "null-message",
+          "passed": true,
+          "status": 422,
+          "seconds": 0.002
+        },
+        {
+          "id": "missing-message",
+          "passed": true,
+          "status": 422,
+          "seconds": 0.002
+        },
+        {
+          "id": "huge-conversation",
+          "passed": true,
+          "status": 422,
+          "seconds": 0.005
+        },
+        {
+          "id": "negative-conversation",
+          "passed": true,
+          "status": 422,
+          "seconds": 0.002
+        },
+        {
+          "id": "history-system-role",
+          "passed": true,
+          "status": 422,
+          "seconds": 0.005
+        },
+        {
+          "id": "history-over-budget",
+          "passed": true,
+          "status": 422,
+          "seconds": 0.003
+        },
+        {
+          "id": "malformed-json",
+          "passed": true,
+          "status": 422,
+          "seconds": 0.002
+        },
+        {
+          "id": "invalid-unicode",
+          "passed": true,
+          "status": 422,
+          "seconds": 0.002
+        },
+        {
+          "id": "private-validation",
+          "passed": true,
+          "status": 422,
+          "seconds": 0.004
+        },
+        {
+          "id": "foreign-origin",
+          "passed": true,
+          "status": 403,
+          "seconds": 0.001
+        },
+        {
+          "id": "oversized-transport",
+          "passed": true,
+          "status": 413,
+          "seconds": 0.013
+        },
+        {
+          "id": "long-supported-transport",
+          "passed": true,
+          "status": 200,
+          "seconds": 0.003
+        },
+        {
+          "id": "huge-book-id",
+          "passed": true,
+          "status": 422
+        },
+        {
+          "id": "invalid-catalog-kind",
+          "passed": true,
+          "status": 422
+        },
+        {
+          "id": "admin-without-auth",
+          "passed": true,
+          "status": 401
+        },
+        {
+          "id": "expired-cookie-then-guest",
+          "passed": true,
+          "status": 401,
+          "guest_status": 200
+        }
+      ]
+    },
+    "two_chat_smoke": {
+      "results": [
+        {
+          "question": "Tôi cần chuẩn bị gì để mượn sách?",
+          "seconds": 0.038,
+          "response": {
+            "answer": "Theo trang Phục vụ mượn–trả tài liệu, bạn đọc xuất trình thẻ, tra tìm tài liệu bằng máy tính hoặc trong kho, dùng sơ đồ và bảng chỉ dẫn kệ để xác định tài liệu, rồi mang sách ra quầy thủ thư làm thủ tục ghi mượn. Kiểm tra tình trạng tài liệu trước khi nhận; không tự mang tài liệu ra ngoài khi chưa làm thủ tục. Hạn mức, hạn trả, phí và quyền gia hạn hiện hành cần kiểm tra với thư viện vì các trang quy định công khai còn khác nhau.",
+            "status": "answered",
+            "sources": [
+              {
+                "title": "LIC UTH — Phục vụ mượn–trả tài liệu",
+                "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-muon-tra-tai-lieu/",
+                "checked_at": "2026-10-31"
+              }
+            ],
+            "suggestions": [],
+            "mode": "faq",
+            "conversation_id": null,
+            "message_id": null,
+            "books": []
+          }
+        },
+        {
+          "question": "hãy tìm cho tôi những sách để học IT tốt hơn",
+          "seconds": 17.814,
+          "response": {
+            "answer": "Mình gợi ý các tài liệu dưới đây theo nhu cầu học tập của bạn. Mỗi cuốn có lý do lựa chọn từ nhan đề hoặc từ khóa của biểu ghi; bạn có thể mở nguồn để xem nội dung trước khi chọn. Bạn đang muốn học mảng nào và đã có kiến thức nền đến đâu để mình chọn sát hơn?",
+            "status": "answered",
+            "sources": [
+              {
+                "title": "Bài giảng cấu trúc dữ liệu và giải thuật : Dành cho ngành Công nghệ thông tin",
+                "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26460",
+                "checked_at": "2026-11-01"
+              },
+              {
+                "title": "Bài giảng kỹ thuật lập trình : Dành cho ngành công nghệ thông tin",
+                "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26461",
+                "checked_at": "2026-11-01"
+              },
+              {
+                "title": "Công nghệ phần mềm : Giáo trình dùng cho sinh viên ngành công nghệ thông tin các trường đại học",
+                "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=464",
+                "checked_at": "2026-11-01"
+              },
+              {
+                "title": "Giáo trình Kiến trúc máy tính : Dành cho ngành Công nghệ thông tin, Ngành Mạng máy tính và truyền thông dữ liệu",
+                "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26446",
+                "checked_at": "2026-11-02"
+              },
+              {
+                "title": "Giáo trình lập trình hướng đối tượng : Dành cho ngành Công nghệ thông tin",
+                "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26746",
+                "checked_at": "2026-11-02"
+              }
+            ],
+            "suggestions": [
+              "Tìm sách Bài giảng cấu trúc dữ liệu và giải thuật : Dành cho ngành Công nghệ thông tin",
+              "Tìm sách Bài giảng kỹ thuật lập trình : Dành cho ngành công nghệ thông tin",
+              "Tìm sách Công nghệ phần mềm : Giáo trình dùng cho sinh viên ngành công nghệ thông tin các trường đại học"
+            ],
+            "mode": "catalog_ai",
+            "conversation_id": null,
+            "message_id": null,
+            "books": [
+              {
+                "id": 5931,
+                "title": "Bài giảng cấu trúc dữ liệu và giải thuật : Dành cho ngành Công nghệ thông tin",
+                "author": "ThS. Bùi Văn Thượng",
+                "year": "2023",
+                "kind": "books",
+                "subjects": "TV Cấu trúc dữ liệu và giải thuật; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Tiếng Việt; TV Tin học đại cương;",
+                "description": "Thông tin xuất bản: TP. Hồ Chí Minh : Đại học Giao thông vận tải TP. Hồ Chí Minh , 2023\nDạng tài liệu: Sách truyền thống\nChỉ số Phân loại thập phân Dewey: 005  B103GI/24",
+                "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26460",
+                "checked_at": "2026-11-01",
+                "published": true,
+                "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26460",
+                "recommendation_reason": "Nhan đề: “Bài giảng cấu trúc dữ liệu và giải thuật : Dành cho ngành Công nghệ thông tin”. Ưu tiên tài liệu học tập vì nhan đề ghi giáo trình/bài giảng hoặc tự học."
+              },
+              {
+                "id": 5982,
+                "title": "Bài giảng kỹ thuật lập trình : Dành cho ngành công nghệ thông tin",
+                "author": "ThS. Nguyễn Văn Huy (Chủ biên); ThS. Nguyễn Ngọc Thạch",
+                "year": "2023",
+                "kind": "books",
+                "subjects": "TV Công nghệ thông tin; TV Điện; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+                "description": "Thông tin xuất bản: TP. Hồ Chí Minh : Đại học Giao thông vận tải TP. Hồ Chí Minh , 2023\nDạng tài liệu: Sách truyền thống\nChỉ số Phân loại thập phân Dewey: 005.133  B103GI/24",
+                "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26461",
+                "checked_at": "2026-11-01",
+                "published": true,
+                "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26461",
+                "recommendation_reason": "Nhan đề: “Bài giảng kỹ thuật lập trình : Dành cho ngành công nghệ thông tin”. Ưu tiên tài liệu học tập vì nhan đề ghi giáo trình/bài giảng hoặc tự học."
+              },
+              {
+                "id": 7347,
+                "title": "Công nghệ phần mềm : Giáo trình dùng cho sinh viên ngành công nghệ thông tin các trường đại học",
+                "author": "Lê Đức Trung",
+                "year": "2002",
+                "kind": "books",
+                "subjects": "TV Cơ khí tự động; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Kỹ thuật cơ khí; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin; TV Viện Cơ khí;",
+                "description": "Thông tin xuất bản: H.: Khoa học - Kỹ thuật , 2002\nDạng tài liệu: Sách truyền thống\nChỉ số Phân loại thập phân Dewey: 005.1  C455NGH/11",
+                "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=464",
+                "checked_at": "2026-11-01",
+                "published": true,
+                "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=464",
+                "recommendation_reason": "Nhan đề: “Công nghệ phần mềm : Giáo trình dùng cho sinh viên ngành công nghệ thông tin các trường đại học”. Ưu tiên tài liệu học tập vì nhan đề ghi giáo trình/bài giảng hoặc tự học."
+              },
+              {
+                "id": 8996,
+                "title": "Giáo trình Kiến trúc máy tính : Dành cho ngành Công nghệ thông tin, Ngành Mạng máy tính và truyền thông dữ liệu",
+                "author": "TS. Lê Văn Quốc Anh (Chủ biên), TS. Trần Thiên Thanh (Đồng chủ biên); ThS. Phan Thị Hồng Nhung",
+                "year": "2023",
+                "kind": "books",
+                "subjects": "Hệ thống thông tin quản lý; Kiến trúc máy tính; Mạng máy tính và truyền thông dữ liệu; Ngành công nghệ thông tin; Tiếng Việt;",
+                "description": "Thông tin xuất bản: Hà Nội : Khoa học kỹ thuật , 2023\nDạng tài liệu: Sách truyền thống\nChỉ số Phân loại thập phân Dewey: 005  GI108TR/24",
+                "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26446",
+                "checked_at": "2026-11-02",
+                "published": true,
+                "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26446",
+                "recommendation_reason": "Nhan đề: “Giáo trình Kiến trúc máy tính : Dành cho ngành Công nghệ thông tin, Ngành Mạng máy tính và truyền thông dữ liệu”. Ưu tiên tài liệu học tập vì nhan đề ghi giáo trình/bài giảng hoặc tự học."
+              },
+              {
+                "id": 9121,
+                "title": "Giáo trình lập trình hướng đối tượng : Dành cho ngành Công nghệ thông tin",
+                "author": "TS. Lê Văn Quốc Anh (Chủ biên); ThS. Trần Thị Mỹ Tiên, ThS. Trần Đức Doanh",
+                "year": "2025",
+                "kind": "books",
+                "subjects": "Tiếng Việt; TV Công nghệ thông tin; TV Hệ thống thông tin quản lý; TV Mạng máy tính và truyền thông dữ liệu; TV Ngành công nghệ thông tin;",
+                "description": "Thông tin xuất bản: Hà Nội : Giao thông vận tải , 2025\nDạng tài liệu: Sách truyền thống\nChỉ số Phân loại thập phân Dewey: 005.133  GI108TR/25",
+                "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26746",
+                "checked_at": "2026-11-02",
+                "published": true,
+                "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26746",
+                "recommendation_reason": "Nhan đề: “Giáo trình lập trình hướng đối tượng : Dành cho ngành Công nghệ thông tin”. Ưu tiên tài liệu học tập vì nhan đề ghi giáo trình/bài giảng hoặc tự học."
+              }
+            ]
+          }
+        }
+      ],
+      "health": {
+        "status": "ok",
+        "version": "1.0.0",
+        "knowledge_count": 31,
+        "capabilities": {
+          "accounts": true,
+          "history": true,
+          "admin": true,
+          "crawler": true,
+          "vectors": {
+            "configured": true,
+            "ready": false,
+            "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+            "error": null,
+            "namespaces": {}
+          },
+          "llm_provider": "ollama",
+          "library_configured": false,
+          "messenger_configured": false,
+          "zalo_configured": false
+        }
+      }
+    }
+  },
+  "linux": {
+    "image": "uth-library:2026-11-03-tdd",
+    "image_id": "sha256:fbbe9cd1e5dd30d5499ec120e23b39ae59c1a8e66366b49e7e37dc9ba7d09de5",
+    "checks": {
+      "passed": 12,
+      "checks": [
+        "ready",
+        "register_unicode",
+        "private_history",
+        "cross_user_history_export",
+        "signed64_bound",
+        "unicode_validation_safe",
+        "expired_cookie_401_deleted",
+        "guest_after_expiry",
+        "relogin_history_preserved",
+        "synthetic_accounts_deleted",
+        "16_guest_requests_4_concurrent_no_llm_generation",
+        "rate_limit_returns_429_without_500"
+      ],
+      "model_catalog_readiness": {
+        "status": "ready",
+        "checks": {
+          "database": true,
+          "model": true
+        }
+      },
+      "small_concurrency_probe": {
+        "requests": 16,
+        "workers": 4,
+        "median_ms": 35.706,
+        "p95_ms": 48.383,
+        "scope": "guest greeting/FAQ only; not LLM concurrency, sustained capacity or production SLA"
+      },
+      "rate_probe_statuses": {
+        "200": 93,
+        "429": 32
+      }
+    },
+    "actual_model": {
+      "actual_grounded_model": true,
+      "source_ids": [
+        1
+      ],
+      "uid": 10001,
+      "cross_process_opac_gate": true
+    },
+    "cleanup": "owned QAcontainer stopped/removed; syntheticusers/sessions/conversations/messages verifiedzero; no mainprivate data copied"
+  },
+  "marc": {
+    "validated_files": 1210,
+    "invalid_or_outside_inventory": [],
+    "inventory_ids": 22401,
+    "inventory_sha256": "99b543d717c846b6bebab9c5d37087df9c563419f5ad164ad038f0b21f53752a",
+    "latest_fetched_at": "2026-11-03T06:26:07.276081+00:00",
+    "manifest": {
+      "source": "https://opacthuvien.ut.edu.vn/opac/",
+      "recorded_at": "2026-11-03T06:26:07.278126+00:00",
+      "complete": false,
+      "blocked": null,
+      "categories": {},
+      "listing_records": 22401,
+      "detail_records": 1044,
+      "phase": "details",
+      "details_requested": true,
+      "session_refreshes": 0,
+      "transport_retries": 16,
+      "minimum_request_gap_seconds": 10,
+      "robots_disallow_acknowledged": true,
+      "scope": "MARC details for frozen inventory only, not current full-site inventory; public bibliographic metadata; no login, full text, reader data or current availability claim",
+      "frozen_inventory": {
+        "pack": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101\\catalog-listings.jsonl",
+        "pack_sha256": "99b543d717c846b6bebab9c5d37087df9c563419f5ad164ad038f0b21f53752a",
+        "records": 22401
+      },
+      "last_request_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=7624",
+      "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6"
+    },
+    "process": {
+      "output": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101",
+      "scope": "missing MARC for frozen validated22401-ID inventory; shared host pacing; no login/full text",
+      "stderr": "collector-shared-20261103T035808Z.stderr.log",
+      "pid": 27676,
+      "supervisor_pid": 36472,
+      "stdout": "collector-shared-20261103T035808Z.stdout.log",
+      "started_at": "2026-11-03T03:58:08.9181637+00:00"
+    },
+    "scope": "independent frozen-inventory worker preserved; per-runprefix counter differs from totalstoredfiles; incomplete"
+  },
+  "source_sha256": {
+    "backend/app/api/auth.py": "3b94baaafccf9ed5233eb783a9960f47255ca8fe01d25ca1d9d048e356fa41c6",
+    "backend/app/api/library.py": "bea4b118d6328516b27b7b65132a1cecfe17e9b69c091870504476ba1a536d1c",
+    "backend/app/api/channels.py": "287dcd16a876dc966368b805c54cd131f2f8b1c67cee7a666efe8256e5885ca2",
+    "backend/app/services/llm_service.py": "f0c3d8cb161cbbc14a3e5dc6a7ac8741ce6964c90f0ec84923cb96d018c5c248",
+    "frontend/src/components/Loans.jsx": "dcdb757c5b0a55a6bde8a9fc61290b5491a9983e7a8cff139650a59e5e877fcf",
+    "frontend/src/components/Admin.jsx": "75aa21b1915fe4c8c57077a1cf97e3aff2be2de6afbb3e61cbef4953cd17814f",
+    "tests/test_session_revocation.py": "c82af04524e1b9bb5897581b1114bfc7c71c29bf5eddd31666b2bd04c2ac970c",
+    "tests/test_loans_session.py": "e43a2b4ebaefeb749b1a9cc0eab6e22267d2eec64820a0c933133c0131a1a61a",
+    "tests/test_renewal_receipt_session.py": "b5cdc37e7a99a8902fc5fe99d4b20b4c722357ce34ac075de5393268347ef417",
+    "tests/test_model_output_contract.py": "7b53f495a721e5a110eb47af568a61384d3a557ab2a963c0a6e42611bf7f694a",
+    "tests/test_webhook_text_validation.py": "634984187e512acaaf98fc8ded75917732b3538fbcd3cf2c571ac19301dd35ca",
+    "frontend/src/dialogRegression.test.jsx": "15e9cceb9fae9e4928169886757d5d684f4b026f00610d022a55b98c10ed5f74"
+  },
+  "limits": [
+    "No librarytransaction/channelmessages sent; bridge/provider transport simulated in relevanttests",
+    "No browser/device visual verification; Work browser use disabled",
+    "Native vector configured but lazy initialization not required by keywordsmoke; no new coldload/capacity claim",
+    "Local16request4workerFAQ check is not LLM/sustained/publiccapacity acceptance",
+    "Cross-tab browserSet-Cookie ordering, independent semanticrelevance and targethost/HTTPS/restore remain open",
+    "No paidprovider calls, frozenbenchmark tuning, publicdeployment, commits or pushes in this task"
+  ]
+}

@@ -1,0 +1,356 @@
+{
+  "recorded_at": "2026-11-01T13:21:04.141122+00:00",
+  "project_complete": false,
+  "lic_html": {
+    "complete": true,
+    "checked_at": "2026-11-01T12:51:15.845675+00:00",
+    "sitemap_locations": 100,
+    "discovered_unique": 141,
+    "counts": {
+      "quarantine_spam": 9,
+      "skipped_non_library_it": 19,
+      "skipped_personnel": 2,
+      "skipped_template": 21,
+      "quarantine_unrelated": 13,
+      "skipped_media": 31,
+      "accepted": 30,
+      "skipped_query": 2,
+      "duplicate": 4,
+      "quarantine_empty": 8,
+      "missing_404": 2
+    },
+    "pending": 0
+  },
+  "lic_attachments": {
+    "discovered": 9,
+    "complete": true,
+    "counts": {
+      "downloaded": 9
+    },
+    "reused": 9,
+    "total_bytes": 20773458,
+    "sources": [
+      {
+        "url": "https://lic.ut.edu.vn/wp-content/uploads/2024/10/2024.10.16_HD-khai-thac-tai-lieu-tren-OPAC.pdf",
+        "sha256": "028fe976ea21685fbd5e6bf840a9d7aa4493664e24f47831304833ff493d43ce",
+        "bytes": 1289690
+      },
+      {
+        "url": "https://lic.ut.edu.vn/wp-content/uploads/2022/09/2.-HDSD-CSDL-EBOOK-UT-XD-ok.pdf",
+        "sha256": "f2254115214ec1272f47d1fb189d401c29ede12cc2524f2a745f27dc1e15857a",
+        "bytes": 3158351
+      },
+      {
+        "url": "https://lic.ut.edu.vn/wp-content/uploads/2022/10/2.-HD-khai-thac-tai-lieu-va-su-dung-website-Thu-vien-OPAC-1.pdf",
+        "sha256": "54cc34296770950adba31d1b72b2f3b8dce208485fd2504c7757acbc7a134432",
+        "bytes": 2708102
+      },
+      {
+        "url": "https://lic.ut.edu.vn/wp-content/uploads/2022/10/5.-HD-tim-kiem-va-khai-thac-TL-tren-STINET.pdf",
+        "sha256": "4129634f2b5344313f5ef9d75ad230063761c957e1d75c3d0e6c470c6703d88d",
+        "bytes": 1093312
+      },
+      {
+        "url": "https://lic.ut.edu.vn/wp-content/uploads/2025/08/2025.07.08_Chinhsachmuonlienthuvien.pdf",
+        "sha256": "4ab82351804f0010522670b2632982546fd6ca21e272acaf8d02bfdc623f16e5",
+        "bytes": 135881
+      },
+      {
+        "url": "https://lic.ut.edu.vn/wp-content/uploads/2022/09/3.-HDSD-CSDL-cong-bo-nhiem-vu-KH-CN-VN-.pdf",
+        "sha256": "895b82d304b252f1f0c723dbe4fefee69dc173279e9342a737eabfa82141f6e6",
+        "bytes": 2963003
+      },
+      {
+        "url": "https://lic.ut.edu.vn/wp-content/uploads/2024/04/2024-Huong-dan-su-dung-Thu-vien-so-DSPACE.pdf",
+        "sha256": "a9bc31ed301cf8213677ab1d5d99f30849512ae346ce5ad59ca38f9c3159cc87",
+        "bytes": 1125126
+      },
+      {
+        "url": "https://lic.ut.edu.vn/wp-content/uploads/2024/07/HD-khai-thac-tai-lieu-Vien-KHCN-va-GTVT.pdf",
+        "sha256": "e91e5d691c0eaa9eb6a5f57965db1c31360f6050b0a42a4c707de0068f57f3d2",
+        "bytes": 813288
+      },
+      {
+        "url": "https://lic.ut.edu.vn/wp-content/uploads/2024/11/1.HD-su-dung-thu-vien-va-khai-thac-hieu-qua-cac-CSDL-tai-nguyen-thong-tin-thu-vien.pdf",
+        "sha256": "a2e1bfcb91744de396dbcc65e954583b6e684e5209d9853b73a0c0bfed89a6cc",
+        "bytes": 7486705
+      }
+    ],
+    "extraction": {
+      "extracted_at": "2026-11-01T12:54:28.810592+00:00",
+      "extractor": "pypdf 6.10.0",
+      "documents": 9,
+      "pages": 100,
+      "characters": 29028,
+      "needs_ocr_pages": 0,
+      "login_example_pages_withheld": 11,
+      "encrypted_documents": 0,
+      "unsupported_documents": 0,
+      "scope": "offline PDF text only; not OCR, reviewed facts, or proof of current policy"
+    }
+  },
+  "dspace": {
+    "inventory_total": 5578,
+    "collected": 5569,
+    "reused": 5569,
+    "fetched": 0,
+    "restricted": 9,
+    "remaining": 0,
+    "complete": true,
+    "quality": {
+      "snapshots": 5569,
+      "with_abstract": 505,
+      "with_dc_rights": 0
+    },
+    "note": "Inventory refreshed; item bodies reused with hash checks, not fetched again. No license inferred."
+  },
+  "opac": {
+    "manifest_snapshot": {
+      "source": "https://opacthuvien.ut.edu.vn/opac/",
+      "recorded_at": "2026-11-01T13:20:56.338784+00:00",
+      "complete": false,
+      "blocked": null,
+      "categories": {
+        "10": {
+          "name": "Video",
+          "total": 3,
+          "pages": 1,
+          "unique_records": 3,
+          "complete": true
+        },
+        "36": {
+          "name": "Khóa luận",
+          "total": 1,
+          "pages": 1,
+          "unique_records": 1,
+          "complete": true
+        },
+        "11-7": {
+          "name": "Báo / Tạp chí điện tử",
+          "total": 2,
+          "pages": 1,
+          "unique_records": 2,
+          "complete": true
+        },
+        "23": {
+          "name": "CD-ROM",
+          "total": 371,
+          "pages": 1,
+          "unique_records": 20,
+          "complete": false
+        },
+        "9": {
+          "name": "Báo / Tạp chí",
+          "total": 823,
+          "pages": 1,
+          "unique_records": 20,
+          "complete": false
+        },
+        "3": {
+          "name": "Luận văn",
+          "total": 3259,
+          "pages": 1,
+          "unique_records": 20,
+          "complete": false
+        },
+        "32": {
+          "name": "Tài liệu số",
+          "total": 7487,
+          "pages": 1,
+          "unique_records": 20,
+          "complete": false
+        }
+      },
+      "listing_records": 86,
+      "detail_records": 0,
+      "phase": "listing",
+      "details_requested": true,
+      "session_refreshes": 0,
+      "minimum_request_gap_seconds": 10,
+      "robots_disallow_acknowledged": true,
+      "scope": "public bibliographic metadata; no login, full text, reader data or current availability claim",
+      "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6"
+    },
+    "page_snapshots_verified": 44,
+    "unique_ids_in_stored_pages": 826,
+    "detail_samples_verified": [
+      {
+        "id": "13144",
+        "fields": 23
+      },
+      {
+        "id": "14146",
+        "fields": 10
+      },
+      {
+        "id": "14639",
+        "fields": 12
+      },
+      {
+        "id": "17832",
+        "fields": 13
+      },
+      {
+        "id": "18560",
+        "fields": 83
+      },
+      {
+        "id": "22237",
+        "fields": 17
+      },
+      {
+        "id": "23325",
+        "fields": 16
+      },
+      {
+        "id": "5712",
+        "fields": 17
+      }
+    ],
+    "preflight": [
+      {
+        "category": "1",
+        "id": "5712",
+        "marc_fields": 17
+      },
+      {
+        "category": "10",
+        "id": "14146",
+        "marc_fields": 10
+      },
+      {
+        "category": "23",
+        "id": "13144",
+        "marc_fields": 23
+      },
+      {
+        "category": "3",
+        "id": "14639",
+        "marc_fields": 12
+      },
+      {
+        "category": "32",
+        "id": "22237",
+        "marc_fields": 17
+      },
+      {
+        "category": "9",
+        "id": "17832",
+        "marc_fields": 13
+      }
+    ],
+    "first_run": {
+      "source": "https://opacthuvien.ut.edu.vn/opac/",
+      "recorded_at": "2026-11-01T13:00:41.727994+00:00",
+      "complete": false,
+      "blocked": "listing_summary_missing",
+      "categories": {
+        "10": {
+          "name": "Video",
+          "total": 3,
+          "pages": 1,
+          "unique_records": 3,
+          "complete": true
+        },
+        "23": {
+          "name": "CD-ROM",
+          "total": 371,
+          "pages": 3,
+          "unique_records": 60,
+          "complete": false
+        },
+        "9": {
+          "name": "Báo / Tạp chí",
+          "total": 823,
+          "pages": 2,
+          "unique_records": 40,
+          "complete": false
+        },
+        "3": {
+          "name": "Luận văn",
+          "total": 3259,
+          "pages": 2,
+          "unique_records": 40,
+          "complete": false
+        },
+        "32": {
+          "name": "Tài liệu số",
+          "total": 7487,
+          "pages": 2,
+          "unique_records": 40,
+          "complete": false
+        },
+        "1": {
+          "name": "Sách truyền thống",
+          "total": 10457,
+          "pages": 2,
+          "unique_records": 40,
+          "complete": false
+        }
+      },
+      "listing_records": 223,
+      "detail_records": 0,
+      "phase": "listing",
+      "details_requested": true,
+      "minimum_request_gap_seconds": 10,
+      "robots_disallow_acknowledged": true,
+      "scope": "public bibliographic metadata; no login, full text, reader data or current availability claim",
+      "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6"
+    },
+    "homepage_category_counters": {
+      "1": 10457,
+      "32": 7510,
+      "3": 3260,
+      "9": 823,
+      "23": 371,
+      "10": 3
+    },
+    "note": "Background task; snapshot is not live. Listing totals differ from homepage. Category membership overlap unknown; full harvest unverified.",
+    "configured_routes": {
+      "10": "Video",
+      "36": "Khóa luận",
+      "11-7": "Báo / Tạp chí điện tử",
+      "23": "CD-ROM",
+      "9": "Báo / Tạp chí",
+      "3": "Luận văn",
+      "32": "Tài liệu số",
+      "1": "Sách truyền thống"
+    },
+    "process": {
+      "output": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101",
+      "pid": 27764,
+      "scope": "public metadata only; eight browse routes then detailed MARC; no login/full text",
+      "started_at": "2026-11-01T13:19:39.5239419+00:00"
+    },
+    "serials_investigation": "docs/opac-serials.md",
+    "startup_counter_note": "Manifest counts only the current pass during seed validation; old snapshots remain intact and are revalidated/reloaded. Stored unique count is separately verified.",
+    "background_verified_alive_at": "2026-11-01T13:21:04+00:00",
+    "verified_process_ids": [
+      27764,
+      25224
+    ]
+  },
+  "verification": {
+    "backend_junit": "tmp/collection-resumed-tests.xml",
+    "focused_tests_passed": 80,
+    "git_diff_check": "passed",
+    "frontend": "not rerun; no frontend changes",
+    "httpx_form_reference": "https://github.com/encode/httpx/blob/0.28.1/docs/quickstart.md",
+    "independent_review": "cache schema/identity, per-URL robots/redirect controls, detail identity and attachment traversal findings fixed; tests retained",
+    "backend_full_tests_passed": 444,
+    "backend_full_seconds": 55.302
+  },
+  "runtime_unchanged": [
+    "database",
+    "indexes",
+    "models",
+    "reader_accounts",
+    "production"
+  ],
+  "limits": [
+    "No book full text or authentication",
+    "No automatic publication or training",
+    "PDF extraction is not OCR; 11 login-example pages withheld",
+    "No complete catalog or multi-day session acceptance yet"
+  ]
+}

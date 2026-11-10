@@ -1,0 +1,1072 @@
+{
+  "recorded_at": "2026-11-05T05:11:50.274654+00:00",
+  "kind": "Developer regressions and loopback API checks; not independent library acceptance or overall model accuracy",
+  "changes": [
+    "Preserve a selected public book through bounded follow-ups",
+    "Resolve natural pronouns and polite metadata questions",
+    "Prioritize explicit quoted titles and how-to service requests",
+    "Stop stale selection reuse after topic changes, invalid positions or withdrawal"
+  ],
+  "checks": {
+    "backend": {
+      "command": "python -m pytest -q --tb=short --junitxml=tmp/conversation-memory-regression.xml",
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "1013",
+      "time": "138.662",
+      "timestamp": "2026-11-05T12:07:03.019277+07:00",
+      "hostname": "Junn"
+    },
+    "memory_api_tests": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "40",
+      "time": "11.468",
+      "timestamp": "2026-11-05T12:06:45.526951+07:00",
+      "hostname": "Junn"
+    },
+    "frontend": {
+      "command": "npm test",
+      "passed": 141,
+      "failed": 0
+    },
+    "build": {
+      "command": "npm run build",
+      "exit_code": 0
+    },
+    "comparable_live_before": {
+      "passed": 10,
+      "total": 14
+    },
+    "comparable_live_after": {
+      "passed": 14,
+      "total": 14
+    },
+    "expanded_live": {
+      "passed": 43,
+      "total": 43,
+      "chains": 11
+    },
+    "offline_evaluation": {
+      "passed": 49,
+      "total": 49
+    },
+    "opac_smoke": {
+      "passed": 5,
+      "total": 5
+    }
+  },
+  "memory_limits": {
+    "recent_messages": 6,
+    "max_book_ids_per_result": 5,
+    "guest_excerpt_characters": 2000,
+    "guest_persistence": "in-memory tab state; cleared on reload",
+    "account_persistence": "full server history; active processing still reads six recent messages",
+    "long_conversation_summary": false,
+    "cross_conversation_memory": false
+  },
+  "execution": "Live public-data checks through HTTP loopback API; guest-only; no main account creation. Authenticated tests use temporary databases. Local server reloaded with Ollama configured.",
+  "limits": [
+    "Native browser and physical mobile were not rerun in this pass",
+    "No external lending transaction or public deployment",
+    "These metadata and FAQ checks do not evaluate general LLM generation quality"
+  ],
+  "source_sha256": {
+    "backend/app/api/chat.py": "083aa652558450d0a1e7ba11b0242e5592af8e356643a778fbceed35a0334e10",
+    "backend/app/services/assistant.py": "12b6b5955d07e525dc74e7d04c963015668a248ac19389131d5ad938d6aff814",
+    "backend/app/services/catalog.py": "f659f3e8c73ba8117792df2dc273b63ec98679df07f205a6768f5b974b01ad73",
+    "frontend/src/components/ChatWindow.jsx": "687632c993a42058e5cd7fe4ee01e5d2891b4f774e45cdef791953152a294b23",
+    "tests/test_conversation_memory.py": "a1865eb2f78d1aef2c02880bcec1b0b2694ae700e96f5336a966ec3b3b9d939d"
+  },
+  "live_results": [
+    {
+      "chain": "selected-python",
+      "question": "Tìm sách Python",
+      "passed": true,
+      "expected_book_id": null,
+      "received_book_ids": [
+        9125,
+        19702,
+        24212,
+        24214,
+        24249
+      ],
+      "status": "answered",
+      "answer": "Mình tìm được 5 tài liệu phù hợp. Bạn có thể xem thông tin và mở nguồn thư viện bên dưới; tình trạng còn sách và quyền truy cập có thể thay đổi.",
+      "sources": [
+        {
+          "title": "Giáo trình lập trình python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        },
+        {
+          "title": "Practical Discrete Mathematics : Discover math principles that fuel algorithms for computer science and machine learning with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18886",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "Practical Programming : An Introduction to Computer Science Using Python 3.6",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18984",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "PYTHON  CRASH COURSE : A HANDS-ON, PROJECT-BASED INTRODUCTION TO PROGRAMMING",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970",
+          "checked_at": "2026-11-02"
+        }
+      ],
+      "elapsed_ms": 5699.19
+    },
+    {
+      "chain": "selected-python",
+      "question": "Cuốn thứ hai do ai viết?",
+      "passed": true,
+      "expected_book_id": 19702,
+      "received_book_ids": [
+        19702
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, tác giả của “A Primer on Scientiﬁ c Programming with Python” là Hans Petter Langtangen, Timothy J. Barth, Michael Griebel, David E. Keyes, Risto M. Nieminen, Dirk Roose, Tamar Schlick.",
+      "sources": [
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        }
+      ],
+      "elapsed_ms": 16.1
+    },
+    {
+      "chain": "selected-python",
+      "question": "Xuất bản năm nào?",
+      "passed": true,
+      "expected_book_id": 19702,
+      "received_book_ids": [
+        19702
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, năm xuất bản của “A Primer on Scientiﬁ c Programming with Python” là 2016.",
+      "sources": [
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        }
+      ],
+      "elapsed_ms": 5.88
+    },
+    {
+      "chain": "selected-python",
+      "question": "Tóm tắt cuốn đó",
+      "passed": true,
+      "expected_book_id": 19702,
+      "received_book_ids": [
+        19702
+      ],
+      "status": "needs_confirmation",
+      "answer": "Biểu ghi đang có chưa xác nhận tóm tắt nội dung. Bạn hãy mở nguồn gốc hoặc hỏi thư viện; mình không tự suy đoán thông tin này.",
+      "sources": [
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        }
+      ],
+      "elapsed_ms": 6.06
+    },
+    {
+      "chain": "selected-python",
+      "question": "ISBN của cuốn đó là gì?",
+      "passed": true,
+      "expected_book_id": 19702,
+      "received_book_ids": [
+        19702
+      ],
+      "status": "needs_confirmation",
+      "answer": "Biểu ghi đang có chưa xác nhận ISBN. Bạn hãy mở nguồn gốc hoặc hỏi thư viện; mình không tự suy đoán thông tin này.",
+      "sources": [
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        }
+      ],
+      "elapsed_ms": 5.5
+    },
+    {
+      "chain": "switch-topic",
+      "question": "Tóm tắt tài liệu “Thiết kế web với CSS”",
+      "passed": true,
+      "expected_book_id": 15277,
+      "received_book_ids": [
+        15277
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi OPAC, tóm tắt nội dung của “Thiết kế web với CSS” được ghi như sau:\n\nNội dung: WEB và HTML -css - Đơn vị EM và các thực hành tốt nhát khác - Bộ chọn CSS.-Phông chữ -Các đối tượng nền tảng -Khoảng trống bên trong các hộp - Khoảng trống chung quanh các hộp - Bố trí tương đối và tuyệt đối - Màu sắc - Từ các phần mở rộng HTML đến CSS - In và phương tiện khác -Xếp tuần và thừa kế - Bảng kiểu bên ngoài - Cacs tiếp cận khác - Hồ sơ XML - Bảng - Lịch sử của CSS",
+      "sources": [
+        {
+          "title": "Thiết kế web với CSS",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+          "checked_at": "2026-11-04"
+        }
+      ],
+      "elapsed_ms": 1308.86
+    },
+    {
+      "chain": "switch-topic",
+      "question": "Tác giả là ai?",
+      "passed": true,
+      "expected_book_id": 15277,
+      "received_book_ids": [
+        15277
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, tác giả của “Thiết kế web với CSS” là Lê Minh Hoàng (Chủ biên).",
+      "sources": [
+        {
+          "title": "Thiết kế web với CSS",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+          "checked_at": "2026-11-03"
+        }
+      ],
+      "elapsed_ms": 5.11
+    },
+    {
+      "chain": "switch-topic",
+      "question": "Tìm sách logistics",
+      "passed": true,
+      "expected_book_id": null,
+      "received_book_ids": [
+        27943,
+        27944,
+        27945,
+        27946,
+        27947
+      ],
+      "status": "answered",
+      "answer": "Mình tìm được 5 tài liệu phù hợp. Bạn có thể xem thông tin và mở nguồn thư viện bên dưới; tình trạng còn sách và quyền truy cập có thể thay đổi.",
+      "sources": [
+        {
+          "title": "Vietnam Logistics (2014) : Xuất bản hàng tháng",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=12351",
+          "checked_at": "2026-11-01"
+        },
+        {
+          "title": "Vietnam Logistics (2016) : Xuất bản hàng tháng",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=12621",
+          "checked_at": "2026-11-01"
+        },
+        {
+          "title": "Vietnam Logistics (2017) : Xuất bản hàng tháng",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=12522",
+          "checked_at": "2026-11-01"
+        },
+        {
+          "title": "Vietnam Logistics (2018) : Xuất bản hàng tháng",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=14024",
+          "checked_at": "2026-11-01"
+        },
+        {
+          "title": "Vietnam Logistics (2019) : Xuất bản hàng tháng",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15035",
+          "checked_at": "2026-11-01"
+        }
+      ],
+      "elapsed_ms": 2342.04
+    },
+    {
+      "chain": "switch-topic",
+      "question": "Cuốn đầu tiên do ai viết?",
+      "passed": true,
+      "expected_book_id": 27943,
+      "received_book_ids": [
+        27943
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, tác giả của “Vietnam Logistics (2014) : Xuất bản hàng tháng” là Cơ quan của hiệp hội doanh nghiệp dịch vụ Logistics Việt Nam.",
+      "sources": [
+        {
+          "title": "Vietnam Logistics (2014) : Xuất bản hàng tháng",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=12351",
+          "checked_at": "2026-11-01"
+        }
+      ],
+      "elapsed_ms": 6.3
+    },
+    {
+      "chain": "switch-topic",
+      "question": "Xuất bản năm nào?",
+      "passed": true,
+      "expected_book_id": 27943,
+      "received_book_ids": [
+        27943
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, năm xuất bản của “Vietnam Logistics (2014) : Xuất bản hàng tháng” là 2014.",
+      "sources": [
+        {
+          "title": "Vietnam Logistics (2014) : Xuất bản hàng tháng",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=12351",
+          "checked_at": "2026-11-01"
+        }
+      ],
+      "elapsed_ms": 5.43
+    },
+    {
+      "chain": "service-boundary",
+      "question": "Tìm sách Python",
+      "passed": true,
+      "expected_book_id": null,
+      "received_book_ids": [
+        9125,
+        19702,
+        24212,
+        24214,
+        24249
+      ],
+      "status": "answered",
+      "answer": "Mình tìm được 5 tài liệu phù hợp. Bạn có thể xem thông tin và mở nguồn thư viện bên dưới; tình trạng còn sách và quyền truy cập có thể thay đổi.",
+      "sources": [
+        {
+          "title": "Giáo trình lập trình python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        },
+        {
+          "title": "Practical Discrete Mathematics : Discover math principles that fuel algorithms for computer science and machine learning with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18886",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "Practical Programming : An Introduction to Computer Science Using Python 3.6",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18984",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "PYTHON  CRASH COURSE : A HANDS-ON, PROJECT-BASED INTRODUCTION TO PROGRAMMING",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970",
+          "checked_at": "2026-11-02"
+        }
+      ],
+      "elapsed_ms": 1287.44
+    },
+    {
+      "chain": "service-boundary",
+      "question": "Tôi cần chuẩn bị gì để mượn sách?",
+      "passed": true,
+      "expected_book_id": null,
+      "received_book_ids": [],
+      "status": "answered",
+      "answer": "Theo trang Phục vụ mượn–trả tài liệu, bạn đọc xuất trình thẻ, tra tìm tài liệu bằng máy tính hoặc trong kho, dùng sơ đồ và bảng chỉ dẫn kệ để xác định tài liệu, rồi mang sách ra quầy thủ thư làm thủ tục ghi mượn. Kiểm tra tình trạng tài liệu trước khi nhận; không tự mang tài liệu ra ngoài khi chưa làm thủ tục. Hạn mức, hạn trả, phí và quyền gia hạn hiện hành cần kiểm tra với thư viện vì các trang quy định công khai còn khác nhau.",
+      "sources": [
+        {
+          "title": "LIC UTH — Phục vụ mượn–trả tài liệu",
+          "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-muon-tra-tai-lieu/",
+          "checked_at": "2026-10-31"
+        }
+      ],
+      "elapsed_ms": 12.04
+    },
+    {
+      "chain": "service-boundary",
+      "question": "Tác giả là ai?",
+      "passed": true,
+      "expected_book_id": null,
+      "received_book_ids": [],
+      "status": "clarify",
+      "answer": "Bạn đang hỏi về tài liệu nào? Hãy chọn nhan đề hoặc thứ tự trong danh sách để mình đối chiếu đúng biểu ghi.",
+      "sources": [],
+      "elapsed_ms": 2.99
+    },
+    {
+      "chain": "new-conversation",
+      "question": "Cuốn thứ hai do ai viết?",
+      "passed": true,
+      "expected_book_id": null,
+      "received_book_ids": [],
+      "status": "clarify",
+      "answer": "Mình chưa xác định được tài liệu theo thứ tự này trong danh sách vừa hiển thị. Bạn hãy gửi nhan đề cụ thể hoặc tìm lại sách để mình đối chiếu đúng biểu ghi công khai.",
+      "sources": [],
+      "elapsed_ms": 2.41
+    },
+    {
+      "chain": "courtesy",
+      "question": "Tìm sách Python",
+      "passed": true,
+      "expected_book_id": null,
+      "received_book_ids": [
+        9125,
+        19702,
+        24212,
+        24214,
+        24249
+      ],
+      "status": "answered",
+      "answer": "Mình tìm được 5 tài liệu phù hợp. Bạn có thể xem thông tin và mở nguồn thư viện bên dưới; tình trạng còn sách và quyền truy cập có thể thay đổi.",
+      "sources": [
+        {
+          "title": "Giáo trình lập trình python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        },
+        {
+          "title": "Practical Discrete Mathematics : Discover math principles that fuel algorithms for computer science and machine learning with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18886",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "Practical Programming : An Introduction to Computer Science Using Python 3.6",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18984",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "PYTHON  CRASH COURSE : A HANDS-ON, PROJECT-BASED INTRODUCTION TO PROGRAMMING",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970",
+          "checked_at": "2026-11-02"
+        }
+      ],
+      "elapsed_ms": 1246.38
+    },
+    {
+      "chain": "courtesy",
+      "question": "Cuốn thứ hai do ai viết?",
+      "passed": true,
+      "expected_book_id": 19702,
+      "received_book_ids": [
+        19702
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, tác giả của “A Primer on Scientiﬁ c Programming with Python” là Hans Petter Langtangen, Timothy J. Barth, Michael Griebel, David E. Keyes, Risto M. Nieminen, Dirk Roose, Tamar Schlick.",
+      "sources": [
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        }
+      ],
+      "elapsed_ms": 6.33
+    },
+    {
+      "chain": "courtesy",
+      "question": "Cảm ơn bạn",
+      "passed": true,
+      "expected_book_id": 19702,
+      "received_book_ids": [],
+      "status": "answered",
+      "answer": "Rất vui được hỗ trợ bạn. Khi cần tìm tài liệu hoặc hỏi về dịch vụ thư viện, bạn cứ nhắn mình nhé.",
+      "sources": [],
+      "elapsed_ms": 2.97
+    },
+    {
+      "chain": "courtesy",
+      "question": "Vậy cuốn đó xuất bản năm nào?",
+      "passed": true,
+      "expected_book_id": 19702,
+      "received_book_ids": [
+        19702
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, năm xuất bản của “A Primer on Scientiﬁ c Programming with Python” là 2016.",
+      "sources": [
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        }
+      ],
+      "elapsed_ms": 5.89
+    },
+    {
+      "chain": "explicit-title-switch",
+      "question": "Tìm sách Python",
+      "passed": true,
+      "expected_book_id": null,
+      "received_book_ids": [
+        9125,
+        19702,
+        24212,
+        24214,
+        24249
+      ],
+      "status": "answered",
+      "answer": "Mình tìm được 5 tài liệu phù hợp. Bạn có thể xem thông tin và mở nguồn thư viện bên dưới; tình trạng còn sách và quyền truy cập có thể thay đổi.",
+      "sources": [
+        {
+          "title": "Giáo trình lập trình python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        },
+        {
+          "title": "Practical Discrete Mathematics : Discover math principles that fuel algorithms for computer science and machine learning with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18886",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "Practical Programming : An Introduction to Computer Science Using Python 3.6",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18984",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "PYTHON  CRASH COURSE : A HANDS-ON, PROJECT-BASED INTRODUCTION TO PROGRAMMING",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970",
+          "checked_at": "2026-11-02"
+        }
+      ],
+      "elapsed_ms": 1270.74
+    },
+    {
+      "chain": "explicit-title-switch",
+      "question": "Cuốn thứ hai do ai viết?",
+      "passed": true,
+      "expected_book_id": 19702,
+      "received_book_ids": [
+        19702
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, tác giả của “A Primer on Scientiﬁ c Programming with Python” là Hans Petter Langtangen, Timothy J. Barth, Michael Griebel, David E. Keyes, Risto M. Nieminen, Dirk Roose, Tamar Schlick.",
+      "sources": [
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        }
+      ],
+      "elapsed_ms": 5.97
+    },
+    {
+      "chain": "explicit-title-switch",
+      "question": "Tác giả của sách “Thiết kế web với CSS” là ai?",
+      "passed": true,
+      "expected_book_id": 15277,
+      "received_book_ids": [
+        15277
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, tác giả của “Thiết kế web với CSS” là Lê Minh Hoàng (Chủ biên).",
+      "sources": [
+        {
+          "title": "Thiết kế web với CSS",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+          "checked_at": "2026-11-03"
+        }
+      ],
+      "elapsed_ms": 413.71
+    },
+    {
+      "chain": "explicit-title-switch",
+      "question": "Xuất bản năm nào?",
+      "passed": true,
+      "expected_book_id": 15277,
+      "received_book_ids": [
+        15277
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, năm xuất bản của “Thiết kế web với CSS” là 2007.",
+      "sources": [
+        {
+          "title": "Thiết kế web với CSS",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+          "checked_at": "2026-11-03"
+        }
+      ],
+      "elapsed_ms": 5.48
+    },
+    {
+      "chain": "ambiguous-selection",
+      "question": "Tìm sách Python",
+      "passed": true,
+      "expected_book_id": null,
+      "received_book_ids": [
+        9125,
+        19702,
+        24212,
+        24214,
+        24249
+      ],
+      "status": "answered",
+      "answer": "Mình tìm được 5 tài liệu phù hợp. Bạn có thể xem thông tin và mở nguồn thư viện bên dưới; tình trạng còn sách và quyền truy cập có thể thay đổi.",
+      "sources": [
+        {
+          "title": "Giáo trình lập trình python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        },
+        {
+          "title": "Practical Discrete Mathematics : Discover math principles that fuel algorithms for computer science and machine learning with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18886",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "Practical Programming : An Introduction to Computer Science Using Python 3.6",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18984",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "PYTHON  CRASH COURSE : A HANDS-ON, PROJECT-BASED INTRODUCTION TO PROGRAMMING",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970",
+          "checked_at": "2026-11-02"
+        }
+      ],
+      "elapsed_ms": 1271.45
+    },
+    {
+      "chain": "ambiguous-selection",
+      "question": "Tác giả là ai?",
+      "passed": true,
+      "expected_book_id": null,
+      "received_book_ids": [
+        9125,
+        19702,
+        24212,
+        24214,
+        24249
+      ],
+      "status": "clarify",
+      "answer": "Bạn đang hỏi về tài liệu nào? Hãy chọn nhan đề hoặc thứ tự trong danh sách để mình đối chiếu đúng biểu ghi.",
+      "sources": [],
+      "elapsed_ms": 14.87
+    },
+    {
+      "chain": "ambiguous-selection",
+      "question": "Cuốn thứ hai do ai viết?",
+      "passed": true,
+      "expected_book_id": 19702,
+      "received_book_ids": [
+        19702
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, tác giả của “A Primer on Scientiﬁ c Programming with Python” là Hans Petter Langtangen, Timothy J. Barth, Michael Griebel, David E. Keyes, Risto M. Nieminen, Dirk Roose, Tamar Schlick.",
+      "sources": [
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        }
+      ],
+      "elapsed_ms": 6.59
+    },
+    {
+      "chain": "ambiguous-selection",
+      "question": "Xuất bản năm nào?",
+      "passed": true,
+      "expected_book_id": 19702,
+      "received_book_ids": [
+        19702
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, năm xuất bản của “A Primer on Scientiﬁ c Programming with Python” là 2016.",
+      "sources": [
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        }
+      ],
+      "elapsed_ms": 6.31
+    },
+    {
+      "chain": "missing-selection",
+      "question": "Tìm sách Python",
+      "passed": true,
+      "expected_book_id": null,
+      "received_book_ids": [
+        9125,
+        19702,
+        24212,
+        24214,
+        24249
+      ],
+      "status": "answered",
+      "answer": "Mình tìm được 5 tài liệu phù hợp. Bạn có thể xem thông tin và mở nguồn thư viện bên dưới; tình trạng còn sách và quyền truy cập có thể thay đổi.",
+      "sources": [
+        {
+          "title": "Giáo trình lập trình python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        },
+        {
+          "title": "Practical Discrete Mathematics : Discover math principles that fuel algorithms for computer science and machine learning with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18886",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "Practical Programming : An Introduction to Computer Science Using Python 3.6",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18984",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "PYTHON  CRASH COURSE : A HANDS-ON, PROJECT-BASED INTRODUCTION TO PROGRAMMING",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970",
+          "checked_at": "2026-11-02"
+        }
+      ],
+      "elapsed_ms": 1199.61
+    },
+    {
+      "chain": "missing-selection",
+      "question": "Cuốn thứ 99 do ai viết?",
+      "passed": true,
+      "expected_book_id": null,
+      "received_book_ids": [],
+      "status": "clarify",
+      "answer": "Mình chưa xác định được tài liệu theo thứ tự này trong danh sách vừa hiển thị. Bạn hãy gửi nhan đề cụ thể hoặc tìm lại sách để mình đối chiếu đúng biểu ghi công khai.",
+      "sources": [],
+      "elapsed_ms": 3.14
+    },
+    {
+      "chain": "missing-selection",
+      "question": "Xuất bản năm nào?",
+      "passed": true,
+      "expected_book_id": null,
+      "received_book_ids": [],
+      "status": "clarify",
+      "answer": "Bạn đang hỏi về tài liệu nào? Hãy chọn nhan đề hoặc thứ tự trong danh sách để mình đối chiếu đúng biểu ghi.",
+      "sources": [],
+      "elapsed_ms": 2.91
+    },
+    {
+      "chain": "natural-pronouns",
+      "question": "Tóm tắt tài liệu “Thiết kế web với CSS”",
+      "passed": true,
+      "expected_book_id": 15277,
+      "received_book_ids": [
+        15277
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi OPAC, tóm tắt nội dung của “Thiết kế web với CSS” được ghi như sau:\n\nNội dung: WEB và HTML -css - Đơn vị EM và các thực hành tốt nhát khác - Bộ chọn CSS.-Phông chữ -Các đối tượng nền tảng -Khoảng trống bên trong các hộp - Khoảng trống chung quanh các hộp - Bố trí tương đối và tuyệt đối - Màu sắc - Từ các phần mở rộng HTML đến CSS - In và phương tiện khác -Xếp tuần và thừa kế - Bảng kiểu bên ngoài - Cacs tiếp cận khác - Hồ sơ XML - Bảng - Lịch sử của CSS",
+      "sources": [
+        {
+          "title": "Thiết kế web với CSS",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+          "checked_at": "2026-11-04"
+        }
+      ],
+      "elapsed_ms": 459.76
+    },
+    {
+      "chain": "natural-pronouns",
+      "question": "Nó nói về gì?",
+      "passed": true,
+      "expected_book_id": 15277,
+      "received_book_ids": [
+        15277
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi OPAC, tóm tắt nội dung của “Thiết kế web với CSS” được ghi như sau:\n\nNội dung: WEB và HTML -css - Đơn vị EM và các thực hành tốt nhát khác - Bộ chọn CSS.-Phông chữ -Các đối tượng nền tảng -Khoảng trống bên trong các hộp - Khoảng trống chung quanh các hộp - Bố trí tương đối và tuyệt đối - Màu sắc - Từ các phần mở rộng HTML đến CSS - In và phương tiện khác -Xếp tuần và thừa kế - Bảng kiểu bên ngoài - Cacs tiếp cận khác - Hồ sơ XML - Bảng - Lịch sử của CSS",
+      "sources": [
+        {
+          "title": "Thiết kế web với CSS",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+          "checked_at": "2026-11-04"
+        }
+      ],
+      "elapsed_ms": 6.16
+    },
+    {
+      "chain": "natural-pronouns",
+      "question": "Nó dành cho ai?",
+      "passed": true,
+      "expected_book_id": 15277,
+      "received_book_ids": [
+        15277
+      ],
+      "status": "needs_confirmation",
+      "answer": "Biểu ghi đang có chưa xác nhận đối tượng đọc. Bạn hãy mở nguồn gốc hoặc hỏi thư viện; mình không tự suy đoán thông tin này.",
+      "sources": [
+        {
+          "title": "Thiết kế web với CSS",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+          "checked_at": "2026-11-03"
+        }
+      ],
+      "elapsed_ms": 5.95
+    },
+    {
+      "chain": "natural-pronouns",
+      "question": "Cuốn ấy có nội dung gì?",
+      "passed": true,
+      "expected_book_id": 15277,
+      "received_book_ids": [
+        15277
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi OPAC, tóm tắt nội dung của “Thiết kế web với CSS” được ghi như sau:\n\nNội dung: WEB và HTML -css - Đơn vị EM và các thực hành tốt nhát khác - Bộ chọn CSS.-Phông chữ -Các đối tượng nền tảng -Khoảng trống bên trong các hộp - Khoảng trống chung quanh các hộp - Bố trí tương đối và tuyệt đối - Màu sắc - Từ các phần mở rộng HTML đến CSS - In và phương tiện khác -Xếp tuần và thừa kế - Bảng kiểu bên ngoài - Cacs tiếp cận khác - Hồ sơ XML - Bảng - Lịch sử của CSS",
+      "sources": [
+        {
+          "title": "Thiết kế web với CSS",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+          "checked_at": "2026-11-04"
+        }
+      ],
+      "elapsed_ms": 5.58
+    },
+    {
+      "chain": "natural-pronouns",
+      "question": "Cho tôi biết tác giả của nó",
+      "passed": true,
+      "expected_book_id": 15277,
+      "received_book_ids": [
+        15277
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, tác giả của “Thiết kế web với CSS” là Lê Minh Hoàng (Chủ biên).",
+      "sources": [
+        {
+          "title": "Thiết kế web với CSS",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+          "checked_at": "2026-11-03"
+        }
+      ],
+      "elapsed_ms": 6.21
+    },
+    {
+      "chain": "natural-pronouns",
+      "question": "Vậy nó xuất bản năm nào?",
+      "passed": true,
+      "expected_book_id": 15277,
+      "received_book_ids": [
+        15277
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, năm xuất bản của “Thiết kế web với CSS” là 2007.",
+      "sources": [
+        {
+          "title": "Thiết kế web với CSS",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+          "checked_at": "2026-11-03"
+        }
+      ],
+      "elapsed_ms": 7.52
+    },
+    {
+      "chain": "natural-pronouns",
+      "question": "Vậy cho mình biết năm xuất bản",
+      "passed": true,
+      "expected_book_id": 15277,
+      "received_book_ids": [
+        15277
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, năm xuất bản của “Thiết kế web với CSS” là 2007.",
+      "sources": [
+        {
+          "title": "Thiết kế web với CSS",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+          "checked_at": "2026-11-03"
+        }
+      ],
+      "elapsed_ms": 7.09
+    },
+    {
+      "chain": "natural-pronouns",
+      "question": "ISBN của nó là gì?",
+      "passed": true,
+      "expected_book_id": 15277,
+      "received_book_ids": [
+        15277
+      ],
+      "status": "needs_confirmation",
+      "answer": "Biểu ghi đang có chưa xác nhận ISBN. Bạn hãy mở nguồn gốc hoặc hỏi thư viện; mình không tự suy đoán thông tin này.",
+      "sources": [
+        {
+          "title": "Thiết kế web với CSS",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100",
+          "checked_at": "2026-11-03"
+        }
+      ],
+      "elapsed_ms": 7.33
+    },
+    {
+      "chain": "opac-guidance-priority",
+      "question": "Tìm sách Python",
+      "passed": true,
+      "expected_book_id": null,
+      "received_book_ids": [
+        9125,
+        19702,
+        24212,
+        24214,
+        24249
+      ],
+      "status": "answered",
+      "answer": "Mình tìm được 5 tài liệu phù hợp. Bạn có thể xem thông tin và mở nguồn thư viện bên dưới; tình trạng còn sách và quyền truy cập có thể thay đổi.",
+      "sources": [
+        {
+          "title": "Giáo trình lập trình python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        },
+        {
+          "title": "Practical Discrete Mathematics : Discover math principles that fuel algorithms for computer science and machine learning with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18886",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "Practical Programming : An Introduction to Computer Science Using Python 3.6",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18984",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "PYTHON  CRASH COURSE : A HANDS-ON, PROJECT-BASED INTRODUCTION TO PROGRAMMING",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970",
+          "checked_at": "2026-11-02"
+        }
+      ],
+      "elapsed_ms": 1215.99
+    },
+    {
+      "chain": "opac-guidance-priority",
+      "question": "Cuốn thứ hai do ai viết?",
+      "passed": true,
+      "expected_book_id": 19702,
+      "received_book_ids": [
+        19702
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, tác giả của “A Primer on Scientiﬁ c Programming with Python” là Hans Petter Langtangen, Timothy J. Barth, Michael Griebel, David E. Keyes, Risto M. Nieminen, Dirk Roose, Tamar Schlick.",
+      "sources": [
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        }
+      ],
+      "elapsed_ms": 7.57
+    },
+    {
+      "chain": "opac-guidance-priority",
+      "question": "Hướng dẫn tra cứu sách này theo tác giả trên OPAC",
+      "passed": true,
+      "expected_book_id": 19702,
+      "received_book_ids": [],
+      "status": "answered",
+      "answer": "OPAC có menu Nhan đề, Tác giả, Năm xuất bản, Nhà xuất bản và Từ khóa. Chọn trường phù hợp rồi nhập nội dung cần tìm. Tìm theo tác giả giúp phân biệt với tìm toàn bộ, nơi từ khóa có thể xuất hiện ở nhiều trường.",
+      "sources": [
+        {
+          "title": "Thư viện UTH",
+          "url": "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=6",
+          "checked_at": "2026-10-28"
+        }
+      ],
+      "elapsed_ms": 12.63
+    },
+    {
+      "chain": "borrowing-guidance-priority",
+      "question": "Tìm sách Python",
+      "passed": true,
+      "expected_book_id": null,
+      "received_book_ids": [
+        9125,
+        19702,
+        24212,
+        24214,
+        24249
+      ],
+      "status": "answered",
+      "answer": "Mình tìm được 5 tài liệu phù hợp. Bạn có thể xem thông tin và mở nguồn thư viện bên dưới; tình trạng còn sách và quyền truy cập có thể thay đổi.",
+      "sources": [
+        {
+          "title": "Giáo trình lập trình python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        },
+        {
+          "title": "Practical Discrete Mathematics : Discover math principles that fuel algorithms for computer science and machine learning with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18886",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "Practical Programming : An Introduction to Computer Science Using Python 3.6",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18984",
+          "checked_at": "2026-11-02"
+        },
+        {
+          "title": "PYTHON  CRASH COURSE : A HANDS-ON, PROJECT-BASED INTRODUCTION TO PROGRAMMING",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970",
+          "checked_at": "2026-11-02"
+        }
+      ],
+      "elapsed_ms": 1230.6
+    },
+    {
+      "chain": "borrowing-guidance-priority",
+      "question": "Cuốn thứ hai do ai viết?",
+      "passed": true,
+      "expected_book_id": 19702,
+      "received_book_ids": [
+        19702
+      ],
+      "status": "answered",
+      "answer": "Theo biểu ghi nguồn, tác giả của “A Primer on Scientiﬁ c Programming with Python” là Hans Petter Langtangen, Timothy J. Barth, Michael Griebel, David E. Keyes, Risto M. Nieminen, Dirk Roose, Tamar Schlick.",
+      "sources": [
+        {
+          "title": "A Primer on Scientiﬁ c Programming with Python",
+          "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "checked_at": "2026-11-01"
+        }
+      ],
+      "elapsed_ms": 5.92
+    },
+    {
+      "chain": "borrowing-guidance-priority",
+      "question": "Cách mượn sách này khi còn bản?",
+      "passed": true,
+      "expected_book_id": 19702,
+      "received_book_ids": [],
+      "status": "answered",
+      "answer": "Theo trang Phục vụ mượn–trả tài liệu, bạn đọc xuất trình thẻ, tra tìm tài liệu bằng máy tính hoặc trong kho, dùng sơ đồ và bảng chỉ dẫn kệ để xác định tài liệu, rồi mang sách ra quầy thủ thư làm thủ tục ghi mượn. Kiểm tra tình trạng tài liệu trước khi nhận; không tự mang tài liệu ra ngoài khi chưa làm thủ tục. Hạn mức, hạn trả, phí và quyền gia hạn hiện hành cần kiểm tra với thư viện vì các trang quy định công khai còn khác nhau.",
+      "sources": [
+        {
+          "title": "LIC UTH — Phục vụ mượn–trả tài liệu",
+          "url": "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-muon-tra-tai-lieu/",
+          "checked_at": "2026-10-31"
+        }
+      ],
+      "elapsed_ms": 11.41
+    }
+  ]
+}

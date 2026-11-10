@@ -1,0 +1,85 @@
+{
+  "checked_at": "2026-11-03T00:55:11.671293+00:00",
+  "verified_global_unique_ids": 22401,
+  "verified_page_snapshots": 1125,
+  "verified_detail_snapshots": 22,
+  "stored_route_counts": {
+    "1": {
+      "ids": 10457,
+      "listing_total": 10457,
+      "stored_count_matches_total": true
+    },
+    "10": {
+      "ids": 3,
+      "listing_total": 3,
+      "stored_count_matches_total": true
+    },
+    "11-7": {
+      "ids": 2,
+      "listing_total": 2,
+      "stored_count_matches_total": true
+    },
+    "23": {
+      "ids": 371,
+      "listing_total": 371,
+      "stored_count_matches_total": true
+    },
+    "3": {
+      "ids": 3259,
+      "listing_total": 3259,
+      "stored_count_matches_total": true
+    },
+    "32": {
+      "ids": 7487,
+      "listing_total": 7487,
+      "stored_count_matches_total": true
+    },
+    "36": {
+      "ids": 1,
+      "listing_total": 1,
+      "stored_count_matches_total": true
+    },
+    "9": {
+      "ids": 823,
+      "listing_total": 823,
+      "stored_count_matches_total": true
+    }
+  },
+  "current_pass": {
+    "source": "https://opacthuvien.ut.edu.vn/opac/",
+    "recorded_at": "2026-11-03T00:55:09.894411+00:00",
+    "complete": false,
+    "blocked": null,
+    "categories": {
+      "32": {
+        "name": "Tài liệu số",
+        "total": 7487,
+        "pages": 375,
+        "unique_records": 7487,
+        "complete": true
+      },
+      "1": {
+        "name": "Sách truyền thống",
+        "total": 10457,
+        "pages": 523,
+        "unique_records": 10457,
+        "complete": true
+      }
+    },
+    "listing_records": 17944,
+    "detail_records": 15,
+    "phase": "details",
+    "details_requested": true,
+    "session_refreshes": 2,
+    "minimum_request_gap_seconds": 10,
+    "robots_disallow_acknowledged": true,
+    "scope": "public bibliographic metadata; no login, full text, reader data or current availability claim",
+    "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6",
+    "last_recovery": {
+      "category": "1",
+      "page": 445,
+      "response_sha256": "3c3c3f5bb9de0b4c3b06ab5135d7e24e561888747fff71d855fc3ddc3aa69e36"
+    }
+  },
+  "note": "Stored route counts matching their snapshot totals do not prove current live reconciliation for all routes. Current worker covers only32and1; remaining MARC outside these routes and serial seed reconciliation still outstanding."
+}

@@ -1,0 +1,276 @@
+{
+  "recorded_at": "2026-11-03T03:44:20.653756+00:00",
+  "kind": "local release preparation and live development validation; no public-production or staff acceptance",
+  "user_deployment_scope": "No host/domain yet; prepare package and test locally (confirmed2026-11-03)",
+  "backend": {
+    "tests": "644",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "66.476",
+    "timestamp": "2026-11-03T10:42:09.114302+07:00"
+  },
+  "frontend": {
+    "passed": 65,
+    "files": 9,
+    "build": "Vite6.4.5 production build42modules passed"
+  },
+  "native": {
+    "readiness": {
+      "status": "ready",
+      "checks": {
+        "database": true,
+        "model": true
+      }
+    },
+    "capabilities": {
+      "accounts": true,
+      "history": true,
+      "admin": true,
+      "crawler": true,
+      "vectors": {
+        "configured": true,
+        "ready": true,
+        "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "error": null,
+        "namespaces": {
+          "books": {
+            "sources": 27964,
+            "chunks": 108133,
+            "ready": true
+          }
+        }
+      },
+      "llm_provider": "ollama",
+      "library_configured": false,
+      "messenger_configured": false,
+      "zalo_configured": false
+    },
+    "natural_development_cases": {
+      "passed": 12,
+      "total": 12
+    },
+    "catalog_cases": [
+      {
+        "query": "quuxzzvector zzzyyintegration",
+        "passed": true,
+        "seconds": 39.098,
+        "total": 0,
+        "ids": []
+      },
+      {
+        "query": "frobnicator blarglesnort",
+        "passed": true,
+        "seconds": 2.984,
+        "total": 0,
+        "ids": []
+      },
+      {
+        "query": "Python",
+        "passed": true,
+        "seconds": 1.184,
+        "total": 9,
+        "ids": [
+          9125,
+          19702,
+          24212,
+          24214,
+          24249
+        ]
+      },
+      {
+        "query": "Olympic cơ học",
+        "passed": true,
+        "seconds": 1.168,
+        "total": 15,
+        "ids": [
+          1,
+          5617,
+          5618,
+          5628,
+          5629
+        ]
+      }
+    ],
+    "shared_opac": {
+      "question": "Tìm sách Giáo trình lập trình python còn bản nào không?",
+      "seconds": 16.967,
+      "marc_before": 352,
+      "marc_after": 352,
+      "response": {
+        "answer": "• Giáo trình lập trình python: OPAC hiển thị 1/1 bản rỗi (kiểm tra 2026-11-03T10:36:45+07:00).\n\nCó bản rỗi là thông tin OPAC tại thời điểm kiểm tra; chưa phải xác nhận đặt mượn thành công hay bảo đảm đủ điều kiện mượn. Những biểu ghi khác bên dưới chưa được kiểm tra trạng thái. Tài liệu số không được suy ra là sách có thể mượn bản in.",
+        "status": "answered",
+        "sources": [
+          {
+            "title": "Giáo trình lập trình python",
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+            "checked_at": "2026-11-02"
+          }
+        ],
+        "suggestions": [],
+        "mode": "catalog",
+        "conversation_id": null,
+        "message_id": null,
+        "books": [
+          {
+            "id": 9125,
+            "title": "Giáo trình lập trình python",
+            "author": "Trần Đăng Hưng (chủ biên); Đặng Thành Trung, Nguyễn Thị Thanh Hiền",
+            "year": "2024",
+            "kind": "books",
+            "subjects": "Tiếng Việt; TV Công nghệ thông tin; TV Lập trình python; TV Ngành công ngệ thông tin;",
+            "description": "Thông tin xuất bản: Hà Nội : Đai học Sư phạm , 2024\nDạng tài liệu: Sách truyền thống\nChỉ số Phân loại thập phân Dewey: 005.133  GI108TR",
+            "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+            "checked_at": "2026-11-02",
+            "published": true,
+            "url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+            "availability_snapshot": {
+              "status": "available",
+              "available": 1,
+              "total": 1,
+              "checked_at": "2026-11-03T03:36:45.150671+00:00",
+              "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "linux_container": {
+    "image": "uth-library:2026-11-03",
+    "image_id": "sha256:b8b8de75a694c3c00e0dd92d2f49be5d502e621ec65218a37d61346e4ee4514a",
+    "readiness_chat_probes": 2,
+    "missing_model": {
+      "missing_model_http": 503,
+      "body": {
+        "status": "unavailable",
+        "checks": {
+          "database": true,
+          "model": false
+        }
+      }
+    },
+    "actual_model_and_cross_process_clock": {
+      "actual_grounded_model": true,
+      "source_ids": [
+        1
+      ],
+      "uid": 10001,
+      "cross_process_opac_gate": true
+    },
+    "authenticated_history_and_origin": {
+      "passed": 6,
+      "checks": [
+        "register_two_isolated_accounts",
+        "authenticated_history",
+        "cross_user_history_denied",
+        "cross_origin_mutation_denied",
+        "logout_login",
+        "synthetic_accounts_deleted"
+      ]
+    },
+    "collector_cli": "--details-from-pack option verified in Linux image",
+    "ollama_test_backend": "host.docker.internal:11434; not fullComposeOllamavolume",
+    "cleanup": "synthetic users/conversations/messages verified0; owned QA containers stopped and removed; image retained"
+  },
+  "marc": {
+    "inventory_sha256": "99b543d717c846b6bebab9c5d37087df9c563419f5ad164ad038f0b21f53752a",
+    "inventory_ids": 22401,
+    "listing_pages": 1125,
+    "before_validated_files": 319,
+    "current_files_observed": 374,
+    "current_validated_files": 374,
+    "invalid_or_outside_inventory": [],
+    "latest_fetched_at": "2026-11-03T03:44:16.277617+00:00",
+    "percent_of_frozen_inventory": 1.67,
+    "minimum_remaining_hours_at_10_seconds": 61.19,
+    "prior_restart_blocker": "inventory_changed_use_new_output_directory; original listings preserved",
+    "mode": "missing MARC for validated frozen inventory; no freshlisting refresh",
+    "manifest": {
+      "source": "https://opacthuvien.ut.edu.vn/opac/",
+      "recorded_at": "2026-11-03T03:44:16.279624+00:00",
+      "complete": false,
+      "blocked": null,
+      "categories": {},
+      "listing_records": 22401,
+      "detail_records": 208,
+      "phase": "details",
+      "details_requested": true,
+      "session_refreshes": 0,
+      "minimum_request_gap_seconds": 10,
+      "robots_disallow_acknowledged": true,
+      "scope": "MARC details for frozen inventory only, not current full-site inventory; public bibliographic metadata; no login, full text, reader data or current availability claim",
+      "frozen_inventory": {
+        "pack": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101\\catalog-listings.jsonl",
+        "pack_sha256": "99b543d717c846b6bebab9c5d37087df9c563419f5ad164ad038f0b21f53752a",
+        "records": 22401
+      },
+      "last_request_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=4113",
+      "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6"
+    },
+    "worker": {
+      "output": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101",
+      "scope": "missing MARC for frozen validated22401-ID inventory; shared host pacing; no login/full text",
+      "stderr": "collector-shared-20261103T034132Z.stderr.log",
+      "pid": 26388,
+      "supervisor_pid": 34184,
+      "stdout": "collector-shared-20261103T034132Z.stdout.log",
+      "started_at": "2026-11-03T03:41:32.9532951+00:00"
+    },
+    "stderr_empty": true,
+    "counter_note": "manifest.detail_records is successful processed prefix thisrun, not totalstored validatedfiles",
+    "integration": "raw MARC staging only; no automatic catalog enrichment, fulltext or training"
+  },
+  "processes": [
+    {
+      "ProcessId": 38508,
+      "ParentProcessId": 34572,
+      "CommandLine": "\"D:\\Github\\Group4-HKDN\\backend\\.venv\\Scripts\\python.exe\" -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 1 --no-proxy-headers --no-access-log "
+    },
+    {
+      "ProcessId": 31576,
+      "ParentProcessId": 38508,
+      "CommandLine": "\"C:\\Users\\phiha\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe\"  -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 1 --no-proxy-headers --no-access-log "
+    },
+    {
+      "ProcessId": 26388,
+      "ParentProcessId": 34184,
+      "CommandLine": "\"D:\\Github\\Group4-HKDN\\backend\\.venv\\Scripts\\python.exe\" -u scripts/collect_opac.py --output backend/runtime/opac-public-20261101 --details-from-pack backend/runtime/opac-public-20261101/catalog-listings.jsonl --acknowledge-robots-disallow "
+    },
+    {
+      "ProcessId": 12348,
+      "ParentProcessId": 26388,
+      "CommandLine": "\"C:\\Users\\phiha\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe\"  -u scripts/collect_opac.py --output backend/runtime/opac-public-20261101 --details-from-pack backend/runtime/opac-public-20261101/catalog-listings.jsonl --acknowledge-robots-disallow "
+    }
+  ],
+  "source_sha256": {
+    "Dockerfile": "9020cdcccb5871c86e6c2d204598805a39faf8c55b29d86cdaf3eb79b024068a",
+    "compose.yaml": "8b7ad8b91a2583bad5c665c08c6d95b74166e95a8d02d3386c056ecd60bfe2ff",
+    "backend/app/main.py": "c611fdbf1b4b2d07d698901ae61d2eb24a7ae5e8d7d18173ab20022e52134e8f",
+    "backend/app/services/catalog.py": "72c879747f8bf981a66bf07f921a06ce238d804ee02fa4caa4a19d28e8f243e5",
+    "backend/app/services/opac_pacing.py": "6193d9813402bc4f5e90a17790c31c91867864e2e8303cc4d64dbbb01dfc9970",
+    "backend/app/services/integrations.py": "a7cecec786f1e8757f5a1c37c148185139e6e1b592307990251845ab26ecfc82",
+    "backend/app/services/opac_availability.py": "7ad1547f6e1a16fa0080bf069846b9ae00c5a761f17b2a7619d5032bd4c348f2",
+    "scripts/collect_opac.py": "269a57aeb45434c297a2f0f15f2a4ac4a29c80e86f7ffa788c9434993eeede1b",
+    "frontend/src/App.jsx": "f935ddc7bcead456a34a1f2c8548dbb1bc1c3562d9710df532ad411b2c6bfef9",
+    "frontend/src/components/ChatMessage.jsx": "192e990fd27108c48a08be64b3f61f5732bc7728d8712365bb29f84738c51b84",
+    "frontend/src/components/Catalog.jsx": "b5944d344910c9d36d2be46f2a79cbeb67f9ee012aecc49ebc5b60e9418ce720",
+    "frontend/src/components/BookDetails.jsx": "b3f717dddf163711aec37812673b1dd95e3546c1c75c93828d17b56d96eb7f79",
+    "frontend/src/readerCopy.test.jsx": "c0cdc0d927ebeb44ec453dd68de19eac1de25bb61f7799bf727ce9602ed5e6cd",
+    "tests/test_catalog_precision.py": "fbd2fccf3fbfe1499ca2efce1bfb0535630789e44460b358d0e27e779725455d",
+    "tests/test_readiness.py": "6a7192cccdba791529289dbf3617fb2edf8444eef6a4473bb07e85612cb58156",
+    "tests/test_opac_pacing.py": "954ce246f2fde8ae53b680722812466fba1d1b7253235136abaf95aa4ff63f96",
+    "tests/test_opac_frozen_inventory.py": "3588f318f04b8da2255ebf81d071187b94791df5c17d453e5fdf5276470defba",
+    "tests/test_opac_worker_lock.py": "f4c106b5ec297450f7ce971093f4ccc2820b1bc3528f7b204aad0bbb303d527d"
+  },
+  "remaining_limits": [
+    "No public host/domain/ACME/concurrent-user/target-restore acceptance",
+    "Cold localQdrant semanticprobe remains tens ofseconds; readiness doesnot assert warmindex",
+    "Conservative semantic gate may omit pure synonyms; broad topic relevance needs independent library/user labels",
+    "OPAC clock requires sameDATA_DIR/localfilesystem; not distributed multi-host coordination",
+    "Concurrent readers may exhaust20s wait; unavailable/error counts remainunknown",
+    "MARC frozen inventory is incomplete and not currentfull-sitecoverage; do not overwrite operator metadata automatically",
+    "Current policy/fees/hours and real lending bridge/channel authority remain unverified",
+    "Browser visual recheck unavailable in Worksettings; operator diagnostics retained, reader debuglabels removed"
+  ]
+}

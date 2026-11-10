@@ -1,0 +1,104 @@
+{
+  "checked_at": "2026-11-07T05:21:40.867223+00:00",
+  "scope": "Local library transaction bridge safety and interoperability readiness; no real library transaction.",
+  "overall_status": "BLOCKED_EXTERNAL_LIBRARY_AUTHORIZATION_AND_API",
+  "user_confirmed_blocker": "Chưa được cấp quyền hoặc API.",
+  "real_library_validation": {
+    "status": "BLOCKED",
+    "provider_requests_sent": 0,
+    "real_accounts_created": 0,
+    "real_transactions_attempted": 0,
+    "reason": "The library has not issued permission or an API. Local simulations cannot establish real token validity, loan ownership, renewal eligibility, upstream idempotency, or actual due-date changes."
+  },
+  "current_configuration": {
+    "source": "Application configuration loaded locally; presence booleans only. No endpoint values or credentials are included.",
+    "LIBRARY_LOANS_URL_present": false,
+    "LIBRARY_RENEW_URL_present": false,
+    "local_health": {
+      "url": "http://127.0.0.1:8000/health",
+      "http_status": 200,
+      "library_configured": false
+    },
+    "health_flag_limit": "library_configured currently reports renewal URL presence only; it is not an external connectivity, authorization or readiness check."
+  },
+  "local_verification": {
+    "status": "PASS",
+    "environment": "Temporary SQLite stores and synthetic app accounts. HTTPX MockTransport or mocked transaction service; no library network IO.",
+    "command": ".\\backend\\.venv\\Scripts\\python.exe -m pytest tests/test_transaction_contract.py tests/test_integrations.py tests/test_operations.py tests/test_renewal_receipt_session.py tests/test_loans_session.py tests/test_final_review.py -q -k \"transaction_contract or library or renewal or inflight or late_receipt or sent_renewal\" --junitxml=docs/validation/2026-11-07-transaction-contract-junit.xml",
+    "tests": 49,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 10.838,
+    "junit": "docs/validation/2026-11-07-transaction-contract-junit.xml",
+    "checked_behaviors": [
+      "Anonymous requests cannot call loan or renewal providers.",
+      "Missing/false confirmation returns 422 before sending or inserting a renewal ledger entry.",
+      "Unconfigured renewal returns 503 without sending or creating a ledger entry.",
+      "Saved successful receipt is cached for the same authenticated account/loan/key; changed payload or another account conflicts without revealing receipt.",
+      "Concurrent duplicate returns a conflict while first request is pending; only one provider call occurs.",
+      "Uncertain renewal survives application restart and blocks same-key and different-key retries for the same app account/loan.",
+      "Reader cannot view admin transaction ledger or reconcile; admin reconciliation records an audit entry and a stable official-reference receipt.",
+      "Revoked/expired sessions cannot receive private loan data or renewal receipts; authorized provider result is retained.",
+      "Late provider callbacks cannot overwrite final reconciliation or a replacement account reusing a numeric ID.",
+      "Timeout/invalid or mismatched acknowledgement/invalid JSON/date leaves renewal uncertain; no automatic resend.",
+      "Tokens are not stored in the renewal ledger; bridge output filters extra upstream fields."
+    ],
+    "warning": "Starlette TestClient emitted its existing httpx deprecation warning. No dependency was changed."
+  },
+  "minimal_fix": {
+    "file": "backend/app/api/library.py",
+    "change": "Align Renewal.loan_id max_length from 128 to the existing bridge limit of 200.",
+    "root_cause": "library_loans/library_renew already accept IDs through 200 characters, so the API previously rejected valid returned IDs of length 129-200.",
+    "regression": "tests/test_transaction_contract.py::test_renewal_accepts_the_bridge_loan_id_length_limit",
+    "red_evidence": "Before the fix: 129- and 200-character IDs returned 422 rather than 200 (2 failing assertions); 201 characters remained rejected.",
+    "green_evidence": "After the fix: all 49 selected transaction tests pass, including accepted 129/200 and rejected 201 lengths."
+  },
+  "bridge_contract": {
+    "implementation": "Existing configurable bridge; no EMICLIB/UTH API implementation or issued endpoint is assumed.",
+    "loans": "GET LIBRARY_LOANS_URL, Authorization: Bearer reader token; HTTP 200 JSON loans array (at most 500), stable id or loan_id (at most 200 chars), optional ISO due_date.",
+    "renew": "POST LIBRARY_RENEW_URL, Authorization: Bearer reader token, Idempotency-Key; JSON loan_id. Confirmation requires HTTP 200 JSON status=renewed, matching loan_id and valid due_date.",
+    "network": "Full HTTPS URLs, port 443, certificate verification, public unicast DNS and pinned Host/SNI. Private/VPN bridges require a separately reviewed deployment.",
+    "reconciliation": "Durable local pending/uncertain ledger; manual admin reconciliation with explicit confirmation/reference (and date for success). No automatic upstream status polling.",
+    "ownership": "The approved upstream bridge must scope each token to its reader and enforce loan ownership, eligibility and idempotency. Chatbot account authentication does not itself prove library reader identity."
+  },
+  "external_inputs_required": [
+    {
+      "id": "TX-EXT-01",
+      "requirement": "Written library authorization naming the integration/test environment, operations, allowed data, test window and responsible library contact."
+    },
+    {
+      "id": "TX-EXT-02",
+      "requirement": "Library-issued endpoint documentation/OpenAPI or agreed bridge schema, approved full HTTPS loan/renew URLs, auth/token issuance and expiry/revocation contract."
+    },
+    {
+      "id": "TX-EXT-03",
+      "requirement": "Library-owned synthetic/test reader token and an eligible test loan, its authoritative current due date, plus controlled rejection cases. Do not send a password or token into repository/report/chat logs."
+    },
+    {
+      "id": "TX-EXT-04",
+      "requirement": "Upstream idempotency guarantees: account/loan binding, key retention period, duplicate behavior, timeout reconciliation procedure and official receipt/status access."
+    },
+    {
+      "id": "TX-EXT-05",
+      "requirement": "Confirmation of response mapping. The adapter supports HTTP 200 confirmed renewed receipts only; 201/202/204, alternate status/date fields, pending operations or a different auth scheme need a documented adapter change and contract tests."
+    },
+    {
+      "id": "TX-EXT-06",
+      "requirement": "Authorized acceptance operator and evidence procedure to verify loan state before/after one explicitly confirmed renewal and resolve uncertain results without blind resend."
+    }
+  ],
+  "real_acceptance_sequence_after_authorization": [
+    "Configure only the supplied test endpoints; validate TLS/network and documented schema without guessing routes or logging credentials.",
+    "Use the issued test token for a read-only loan query and compare reader/loan identity and due date against the library authoritative record.",
+    "Confirm one eligible test renewal with a single idempotency key. Compare returned loan ID/date and official library receipt/state.",
+    "Replay the same key under the documented test contract and verify one actual upstream operation through library evidence; do not assume local cache proves upstream idempotency.",
+    "Use only approved synthetic denial/expiry cases to verify ownership, eligibility, expired tokens and safe error disclosure.",
+    "Exercise uncertain status only in a provider-controlled sandbox, then reconcile against an official record before any resend."
+  ],
+  "not_verified": [
+    "No real library account authentication, reader token, loan, eligibility decision, renewal, reservation or due-date change.",
+    "No upstream idempotency, transaction reconciliation, availability, quotas or live transaction load.",
+    "No production deployment or modification of runtime/user data."
+  ]
+}

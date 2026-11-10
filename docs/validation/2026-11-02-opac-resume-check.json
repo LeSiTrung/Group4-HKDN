@@ -1,0 +1,216 @@
+{
+  "checked_at": "2026-11-01T21:21:35.180228+00:00",
+  "local_date": "2026-11-02",
+  "verified_stored_unique_ids": 8478,
+  "verified_stored_listing_snapshots": 428,
+  "stored_marc_samples": 8,
+  "previous_worker_active": false,
+  "windows_last_boot_local": "2026-11-02T03:10:36+07:00",
+  "previous_stop_cause": "not established; machine has rebooted since last check",
+  "restart": {
+    "output": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101",
+    "scope": "public metadata; eight browse routes then MARC; no login/full text",
+    "pid": 8628,
+    "launch": "WMI-created hidden supervisor; no scheduled task or service configuration",
+    "supervisor_pid": 18816,
+    "started_at": "2026-11-01T21:20:55.7195786+00:00"
+  },
+  "complete": false,
+  "note": "Seed refresh counters do not represent total stored corpus until cached pages are reloaded. No product-code or system configuration changes.",
+  "progress_after_resume": {
+    "recorded_at": "2026-11-01T21:22:32.821497+00:00",
+    "listing_records": 8498,
+    "blocked": null,
+    "complete": false
+  },
+  "followup_checks": [
+    {
+      "checked_at": "2026-11-02T11:15:49.107673+00:00",
+      "verified_stored_unique_ids": 14857,
+      "verified_page_snapshots": 747,
+      "stored_marc_samples": 8,
+      "before_restart": {
+        "source": "https://opacthuvien.ut.edu.vn/opac/",
+        "recorded_at": "2026-11-01T22:17:58.198699+00:00",
+        "complete": false,
+        "blocked": "source_http_520",
+        "categories": {
+          "10": {
+            "name": "Video",
+            "total": 3,
+            "pages": 1,
+            "unique_records": 3,
+            "complete": true
+          },
+          "36": {
+            "name": "Khóa luận",
+            "total": 1,
+            "pages": 1,
+            "unique_records": 1,
+            "complete": true
+          },
+          "11-7": {
+            "name": "Báo / Tạp chí điện tử",
+            "total": 2,
+            "pages": 1,
+            "unique_records": 2,
+            "complete": true
+          },
+          "23": {
+            "name": "CD-ROM",
+            "total": 371,
+            "pages": 19,
+            "unique_records": 371,
+            "complete": true
+          },
+          "9": {
+            "name": "Báo / Tạp chí",
+            "total": 823,
+            "pages": 42,
+            "unique_records": 823,
+            "complete": true
+          },
+          "3": {
+            "name": "Luận văn",
+            "total": 3259,
+            "pages": 163,
+            "unique_records": 3259,
+            "complete": true
+          },
+          "32": {
+            "name": "Tài liệu số",
+            "total": 7487,
+            "pages": 260,
+            "unique_records": 5200,
+            "complete": false
+          },
+          "1": {
+            "name": "Sách truyền thống",
+            "total": 10457,
+            "pages": 260,
+            "unique_records": 5200,
+            "complete": false
+          }
+        },
+        "listing_records": 14857,
+        "detail_records": 0,
+        "phase": "listing",
+        "details_requested": true,
+        "session_refreshes": 7,
+        "minimum_request_gap_seconds": 10,
+        "robots_disallow_acknowledged": true,
+        "scope": "public bibliographic metadata; no login, full text, reader data or current availability claim",
+        "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6",
+        "last_recovery": {
+          "category": "32",
+          "page": 229,
+          "response_sha256": "c2cb8bf77239d796141ba3d8595f968bcbe82a3eecbc2fcc4ad73dd0bc35d929"
+        }
+      },
+      "restart": {
+        "output": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101",
+        "scope": "public metadata; eight browse routes then MARC; no login/full text",
+        "pid": 10696,
+        "launch": "WMI-created hidden supervisor; no scheduled task or service configuration",
+        "supervisor_pid": 28296,
+        "started_at": "2026-11-02T11:15:20.2932588+00:00"
+      },
+      "previous_worker_active": false,
+      "reason": "source_http_520; explicit user request to continue",
+      "complete": false
+    },
+    {
+      "checked_at": "2026-11-02T11:20:04.992225+00:00",
+      "verified_stored_unique_ids": 14917,
+      "verified_page_snapshots": 750,
+      "restart": {
+        "output": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101",
+        "scope": "remaining digital and printed routes then their MARC; other stored routes preserved",
+        "pid": 28140,
+        "launch": "WMI-created hidden supervisor; no scheduled task or service configuration",
+        "supervisor_pid": 23584,
+        "started_at": "2026-11-02T11:19:00.3777826+00:00"
+      },
+      "current_pass": {
+        "source": "https://opacthuvien.ut.edu.vn/opac/",
+        "recorded_at": "2026-11-02T11:19:57.610914+00:00",
+        "complete": false,
+        "blocked": null,
+        "categories": {
+          "32": {
+            "name": "Tài liệu số",
+            "total": 7487,
+            "pages": 262,
+            "unique_records": 5240,
+            "complete": false
+          },
+          "1": {
+            "name": "Sách truyền thống",
+            "total": 10457,
+            "pages": 261,
+            "unique_records": 5220,
+            "complete": false
+          }
+        },
+        "listing_records": 10460,
+        "detail_records": 0,
+        "phase": "listing",
+        "details_requested": true,
+        "session_refreshes": 0,
+        "minimum_request_gap_seconds": 10,
+        "robots_disallow_acknowledged": true,
+        "scope": "public bibliographic metadata; no login, full text, reader data or current availability claim",
+        "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6"
+      },
+      "reason": "Full-route resume twice failed on changed serial seed; direct isolated seed matched cache. Cause unconfirmed. Continue missing digital/printed routes with exact validation; preserve completed-route data for separate reconciliation.",
+      "complete_scope_warning": "Current manifest covers only32and1; stored global total computed independently; selected-route completion will not mean all eight routes reconciled."
+    },
+    {
+      "checked_at": "2026-11-02T15:37:18.203998+00:00",
+      "verified_stored_unique_ids": 15557,
+      "verified_page_snapshots": 782,
+      "previous_stop": "source_http_520 at18:24ICT",
+      "restart": {
+        "output": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101",
+        "scope": "remaining digital and printed routes then their MARC; other stored routes preserved",
+        "pid": 7880,
+        "launch": "WMI-created hidden supervisor; no scheduled task or service configuration",
+        "supervisor_pid": 21688,
+        "started_at": "2026-11-02T15:35:48.5523410+00:00"
+      },
+      "active_pass": {
+        "source": "https://opacthuvien.ut.edu.vn/opac/",
+        "recorded_at": "2026-11-02T15:37:17.830391+00:00",
+        "complete": false,
+        "blocked": null,
+        "categories": {
+          "32": {
+            "name": "Tài liệu số",
+            "total": 7487,
+            "pages": 278,
+            "unique_records": 5560,
+            "complete": false
+          },
+          "1": {
+            "name": "Sách truyền thống",
+            "total": 10457,
+            "pages": 278,
+            "unique_records": 5560,
+            "complete": false
+          }
+        },
+        "listing_records": 11120,
+        "detail_records": 0,
+        "phase": "listing",
+        "details_requested": true,
+        "session_refreshes": 0,
+        "minimum_request_gap_seconds": 10,
+        "robots_disallow_acknowledged": true,
+        "scope": "public bibliographic metadata; no login, full text, reader data or current availability claim",
+        "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6"
+      },
+      "new_pages_after_resume_verified": true,
+      "scope": "manifest covers only digital and printed; global IDs independently counted across all stored categories"
+    }
+  ]
+}

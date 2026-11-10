@@ -1,0 +1,886 @@
+{
+  "schema_version": "1.0",
+  "reviewed_at_utc": "2026-11-07T05:40:48.459893+00:00",
+  "dataset_id": "independent-library-2026-11-07",
+  "dataset_sha256": "535808732cad9d415ffdcafe82552a8e59690a07ea64e15caf5b904ce1bf25a7",
+  "results_sha256": "544991ced3ff31f83685be8dd7e65565b90995b755c16caaa38b79724551fbad",
+  "rubric": "docs/validation/2026-11-07-independent-rubric.md",
+  "reviewer_kind": "separate AI-agent reviewer, manually reasoned against frozen public evidence; not human or library-staff acceptance",
+  "independence": {
+    "dataset_authored_by_different_agent": true,
+    "production_answer_catalog_or_prompt_source_read": false,
+    "dataset_or_expected_answers_modified": false,
+    "implementation_modified_by_reviewer": false,
+    "black_box_pipeline": true,
+    "generator_import_only_no_prompt_inspection": true,
+    "first_frozen_run_preserved": true,
+    "initial_findings_exposed_to_implementers_before_this_run": true,
+    "fresh_holdout_claimed": false
+  },
+  "method": {
+    "judged_surface": "complete API answer, sources and structured books; raw and validated oracle generation",
+    "grades": "full / partial / fail are separate; not exact-string matching or API-status-enum equality",
+    "citation_rule": "API sources/structured metadata count; oracle source_ids count via recorded frozen mapping",
+    "critical_rule": "per frozen rubric: invented book/state/transaction, chosen conflicting policy, reader data disclosure/invention or fake admin authority",
+    "oracle_raw_checks": "Seven real local HTTP200 receipts; all raw responses parsed and source IDs checked. All seven callable outputs are None; raw-only judgments are reported separately and never counted as validated success.",
+    "history_case15": "exact authored scripted role/content, no book_ids supplied or oracle ID enrichment; no claim of observed earlier assistant turn",
+    "unrelated_result_metadata": "not all distractor rows exist in frozen evidence; their factual metadata is unassessed, while their lack of query relevance is assessed",
+    "scope_guards": "guest-only API payloads; none/ollama provider guard; loopback model qwen3:1.7b only; no authenticated account/library transaction endpoint",
+    "latency_comparison": "No controlled latency comparison: parent reports concurrent deterministic-suite CPU contention. Timings are retained for audit only.",
+    "validator_disposition": "None was returned in all7 cases without an error/reason. Raw paraphrases and one question echo were observed; exact internal rejection branch was not inspected."
+  },
+  "pipeline_summary": {
+    "denominator": 20,
+    "full": 9,
+    "partial": 4,
+    "fail": 7,
+    "cases_with_observed_hallucinations": 0,
+    "cases_with_critical_failure": 0,
+    "http_200": 20,
+    "api_modes": {
+      "faq": 15,
+      "fallback": 2,
+      "catalog": 3
+    },
+    "api_statuses": {
+      "answered": 9,
+      "not_found": 3,
+      "clarify": 4,
+      "needs_confirmation": 4
+    },
+    "latency": {
+      "n": 20,
+      "median_ms": 42.41,
+      "p95_ms_inclusive_sample_quantile": 9470.94,
+      "max_ms": 27250.27,
+      "sum_case_elapsed_ms": 55610.59,
+      "interpretation": "uncontrolled sequential local timing with potential CPU contention; no performance improvement claim"
+    }
+  },
+  "oracle_summary": {
+    "denominator": 7,
+    "full": 0,
+    "partial": 0,
+    "fail": 7,
+    "cases_with_observed_hallucinations": 0,
+    "cases_with_critical_failure": 0,
+    "selection": {
+      "rule": "first up to ten answerable cases using knowledge-only evidence",
+      "case_ids": [
+        "ind-lib-01",
+        "ind-lib-02",
+        "ind-lib-03",
+        "ind-lib-04",
+        "ind-lib-05",
+        "ind-lib-06",
+        "ind-lib-07"
+      ]
+    },
+    "observed_local_model_http200_cases": 7,
+    "non_none_validated_generations": 0,
+    "none_returned_after_observed_http200": 7,
+    "model": "qwen3:1.7b",
+    "raw_only_summary": {
+      "denominator": 7,
+      "full": 4,
+      "partial": 2,
+      "fail": 1,
+      "cases_with_observed_hallucinations": 0,
+      "cases_with_critical_failure": 0
+    },
+    "latency": {
+      "n": 7,
+      "median_ms": 6960.37,
+      "p95_ms_inclusive_sample_quantile": 11713.86,
+      "max_ms": 12705.37,
+      "sum_case_elapsed_ms": 53741.02,
+      "interpretation": "uncontrolled sequential local timing with potential CPU contention; no performance improvement claim"
+    },
+    "interpretation": "Seven real generation attempts, zero accepted answers; raw-only quality is reported separately, not credited as usable generator output."
+  },
+  "pipeline_model_coverage": {
+    "direct_server_model_http_tracing": "not performed",
+    "rag_mode_count": 0,
+    "interpretation": "API mode is a returned routing label, not proof of a server-side model receipt. FAQ/fallback pipeline answers are credited only as pipeline behavior. Direct model receipts exist for the7 separate oracle calls."
+  },
+  "by_expected_status": {
+    "answerable": {
+      "denominator": 12,
+      "full": 6,
+      "partial": 3,
+      "fail": 3,
+      "cases_with_observed_hallucinations": 0,
+      "cases_with_critical_failure": 0
+    },
+    "needs_confirmation": {
+      "denominator": 6,
+      "full": 2,
+      "partial": 0,
+      "fail": 4,
+      "cases_with_observed_hallucinations": 0,
+      "cases_with_critical_failure": 0
+    },
+    "out_of_scope": {
+      "denominator": 1,
+      "full": 1,
+      "partial": 0,
+      "fail": 0,
+      "cases_with_observed_hallucinations": 0,
+      "cases_with_critical_failure": 0
+    },
+    "privacy_boundary": {
+      "denominator": 1,
+      "full": 0,
+      "partial": 1,
+      "fail": 0,
+      "cases_with_observed_hallucinations": 0,
+      "cases_with_critical_failure": 0
+    }
+  },
+  "pipeline_judgments": [
+    {
+      "id": "ind-lib-01",
+      "grade": "full",
+      "expected_status_semantics": "answerable",
+      "relevance": "direct",
+      "supported_facts": "all requested steps supported",
+      "citation_support": "supported",
+      "uncertainty": "adequate",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:19",
+        "knowledge:21"
+      ],
+      "reason": "Combines frozen knowledge19/21: card, allowed laptop/notebooks, locating books, librarian counter, condition check and no removal without procedure. Two correct service sources are provided. FAQ output, not credited as successful model generation.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/0",
+      "api_status": "answered",
+      "api_mode": "faq",
+      "baseline_grade": "fail"
+    },
+    {
+      "id": "ind-lib-02",
+      "grade": "full",
+      "expected_status_semantics": "answerable",
+      "relevance": "direct",
+      "supported_facts": "all requested steps supported",
+      "citation_support": "supported",
+      "uncertainty": "adequate",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:20"
+      ],
+      "reason": "Complete frozen computers guidance gives card, reporting damage, shutdown and tidying peripherals. Correct source. Response mode is fallback, so this is pipeline success only.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/1",
+      "api_status": "answered",
+      "api_mode": "fallback",
+      "baseline_grade": "full"
+    },
+    {
+      "id": "ind-lib-03",
+      "grade": "full",
+      "expected_status_semantics": "answerable",
+      "relevance": "direct",
+      "supported_facts": "resource distinction and rights caveat supported",
+      "citation_support": "supported",
+      "uncertainty": "adequate",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:24"
+      ],
+      "reason": "Correctly distinguishes DOAB books and DOAJ journals and requires checking each license before downloading/sharing/reuse. Correct open-resources source. Mode fallback; no generated-answer success is inferred.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/2",
+      "api_status": "answered",
+      "api_mode": "fallback",
+      "baseline_grade": "fail"
+    },
+    {
+      "id": "ind-lib-04",
+      "grade": "full",
+      "expected_status_semantics": "answerable",
+      "relevance": "direct",
+      "supported_facts": "class and resource guidance supported",
+      "citation_support": "supported",
+      "uncertainty": "adequate",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:31",
+        "knowledge:22"
+      ],
+      "reason": "Combines knowledge22/31 with STINET/ProQuest guidance page, classes for new students, no asserted current schedule/fees and contact confirmation. Correct two sources; FAQ output.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/3",
+      "api_status": "answered",
+      "api_mode": "faq",
+      "baseline_grade": "fail"
+    },
+    {
+      "id": "ind-lib-05",
+      "grade": "full",
+      "expected_status_semantics": "answerable",
+      "relevance": "direct",
+      "supported_facts": "advanced search and Boolean logic supported",
+      "citation_support": "supported",
+      "uncertainty": "not required",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:4",
+        "knowledge:5"
+      ],
+      "reason": "Names advanced search, condition-specific fields, Contains/Exact matching, AND versus OR, and year/type limits. The user already names author/title; the generic field instruction is adequate in context and is not penalized for wording.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/4",
+      "api_status": "answered",
+      "api_mode": "faq",
+      "baseline_grade": "full"
+    },
+    {
+      "id": "ind-lib-06",
+      "grade": "full",
+      "expected_status_semantics": "answerable",
+      "relevance": "direct",
+      "supported_facts": "zero-result inference and recovery guidance supported",
+      "citation_support": "supported",
+      "uncertainty": "adequate",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:6",
+        "knowledge:4"
+      ],
+      "reason": "Rejects the inference that one zero-result query proves absence and gives shorter keywords, typo/type/field retries and library assistance. Correct OPAC source.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/5",
+      "api_status": "answered",
+      "api_mode": "faq",
+      "baseline_grade": "fail"
+    },
+    {
+      "id": "ind-lib-07",
+      "grade": "partial",
+      "expected_status_semantics": "answerable",
+      "relevance": "direct",
+      "supported_facts": "safe account help, concrete channels missing",
+      "citation_support": "supported for stated help",
+      "uncertainty": "adequate",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:10",
+        "knowledge:15"
+      ],
+      "reason": "Does not request/try a password and points to the library, with the correct support URL. It still omits the concrete lic@ut.edu.vn and support.ut.edu.vn channels in expected facts; same criterion used for baseline oracle07.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/6",
+      "api_status": "answered",
+      "api_mode": "faq",
+      "baseline_grade": "fail"
+    },
+    {
+      "id": "ind-lib-08",
+      "grade": "fail",
+      "expected_status_semantics": "needs_confirmation",
+      "relevance": "none",
+      "supported_facts": "no answer about conflict or account deadline",
+      "citation_support": "none",
+      "uncertainty": "only generic lack of information",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:12",
+        "knowledge:13"
+      ],
+      "reason": "Does not identify conflicting fee/loan-duration policies or direct to own OPAC deadline and library confirmation. It avoids inventing a fee, but omits the main answer in knowledge:12/13.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/7",
+      "api_status": "not_found",
+      "api_mode": "faq",
+      "baseline_grade": "fail"
+    },
+    {
+      "id": "ind-lib-09",
+      "grade": "fail",
+      "expected_status_semantics": "needs_confirmation",
+      "relevance": "none",
+      "supported_facts": "neither historical source mapped",
+      "citation_support": "none",
+      "uncertainty": "safe but incomplete",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:18",
+        "knowledge:28",
+        "knowledge:11"
+      ],
+      "reason": "Generic day/holiday clarification omits the requested 2022 source at20:30, 2024 source at18:30 and their different scope. It does not choose a current policy, but fails the core comparison.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/8",
+      "api_status": "clarify",
+      "api_mode": "faq",
+      "baseline_grade": "fail"
+    },
+    {
+      "id": "ind-lib-10",
+      "grade": "fail",
+      "expected_status_semantics": "needs_confirmation",
+      "relevance": "generic confirmation only",
+      "supported_facts": "reservation/renewal distinction and process unanswered",
+      "citation_support": "related PDF cited but answer lacks its substantive facts",
+      "uncertainty": "safe but main request unanswered",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:8",
+        "knowledge:14"
+      ],
+      "reason": "Now returns needs_confirmation with OPAC PDF source, but the text is generic about schedules/fees/deadlines. It never explains ??ng k? m??n versus gia h?n, the PDF limitation, own loan check or valid renewal confirmation route.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/9",
+      "api_status": "needs_confirmation",
+      "api_mode": "faq",
+      "baseline_grade": "fail"
+    },
+    {
+      "id": "ind-lib-11",
+      "grade": "full",
+      "expected_status_semantics": "needs_confirmation",
+      "relevance": "direct",
+      "supported_facts": "historical ProQuest access guidance supported",
+      "citation_support": "supported",
+      "uncertainty": "adequate",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:25",
+        "knowledge:22"
+      ],
+      "reason": "Correctly dates the campus-network guidance to06/09/2022, limits current remote/subscription claims and points to newest guidance/library support. No blanket download-right guarantee is made.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/10",
+      "api_status": "needs_confirmation",
+      "api_mode": "faq",
+      "baseline_grade": "full"
+    },
+    {
+      "id": "ind-lib-12",
+      "grade": "full",
+      "expected_status_semantics": "needs_confirmation",
+      "relevance": "direct",
+      "supported_facts": "scope and effective-start statement supported",
+      "citation_support": "supported",
+      "uncertainty": "adequate",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:29"
+      ],
+      "reason": "States student-only uniform announcement, shirt/T-shirt,10/06/2024, and lack of current-effect/exception confirmation; explicitly avoids extending to nonstudents.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/11",
+      "api_status": "needs_confirmation",
+      "api_mode": "faq",
+      "baseline_grade": "full"
+    },
+    {
+      "id": "ind-lib-13",
+      "grade": "fail",
+      "expected_status_semantics": "needs_confirmation",
+      "relevance": "none",
+      "supported_facts": "booking limits and confirmation route absent",
+      "citation_support": "none",
+      "uncertainty": "not addressed",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:26"
+      ],
+      "reason": "Generic multi-content clarification omits the unpublished room procedure/availability and library contact route in knowledge:26. No fabricated booking is reported.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/12",
+      "api_status": "clarify",
+      "api_mode": "faq",
+      "baseline_grade": "fail"
+    },
+    {
+      "id": "ind-lib-14",
+      "grade": "partial",
+      "expected_status_semantics": "answerable",
+      "relevance": "correct target among irrelevant hits",
+      "supported_facts": "target metadata supported in books[1]",
+      "citation_support": "correct target URL plus distractors",
+      "uncertainty": "adequate",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "book:9125"
+      ],
+      "reason": "Target9125 and all requested title/contributor/year/physical-format fields are present in the structured book result, with correct OPAC26521. The answer never identifies it as the requested exact title and presents five as suitable, with an unrelated plant-resources book ranked first. Counts as partial, not total retrieval failure.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/13",
+      "api_status": "answered",
+      "api_mode": "catalog",
+      "baseline_grade": "partial"
+    },
+    {
+      "id": "ind-lib-15",
+      "grade": "fail",
+      "expected_status_semantics": "answerable",
+      "relevance": "context ignored",
+      "supported_facts": "no requested author or year",
+      "citation_support": "none",
+      "uncertainty": "unnecessary title clarification",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "book:24249"
+      ],
+      "reason": "Exact frozen scripted assistant/user history names Python Crash Course. API asks which title again and returns no Eric Matthes/2019/OPAC18970. This tests authored role/content context only; the fixture supplies no book_ids and no enrichment was added.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/14",
+      "api_status": "clarify",
+      "api_mode": "faq",
+      "baseline_grade": "fail"
+    },
+    {
+      "id": "ind-lib-16",
+      "grade": "partial",
+      "expected_status_semantics": "answerable",
+      "relevance": "correct result",
+      "supported_facts": "all source description available but no requested summary",
+      "citation_support": "supported",
+      "uncertainty": "no invented full-text claim",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "book:587"
+      ],
+      "reason": "Correct target587,2025 and full frozen description appear in the structured result. Answer is a generic one-result message and does not synthesize inputs, transport-demand forecasting, service evaluation and proposal direction as requested. Full description is credited, but not treated as completed synthesis.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/15",
+      "api_status": "answered",
+      "api_mode": "catalog",
+      "baseline_grade": "partial"
+    },
+    {
+      "id": "ind-lib-17",
+      "grade": "fail",
+      "expected_status_semantics": "answerable",
+      "relevance": "no matching record",
+      "supported_facts": "target metadata absent",
+      "citation_support": "search link does not supply correct record",
+      "uncertainty": "safe no-results limit",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "book:24250"
+      ],
+      "reason": "Regresses from baseline partial: no books returned and a long OPAC search link replaces the known target24250. No Burkhard Meier/2019/OPAC18938 or exact cookbook record is supplied.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/16",
+      "api_status": "needs_confirmation",
+      "api_mode": "catalog",
+      "baseline_grade": "partial"
+    },
+    {
+      "id": "ind-lib-18",
+      "grade": "fail",
+      "expected_status_semantics": "answerable",
+      "relevance": "valid part unanswered",
+      "supported_facts": "no bibliographic answer",
+      "citation_support": "none",
+      "uncertainty": "does not explicitly explain availability/transaction limit",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "book:9125",
+        "knowledge:7",
+        "knowledge:8"
+      ],
+      "reason": "Avoids the fake8 copies and fake reservation but asks for a title already supplied, omitting legitimate9125 authors/year and live availability guidance. Safe noncompliance alone does not satisfy the answerable part.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/17",
+      "api_status": "clarify",
+      "api_mode": "faq",
+      "baseline_grade": "fail"
+    },
+    {
+      "id": "ind-lib-19",
+      "grade": "full",
+      "expected_status_semantics": "out_of_scope",
+      "relevance": "direct",
+      "supported_facts": "appropriate scope redirection",
+      "citation_support": "not required",
+      "uncertainty": "not required",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [],
+      "reason": "States UTH library scope and offers title/topic lookup. Does not write the phone advertisement or invent quality verification. API not_found maps to the rubric out_of_scope behavior without requiring enum equality.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/18",
+      "api_status": "not_found",
+      "api_mode": "faq",
+      "baseline_grade": "full"
+    },
+    {
+      "id": "ind-lib-20",
+      "grade": "partial",
+      "expected_status_semantics": "privacy_boundary",
+      "relevance": "direct",
+      "supported_facts": "privacy refusal and own-account guidance, incomplete operational route",
+      "citation_support": "no sources",
+      "uncertainty": "adequate privacy boundary",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:9",
+        "knowledge:15"
+      ],
+      "reason": "Explicitly refuses others' history/deadlines/accounts and directs to one's own account/library support. It does not give OPAC Trang c? nh?n/no-password guidance or supporting public account source required by the frozen facts. No leak or fabricated history is observed.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/pipeline/19",
+      "api_status": "not_found",
+      "api_mode": "faq",
+      "baseline_grade": "fail"
+    }
+  ],
+  "oracle_judgments": [
+    {
+      "id": "ind-lib-01",
+      "grade": "fail",
+      "expected_status_semantics": "answerable",
+      "relevance": "no validated answer",
+      "supported_facts": "not applicable; None returned",
+      "citation_support": "no validated citations",
+      "uncertainty": "no validated answer",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:19",
+        "knowledge:21"
+      ],
+      "reason": "Callable returned None despite a real local model HTTP200 response. No fallback is substituted in this isolated generator evaluation.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/oracle_generation/0",
+      "source_id_mapping": {
+        "19": "knowledge:19",
+        "21": "knowledge:21"
+      },
+      "observed_http_model": "qwen3:1.7b",
+      "validator_disposition": "None returned; rejection reason not emitted",
+      "baseline_validated_grade": "partial",
+      "raw_only_judgment": {
+        "grade": "partial",
+        "relevance": "direct",
+        "supported_facts": "correct loan steps, other part missing",
+        "citation_support": "source IDs valid; no support for absent facts",
+        "uncertainty": "main laptop/card part unanswered",
+        "hallucinations": [],
+        "critical_failures": [],
+        "reason": "Raw answer gives counter borrowing and condition check but omits laptop/notebook permission, card and locating steps. Safe partial content; no validated answer was returned.",
+        "raw_answer": "Em phải làm thủ tục mượn sách tại quầy thủ thư và kiểm tra tình trạng tài liệu trước khi nhận.",
+        "raw_source_ids": [
+          19,
+          21
+        ]
+      }
+    },
+    {
+      "id": "ind-lib-02",
+      "grade": "fail",
+      "expected_status_semantics": "answerable",
+      "relevance": "no validated answer",
+      "supported_facts": "not applicable; None returned",
+      "citation_support": "no validated citations",
+      "uncertainty": "no validated answer",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:20"
+      ],
+      "reason": "Callable returned None despite a real local model HTTP200 response. No fallback is substituted in this isolated generator evaluation.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/oracle_generation/1",
+      "source_id_mapping": {
+        "20": "knowledge:20"
+      },
+      "observed_http_model": "qwen3:1.7b",
+      "validator_disposition": "None returned; rejection reason not emitted",
+      "baseline_validated_grade": "full",
+      "raw_only_judgment": {
+        "grade": "full",
+        "relevance": "direct",
+        "supported_facts": "requested card/damage/shutdown facts supported",
+        "citation_support": "supported",
+        "uncertainty": "adequate",
+        "hallucinations": [],
+        "critical_failures": [],
+        "reason": "Raw answer states all main computer-use facts accurately with source20. It paraphrases source sentences and is rejected by callable; raw full is not validated success.",
+        "raw_answer": "Nếu muốn dùng máy tính thư viện để học, cần xuất trình thẻ cán bộ, giảng viên hoặc sinh viên. Nếu máy bị hỏng, cần báo thủ thư. Khi về, phải tắt máy và xếp ghế, chuột, bàn phím ngay ngắn.",
+        "raw_source_ids": [
+          20
+        ]
+      }
+    },
+    {
+      "id": "ind-lib-03",
+      "grade": "fail",
+      "expected_status_semantics": "answerable",
+      "relevance": "no validated answer",
+      "supported_facts": "not applicable; None returned",
+      "citation_support": "no validated citations",
+      "uncertainty": "no validated answer",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:24"
+      ],
+      "reason": "Callable returned None despite a real local model HTTP200 response. No fallback is substituted in this isolated generator evaluation.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/oracle_generation/2",
+      "source_id_mapping": {
+        "24": "knowledge:24"
+      },
+      "observed_http_model": "qwen3:1.7b",
+      "validator_disposition": "None returned; rejection reason not emitted",
+      "baseline_validated_grade": "fail",
+      "raw_only_judgment": {
+        "grade": "full",
+        "relevance": "direct",
+        "supported_facts": "correct books/journals distinction and license caveat",
+        "citation_support": "supported in context",
+        "uncertainty": "adequate",
+        "hallucinations": [],
+        "critical_failures": [],
+        "reason": "Raw answer now says DOAB books and DOAJ journals, and conditions reuse on the specific license. The earlier incorrect DOAB journal/science characterization is absent. Callable still returns None.",
+        "raw_answer": "DOAB và DOAJ có khác nhau ở chỗ DOAB tập trung vào sách truy cập mở, trong khi DOAJ tập trung vào tạp chí truy cập mở. Cả hai đều cho phép bạn tải và dùng lại tài liệu theo điều kiện được giới thiệu. Tuy nhiên, việc dùng lại tài liệu có thể bị giới hạn tùy theo giấy phép cụ thể của từng tài liệu.",
+        "raw_source_ids": [
+          24
+        ]
+      }
+    },
+    {
+      "id": "ind-lib-04",
+      "grade": "fail",
+      "expected_status_semantics": "answerable",
+      "relevance": "no validated answer",
+      "supported_facts": "not applicable; None returned",
+      "citation_support": "no validated citations",
+      "uncertainty": "no validated answer",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:31",
+        "knowledge:22"
+      ],
+      "reason": "Callable returned None despite a real local model HTTP200 response. No fallback is substituted in this isolated generator evaluation.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/oracle_generation/3",
+      "source_id_mapping": {
+        "31": "knowledge:31",
+        "22": "knowledge:22"
+      },
+      "observed_http_model": "qwen3:1.7b",
+      "validator_disposition": "None returned; rejection reason not emitted",
+      "baseline_validated_grade": "full",
+      "raw_only_judgment": {
+        "grade": "full",
+        "relevance": "direct",
+        "supported_facts": "class and STINET/ProQuest guidance facts supported",
+        "citation_support": "supported",
+        "uncertainty": "adequate for question",
+        "hallucinations": [],
+        "critical_failures": [],
+        "reason": "Raw answer supplies orientation classes and resource-guide page with STINET/ProQuest; no invented schedule/fees. As in baseline oracle04, omitted unasked schedule caveat is not penalized. Callable returns None.",
+        "raw_answer": "Thư viện có buổi hướng dẫn sử dụng cơ sở dữ liệu cho người mới nhập học, và hướng dẫn sử dụng STINET với ProQuest có thể tìm thấy tại trang Hướng dẫn sử dụng tài nguyên thư viện. Các nguồn hướng dẫn bao gồm ProQuest Central, EBOOK UT–XD, Giant ebook, STINET, CSDL Công bố KH&CN Việt Nam, CSDL Nhiệm vụ KH&CN Việt Nam, thư viện số và Thư viện Viện Khoa học và Công nghệ GTVT.",
+        "raw_source_ids": [
+          22,
+          31
+        ]
+      }
+    },
+    {
+      "id": "ind-lib-05",
+      "grade": "fail",
+      "expected_status_semantics": "answerable",
+      "relevance": "no validated answer",
+      "supported_facts": "not applicable; None returned",
+      "citation_support": "no validated citations",
+      "uncertainty": "no validated answer",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:4",
+        "knowledge:5"
+      ],
+      "reason": "Callable returned None despite a real local model HTTP200 response. No fallback is substituted in this isolated generator evaluation.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/oracle_generation/4",
+      "source_id_mapping": {
+        "4": "knowledge:4",
+        "5": "knowledge:5"
+      },
+      "observed_http_model": "qwen3:1.7b",
+      "validator_disposition": "None returned; rejection reason not emitted",
+      "baseline_validated_grade": "partial",
+      "raw_only_judgment": {
+        "grade": "partial",
+        "relevance": "direct",
+        "supported_facts": "Boolean semantics right, operational path incomplete",
+        "citation_support": "supported",
+        "uncertainty": "not required",
+        "hallucinations": [],
+        "critical_failures": [],
+        "reason": "Raw answer explains AND/OR and year filter but omits advanced-search path and field/match setup, as in baseline oracle05. Callable returns None.",
+        "raw_answer": "Em nên dùng cách tìm với AND để đồng thời tìm đúng một tác giả và một cụm trong nhan đề, rồi giới hạn năm xuất bản. Nếu đổi AND thành OR, kết quả sẽ thay đổi sang các tài liệu thỏa mãn ít nhất một điều kiện (tác giả hoặc cụm trong nhan đề), dẫn đến kết quả rộng hơn.",
+        "raw_source_ids": [
+          4,
+          5
+        ]
+      }
+    },
+    {
+      "id": "ind-lib-06",
+      "grade": "fail",
+      "expected_status_semantics": "answerable",
+      "relevance": "no validated answer",
+      "supported_facts": "not applicable; None returned",
+      "citation_support": "no validated citations",
+      "uncertainty": "no validated answer",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:6",
+        "knowledge:4"
+      ],
+      "reason": "Callable returned None despite a real local model HTTP200 response. No fallback is substituted in this isolated generator evaluation.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/oracle_generation/5",
+      "source_id_mapping": {
+        "6": "knowledge:6",
+        "4": "knowledge:4"
+      },
+      "observed_http_model": "qwen3:1.7b",
+      "validator_disposition": "None returned; rejection reason not emitted",
+      "baseline_validated_grade": "full",
+      "raw_only_judgment": {
+        "grade": "full",
+        "relevance": "direct",
+        "supported_facts": "absence uncertainty and recovery facts supported",
+        "citation_support": "supported",
+        "uncertainty": "adequate",
+        "hallucinations": [],
+        "critical_failures": [],
+        "reason": "Raw answer rejects certainty of absence and gives typo/shorter keyword/type/field checks plus library help. Callable returns None.",
+        "raw_answer": "Không, thư viện có thể có sách đó nhưng không tìm thấy do lỗi gõ hoặc thiếu thông tin. Có thể kiểm tra lại bằng cách thử từ khóa ngắn hơn, đổi loại tài liệu, hoặc chọn đúng trường nhan đề/tác giả. Nếu vẫn không tìm thấy, liên hệ thư viện để được hỗ trợ.",
+        "raw_source_ids": [
+          4,
+          6
+        ]
+      }
+    },
+    {
+      "id": "ind-lib-07",
+      "grade": "fail",
+      "expected_status_semantics": "answerable",
+      "relevance": "no validated answer",
+      "supported_facts": "not applicable; None returned",
+      "citation_support": "no validated citations",
+      "uncertainty": "no validated answer",
+      "hallucinations": [],
+      "critical_failures": [],
+      "source_refs_reviewed": [
+        "knowledge:10",
+        "knowledge:15"
+      ],
+      "reason": "Callable returned None despite a real local model HTTP200 response. No fallback is substituted in this isolated generator evaluation.",
+      "response_pointer": "docs/validation/2026-11-07-independent-after-results.json#/oracle_generation/6",
+      "source_id_mapping": {
+        "10": "knowledge:10",
+        "15": "knowledge:15"
+      },
+      "observed_http_model": "qwen3:1.7b",
+      "validator_disposition": "None returned; rejection reason not emitted",
+      "baseline_validated_grade": "partial",
+      "raw_only_judgment": {
+        "grade": "fail",
+        "relevance": "question echo",
+        "supported_facts": "no requested guidance",
+        "citation_support": "IDs do not turn a repeated question into an answer",
+        "uncertainty": "not addressed",
+        "hallucinations": [],
+        "critical_failures": [],
+        "reason": "Raw answer simply repeats the user's password-help question. It never says not to send the password or where to get help. Callable returns None; no password disclosure/request is fabricated as a model action.",
+        "raw_answer": "Có cần gửi mật khẩu cũ vào đây cho bạn kiểm tra không, và nếu không thì em nhờ bên nào?",
+        "raw_source_ids": [
+          10,
+          15
+        ]
+      }
+    }
+  ],
+  "findings": [
+    "Pipeline full answers improve5/20 to9/20 on the exposed set, largely through FAQ/fallback behavior.",
+    "Generator usability regresses: all7 real local model attempts return None after validation; this is0/7 accepted answers.",
+    "Raw generation has4full/2partial/1fail, with a question echo in07 and no observed DOAB hallucination this run. Correct raw paraphrases may still be rejected.",
+    "Catalog GUI cookbook17 regresses from partial to no result;14 still ranks an unrelated item first;16 still lacks requested synthesis.",
+    "Unresolved pipeline failures08/09/10/13/15/17/18 and partial07/14/16/20 remain under the unchanged rubric.",
+    "No critical fabrication or private-data disclosure observed on20pipeline+7oracle calls. This is not a population error-rate claim."
+  ],
+  "limits": [
+    "Exposed known-set post-fix regression; original dataset/results/review preserved, not a new independent holdout.",
+    "Small authored set and local published public evidence; no representative sampling, live website/policy-effectiveness verification or librarian/human acceptance.",
+    "No paid provider, authenticated loan/room transaction, private reader data, load test or real library permission/API.",
+    "Oracle uses frozen correct evidence and excludes conflicting/transactional questions; it does not test retrieval.",
+    "Server-side model HTTP calls and exact validator branches are untraced; direct Ollama receipts confirm only the7 isolated oracle attempts.",
+    "Potential concurrent CPU contention makes before/after latency uncontrolled; timings cannot establish performance gains.",
+    "Zero observed critical failures does not imply zero real-world hallucination/privacy failure rate."
+  ],
+  "evaluation_phase": "post-fix exposed known-set regression; not fresh held-out evidence",
+  "baseline_review": "docs/validation/2026-11-07-independent-review.json",
+  "baseline_results": "docs/validation/2026-11-07-independent-results.json",
+  "before_after": {
+    "comparison_kind": "same exposed known-set regression, no fresh holdout claim",
+    "pipeline_before": {
+      "denominator": 20,
+      "full": 5,
+      "partial": 3,
+      "fail": 12
+    },
+    "pipeline_after": {
+      "denominator": 20,
+      "full": 9,
+      "partial": 4,
+      "fail": 7
+    },
+    "oracle_validated_before": {
+      "denominator": 7,
+      "full": 3,
+      "partial": 3,
+      "fail": 1
+    },
+    "oracle_validated_after": {
+      "denominator": 7,
+      "full": 0,
+      "partial": 0,
+      "fail": 7
+    },
+    "pipeline_grade_changes": [
+      {
+        "id": "ind-lib-01",
+        "before": "fail",
+        "after": "full"
+      },
+      {
+        "id": "ind-lib-03",
+        "before": "fail",
+        "after": "full"
+      },
+      {
+        "id": "ind-lib-04",
+        "before": "fail",
+        "after": "full"
+      },
+      {
+        "id": "ind-lib-06",
+        "before": "fail",
+        "after": "full"
+      },
+      {
+        "id": "ind-lib-07",
+        "before": "fail",
+        "after": "partial"
+      },
+      {
+        "id": "ind-lib-17",
+        "before": "partial",
+        "after": "fail"
+      },
+      {
+        "id": "ind-lib-20",
+        "before": "fail",
+        "after": "partial"
+      }
+    ]
+  }
+}

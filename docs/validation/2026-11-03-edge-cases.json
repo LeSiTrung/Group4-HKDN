@@ -1,0 +1,668 @@
+{
+  "recorded_at": "2026-11-03T05:44:05.020895+00:00",
+  "local_time": "2026-11-03T12:44:05.020895+07:00",
+  "kind": "development edge regressions; not exhaustive, held-out, staff-approved or production acceptance",
+  "backend": {
+    "tests": "783",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "time": "102.748",
+    "timestamp": "2026-11-03T12:35:33.875540+07:00"
+  },
+  "new_backend_cases": {
+    "tests.test_assistant_edge_matrix": 23,
+    "tests.test_auth_security_matrix": 66,
+    "tests.test_catalog_edge_matrix": 42,
+    "tests.test_opac_transport_retry": 8
+  },
+  "frontend": {
+    "passed": 101,
+    "files": 10,
+    "failure_flows": 36,
+    "production_build": "Vite6.4.5,42modules,passed"
+  },
+  "native_readiness": {
+    "status": "ready",
+    "checks": {
+      "database": true,
+      "model": true
+    }
+  },
+  "native_capabilities": {
+    "accounts": true,
+    "history": true,
+    "admin": true,
+    "crawler": true,
+    "vectors": {
+      "configured": true,
+      "ready": true,
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "error": null,
+      "namespaces": {
+        "books": {
+          "sources": 27964,
+          "chunks": 108133,
+          "ready": true
+        }
+      }
+    },
+    "llm_provider": "ollama",
+    "library_configured": false,
+    "messenger_configured": false,
+    "zalo_configured": false
+  },
+  "dialogue_live": {
+    "passed": 31,
+    "total": 31,
+    "cases": "tests/evaluation/edge-library-2026-11-03.json",
+    "results": [
+      {
+        "id": "social-greeting",
+        "passed": true,
+        "elapsed_ms": 11.79,
+        "status": "answered",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": []
+      },
+      {
+        "id": "social-thanks",
+        "passed": true,
+        "elapsed_ms": 4.16,
+        "status": "answered",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": []
+      },
+      {
+        "id": "scope-arithmetic",
+        "passed": true,
+        "elapsed_ms": 22.63,
+        "status": "not_found",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": []
+      },
+      {
+        "id": "scope-code",
+        "passed": true,
+        "elapsed_ms": 4.69,
+        "status": "not_found",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": []
+      },
+      {
+        "id": "scope-switch",
+        "passed": true,
+        "elapsed_ms": 4.44,
+        "status": "not_found",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": []
+      },
+      {
+        "id": "desk-preparation",
+        "passed": true,
+        "elapsed_ms": 12.42,
+        "status": "answered",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": [
+          "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-muon-tra-tai-lieu/"
+        ]
+      },
+      {
+        "id": "desk-how",
+        "passed": true,
+        "elapsed_ms": 9.61,
+        "status": "answered",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": [
+          "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-muon-tra-tai-lieu/"
+        ]
+      },
+      {
+        "id": "desk-first-time",
+        "passed": true,
+        "elapsed_ms": 9.41,
+        "status": "answered",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": [
+          "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-muon-tra-tai-lieu/"
+        ]
+      },
+      {
+        "id": "desk-short",
+        "passed": true,
+        "elapsed_ms": 9.98,
+        "status": "answered",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": [
+          "https://lic.ut.edu.vn/dich-vu-thu-vien/phuc-vu-muon-tra-tai-lieu/"
+        ]
+      },
+      {
+        "id": "online-how",
+        "passed": true,
+        "elapsed_ms": 10.3,
+        "status": "answered",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=7"
+        ]
+      },
+      {
+        "id": "online-no-accent",
+        "passed": true,
+        "elapsed_ms": 10.72,
+        "status": "answered",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=7"
+        ]
+      },
+      {
+        "id": "online-after-books",
+        "passed": true,
+        "elapsed_ms": 10.14,
+        "status": "answered",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=7"
+        ]
+      },
+      {
+        "id": "online-and-fee",
+        "passed": true,
+        "elapsed_ms": 6.77,
+        "status": "needs_confirmation",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=7"
+        ]
+      },
+      {
+        "id": "current-fee",
+        "passed": true,
+        "elapsed_ms": 21.67,
+        "status": "needs_confirmation",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": [
+          "https://lic.ut.edu.vn/noi-quy-thu-vien/"
+        ]
+      },
+      {
+        "id": "loan-deadline",
+        "passed": true,
+        "elapsed_ms": 24.49,
+        "status": "needs_confirmation",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": [
+          "https://lic.ut.edu.vn/quy-dinh-muon-tra-tai-lieu/"
+        ]
+      },
+      {
+        "id": "hours-location-missing",
+        "passed": true,
+        "elapsed_ms": 7.38,
+        "status": "clarify",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": []
+      },
+      {
+        "id": "hours-invalid-location",
+        "passed": true,
+        "elapsed_ms": 2.89,
+        "status": "clarify",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": []
+      },
+      {
+        "id": "hours-reference-conflict",
+        "passed": true,
+        "elapsed_ms": 6.87,
+        "status": "needs_confirmation",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": [
+          "https://lic.ut.edu.vn/wp-content/uploads/2022/10/1.-HD-su-dung-thu-vien-va-khai-thac-hieu-qua-cac-CSDL-tai-nguyen-thong-tin-thu-vien.pdf#page=12",
+          "https://lic.ut.edu.vn/wp-content/uploads/2024/11/1.HD-su-dung-thu-vien-va-khai-thac-hieu-qua-cac-CSDL-tai-nguyen-thong-tin-thu-vien.pdf#page=12"
+        ]
+      },
+      {
+        "id": "hours-future",
+        "passed": true,
+        "elapsed_ms": 3.39,
+        "status": "clarify",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": []
+      },
+      {
+        "id": "search-python",
+        "passed": true,
+        "elapsed_ms": 4585.96,
+        "status": "answered",
+        "mode": "catalog",
+        "book_ids": [
+          9125,
+          19702,
+          24212,
+          24214,
+          24249
+        ],
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18886",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18984",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970"
+        ]
+      },
+      {
+        "id": "search-vietnamese-subject",
+        "passed": true,
+        "elapsed_ms": 12306.29,
+        "status": "answered",
+        "mode": "catalog_ai",
+        "book_ids": [
+          9420,
+          8060,
+          8065,
+          8066,
+          8920
+        ],
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26897",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=7195",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15824",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=19384",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=14041"
+        ]
+      },
+      {
+        "id": "count-leading-zero",
+        "passed": true,
+        "elapsed_ms": 1335.3,
+        "status": "answered",
+        "mode": "catalog",
+        "book_ids": [
+          9125,
+          19702
+        ],
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965"
+        ]
+      },
+      {
+        "id": "count-large-bounded",
+        "passed": true,
+        "elapsed_ms": 1212.53,
+        "status": "answered",
+        "mode": "catalog",
+        "book_ids": [
+          9125,
+          19702,
+          24212,
+          24214,
+          24249
+        ],
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15965",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18886",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18984",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18970"
+        ]
+      },
+      {
+        "id": "topic-switch-java",
+        "passed": true,
+        "elapsed_ms": 1379.53,
+        "status": "answered",
+        "mode": "catalog_ai",
+        "book_ids": [
+          21998,
+          10542,
+          20642,
+          20645,
+          21178
+        ],
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=22230",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=266",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=23682",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=18895",
+          "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=15995"
+        ]
+      },
+      {
+        "id": "unknown-semantic",
+        "passed": true,
+        "elapsed_ms": 43372.32,
+        "status": "not_found",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/Oshow.aspx?rdSearchOption=0&txtSearch=quuxzzvector+zzzyyintegration"
+        ]
+      },
+      {
+        "id": "unknown-recommendation",
+        "passed": true,
+        "elapsed_ms": 6424.8,
+        "status": "not_found",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": [
+          "https://opacthuvien.ut.edu.vn/opac/Oshow.aspx?rdSearchOption=0&txtSearch=frobnicator+blarglesnort"
+        ]
+      },
+      {
+        "id": "exclusion-negative",
+        "passed": true,
+        "elapsed_ms": 3.16,
+        "status": "clarify",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": []
+      },
+      {
+        "id": "exclusion-not-needed",
+        "passed": true,
+        "elapsed_ms": 2.77,
+        "status": "clarify",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": []
+      },
+      {
+        "id": "exclusion-skip",
+        "passed": true,
+        "elapsed_ms": 2.66,
+        "status": "clarify",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": []
+      },
+      {
+        "id": "attribute-no-context",
+        "passed": true,
+        "elapsed_ms": 2.65,
+        "status": "clarify",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": []
+      },
+      {
+        "id": "model-scope-injection",
+        "passed": true,
+        "elapsed_ms": 2.92,
+        "status": "not_found",
+        "mode": "faq",
+        "book_ids": [],
+        "source_urls": []
+      }
+    ],
+    "initial_run": "30/31; outside-content injection prompted clarification from unrelated FAQ candidates; explicit library redirect added and31/31verified",
+    "policy_latency_note": "Single current-fee probe23.88186s before bypass of unnecessary coldvectors;0.02167s after; not a concurrent-userSLA"
+  },
+  "api_contract_live": {
+    "passed": 19,
+    "total": 19,
+    "results": [
+      {
+        "id": "empty-message",
+        "passed": true,
+        "status": 422,
+        "seconds": 0.019
+      },
+      {
+        "id": "blank-message",
+        "passed": true,
+        "status": 422,
+        "seconds": 0.003
+      },
+      {
+        "id": "numeric-message",
+        "passed": true,
+        "status": 422,
+        "seconds": 0.002
+      },
+      {
+        "id": "null-message",
+        "passed": true,
+        "status": 422,
+        "seconds": 0.002
+      },
+      {
+        "id": "missing-message",
+        "passed": true,
+        "status": 422,
+        "seconds": 0.002
+      },
+      {
+        "id": "huge-conversation",
+        "passed": true,
+        "status": 422,
+        "seconds": 0.002
+      },
+      {
+        "id": "negative-conversation",
+        "passed": true,
+        "status": 422,
+        "seconds": 0.002
+      },
+      {
+        "id": "history-system-role",
+        "passed": true,
+        "status": 422,
+        "seconds": 0.002
+      },
+      {
+        "id": "history-over-budget",
+        "passed": true,
+        "status": 422,
+        "seconds": 0.002
+      },
+      {
+        "id": "malformed-json",
+        "passed": true,
+        "status": 422,
+        "seconds": 0.001
+      },
+      {
+        "id": "invalid-unicode",
+        "passed": true,
+        "status": 422,
+        "seconds": 0.002
+      },
+      {
+        "id": "private-validation",
+        "passed": true,
+        "status": 422,
+        "seconds": 0.003
+      },
+      {
+        "id": "foreign-origin",
+        "passed": true,
+        "status": 403,
+        "seconds": 0.001
+      },
+      {
+        "id": "oversized-transport",
+        "passed": true,
+        "status": 413,
+        "seconds": 0.011
+      },
+      {
+        "id": "long-supported-transport",
+        "passed": true,
+        "status": 200,
+        "seconds": 0.004
+      },
+      {
+        "id": "huge-book-id",
+        "passed": true,
+        "status": 422
+      },
+      {
+        "id": "invalid-catalog-kind",
+        "passed": true,
+        "status": 422
+      },
+      {
+        "id": "admin-without-auth",
+        "passed": true,
+        "status": 401
+      },
+      {
+        "id": "expired-cookie-then-guest",
+        "passed": true,
+        "status": 401,
+        "guest_status": 200
+      }
+    ]
+  },
+  "linux_container": {
+    "image": "uth-library:2026-11-03-edge",
+    "image_id": "sha256:0d0adf42dd2e61e2e696766842d0cd9086bdefdeb4056477947d6109e5ec2236",
+    "checks": {
+      "passed": 12,
+      "checks": [
+        "ready",
+        "register_unicode",
+        "private_history",
+        "cross_user_history_export",
+        "signed64_bound",
+        "unicode_validation_safe",
+        "expired_cookie_401_deleted",
+        "guest_after_expiry",
+        "relogin_history_preserved",
+        "synthetic_accounts_deleted",
+        "16_guest_requests_4_concurrent_no_llm_generation",
+        "rate_limit_returns_429_without_500"
+      ],
+      "model_catalog_readiness": {
+        "status": "ready",
+        "checks": {
+          "database": true,
+          "model": true
+        }
+      },
+      "small_concurrency_probe": {
+        "requests": 16,
+        "workers": 4,
+        "median_ms": 35.9955,
+        "p95_ms": 48.564,
+        "scope": "guest greeting/FAQ only; not LLM concurrency, sustained capacity or production SLA"
+      },
+      "rate_probe_statuses": {
+        "200": 93,
+        "429": 32
+      }
+    },
+    "model": {
+      "actual_grounded_model": true,
+      "source_ids": [
+        1
+      ],
+      "uid": 10001,
+      "cross_process_opac_gate": true
+    },
+    "startup_probe_note": "First probe ran beforeAPIstartup and disconnected; afterobservedstartup theprobe reran successfully. Not counted as a product success.",
+    "cleanup": "synthetic private rows checkedzero before removal; ownedQAcontainer stopped/removed; image retained",
+    "llm_scope": "Container uses hostOllama; concurrencyprobe is greeting/FAQonly. No paidproviders."
+  },
+  "marc": {
+    "inventory_ids": 22401,
+    "inventory_sha256": "99b543d717c846b6bebab9c5d37087df9c563419f5ad164ad038f0b21f53752a",
+    "validated_files": 979,
+    "invalid_or_outside_inventory": [],
+    "latest_fetched_at": "2026-11-03T05:43:56.827676+00:00",
+    "percentage": 4.37,
+    "minimum_remaining_hours_at10seconds": 59.51,
+    "manifest": {
+      "source": "https://opacthuvien.ut.edu.vn/opac/",
+      "recorded_at": "2026-11-03T05:43:56.829187+00:00",
+      "complete": false,
+      "blocked": null,
+      "categories": {},
+      "listing_records": 22401,
+      "detail_records": 813,
+      "phase": "details",
+      "details_requested": true,
+      "session_refreshes": 0,
+      "transport_retries": 11,
+      "minimum_request_gap_seconds": 10,
+      "robots_disallow_acknowledged": true,
+      "scope": "MARC details for frozen inventory only, not current full-site inventory; public bibliographic metadata; no login, full text, reader data or current availability claim",
+      "frozen_inventory": {
+        "pack": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101\\catalog-listings.jsonl",
+        "pack_sha256": "99b543d717c846b6bebab9c5d37087df9c563419f5ad164ad038f0b21f53752a",
+        "records": 22401
+      },
+      "last_request_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1817",
+      "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6"
+    },
+    "process": {
+      "output": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101",
+      "scope": "missing MARC for frozen validated22401-ID inventory; shared host pacing; no login/full text",
+      "stderr": "collector-shared-20261103T035808Z.stderr.log",
+      "pid": 27676,
+      "supervisor_pid": 36472,
+      "stdout": "collector-shared-20261103T035808Z.stdout.log",
+      "started_at": "2026-11-03T03:58:08.9181637+00:00"
+    },
+    "note": "Manifest detail_records is processedprefix in currentrun, not totalvalidatedfiles; frozeninventory not currentfullwebsite. Retries are attempts, not measured failure-rate."
+  },
+  "source_sha256": {
+    "backend/app/main.py": "e0664b72897eb65b894d6866a7a31c4ce8081af8f011bbfd75376c5b1c5dfbf7",
+    "backend/app/security.py": "0b34343bdb13104ff5511b3f5184e21fdb4a8bb89295408e61a93221d216b37d",
+    "backend/app/api/auth.py": "dc91168af4a9f2d514cf68944f56dda01a1e4768ba82571d8da3e4b4d336d7ce",
+    "backend/app/api/chat.py": "474ef66beada0e36f7811d875db255fdadc0221facfbed68bc52a4f44fada8f3",
+    "backend/app/api/history.py": "fc5da8a40a5c2170e9a5c4c40404a5f41a0e54ce049670705dcfe84542336fb1",
+    "backend/app/api/admin.py": "40d199bb942cf830a797f9da2100945b6e71d3ddc51aa0f9b50a1d4cce492c2d",
+    "backend/app/api/catalog.py": "3b89e00234a2a0ec9c35155b94ef67bf42b24dcc71eff5a66c8699e541e5ce76",
+    "backend/app/services/assistant.py": "3c88a3f48cdb45038a61d28d4a470b81fe9012025b4e7657ca4176de485d7981",
+    "backend/app/services/catalog.py": "458c27c3907bcfe4dacff054d8554fc54dd2beee2fd10f6120ec8699747e46da",
+    "backend/app/services/recommendations.py": "3962b94a81a28a0221320e2d204edbc65fb7a620fb0fb982f53b71740ae5f130",
+    "backend/app/services/integrations.py": "76dc6408e65dcf6a9ddd3405b9239ae239be0ab243a4d56b5e30d43bbe75d9cf",
+    "scripts/collect_opac.py": "6bc45743d5c9f43404814c6ad628b0802198d117e70f582d1fb579e398f6ce6d",
+    "frontend/src/App.jsx": "39eaa77b52578ea482010102525754b6d993f44ab3d6dae2ca14543d518b1350",
+    "frontend/src/services/chatApi.js": "8a18fabde45e5dd0cec67696338aa63d118d3b0c95fab649dc3de6b981e5349e",
+    "frontend/src/components/ChatWindow.jsx": "6699b1384ce70f2361ecfd62dd4724ecac9cf006d95266a3ae255ac7a3922d6d",
+    "frontend/src/components/Account.jsx": "169bd9533c4c01a50dd71ce70e70c50cedcd2c200409ca0c8c84c6b3147d3c54",
+    "frontend/src/components/Catalog.jsx": "54c12ac7dcfedff875590187e3ec5219d19fc29192b04723d28cf055a3932604",
+    "frontend/src/components/BookDetails.jsx": "a89033cb3d4883790168dcb5d6520d5750ab357f4d0cccfd15dfc17ed8ecec20",
+    "tests/test_assistant_edge_matrix.py": "7796d4c4fffd5f249998ec9174ba75137526b4c68fcccd039cc2d18ab37f7244",
+    "tests/test_catalog_edge_matrix.py": "eab3a66663ec2f218680d2d4dc63a048bf3d65b291f7dfa68d9962917f98f1b6",
+    "tests/test_auth_security_matrix.py": "b1f8dd762892d444ec5dc867d021db25b2ae2c6adc3869bace3ff5ae7c74191a",
+    "tests/test_opac_transport_retry.py": "a749aeb61ad377245db4f873712ba9d4d617318bf5257365a40de4f35f539e48",
+    "tests/evaluation/edge-library-2026-11-03.json": "d4302ba80dae8230e3d31a1af42be80754f7aafe3cb78fef221ae79eb062110b",
+    "frontend/src/failureFlows.test.jsx": "354021b6ed625cc22547f8e7dd477fe06f09292200583ebb00480de93ef505c4"
+  },
+  "limits": [
+    "No browser/device visual acceptance; Work browser use disabled",
+    "Cross-tab browser Set-Cookie ordering after overlapping auth mutations remains outside frontendcontinuation guards",
+    "Cold localQdrant can take tens ofseconds; independent relevance labels/pure-synonymrecall remainopen",
+    "16requests/4workers FAQprobe is not LLMconcurrency, sustainedcapacity, or publicdeploymentacceptance",
+    "MARC incomplete; no automatic catalogenrichment/training/fulltext; retries do not bypass HTTPdenials",
+    "No targethost/domain supplied; HTTPS/ACME/targetrestore/load and approved realtransactions remainpending",
+    "Existing StarletteTestClient/httpx deprecation warning remains; no testremoval or frozenbenchmarktuning"
+  ]
+}

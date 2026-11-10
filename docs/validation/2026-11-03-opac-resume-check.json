@@ -1,0 +1,56 @@
+{
+  "checked_at": "2026-11-03T00:30:08.789782+00:00",
+  "verified_global_ids_before_restart": 19684,
+  "verified_page_snapshots": 989,
+  "marc_samples": 8,
+  "digital_listing": {
+    "collected": 7487,
+    "total": 7487
+  },
+  "printed_listing_before_restart": {
+    "collected": 7740,
+    "total": 10457
+  },
+  "previous_worker_active": false,
+  "restart": {
+    "output": "D:\\Github\\Group4-HKDN\\backend\\runtime\\opac-public-20261101",
+    "scope": "remaining digital and printed routes then their MARC; other stored routes preserved",
+    "pid": 2608,
+    "launch": "WMI-created hidden supervisor; no scheduled task or service configuration",
+    "supervisor_pid": 14352,
+    "started_at": "2026-11-03T00:29:05.8618845+00:00"
+  },
+  "current_pass": {
+    "source": "https://opacthuvien.ut.edu.vn/opac/",
+    "recorded_at": "2026-11-03T00:30:04.152601+00:00",
+    "complete": false,
+    "blocked": null,
+    "categories": {
+      "32": {
+        "name": "Tài liệu số",
+        "total": 7487,
+        "pages": 375,
+        "unique_records": 7487,
+        "complete": true
+      },
+      "1": {
+        "name": "Sách truyền thống",
+        "total": 10457,
+        "pages": 390,
+        "unique_records": 7800,
+        "complete": false
+      }
+    },
+    "listing_records": 15287,
+    "detail_records": 0,
+    "phase": "listing",
+    "details_requested": true,
+    "session_refreshes": 0,
+    "minimum_request_gap_seconds": 10,
+    "robots_disallow_acknowledged": true,
+    "scope": "public bibliographic metadata; no login, full text, reader data or current availability claim",
+    "robots_sha256": "b43ee3677cc1756171bd8511d55bf6f668a93ecc401d558f4da7274bcf6ba6b6"
+  },
+  "note": "Current pass covers only32and1, global corpus includes all stored routes. Other-route reconciliation and bulk MARC still outstanding.",
+  "global_ids_after_resume": 19764
+}

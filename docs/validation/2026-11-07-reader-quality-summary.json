@@ -1,0 +1,96 @@
+{
+  "recorded_at": "2026-11-07T06:41:07.319637+00:00",
+  "task": "QA-READER-QUALITY-20261107",
+  "overall": "Verified local improvements; project not complete; browser and external acceptance remain open",
+  "changes": [
+    "Prefer complete catalog term matches over partial matches; keep fuzzy fallback when no complete match exists.",
+    "Resolve explicit text-only viewed/read book context through current public catalog; ignore assistant factual claims and clarify duplicate editions.",
+    "Preserve complete reviewed computer-use instructions; add published password-support contact and own-account OPAC guidance to privacy refusals.",
+    "Deduplicate identical citations, preserve different check dates.",
+    "Provide a requested public description when MARC summary is missing, retaining needs_confirmation and no-full-text disclosure."
+  ],
+  "verification": {
+    "backend": {
+      "tests": 1172,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "new_regressions": 13,
+    "frontend": {
+      "tests": 144,
+      "test_files": 14,
+      "build": "passed; 47 modules, production Vite bundle"
+    },
+    "offline": {
+      "passed": 49,
+      "total": 49,
+      "scope": "isolated deterministic, model/vectors disabled"
+    },
+    "opac_api_smoke": {
+      "passed": 5,
+      "total": 5,
+      "scope": "actual loopback API and existing published metadata/MARC; no upstream transaction"
+    },
+    "targeted_public_api": {
+      "checks": 8,
+      "functional_cases": 7,
+      "safety_only_cases": 1,
+      "errors": 0,
+      "note": "Eight exposed-case checks include ind-lib-18 clarification only; do not interpret as eight fully answered cases or a new independent score."
+    },
+    "local_model": {
+      "http_status": 200,
+      "mode": "rag",
+      "source_sentences_checked_against_published_answers": true,
+      "scope": "one local Ollama API probe, no new oracle or model quality score"
+    },
+    "readiness": {
+      "status": "ready",
+      "checks": {
+        "database": true,
+        "model": true
+      }
+    },
+    "docker": {
+      "engine_version": "29.9.2",
+      "image": "uth-library:reader-quality-20261107",
+      "image_id": "sha256:84fb2d291db221ba5d4a7afd8543c909861a97a7da54aa7a4d262d697589d8e6",
+      "build": "passed",
+      "isolated_container_checks": 11,
+      "all_passed": true,
+      "temporary_container_removed": true,
+      "scope": "Fresh ephemeral Linux container, seed corpus, model and vectors disabled; not Compose/HTTPS/model or production acceptance"
+    },
+    "compose_config": "passed with SITE_DOMAIN=localhost in process environment; not a public deployment",
+    "browser": {
+      "status": "stopped_by_tool",
+      "reason": "Browser connector disabled; native Computer Use could not verify the active Edge URL with enough confidence to enforce policy. No bypass attempted."
+    }
+  },
+  "failed_attempts_preserved": [
+    "Initial focused tests reproduced missing context, unrelated partial matches, missing support contact/privacy guidance, omitted model-selected procedure steps and description handling.",
+    "First full suite: 1 failed,1170 passed. Existing test_catalog missing_summary expectation was preserved; cautious description status fixed and complete suite rerun.",
+    "First live helper used an incorrect expected GUI book ID23568. Frozen source_refs specify24250; corrected the helper from that source, not by weakening book matching. First output preserved in tmp/reader-quality-first-live.json.",
+    "Docker first had no running engine, then credential-helper lookup failed. Started existing Desktop and added its verified bin directory to build process PATH; no credential-store modification."
+  ],
+  "remaining": [
+    "Mixed injection plus legitimate bibliography still clarifies instead of answering its safe bibliographic portion (ind-lib-18).",
+    "General LLM sentence selection may omit relevant conditions; no new independent holdout/staff evaluation or population accuracy estimate.",
+    "Browser, physical devices, full Compose with model/HTTPS, target-host capacity and multi-day uptime remain unverified in this update.",
+    "Real library transactions remain BLOCKED: user confirmed no library authorization/API; zero attempted.",
+    "Existing account data, MARC collector and snapshots were not changed; no commit, push or production deployment.",
+    "Backend emits the existing Starlette/httpx TestClient deprecation warning; not upgraded in this focused change."
+  ],
+  "sha256": {
+    "backend/app/services/assistant.py": "2224bbb99981d2080db42d61257ed200538de97e3dffd573e704d88e3b4d36bb",
+    "backend/app/services/catalog.py": "c332fb660564aa2034c4df5707f233381d44a63f4529376138a67351ca83ea94",
+    "tests/test_reader_quality_gaps.py": "6819beef388d3ac4db8ef8895b0562157d832dd693d92668817c1a8116eaad4c",
+    "docs/validation/2026-11-07-reader-quality-junit.xml": "dbbf7c1686c6f9ecb276c56adec0d569b8ba980ec14dda19b40d22eaef7d93ac",
+    "docs/validation/2026-11-07-reader-quality-offline.json": "2bea1eef317bf61e57968d76d89a1a268eb7d8ade635d6759ec938210465ff00",
+    "docs/validation/2026-11-07-reader-quality-live.json": "bd7fb0a8eb3b6b5624877a5093959117d10381d6786d96d220de6b233ba01dfc",
+    "docs/validation/2026-11-07-reader-quality-opac-smoke.json": "a555342b030b9cb1c5d9ef3f3a3c4780ad2d41eb08344fdee419d34c4fe72c8a",
+    "docs/validation/2026-11-07-reader-quality-model.json": "d97607670f0014e0d9da3e1464452801037f54f9162442fd53f0e4a108fcb0a5",
+    "docs/validation/2026-11-07-reader-quality-container.json": "75ef7cf16daa3ddf1657985c2884b0916ca18e6df78f8ec45cb7d0ea69ae1a90"
+  }
+}

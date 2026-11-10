@@ -1,0 +1,31 @@
+{
+  "recorded_at": "2026-11-07T06:38:59.271787+00:00",
+  "image": "uth-library:reader-quality-20261107",
+  "image_id": "sha256:84fb2d291db221ba5d4a7afd8543c909861a97a7da54aa7a4d262d697589d8e6",
+  "container_id": "cb7b8855843c0db9bdb8e61b8fe2580925e523e141b90879d54a3482aaf36ea9",
+  "network": "none",
+  "bind_mounts": false,
+  "production_data_accessed": false,
+  "scope": "Fresh ephemeral Linux container, seed corpus, model and vectors disabled; not Compose/HTTPS/model or production acceptance",
+  "checks": {
+    "non_root_uid10001": true,
+    "ready_http200": true,
+    "database_ready": true,
+    "health_http200": true,
+    "model_disabled": true,
+    "vectors_disabled": true,
+    "frontend_index": true,
+    "frontend_assets": true,
+    "chat_guide": true,
+    "pdf_source_page3": true,
+    "anonymous_admin_denied": true
+  },
+  "ready": {
+    "status": "ready",
+    "checks": {
+      "database": true,
+      "model": true
+    }
+  },
+  "knowledge_count": 17
+}

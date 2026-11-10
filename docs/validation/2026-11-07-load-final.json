@@ -1,0 +1,697 @@
+{
+  "recorded_at": "2026-11-07T06:08:56.239845+00:00",
+  "base_url": "http://127.0.0.1:8000",
+  "profile": "retrieval",
+  "client_cpu_count": 16,
+  "capabilities": {
+    "accounts": true,
+    "history": true,
+    "admin": true,
+    "crawler": true,
+    "demo_reservations": false,
+    "vectors": {
+      "configured": true,
+      "ready": true,
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "error": null,
+      "namespaces": {
+        "knowledge": {
+          "sources": 31,
+          "chunks": 145,
+          "ready": true
+        }
+      }
+    },
+    "llm_provider": "ollama",
+    "library_configured": false,
+    "messenger_configured": false,
+    "zalo_configured": false
+  },
+  "scope": "closed-loop synthetic guest clients on one local host; shared IP; no OPAC reads, account writes or transactions",
+  "limits": "Small samples; not a production capacity guarantee. LLM warm-up is reported separately; inspect modes/fallbacks.",
+  "warmup": [
+    {
+      "case": "guide",
+      "http_status": 200,
+      "mode": "faq",
+      "ok": true,
+      "elapsed_ms": 11.72
+    },
+    {
+      "case": "catalog",
+      "http_status": 200,
+      "mode": null,
+      "ok": true,
+      "elapsed_ms": 563.0
+    },
+    {
+      "case": "metadata",
+      "http_status": 200,
+      "mode": "catalog",
+      "ok": true,
+      "elapsed_ms": 443.05
+    }
+  ],
+  "phases": [
+    {
+      "concurrency": 1,
+      "elapsed_seconds": 4.445,
+      "requests": 20,
+      "successful": 20,
+      "failed": 0,
+      "p50_ms": 113.94,
+      "p95_ms": 528.41,
+      "max_ms": 535.71,
+      "requests_per_second": 4.5,
+      "http_statuses": {
+        "200": 20
+      },
+      "modes": {
+        "faq": 7,
+        "catalog": 6
+      },
+      "results": [
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 12.9
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 535.71
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 115.85
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 12.16
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 528.03
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 112.33
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 11.13
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 527.12
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 111.48
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 10.94
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 524.22
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 115.56
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 11.98
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 525.88
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 116.15
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 11.25
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 522.46
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 111.06
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 11.73
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 514.74
+        }
+      ]
+    },
+    {
+      "concurrency": 5,
+      "elapsed_seconds": 4.491,
+      "requests": 20,
+      "successful": 20,
+      "failed": 0,
+      "p50_ms": 760.86,
+      "p95_ms": 2062.91,
+      "max_ms": 2141.45,
+      "requests_per_second": 4.453,
+      "http_statuses": {
+        "200": 20
+      },
+      "modes": {
+        "faq": 7,
+        "catalog": 6
+      },
+      "results": [
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 1352.3
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 1225.9
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 477.87
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 2058.78
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 1129.98
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 812.63
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 2141.45
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 702.84
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 639.16
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 1919.61
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 692.52
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 504.41
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 1916.13
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 709.08
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 651.55
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 1344.89
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 677.95
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 673.51
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 1215.72
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 539.64
+        }
+      ]
+    },
+    {
+      "concurrency": 10,
+      "elapsed_seconds": 4.437,
+      "requests": 20,
+      "successful": 20,
+      "failed": 0,
+      "p50_ms": 1827.13,
+      "p95_ms": 4424.32,
+      "max_ms": 4427.99,
+      "requests_per_second": 4.508,
+      "http_statuses": {
+        "200": 20
+      },
+      "modes": {
+        "faq": 7,
+        "catalog": 6
+      },
+      "results": [
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 4420.65
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 1067.83
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 1188.94
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 4418.23
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 1114.0
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 2072.11
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 4427.99
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 2728.39
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 2101.93
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 4424.13
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 1945.78
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 519.43
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 3240.67
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 1708.48
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 1112.46
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 2327.17
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 1421.52
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 1281.31
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 1246.78
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 1071.16
+        }
+      ]
+    },
+    {
+      "concurrency": 20,
+      "elapsed_seconds": 4.414,
+      "requests": 20,
+      "successful": 20,
+      "failed": 0,
+      "p50_ms": 3897.05,
+      "p95_ms": 4403.52,
+      "max_ms": 4410.85,
+      "requests_per_second": 4.531,
+      "http_statuses": {
+        "200": 20
+      },
+      "modes": {
+        "faq": 7,
+        "catalog": 6
+      },
+      "results": [
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 3814.92
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 1209.71
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 1662.01
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 4410.85
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 1208.63
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 3276.53
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 4396.5
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 2572.15
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 3071.86
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 4402.8
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 3792.27
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 3163.5
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 4397.81
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 4297.52
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 4044.08
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 4403.13
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 2691.53
+        },
+        {
+          "case": "metadata",
+          "http_status": 200,
+          "mode": "catalog",
+          "ok": true,
+          "elapsed_ms": 3979.18
+        },
+        {
+          "case": "guide",
+          "http_status": 200,
+          "mode": "faq",
+          "ok": true,
+          "elapsed_ms": 4400.38
+        },
+        {
+          "case": "catalog",
+          "http_status": 200,
+          "mode": null,
+          "ok": true,
+          "elapsed_ms": 4376.7
+        }
+      ]
+    }
+  ]
+}

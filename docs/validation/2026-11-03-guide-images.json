@@ -1,0 +1,153 @@
+{
+  "recorded_at": "2026-11-03T07:37:05.277759+00:00",
+  "kind": "local guide-image feature verification, not public production acceptance",
+  "source": {
+    "source_url": "https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf",
+    "source_sha256": "3eb7a16a5e30e61bb35a581aaa228ad32b3914a00c4ed52b1cf083b028953f56",
+    "source_bytes": 1821058,
+    "rendering": "pypdfium2 whole pages; longest edge1600; WebPquality92; no invented annotations or credentials pages",
+    "pages": [
+      {
+        "page": 3,
+        "file": "opac-page-3.webp",
+        "width": 1237,
+        "height": 1600,
+        "bytes": 134052,
+        "sha256": "02b546ea8bc5a37b972eb451ce1a3bd5885f6de2117d8b346982493be4e83d7c"
+      },
+      {
+        "page": 4,
+        "file": "opac-page-4.webp",
+        "width": 1237,
+        "height": 1600,
+        "bytes": 181256,
+        "sha256": "86b90cf1d2d8010ead7eaa673057c2be4edec3483e4b67a321d3384f542a8b8b"
+      },
+      {
+        "page": 6,
+        "file": "opac-page-6.webp",
+        "width": 1237,
+        "height": 1600,
+        "bytes": 120012,
+        "sha256": "3bf240d42e57e8044040e94321c8cd34acf249b8f3fae9ed3388f89c54fdb92d"
+      }
+    ]
+  },
+  "backend": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "899",
+    "time": "108.387",
+    "timestamp": "2026-11-03T14:35:05.213636+07:00",
+    "hostname": "Junn"
+  },
+  "backend_warning": "1 existing Starlette TestClient/httpx deprecation",
+  "frontend": {
+    "passed": 129,
+    "files": 12,
+    "new_cases": 19,
+    "build": "Vite6.4.5,46modules,passed"
+  },
+  "tdd": {
+    "initial_failures": 6,
+    "later_regressions": "Inherited __proto__ key and original image link both observed RED before fix"
+  },
+  "live_assets": [
+    {
+      "page": 3,
+      "url": "http://127.0.0.1:8000/assets/opac-page-3-C5zAvzCw.webp",
+      "http": 200,
+      "bytes": 134052,
+      "sha256": "02b546ea8bc5a37b972eb451ce1a3bd5885f6de2117d8b346982493be4e83d7c"
+    },
+    {
+      "page": 4,
+      "url": "http://127.0.0.1:8000/assets/opac-page-4-Dsh24v7p.webp",
+      "http": 200,
+      "bytes": 181256,
+      "sha256": "86b90cf1d2d8010ead7eaa673057c2be4edec3483e4b67a321d3384f542a8b8b"
+    },
+    {
+      "page": 6,
+      "url": "http://127.0.0.1:8000/assets/opac-page-6-C25Ps8a8.webp",
+      "http": 200,
+      "bytes": 120012,
+      "sha256": "3bf240d42e57e8044040e94321c8cd34acf249b8f3fae9ed3388f89c54fdb92d"
+    }
+  ],
+  "live_chat": [
+    {
+      "question": "Làm thế nào để tra cứu sách tại thư viện?",
+      "page": 3,
+      "status": "answered",
+      "mode": "faq"
+    },
+    {
+      "question": "Tìm sách truyền thống trên OPAC thế nào?",
+      "page": 4,
+      "status": "answered",
+      "mode": "faq"
+    },
+    {
+      "question": "Làm thế nào để tìm sách theo tác giả?",
+      "page": 6,
+      "status": "answered",
+      "mode": "faq"
+    }
+  ],
+  "browser": {
+    "actual_browser_verified": true,
+    "pages_loaded": [
+      3,
+      4,
+      6
+    ],
+    "enlarge_and_escape_close": true,
+    "original_image_link_verified": true,
+    "mobile_viewport": {
+      "width": 390,
+      "height": 844,
+      "document_width": 390,
+      "image_widths": [
+        298,
+        298,
+        298
+      ]
+    },
+    "viewport_reset": true,
+    "screenshots": [
+      {
+        "path": "tmp/guide-images-desktop.jpg",
+        "size": [
+          904,
+          884
+        ],
+        "bytes": 78919
+      },
+      {
+        "path": "tmp/guide-images-mobile.jpg",
+        "size": [
+          390,
+          844
+        ],
+        "bytes": 36249
+      }
+    ]
+  },
+  "deployment": {
+    "native8000_serves_latest_dist": true,
+    "backend_restarted_for_webp_mime_and_chat_fields": true,
+    "database_migration": false,
+    "paid_provider_calls": false,
+    "docker_rebuilt": false,
+    "public_deployment": false
+  },
+  "limits": [
+    "Illustrations are from the user-provided PDF, not a live OPAC screenshot",
+    "Online PDF screenshot fetch returned403; local supplied file was used without bypassing access controls",
+    "Only reviewed pages3,4,6 are mapped; other source pages remain text/link only",
+    "History rendering and image-failure cases tested in React; no synthetic accounts added to the running reader database"
+  ]
+}
