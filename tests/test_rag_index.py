@@ -1,6 +1,7 @@
 from types import SimpleNamespace
 
 import numpy as np
+from threading import Event
 import pytest
 from qdrant_client import QdrantClient
 
@@ -85,6 +86,41 @@ def index_at(path):
     index.client = QdrantClient(path=str(path / 'vectors'))
     index.model = Embedding()
     return index
+
+
+def test_book_index_preparation_is_single_flight_and_search_never_waits(tmp_path,monkeypatch):
+    index=index_at(tmp_path)
+    started,release=Event(),Event()
+    source=row(1,answer='TAILMARKER')
+    rebuild=index.rebuild
+    calls=[]
+
+    def slow_rebuild(rows,namespace):
+        with index.lock:
+            calls.append(namespace)
+            started.set()
+            assert release.wait(5)
+            return rebuild(rows,namespace)
+
+    monkeypatch.setattr(index,'rebuild',slow_rebuild)
+    try:
+        assert index.prepare_books(lambda:[source])=='preparing'
+        assert started.wait(5)
+        assert index.prepare_books(lambda:[source])=='preparing'
+        with pytest.raises(rag.IndexBusy):
+            index.search_chunks('TAILMARKER',[source])
+        index.invalidate_books()
+        release.set()
+        index.book_job.result(timeout=5)
+        assert calls==['books']
+        assert index.prepare_books(lambda:[source])=='preparing'
+        index.book_job.result(timeout=5)
+        assert index.prepare_books(lambda:[source])=='ready'
+        assert index.search('TAILMARKER',[source],namespace='books',ready_only=True)[0][0]==source
+        assert calls==['books','books']
+    finally:
+        release.set()
+        index.close()
 
 
 @pytest.mark.parametrize('query',['x'*385,'ạ'*129])
@@ -327,4 +363,79 @@ def test_source_filter_applies_before_limit_and_preserves_full_inventory(tmp_pat
         monkeypatch.setattr(index.model, 'query_embed', lambda text: pytest.fail('empty filter must not embed query'))
         assert index.search_chunks('TAILMARKER', sources, namespace='books', source_ids=[]) == []
     finally:
+        index.close()
+
+
+def test_knowledge_warmup_is_single_flight_and_requests_do_not_wait(tmp_path,monkeypatch):
+    index=index_at(tmp_path)
+    started,release=Event(),Event()
+    rebuild=index.rebuild
+    source=row(answer='TAILMARKER')
+    calls=[]
+    def slow_rebuild(rows,namespace='knowledge'):
+        with index.lock:
+            calls.append(namespace)
+            started.set()
+            assert release.wait(5)
+            return rebuild(rows,namespace)
+    monkeypatch.setattr(index,'rebuild',slow_rebuild)
+    try:
+        assert index.prepare_knowledge(lambda:[source])=='preparing'
+        assert started.wait(5)
+        assert index.prepare_knowledge(lambda:[source])=='preparing'
+        with pytest.raises(rag.IndexBusy):
+            index.search_chunks('TAILMARKER',[source])
+        release.set()
+        index.knowledge_job.result(timeout=5)
+        assert calls==['knowledge']
+        assert index.prepare_knowledge(lambda:[source])=='ready'
+        assert index.search('TAILMARKER',[source])[0][0]==source
+    finally:
+        release.set()
+        index.close()
+
+
+def test_failed_warmup_is_visible_and_does_not_prevent_later_recovery(tmp_path,monkeypatch):
+    index=index_at(tmp_path)
+    def unavailable():
+        raise RuntimeError('private-detail-not-for-status')
+    try:
+        assert index.prepare_knowledge(unavailable)=='preparing'
+        index.knowledge_job.result(timeout=5)
+        assert index.status()['ready'] is False
+        assert index.status()['error']=='RuntimeError'
+        assert 'private-detail' not in str(index.status())
+        assert index.prepare_knowledge(lambda:[row()])=='preparing'
+        index.knowledge_job.result(timeout=5)
+        assert index.status()['ready'] is True
+    finally:
+        index.close()
+    assert index.prepare_knowledge(lambda:[row()])=='unavailable'
+
+
+def test_busy_query_does_not_wait_for_vector_module_import(tmp_path,monkeypatch):
+    import builtins
+    from threading import Thread
+    index=index_at(tmp_path)
+    started,release=Event(),Event()
+    def hold_lock():
+        with index.lock:
+            started.set()
+            release.wait(5)
+    worker=Thread(target=hold_lock)
+    worker.start()
+    assert started.wait(5)
+    original_import=builtins.__import__
+    def loading_module(name,*args,**kwargs):
+        if name=='qdrant_client.models':
+            pytest.fail('A busy query must not wait on the cold vector import')
+        return original_import(name,*args,**kwargs)
+    try:
+        with monkeypatch.context() as patch:
+            patch.setattr(builtins,'__import__',loading_module)
+            with pytest.raises(rag.IndexBusy):
+                index.search_chunks('TAILMARKER',[row()])
+    finally:
+        release.set()
+        worker.join(timeout=5)
         index.close()

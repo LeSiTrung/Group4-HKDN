@@ -6,14 +6,20 @@ import re
 import threading
 import unicodedata
 from bisect import bisect_left, bisect_right
+from concurrent.futures import ThreadPoolExecutor
+from time import monotonic
 from uuid import NAMESPACE_URL, uuid5
 
 STOP = set('toi minh ban cho hoi la co khong nao nhu the mot nhung va cua ve tai thu vien duoc muon can lam cach huong dan'.split())
+NONSPACING_MARKS = dict.fromkeys(code for code in range(0x110000) if unicodedata.category(chr(code)) == 'Mn')
+NON_SEARCH_CHARACTER = re.compile(r'[^a-z0-9 ]')
 
 
 def normalize(text):
     text = unicodedata.normalize('NFD', text.lower().replace('đ','d'))
-    return ' '.join(re.sub(r'[^a-z0-9 ]',' ', ''.join(x for x in text if unicodedata.category(x)!='Mn')).split())
+    if not text.isascii():
+        text = text.translate(NONSPACING_MARKS)
+    return ' '.join(NON_SEARCH_CHARACTER.sub(' ',text).split())
 
 
 def tokens(text):
@@ -66,6 +72,10 @@ def row_fingerprint(row):
     return hashlib.sha256(json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')).hexdigest()
 
 
+class IndexBusy(RuntimeError):
+    pass
+
+
 class VectorIndex:
     def __init__(self, settings):
         self.settings, self.lock = settings, threading.RLock()
@@ -73,6 +83,14 @@ class VectorIndex:
         self.fingerprint = None
         self.fingerprints = {}
         self.namespaces = {}
+        self.book_lock = threading.Lock()
+        self.book_pool = ThreadPoolExecutor(max_workers=1,thread_name_prefix='opac-index')
+        self.book_job = None
+        self.knowledge_job = None
+        self.book_revision = 0
+        self.book_ready_revision = -1
+        self.book_retry_at = 0
+        self.closing = threading.Event()
         self.error = None
         self.model_name = os.getenv('EMBEDDING_MODEL','sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')
         self.local_export = None
@@ -107,6 +125,62 @@ class VectorIndex:
             for status in self.namespaces.values():
                 status['ready'] = False
 
+    def invalidate_books(self):
+        with self.book_lock:
+            self.book_revision+=1
+
+    def prepare_knowledge(self, load_rows):
+        with self.book_lock:
+            if self.closing.is_set():
+                return 'unavailable'
+            if self.knowledge_job is not None and not self.knowledge_job.done():
+                return 'preparing'
+            if self.namespaces.get('knowledge',{}).get('ready') and self.model is not None:
+                return 'ready'
+            self.knowledge_job=self.book_pool.submit(self._prepare_knowledge,load_rows)
+            return 'preparing'
+
+    def _prepare_knowledge(self, load_rows):
+        with self.lock:
+            try:
+                if self.closing.is_set():
+                    return
+                rows=load_rows()
+                self.rebuild(rows)
+                if rows and not self.closing.is_set():
+                    self._init()
+            except Exception as exc:
+                self.error=type(exc).__name__
+                self.namespaces.setdefault('knowledge',{'sources':0,'chunks':0})['ready']=False
+
+    def prepare_books(self, load_rows):
+        with self.book_lock:
+            if self.closing.is_set() or monotonic()<self.book_retry_at:
+                return 'unavailable'
+            if self.book_job is not None and not self.book_job.done():
+                return 'preparing'
+            if self.book_ready_revision==self.book_revision and self.namespaces.get('books',{}).get('ready'):
+                return 'ready'
+            self.book_job=self.book_pool.submit(self._prepare_books,load_rows,self.book_revision)
+            return 'preparing'
+
+    def _prepare_books(self, load_rows, revision):
+        try:
+            rows=load_rows()
+            with self.lock:
+                self.rebuild(rows,'books')
+                if rows and not self.closing.is_set():
+                    self._init()
+        except Exception as exc:
+            with self.book_lock:
+                self.book_retry_at=monotonic()+30
+                self.namespaces.setdefault('books',{'sources':0,'chunks':0})['ready']=False
+                self.error=type(exc).__name__
+        else:
+            with self.book_lock:
+                self.book_ready_revision=revision
+                self.book_retry_at=0
+
     def rebuild(self, rows, namespace='knowledge'):
         from qdrant_client.models import Distance, PointIdsList, PointStruct, VectorParams
         with self.lock:
@@ -117,6 +191,7 @@ class VectorIndex:
                 fingerprint = row_fingerprint(row_hashes)
                 exists = self.client.collection_exists(collection)
                 if exists and fingerprint == self.fingerprints.get(collection):
+                    self.namespaces[namespace]['ready']=True
                     return len(rows)
                 documents = {}
                 for row in rows:
@@ -128,6 +203,8 @@ class VectorIndex:
                 existing, offset = {}, None
                 if exists:
                     while True:
+                        if self.closing.is_set():
+                            raise RuntimeError('Index is shutting down')
                         # Local Qdrant sorts the full ID set for each scroll page.
                         page, offset = self.client.scroll(collection, offset=offset, limit=4096,
                                                           with_payload=True, with_vectors=False)
@@ -139,6 +216,8 @@ class VectorIndex:
                 if changed:
                     self._init()
                     for start in range(0,len(changed),64):
+                        if self.closing.is_set():
+                            raise RuntimeError('Index is shutting down')
                         batch=changed[start:start+64]
                         vectors = list(self.model.embed([payload['text'] for _, payload in batch]))
                         if len(vectors) != len(batch):
@@ -161,13 +240,21 @@ class VectorIndex:
                 self.namespaces.setdefault(namespace, {'sources': 0, 'chunks': 0})['ready'] = False
                 raise
 
-    def search_chunks(self, question, rows, namespace='knowledge', source_ids=None):
-        from qdrant_client.models import FieldCondition, Filter, MatchAny
+    def search_chunks(self, question, rows, namespace='knowledge', source_ids=None, *, ready_only=False):
         if len(question.encode('utf-8'))>384:
             raise ValueError('Embedding query exceeds 384 UTF-8 bytes')
-        with self.lock:
+        if not self.lock.acquire(blocking=False):
+            raise IndexBusy('Vector index is busy')
+        try:
             try:
-                self.rebuild(rows,namespace)
+                from qdrant_client.models import FieldCondition, Filter, MatchAny
+                if ready_only:
+                    fingerprint=row_fingerprint({row['id']:row_fingerprint(row) for row in rows})
+                    if fingerprint!=self.fingerprints.get(self._collection(namespace)):
+                        self.namespaces.setdefault(namespace,{'sources':0,'chunks':0})['ready']=False
+                        raise IndexBusy('Book metadata changed since indexing')
+                else:
+                    self.rebuild(rows,namespace)
                 if not rows or (source_ids is not None and not source_ids):
                     return []
                 self._init()
@@ -176,25 +263,28 @@ class VectorIndex:
                 hits = self.client.query_points(self._collection(namespace), query=vector, query_filter=query_filter,
                                                 limit=6, score_threshold=0.45).points
                 current = {row['id']: row for row in rows}
-                hashes = {row['id']: row_fingerprint(row) for row in rows}
                 matches = []
                 for hit in hits:
                     payload = hit.payload or {}
                     source_id = payload.get('source_id')
-                    if source_id in current and payload.get('row_hash') == hashes[source_id]:
+                    if source_id in current and payload.get('row_hash') == row_fingerprint(current[source_id]):
                         matches.append({'row': current[source_id], 'text': payload['text'],
                                         'score': float(hit.score), 'chunk_id': str(hit.id)})
                 self.error = None
                 self.namespaces[namespace]['ready'] = True
                 return matches
+            except IndexBusy:
+                raise
             except Exception as exc:
                 self.error = type(exc).__name__
                 self.namespaces.setdefault(namespace, {'sources': 0, 'chunks': 0})['ready'] = False
                 raise
+        finally:
+            self.lock.release()
 
-    def search(self, question, rows, namespace='knowledge', source_ids=None):
+    def search(self, question, rows, namespace='knowledge', source_ids=None, *, ready_only=False):
         results, seen = [], set()
-        for match in self.search_chunks(question, rows, namespace, source_ids=source_ids):
+        for match in self.search_chunks(question, rows, namespace, source_ids=source_ids,ready_only=ready_only):
             row = match['row']
             if row['id'] not in seen:
                 results.append((row, match['score']))
@@ -202,6 +292,9 @@ class VectorIndex:
         return results
 
     def close(self):
+        with self.book_lock:
+            self.closing.set()
+        self.book_pool.shutdown(wait=True,cancel_futures=True)
         with self.lock:
             if self.client:
                 self.client.close()

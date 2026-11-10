@@ -43,6 +43,8 @@ def create_app(data_dir=None, testing=False):
         app.state.answer = lambda text,history=None: answer_question(app.state,text,history)
         with store.connect() as db:
             db.execute("UPDATE jobs SET status='failed',error='Tiến trình đã dừng trước khi hoàn tất; cần chạy lại tác vụ.' WHERE status IN ('queued','running')")
+        if not testing and os.getenv('ENABLE_VECTORS','true').lower()=='true':
+            app.state.vectors.prepare_knowledge(lambda:published_rows(store.connect))
 
         async def scheduler():
             interval = float(os.getenv('CRAWL_INTERVAL_HOURS','0'))
@@ -63,7 +65,7 @@ def create_app(data_dir=None, testing=False):
                 await task
             except asyncio.CancelledError:
                 pass
-        app.state.vectors.close()
+        await asyncio.to_thread(app.state.vectors.close)
 
     app = FastAPI(title='UTH Library Assistant', version='1.0.0', lifespan=lifespan)
     app.add_exception_handler(RequestValidationError, validation_error)
