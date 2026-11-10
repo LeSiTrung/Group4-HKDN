@@ -1,12 +1,16 @@
 # Trợ lý Thư viện UTH
 
+Cập nhật03/11: đã tích hợp metadata OPAC vào danh mục, tổng27.964biểu ghi; tra cứu theo từ khóa/nhan đề/tác giả và hỏi tiếp có nguồn hoạt động tại [ứng dụng cục bộ](http://127.0.0.1:8000). [Nhập OPAC an toàn](docs/opac-import.md) giữ nguyên dữ liệu cũ và5biểu ghi quá giới hạn trong báo cáo riêng. Chỉ mục ngữ nghĩa mở rộng đang xây trênCPU; lượt ứng dụng hiện tại dùng tra cứu từ khóa/FAQ trong khi chờ. Chưa coi là hoàn tất MARC hoặc nghiệm thu production.
+
 Ứng dụng React + FastAPI có hỏi đáp kèm nguồn, truy xuất ngữ nghĩa tiếng Việt, danh mục sách có nguồn và ngày đối chiếu, tài khoản/lịch sử riêng, quản trị nội dung và lịch phục vụ, thu thập trang thành bản nháp, tra cứu OPAC và các bộ kết nối thư viện/Messenger/Zalo. SQLite lưu dữ liệu nghiệp vụ; FastEmbed + Qdrant lưu chỉ mục có thể tạo lại. Ollama chạy LLM cục bộ; có thể cấu hình nhà cung cấp tương thích OpenAI khi được phép.
 
 Không có tài khoản quản trị mặc định. Giờ mở cửa, phí và quy định chưa được thư viện xác nhận vẫn hiển thị giới hạn. Bộ kết nối đã có không đồng nghĩa dịch vụ bên ngoài đã nghiệm thu. Xem [kết quả kiểm chứng](docs/validation.md) và [các giới hạn tích hợp](docs/integrations.md).
 
-Mốc01/11/2026: Docker Engine đã kết nối, image Linux và HTTPS nội bộ qua Caddy đã kiểm chứng;405 test backend/45 frontend,86 tình huống chat qua API cho mỗi cấu hình Windows/Linux đạt. Runtime đã nhập các gói có31 FAQ/145 đoạn và5.569 bản ghi danh mục. [LIC collector](docs/lic-collection.md) rà141 URL phát hiện được, lưu staging có checksum; [OPAC](docs/opac-access-2026-11-01.md) vẫn cần export/API được cho phép để lấy toàn bộ danh mục. [Vận hành Docker](docs/docker-local-validation.md). Các số này không chứng minh độ chính xác AI tuyệt đối hoặc nghiệm thu production.
+Mốc01/11/2026: Docker Engine đã kết nối, image Linux và HTTPS nội bộ qua Caddy đã kiểm chứng;405 test backend/45 frontend,86 tình huống chat qua API cho mỗi cấu hình Windows/Linux đạt tại mốc Docker. Runtime đã nhập các gói có31 FAQ/145 đoạn và5.569 bản ghi danh mục. [LIC collector](docs/lic-collection.md) rà141 URL phát hiện được, lưu staging có checksum; [attachment collector](docs/lic-attachments.md) bổ sung9 PDF hướng dẫn/chính sách. [Thu thập OPAC](docs/opac-collection.md) đã chạy lại sau khi HTTPS phục hồi, đang lấy metadata tám lối duyệt công khai và MARC với checkpoint; chưa khẳng định hoàn tất danh mục hoặc có quyền tải sách toàn văn. [Vận hành Docker](docs/docker-local-validation.md). Các số này không chứng minh độ chính xác AI tuyệt đối hoặc nghiệm thu production.
 
-Bạn đọc tìm sách theo nhan đề, tác giả, chủ đề hoặc mô tả; xem chi tiết, nguồn gốc và tài liệu liên quan. Chat hỗ trợ một số câu hỏi tiếp nối về sách/cơ sở; khách gửi tối đa sáu lượt ngữ cảnh từ bộ nhớ giao diện, tài khoản dùng lịch sử riêng trên server. Quản trị có CRUD/nhập JSON danh mục và đối soát yêu cầu gia hạn chưa rõ kết quả. Danh mục là bản chụp metadata, không chứa số bản rỗi, vị trí kệ hoặc trạng thái mượn trực tiếp; ứng dụng chưa thay thế phần mềm quản lý lưu thông của thư viện.
+Bạn đọc tìm sách theo nhan đề, tác giả, chủ đề hoặc mô tả; xem chi tiết, nguồn gốc và tài liệu liên quan. Chat hỗ trợ một số câu hỏi tiếp nối về sách/cơ sở; khách gửi lại tối đa sáu tin nhắn ngữ cảnh từ bộ nhớ giao diện, tài khoản dùng lịch sử riêng trên server. Quản trị có CRUD/nhập JSON danh mục và đối soát yêu cầu gia hạn chưa rõ kết quả. Danh mục là bản chụp metadata, không chứa số bản rỗi, vị trí kệ hoặc trạng thái mượn trực tiếp; ứng dụng chưa thay thế phần mềm quản lý lưu thông của thư viện.
+
+Trong cùng hội thoại, bạn có thể chọn “cuốn thứ hai” rồi hỏi “Xuất bản năm nào?”, “Nó nói về gì?” hoặc “Nó dành cho ai?”. Chat giữ mã sách đã chọn và đọc lại biểu ghi công khai trước khi trả lời. Khách giữ lịch sử trong tab đang mở; tài khoản lưu lịch sử trên máy chủ và có thể mở lại. Mỗi lượt xử lý chỉ dùng **6 tin nhắn gần nhất** (khoảng 3 cặp hỏi–đáp), tối đa 5 mã sách trong một danh sách. Chưa có cơ chế tự tóm tắt để nhớ toàn bộ hội thoại dài hoặc nhớ xuyên các cuộc trò chuyện riêng.
 
 ## Chạy trên Windows
 
@@ -105,3 +109,9 @@ Pop-Location
 ```
 
 [Yêu cầu và giới hạn](docs/requirements.md), [thiết kế API](docs/api-design.md), [schema dữ liệu](docs/database-design.md), [vận hành](docs/operations.md), [kiểm chứng](docs/validation.md) và [hợp đồng tích hợp](docs/integrations.md) là tài liệu kỹ thuật. Tài liệu học kỳ đã có trong `docs/` được giữ nguyên; phạm vi phát triển hiện tại tập trung vào phần mềm. Kết quả test cục bộ không thay thế nghiệm thu thư viện, giao dịch thật, kênh nhắn tin hoặc triển khai HTTPS trên máy chủ đích.
+
+## Thử đăng ký mượn trong Thư viện mẫu
+
+Đặt `ENABLE_DEMO_RESERVATIONS=true` khi khởi động ứng dụng cục bộ để bật mục **Thư viện mẫu** tại `/#demo-library`. Tính năng mặc định tắt. Đăng nhập bằng tài khoản bạn đọc, chọn một trong ba đầu sách mẫu, rồi xác nhận đăng ký. Trang hiển thị số bản còn và cho phép hủy đăng ký của chính bạn.
+
+Thử hỏi chatbot “Bạn có thể đăng ký mượn sách giúp tôi được không?” để mở luồng này. Kho sách và yêu cầu giả lập dùng dữ liệu riêng. Kiểm thử luồng tại `tests/test_demo_reservations.py` và `frontend/src/demoReservations.test.jsx`.

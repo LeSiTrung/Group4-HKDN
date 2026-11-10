@@ -1,5 +1,7 @@
 # Vận hành Chatbot thư viện
 
+Ngày03/11/2026: gói Docker `uth-library:2026-11-03` đã build và kiểm tra trên Linux với UID10001, model Qwen qua Ollama của máy hiện tại, readiness200 và tình huống thiếu model503. Giao diện bạn đọc bỏ nhãn định tuyến/phiên bản nội bộ. Xem [gói triển khai cục bộ](local-release.md); đây là bước chuẩn bị theo yêu cầu nhóm chưa có máy chủ/tên miền, không phải nghiệm thu publicHTTPS hay toàn bộ Compose/Ollama volume.
+
 Kiểm chứng ngày 01/11/2026: Docker Engine đã kết nối; image Linux build/chạy dưới UID10001, API/LLM, backup/restore và HTTPS nội bộ qua Caddy đã được kiểm tra thật. Main vẫn ở cổng8000; bản Docker dùng snapshot công khai riêng ở cổng8100. Xem [hướng dẫn và giới hạn Docker](docker-local-validation.md), [bằng chứng mới nhất](validation/2026-11-01-data-container.json). Đây chưa phải nghiệm thu tên miền/ACME công khai, sức tải hoặc toàn bộ Compose/Ollama trên máy đích.
 
 Gói FAQ ngày01/11 bổ sung4 mục đã rà nguồn, nâng runtime đã nhập gói lên31 mục/145 đoạn. Sau backup, dùng `python -m app.cli import-knowledge ../data/faq/public-library-2026-11-01.json`. Hai tài liệu giờ phục vụ2022/2024 đang khác nhau: giữ cả hai với `needs_confirmation`, không tạo lịch hiện hành hoặc tự chọn theo tên thư mục mới hơn. Lịch theo ngày/cơ sở được cán bộ xác nhận vẫn ưu tiên. [Collector LIC](lic-collection.md) chỉ lưu staging, không tự nhập/công bố HTML thô.
@@ -72,7 +74,7 @@ docker compose --env-file backend/.env up -d
 docker compose --env-file backend/.env ps
 ```
 
-Image app chứa frontend build cùng origin, chạy UID 10001, một worker. Compose ép Secure cookie, origin HTTPS chính xác, data path `/var/lib/library`, và Ollama URL nội bộ; không publish cổng 8000/11434. Chỉ Caddy publish cổng web. Caddy dùng hostname cụ thể, tự cấp/gia hạn TLS nếu DNS/cổng/CA hoạt động. Chứng chỉ và cấu hình Caddy có volume riêng. Image Ollama pin `0.40.2`; Caddy dùng tag `2-alpine`, Node/Python dùng tag dòng tương ứng trong Dockerfile: lưu image ID/digest đã nghiệm thu trước mỗi phát hành vì các tag dòng có thể đổi.
+Image app chứa frontend build cùng origin, chạy UID 10001, một worker. Compose ép Secure cookie, origin HTTPS chính xác, data path `/var/lib/library`, và Ollama URL nội bộ; không publish cổng 8000/11434. Chỉ Caddy publish cổng web. Caddy dùng hostname cụ thể, tự cấp/gia hạn TLS nếu DNS/cổng/CA hoạt động. Chứng chỉ và cấu hình Caddy có volume riêng. Image Ollama pin `0.40.13`, khớp phiên bản local đã chạy Qwen; manifest Linux amd64/arm64 đã xác minh. Caddy dùng tag `2-alpine`, Node/Python dùng tag dòng tương ứng trong Dockerfile: lưu image ID/digest đã nghiệm thu trước mỗi phát hành vì các tag dòng có thể đổi.
 
 Proxy network dùng `172.30.47.0/29`, IP Caddy cố định `172.30.47.2`. Uvicorn chỉ tin forwarded headers từ IP đó; Caddy ghi đè client IP/scheme từ kết nối thực, không tin X-Forwarded-For của khách. Không publish API trực tiếp hoặc đổi thành trust `*`. Nếu subnet trùng mạng có sẵn, sửa đồng thời subnet, IP Caddy và `--forwarded-allow-ips` trong Compose. Khi đặt thêm CDN/proxy trước Caddy, địa chỉ thực/rate limit cần cấu hình và nghiệm thu riêng; cấu hình này dành cho Caddy là biên trực tiếp.
 
@@ -149,5 +151,23 @@ Sửa `environment.DATA_DIR` của service app trong Compose thành `/var/lib/li
 Trước nâng cấp, tag image hiện tại để giữ lại, ví dụ `docker image tag uth-library:local uth-library:before-update-2026-10-29`, rồi backup. Rollback phần mềm bằng đặt `LIBRARY_IMAGE` về tag đã giữ và chạy `docker compose --env-file backend/.env up -d --no-build app proxy`. Database mới không được mặc định coi là tương thích phiên bản cũ: nếu schema đã đổi, restore backup trước nâng cấp vào thư mục mới và trỏ DATA_DIR tương ứng. Bản hiện tại dùng schema version 2, bổ sung bảng books và cột books/context_query của messages; ứng dụng từ chối schema mới hơn 2. Xem [schema dữ liệu](database-design.md). Không hạ schema bằng cách xóa bảng/cột.
 
 ## Nguồn cấu hình
+
+Nếu Docker Desktop trên Windows đã chạy nhưng build báo không tìm thấy
+`docker-credential-desktop`, kiểm tra thư mục chứa `docker.exe`. Trong phiên
+PowerShell hiện tại có thể bổ sung thư mục đó vào PATH rồi thử lại; không cần
+xóa cấu hình hoặc kho thông tin đăng nhập:
+
+```powershell
+$dockerBin = Split-Path -Parent (Get-Command docker.exe).Source
+$env:PATH = "$dockerBin;$env:PATH"
+docker version
+docker build --pull=false -t uth-library:local .
+```
+
+`docker compose config --quiet` cần `SITE_DOMAIN` qua `--env-file backend/.env`
+hoặc biến môi trường của shell. Giá trị `localhost` chỉ dùng để kiểm tra cấu hình
+cục bộ; trước khi chạy công khai phải dùng tên miền và môi trường được phê duyệt.
+Build image và smoke với kho seed/model tắt không xác minh toàn bộ Compose,
+HTTPS, dữ liệu đã nhập hoặc model trong container.
 
 Đối chiếu ngày 29/10/2026: [Caddy reverse proxy](https://caddyserver.com/docs/caddyfile/directives/reverse_proxy), [giới hạn request body](https://caddyserver.com/docs/caddyfile/directives/request_body), [Compose interpolation](https://docs.docker.com/compose/how-tos/environment-variables/variable-interpolation/). Lệnh manifest chỉ xác nhận image tag tồn tại; kiểm tra build/runtime/HTTPS thực tế vẫn phải có kết quả riêng trong [validation.md](validation.md).

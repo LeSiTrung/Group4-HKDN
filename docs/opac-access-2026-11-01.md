@@ -1,5 +1,7 @@
 # OPAC access and catalog coverage — 01/11/2026
 
+**Later update, same day:** direct anonymous HTTPS access from the development machine recovered to HTTP200 for the homepage, categories and a detail page. Earlier403/522 observations below remain historical. A paced, explicitly acknowledged public metadata collection is now running; see [opac-collection.md](opac-collection.md) for the current scope, robots instruction, checkpoints and limitations. No full harvest or full-text permission is claimed.
+
 Status: **BLOCKED for bulk collection**. A normal public browser page is readable; this does not establish permission or a supported interface for a full metadata harvest.
 
 ## Current observations
