@@ -11,7 +11,8 @@ from app.services.knowledge import today
 def state(tmp_path,monkeypatch):
     monkeypatch.setenv('ENABLE_VECTORS','true')
     store=Store(tmp_path/'library.sqlite3')
-    return SimpleNamespace(db=store.connect,settings=SimpleNamespace(testing=False),vectors=SimpleNamespace())
+    return SimpleNamespace(db=store.connect,settings=SimpleNamespace(testing=False),
+                           vectors=SimpleNamespace(prepare_books=lambda load:'ready'))
 
 
 def add(state,title='Python cơ bản',**changes):
@@ -65,7 +66,8 @@ def test_semantic_gate_keeps_kind_filter_full_inventory_and_draft_isolation(stat
     digital=add(state,kind='digital')
     draft=add(state,published=False)
     calls=[]
-    def search(query,documents,namespace,source_ids):
+    def search(query,documents,namespace,source_ids,*,ready_only=False):
+        assert ready_only
         calls.append((documents,namespace,source_ids))
         return [(document,.8) for document in [*documents,draft]]
     state.vectors.search=search

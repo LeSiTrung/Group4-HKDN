@@ -46,8 +46,26 @@ CREATE TABLE IF NOT EXISTS books (
  id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, author TEXT NOT NULL DEFAULT '', year TEXT NOT NULL DEFAULT '',
  kind TEXT NOT NULL DEFAULT 'books', subjects TEXT NOT NULL DEFAULT '', description TEXT NOT NULL DEFAULT '',
  source_url TEXT NOT NULL UNIQUE, checked_at TEXT NOT NULL, published INTEGER NOT NULL DEFAULT 0);
+CREATE TABLE IF NOT EXISTS book_marc (
+ book_id INTEGER PRIMARY KEY REFERENCES books(id) ON DELETE CASCADE,
+ source_url TEXT NOT NULL, checked_at TEXT NOT NULL, snapshot_sha256 TEXT NOT NULL,
+ subjects TEXT NOT NULL, summary TEXT NOT NULL, audience TEXT NOT NULL);
+CREATE VIEW IF NOT EXISTS books_discovery AS
+ SELECT b.*, m.subjects AS marc_subjects, m.summary AS marc_summary,
+        m.audience AS marc_audience, m.checked_at AS marc_checked_at
+ FROM books b LEFT JOIN book_marc m ON m.book_id=b.id AND m.source_url=b.source_url;
 CREATE INDEX IF NOT EXISTS ix_messages_conversation ON messages(conversation_id,id);
 CREATE INDEX IF NOT EXISTS ix_conversations_user ON conversations(user_id,updated_at);
+CREATE TABLE IF NOT EXISTS catalog_revision (id INTEGER PRIMARY KEY CHECK(id=1), value INTEGER NOT NULL);
+INSERT OR IGNORE INTO catalog_revision VALUES (1,0);
+"""
+
+for table in ('books','book_marc'):
+    for event in ('INSERT','UPDATE','DELETE'):
+        SCHEMA+=f"""
+CREATE TRIGGER IF NOT EXISTS catalog_revision_{table}_{event.lower()}
+AFTER {event} ON {table}
+BEGIN UPDATE catalog_revision SET value=value+1 WHERE id=1; END;
 """
 
 

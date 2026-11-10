@@ -1,4 +1,8 @@
 from difflib import SequenceMatcher
+from contextlib import contextmanager
+from types import SimpleNamespace
+import re
+import unicodedata
 
 import pytest
 
@@ -31,6 +35,67 @@ def test_impossible_character_matches_do_not_compute_full_similarity(store,monke
     assert comparisons==[]
 
 
+def test_precise_catalog_query_skips_fuzzy_comparison_of_unrelated_books(store,monkeypatch):
+    exact=add(store,'Python cơ bản')
+    add(store,'Thiết kế cầu đường')
+    state=SimpleNamespace(db=store.connect,settings=SimpleNamespace(testing=True))
+    def unexpected(*args):
+        raise AssertionError('A precise result should not scan fuzzy candidates')
+    monkeypatch.setattr(catalog,'_similar_words',unexpected)
+    assert [row['id'] for row in catalog.search_books(state,'Python')]==[exact['id']]
+
+
+def test_precise_fast_path_keeps_typo_fallback_and_publication_changes(store):
+    exact=add(store,'Python cơ bản')
+    state=SimpleNamespace(db=store.connect,settings=SimpleNamespace(testing=True))
+    assert [row['id'] for row in catalog.search_books(state,'Pythno')]==[exact['id']]
+    assert [row['id'] for row in catalog.search_books(state,'Python')]==[exact['id']]
+    with store.connect() as db:
+        db.execute('UPDATE books SET published=0 WHERE id=?',(exact['id'],))
+    assert catalog.search_books(state,'Python')==[]
+    current=add(store,'Python thực hành')
+    assert [row['id'] for row in catalog.search_books(state,'Python')]==[current['id']]
+
+
+def test_catalog_projection_is_reused_until_another_connection_changes_books(store):
+    row=add(store,'Python cơ bản')
+    scans=[]
+    @contextmanager
+    def counted():
+        with store.connect() as db:
+            db.set_trace_callback(lambda sql:scans.append(sql) if sql.startswith('SELECT * FROM books_discovery') else None)
+            yield db
+    assert catalog.search_local(counted,'Python',field='title')
+    assert catalog.search_local(counted,'Python',field='title')
+    assert len(scans)==1
+    with store.connect() as db:
+        db.execute('UPDATE books SET published=0 WHERE id=?',(row['id'],))
+    assert catalog.search_local(counted,'Python',field='title')==[]
+    assert len(scans)==2
+
+
+def test_catalog_projection_invalidates_marc_edits_and_rolled_back_writes(store):
+    row=add(store,'Biên mục thử nghiệm')
+    with store.connect() as db:
+        db.execute('INSERT INTO book_marc VALUES (?,?,?,?,?,?,?)',
+            (row['id'],row['url'],today(),'a'*64,'quuxfirst','Nội dung gốc',''))
+    assert catalog.search_local(store.connect,'quuxfirst')
+    try:
+        with store.connect() as db:
+            db.execute("UPDATE book_marc SET subjects='quuxrollback' WHERE book_id=?",(row['id'],))
+            raise RuntimeError('Synthetic rollback')
+    except RuntimeError:
+        pass
+    assert catalog.search_local(store.connect,'quuxfirst')
+    with store.connect() as db:
+        db.execute("UPDATE book_marc SET subjects='quuxsecond' WHERE book_id=?",(row['id'],))
+    assert catalog.search_local(store.connect,'quuxfirst')==[]
+    assert catalog.search_local(store.connect,'quuxsecond')
+    with store.connect() as db:
+        db.execute('DELETE FROM book_marc WHERE book_id=?',(row['id'],))
+    assert catalog.search_local(store.connect,'quuxsecond')==[]
+
+
 def test_exact_prefix_typo_and_author_search_keep_expected_ranking(store):
     exact=add(store,'Olympic cơ học')
     longer=add(store,'Tuyển tập Olympic cơ học nâng cao')
@@ -39,6 +104,15 @@ def test_exact_prefix_typo_and_author_search_keep_expected_ranking(store):
     assert [r['id'] for r in catalog.search_local(store.connect,'olimpic co hoc')]==[exact['id'],longer['id']]
     assert [r['id'] for r in catalog.search_local(store.connect,'tuyen tap olympic')]==[longer['id']]
     assert {r['id'] for r in catalog.search_local(store.connect,'nguyen van an')}=={exact['id'],longer['id'],unrelated['id']}
+
+
+@pytest.mark.parametrize('text', ['Công nghệ đóng tàu thủy', 'Đà Nẵng – 2026',
+    'Cà phê A\u1ab0B A\ufe0fB', 'A\u093eB', 'ASCII\t+ HTML/CSS', 'A\U000e0100B', ''])
+def test_fast_normalization_preserves_existing_unicode_token_boundaries(text):
+    decomposed=unicodedata.normalize('NFD',text.lower().replace('đ','d'))
+    old=' '.join(re.sub(r'[^a-z0-9 ]',' ',''.join(
+        ch for ch in decomposed if unicodedata.category(ch)!='Mn')).split())
+    assert catalog.normalize(text)==old
 
 
 def test_filters_and_withdrawals_remain_current_after_search(store):
@@ -125,12 +199,12 @@ def test_metadata_cache_preserves_reference_ranking(store,query,kind):
 def test_unchanged_metadata_reuses_normalization_but_edits_are_immediate(store,monkeypatch,field):
     row=add(store,'Python cơ bản')
     calls=[]
-    original=catalog.normalize
+    original=catalog.normalize_catalog
     def counted(value):
         calls.append(value)
         return original(value)
     catalog._normalized_metadata.cache_clear()
-    monkeypatch.setattr(catalog,'normalize',counted)
+    monkeypatch.setattr(catalog,'normalize_catalog',counted)
     query='Nguyễn Văn An' if field=='author' else 'Python'
     assert catalog.search_local(store.connect,query,field=field)
     calls.clear()
