@@ -42,8 +42,9 @@ export function Modal({ title, onClose, children }) {
   const ref = useRef(null)
   useEffect(() => {
     const node = ref.current
+    const trigger = document.activeElement
     node.showModal()
-    return () => { if (node.open) node.close() }
+    return () => { if (node.open) node.close(); trigger?.focus() }
   }, [])
   return <dialog ref={ref} className="modal" aria-label={title} onCancel={event => { event.preventDefault(); onClose() }} onClick={event => { if (event.target === ref.current) onClose() }}>
     <div className="modal-head"><h2>{title}</h2><button type="button" className="icon-button" aria-label="Đóng hộp thoại" onClick={onClose}><Icon name="close" /></button></div>

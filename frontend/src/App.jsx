@@ -66,7 +66,7 @@ export default function App() {
     if (!drawer) return
     sidebar.current.querySelector('button')?.focus()
     const escape = event => {
-      if (event.key === 'Escape') { setDrawer(false); menuButton.current?.focus() }
+      if (event.key === 'Escape') setDrawer(false)
       if (event.key === 'Tab') {
         const controls = [...sidebar.current.querySelectorAll('a, button:not(:disabled)')]
         const first = controls[0], last = controls.at(-1)
@@ -75,7 +75,7 @@ export default function App() {
       }
     }
     window.addEventListener('keydown', escape)
-    return () => window.removeEventListener('keydown', escape)
+    return () => { window.removeEventListener('keydown', escape); menuButton.current?.focus() }
   }, [drawer])
 
   function navigate(next) { location.hash = next; setView(next); setDrawer(false) }
@@ -101,7 +101,7 @@ export default function App() {
     <a href="#main-content" className="skip-link" onClick={event => { event.preventDefault(); document.getElementById('main-content').focus() }}>Chuyển đến nội dung</a>
     {drawer && <button className="sidebar-backdrop" aria-label="Đóng điều hướng" onClick={() => setDrawer(false)} />}
     <aside ref={sidebar} id="app-navigation" className={`sidebar ${drawer ? 'is-open' : ''}`} inert={isMobile && !drawer} role={isMobile && drawer ? 'dialog' : undefined} aria-modal={isMobile && drawer ? 'true' : undefined} aria-label="Điều hướng thư viện">
-      <button className="icon-button sidebar-close" aria-label="Đóng điều hướng" onClick={() => { setDrawer(false); menuButton.current?.focus() }}><Icon name="close" /></button>
+      <button className="icon-button sidebar-close" aria-label="Đóng điều hướng" onClick={() => setDrawer(false)}><Icon name="close" /></button>
       <a className="brand" href="#chat" onClick={() => setDrawer(false)} aria-label="UTH Library, trang chủ"><span className="brand-symbol"><Icon name="book" size={26} /></span><span>UTH<span className="brand-light"> Library</span><small>THƯ VIỆN ĐẠI HỌC UTH</small></span></a>
       <button className="new-chat" onClick={() => openChat()}><Icon name="plus" size={18} />Cuộc trò chuyện mới</button>
       <span className="nav-label">KHÁM PHÁ</span>
