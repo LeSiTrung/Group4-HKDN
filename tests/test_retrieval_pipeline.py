@@ -2,6 +2,7 @@ import json
 from types import SimpleNamespace
 
 import httpx
+import pytest
 
 from app.services import llm_service
 
@@ -64,6 +65,36 @@ def test_curated_question_match_is_not_made_ambiguous_by_incidental_body_words()
     assert [row['id'] for row,_ in found['ranked']]==[1]
 
 
+def test_short_faq_evidence_keeps_its_complete_conditions_and_negations():
+    from app.services.retrieval import retrieve_knowledge
+    row=document()
+    row['question']='Sử dụng máy tính thư viện'
+    row['answer']='Xuất trình thẻ để sử dụng máy tính thư viện. '+('Thông tin thử nghiệm. '*13)+'Nếu máy hỏng, báo thủ thư; không tự sửa máy. Tắt máy trước khi ra về.'
+    result=retrieve_knowledge(row['question'],[row])
+    assert result['evidence'][0]['text']==row['answer']
+
+
+def test_excerpt_work_is_limited_to_long_sources_in_the_final_shortlist(monkeypatch):
+    from app.services import retrieval
+    rows=[document(i) for i in range(1,9)]
+    rows[0].update(question='Tra cứu OPAC',answer='Mở OPAC để tra cứu tài liệu.')
+    for row in rows[1:]:
+        row['question']='Tra cứu OPAC'
+        row['answer']+=f" Mã nguồn {row['id']}."
+    actual_chunk_text=retrieval.chunk_text
+    chunked=[]
+
+    def track(text):
+        chunked.append(text)
+        return actual_chunk_text(text)
+
+    monkeypatch.setattr(retrieval,'chunk_text',track)
+    found=retrieval.retrieve_knowledge('Tra cứu OPAC',rows)
+    assert [row['id'] for row,_ in found['ranked']]==list(range(1,9))
+    assert found['evidence'][0]['text']==rows[0]['answer']
+    assert chunked==[rows[1]['answer'],rows[2]['answer']]
+
+
 def test_long_query_uses_full_lexical_text_without_truncated_embedding():
     from app.services.retrieval import retrieve_knowledge
     row=document()
@@ -97,7 +128,7 @@ def model_response(monkeypatch,answer):
 
 def test_generation_uses_retrieved_excerpt_instead_of_whole_long_source(monkeypatch):
     answer='Đăng nhập kho luận văn bằng tài khoản bạn đọc.'
-    calls=model_response(monkeypatch,answer)
+    calls=model_response(monkeypatch,'1')
     row=document(); row['answer']='Phần giới thiệu. '*600+answer
     assert llm_service.generate_answer('Thư viện đăng nhập kho luận văn thế nào?',[row],evidence=[{'source_id':1,'text':answer,'chunk_id':'tail'}])
     prompt=calls[0]['messages'][-1]['content']
@@ -134,6 +165,36 @@ def test_fabricated_or_unrelated_excerpt_cannot_reach_provider(monkeypatch):
     for source_id,text in ((99,row['answer']),(1,'Bằng chứng không có trong nguồn')):
         assert llm_service.generate_answer('Thư viện',[row],evidence=[{'source_id':source_id,'text':text,'chunk_id':'fake'}]) is None
     assert not calls
+
+
+@pytest.mark.parametrize('answer',[
+    'DOAB giới thiệu cả sách và tạp chí truy cập mở.',
+    'DOAB giới thiệu tạp chí truy cập mở. DOAJ giới thiệu sách truy cập mở.',
+])
+def test_citing_the_right_id_does_not_allow_changed_source_facts(monkeypatch,answer):
+    row=document()
+    row['answer']='DOAB giới thiệu sách truy cập mở. DOAJ giới thiệu tạp chí truy cập mở.'
+    model_response(monkeypatch,answer)
+    assert llm_service.generate_answer('DOAB và DOAJ khác nhau thế nào?',[row]) is None
+
+
+@pytest.mark.parametrize('excerpt',[
+    'Không được tự mang sách ra ngoài.', 'được tự mang sách ra ngoài.',
+])
+def test_generation_cannot_drop_a_negation_even_at_an_excerpt_boundary(monkeypatch,excerpt):
+    row=document()
+    row['answer']='Không được tự mang sách ra ngoài.'
+    model_response(monkeypatch,'được tự mang sách ra ngoài.')
+    assert llm_service.generate_answer('Mượn sách thế nào?',[row],
+        evidence=[{'source_id':1,'text':excerpt,'chunk_id':'boundary'}]) is None
+
+
+def test_generation_can_select_and_reorder_complete_source_sentences(monkeypatch):
+    row=document()
+    row['answer']='Xuất trình thẻ. Làm thủ tục tại quầy. Không tự mang sách ra ngoài.'
+    answer='Không tự mang sách ra ngoài.\n\nXuất trình thẻ.'
+    model_response(monkeypatch,'3,1')
+    assert llm_service.generate_answer('Em cần làm gì?',[row])=={'answer':answer,'source_ids':[1]}
 
 
 def test_model_catalog_check_reports_installed_model_without_generating(monkeypatch):

@@ -20,7 +20,7 @@ def test_model_preserves_valid_vietnamese_and_emoji(monkeypatch):
     monkeypatch.setenv('LLM_PROVIDER','ollama')
     answer='Bạn có thể tìm tài liệu tại OPAC 📚.'
     def provider(request):
-        return httpx.Response(200,json={'message':{'content':json.dumps({'answer':answer,'source_ids':[1]})}})
+        return httpx.Response(200,json={'message':{'content':json.dumps({'answer':'1'})}})
     monkeypatch.setattr(llm_service,'client',lambda:httpx.Client(transport=httpx.MockTransport(provider)))
-    result=llm_service.generate_answer('Hướng dẫn tra cứu sách',[{'id':1,'answer':'Dùng OPAC để tìm tài liệu.'}])
+    result=llm_service.generate_answer('Hướng dẫn tra cứu sách',[{'id':1,'answer':answer}])
     assert result=={'answer':answer,'source_ids':[1]}

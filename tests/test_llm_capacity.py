@@ -18,7 +18,7 @@ def mock_provider(monkeypatch, content=None, envelope=None):
     def handle(request):
         requests.append(request)
         return httpx.Response(200, json=envelope if envelope is not None else {
-            'message': {'role': 'assistant', 'content': content if content is not None else json.dumps(RESULT)}, 'done': True})
+            'message': {'role': 'assistant', 'content': content if content is not None else json.dumps({'answer':'1'})}, 'done': True})
     monkeypatch.setattr(llm_service, 'client', lambda: httpx.Client(transport=httpx.MockTransport(handle)))
     return requests
 
@@ -30,7 +30,7 @@ def test_grounded_generation_uses_bounded_ollama_context_and_output(monkeypatch)
     assert llm_service.generate_answer('Tra cứu sách ở đâu?', ROWS) == RESULT
     body = json.loads(requests[0].content)
     assert body['model'] == 'qwen3:1.7b'
-    assert body['format']['required'] == ['answer', 'source_ids']
+    assert body['format']['required'] == ['answer']
     assert body['stream'] is False and body['think'] is False
     assert body['options']['num_ctx'] == 8192
     assert 800 <= body['options']['num_predict'] <= 1000
@@ -59,7 +59,7 @@ def test_prompt_budget_counts_unicode_question_history_and_complete_evidence(mon
     requests=mock_provider(monkeypatch)
     assert llm_service.generate_answer('Thư viện '*900,ROWS) is None
     assert llm_service.generate_answer('Tra cứu sách',ROWS,[{'role':'user','content':'á'*4000}]) is None
-    assert llm_service.generate_answer('Tra cứu sách',[{'id':1,'answer':'Thông tin nguồn. '*600}]) is None
+    assert llm_service.generate_answer('Tra cứu sách',[{'id':1,'answer':' '.join(f'Thông tin nguồn {index}.' for index in range(600))}]) is None
     assert requests==[]
 
 
@@ -138,7 +138,7 @@ def test_outage_releases_capacity_for_later_request(monkeypatch):
 
 
 def test_openai_compatible_uses_existing_secure_config(monkeypatch):
-    requests = mock_provider(monkeypatch, envelope={'choices': [{'message': {'role': 'assistant', 'content': json.dumps(RESULT)}}]})
+    requests = mock_provider(monkeypatch, envelope={'choices': [{'message': {'role': 'assistant', 'content': json.dumps({'answer':'1'})}}]})
     monkeypatch.setenv('LLM_PROVIDER', 'openai')
     monkeypatch.setenv('LLM_BASE_URL', 'https://provider.example/v1')
     monkeypatch.setenv('LLM_API_KEY', 'synthetic-key')
@@ -168,7 +168,7 @@ def test_grounded_generation_has_nonblocking_two_call_limit(monkeypatch):
             if count == 2:
                 entered.set()
         assert release.wait(5), 'Test did not release model requests'
-        return httpx.Response(200, json={'message': {'content': json.dumps(RESULT)}})
+        return httpx.Response(200, json={'message': {'content': json.dumps({'answer':'1'})}})
     monkeypatch.setattr(llm_service, 'client', lambda: httpx.Client(transport=httpx.MockTransport(handle)))
     with ThreadPoolExecutor(max_workers=2) as executor:
         pending = [executor.submit(llm_service.generate_answer, 'Tra cứu sách', ROWS) for _ in range(2)]
