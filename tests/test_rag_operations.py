@@ -200,3 +200,17 @@ def test_index_cli_can_prebuild_only_published_book_metadata(tmp_path,monkeypatc
     cli.main()
     result=json.loads(capsys.readouterr().out)
     assert result['indexed']==1 and result['namespaces']['books']['sources']==1 and Index.closed
+
+
+@pytest.mark.parametrize('testing,enabled,expected',[(False,'true',True),(False,'false',False),(True,'true',False)])
+def test_only_enabled_runtime_prepares_knowledge_in_background(tmp_path,monkeypatch,testing,enabled,expected):
+    from app.services.rag_service import VectorIndex
+    monkeypatch.setenv('ENABLE_VECTORS',enabled)
+    monkeypatch.setenv('LLM_PROVIDER','none')
+    calls=[]
+    monkeypatch.setattr(VectorIndex,'prepare_knowledge',lambda self,load:calls.append(load()) or 'preparing',raising=False)
+    with TestClient(create_app(tmp_path,testing=testing)) as client:
+        assert client.get('/health').status_code==200
+    assert bool(calls) is expected
+    if expected:
+        assert calls[0] and all(row['published'] for row in calls[0])

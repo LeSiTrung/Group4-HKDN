@@ -68,7 +68,7 @@ def main():
             if args.namespace=='books':
                 from .services.catalog import item,book_documents
                 with store.connect() as db:
-                    rows=book_documents([item(row) for row in db.execute('SELECT * FROM books WHERE published=1')])
+                    rows=book_documents([item(row) for row in db.execute('SELECT * FROM books_discovery WHERE published=1')])
             count=index.rebuild(rows,namespace=args.namespace)
             print(json.dumps({'indexed':count,'model':index.model_name,**index.status()}))
         finally:

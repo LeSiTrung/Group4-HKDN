@@ -1,0 +1,10 @@
+[
+  {"id":"warehouse-learning","q":"Tôi muốn học quản lý kho từ đầu","relevant_ids":["26946","5760"]},
+  {"id":"warehouse-inventory","q":"Tìm sách về hệ thống kiểm soát tồn kho","relevant_ids":["26946","5760"]},
+  {"id":"road-design","q":"Tìm sách về thiết kế đường cong nằm","relevant_ids":["8807"]},
+  {"id":"security","q":"Tìm sách về hệ mật mã","relevant_ids":["26771"]},
+  {"id":"warehouse-title","q":"Tìm theo nhan đề Cẩm nang quản trị kho hàng","relevant_ids":["26946","5760"]},
+  {"id":"road-title","q":"Tìm theo nhan đề Thiết kế đường ô tô","relevant_ids":["8807"]},
+  {"id":"unknown","q":"zxqvutha92b7c","relevant_ids":[]},
+  {"id":"procedure","q":"Làm thế nào để tra cứu sách tại thư viện?","relevant_ids":[],"guidance":true}
+]
