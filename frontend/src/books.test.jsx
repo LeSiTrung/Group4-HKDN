@@ -54,6 +54,75 @@ it('searches the selected metadata field locally and keeps it on subsequent page
   expect(fetch.mock.calls[1][0]).toContain('page=2')
 })
 
+it('shows matching titles in results and only offers related keywords as suggestions', async () => {
+  const title = 'Giáo trình quản lý kho'
+  const url = 'https://lic.ut.edu.vn/record/1'
+  fetch.mockResolvedValueOnce(response({
+    source: 'local', total: 1, items: [{ id: 1, title, url }],
+    interpretation: { field: 'all', query: 'quan ly kho' },
+    suggested_titles: [title], suggested_keywords: ['Quản lý tồn kho'],
+  }))
+  render(<Catalog />)
+  fireEvent.change(screen.getByLabelText('Tìm theo'), { target: { value: 'smart' } })
+  fireEvent.change(screen.getByLabelText('Từ khóa tìm kiếm'), { target: { value: 'Tìm sách về quản lý kho' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Tra cứu', exact: true }))
+  expect(await screen.findByText(/quan ly kho/)).toBeTruthy()
+  expect(screen.getByRole('link', { name: title }).href).toBe(url)
+  expect(screen.getByRole('button', { name: 'Quản lý tồn kho' })).toBeTruthy()
+  expect(screen.queryByRole('button', { name: title })).toBeNull()
+})
+
+it('offers the assistant for a question about library procedures', async () => {
+  fetch.mockResolvedValueOnce(response({ source: 'local', total: 0, items: [], guidance: true }))
+  render(<Catalog />)
+  fireEvent.change(screen.getByLabelText('Tìm theo'), { target: { value: 'smart' } })
+  fireEvent.change(screen.getByLabelText('Từ khóa tìm kiếm'), { target: { value: 'Làm sao để mượn sách?' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Tra cứu', exact: true }))
+  expect((await screen.findByRole('link', { name: 'Hỏi Trợ lý thư viện' })).getAttribute('href')).toBe('#chat')
+})
+
+it('explains delayed semantic search and retries with the submitted filters', async () => {
+  fetch.mockResolvedValueOnce(response({ source: 'local', items: [], semantic_status: 'preparing' }))
+    .mockResolvedValueOnce(response({ source: 'local', items: [], total: 0 }))
+  render(<Catalog />)
+  fireEvent.change(screen.getByLabelText('Từ khóa tìm kiếm'), { target: { value: 'quản lý kho' } })
+  fireEvent.change(screen.getByLabelText('Loại tài liệu'), { target: { value: 'digital' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Tra cứu', exact: true }))
+  expect(await screen.findByText(/Đang chuẩn bị tìm kiếm theo nội dung/)).toBeTruthy()
+  expect(screen.queryByText('Chưa tìm thấy tài liệu phù hợp')).toBeNull()
+  fireEvent.change(screen.getByLabelText('Từ khóa tìm kiếm'), { target: { value: 'Từ khóa mới' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Thử lại lượt tra cứu' }))
+  await screen.findByText('Chưa tìm thấy tài liệu phù hợp')
+  expect(fetch.mock.calls[1][0]).toBe(fetch.mock.calls[0][0])
+})
+
+it('uses a suggested subject as a new local keyword search', async () => {
+  fetch.mockResolvedValueOnce(response({ source: 'local', items: [], suggested_keywords: ['Quản lý tồn kho'] }))
+    .mockResolvedValueOnce(response({ source: 'local', items: [] }))
+  render(<Catalog />)
+  fireEvent.change(screen.getByLabelText('Từ khóa tìm kiếm'), { target: { value: 'Kiểm kê chu kỳ' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Tra cứu', exact: true }))
+  fireEvent.click(await screen.findByRole('button', { name: 'Quản lý tồn kho' }))
+  await waitFor(() => expect(fetch).toHaveBeenCalledTimes(2))
+  const params = new URLSearchParams(fetch.mock.calls[1][0].split('?')[1])
+  expect(params.get('field')).toBe('smart')
+  expect(params.get('q')).toBe('Quản lý tồn kho')
+})
+
+it('shows OPAC match evidence and opens bibliographic details', async () => {
+  const marc = { subjects: 'Quản lý kho', summary: 'Hướng dẫn kiểm kê chu kỳ.', checked_at: '2026-10-29' }
+  const row = { id: 321, title: 'Nghiệp vụ kho vận', url: 'https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=321', marc }
+  fetch.mockResolvedValueOnce(response({ source: 'local', items: [{ ...row, marc_match: 'summary' }] }))
+    .mockResolvedValueOnce(response(row))
+  render(<Catalog />)
+  fireEvent.change(screen.getByLabelText('Từ khóa tìm kiếm'), { target: { value: 'Kiểm kê chu kỳ' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Tra cứu', exact: true }))
+  expect(await screen.findByText(/Khớp mô tả nội dung OPAC/)).toBeTruthy()
+  fireEvent.click(screen.getByRole('button', { name: 'Xem chi tiết' }))
+  expect(await screen.findByText('Hướng dẫn kiểm kê chu kỳ.')).toBeTruthy()
+  expect(screen.getByText(/Chưa có thông tin đối tượng đọc/)).toBeTruthy()
+})
+
 it('creates an unpublished catalog record with source and review date', async () => {
   const mutate = vi.fn().mockResolvedValue({ id: 1 })
   render(<BookAdmin rows={{ items: [], total: 0, page: 1, page_size: 20 }} onMutate={mutate} />)
@@ -92,13 +161,14 @@ it('does not imply that an unchecked search link has been verified', () => {
   expect(screen.queryByText(/Đối chiếu:/)).toBeNull()
 })
 
-it('opens a local book detail with related records from the API', async () => {
-  fetch.mockResolvedValueOnce(response({ source: 'local', total: 1, items: [{ id: 7, title: 'Biểu ghi có chi tiết', url: 'https://example.edu/7' }] })).mockResolvedValueOnce(response({ id: 7, title: 'Biểu ghi có chi tiết', description: 'Mô tả đã đối chiếu từ nguồn.', checked_at: '2026-10-28', url: 'https://example.edu/7', related: [{ id: 8, title: 'Tài liệu liên quan thật', url: 'https://example.edu/8' }] }))
+it('labels author-based suggestions in the local book detail', async () => {
+  fetch.mockResolvedValueOnce(response({ source: 'local', total: 1, items: [{ id: 7, title: 'Biểu ghi có chi tiết', url: 'https://example.edu/7' }] })).mockResolvedValueOnce(response({ id: 7, title: 'Biểu ghi có chi tiết', author: 'Nguyễn Văn An', description: 'Mô tả đã đối chiếu từ nguồn.', checked_at: '2026-10-28', url: 'https://example.edu/7', related: [{ id: 8, title: 'Tài liệu liên quan thật', author: 'Nguyễn Văn An', url: 'https://example.edu/8' }] }))
   render(<Catalog />)
   fireEvent.change(screen.getByLabelText('Từ khóa tìm kiếm'), { target: { value: 'chi tiết' } })
   fireEvent.click(screen.getByRole('button', { name: 'Tra cứu', exact: true }))
   fireEvent.click(await screen.findByRole('button', { name: 'Xem chi tiết' }))
   expect(await screen.findByText('Mô tả đã đối chiếu từ nguồn.')).toBeTruthy()
+  expect(screen.getByRole('heading', { name: 'Gợi ý theo tác giả' })).toBeTruthy()
   expect(screen.getByRole('link', { name: 'Tài liệu liên quan thật' }).href).toBe('https://example.edu/8')
   expect(fetch.mock.calls[1][0]).toBe('/api/catalog/7')
 })

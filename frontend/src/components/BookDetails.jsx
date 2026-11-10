@@ -18,8 +18,15 @@ export default function BookDetails({ id, onClose }) {
       <Notice>Thông tin được đối chiếu ngày {displayDate(book.checked_at)}. Chưa xác nhận tình trạng còn sách hiện tại; vui lòng kiểm tra với thư viện trước khi mượn.</Notice>
       {book.subjects && <p className="subtle"><strong>Chủ đề: </strong>{book.subjects}</p>}
       {book.description && <p className="book-description">{book.description}</p>}
+      {book.marc && <section aria-label="Thông tin từ biểu ghi OPAC">
+        <h3>Thông tin từ biểu ghi OPAC</h3>
+        <p className="subtle">Đối chiếu ngày {displayDate(book.marc.checked_at)}</p>
+        {book.marc.subjects && <p><strong>Chủ đề OPAC</strong> · {book.marc.subjects}</p>}
+        {book.marc.summary && <p className="book-description">{book.marc.summary}</p>}
+        <p className="subtle">{book.marc.audience ? `Đối tượng đọc · ${book.marc.audience}` : 'Chưa có thông tin đối tượng đọc trong biểu ghi.'}</p>
+      </section>}
       <ExternalLink className="secondary" href={book.url || book.source_url}>Xem thông tin tại nguồn <Icon name="link" size={16} /></ExternalLink>
-      {book.related?.length > 0 && <section className="related-books"><h3>Có thể bạn quan tâm</h3><p className="subtle">Những tài liệu có chủ đề hoặc nội dung mô tả liên quan.</p>{book.related.map((item, index) => <article className="related-book" key={item.id || index}><Icon name="book" size={19} /><div><ExternalLink href={item.url || item.source_url}><strong>{item.title}</strong></ExternalLink><small>{item.author || 'Chưa có tác giả'}{item.year ? ` · ${item.year}` : ''}</small><small>Đối chiếu: {displayDate(item.checked_at)}</small></div></article>)}</section>}
+      {book.related?.length > 0 && <section className="related-books"><h3>{book.author?.split(';').some(value => value.trim()) ? 'Gợi ý theo tác giả' : 'Có thể bạn quan tâm'}</h3>{book.related.map((item, index) => <article className="related-book" key={item.id || index}><Icon name="book" size={19} /><div><ExternalLink href={item.url || item.source_url}><strong>{item.title}</strong></ExternalLink><small>{item.author || 'Chưa có tác giả'}{item.year ? ` · ${item.year}` : ''}</small><small>Đối chiếu: {displayDate(item.checked_at)}</small></div></article>)}</section>}
     </div>}
   </Modal>
 }

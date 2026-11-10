@@ -12,7 +12,7 @@ const message = (page = 3, changes = {}) => ({ role: 'assistant', content: 'Mở
 beforeEach(() => {
   vi.stubGlobal('fetch', vi.fn())
   Element.prototype.scrollIntoView = vi.fn()
-  HTMLDialogElement.prototype.showModal = function () { this.open = true }
+  HTMLDialogElement.prototype.showModal = function () { this.open = true; this.querySelector('button')?.focus() }
   HTMLDialogElement.prototype.close = function () { this.open = false }
 })
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals() })
@@ -45,6 +45,20 @@ it('opens a keyboard-accessible enlarged image and closes it without changing th
   fireEvent.click(screen.getByRole('button', { name: 'Đóng hộp thoại' }))
   expect(screen.queryByRole('dialog')).toBeNull()
   expect(screen.getByText('Mở OPAC và nhập từ khóa để tìm sách.')).toBeTruthy()
+})
+
+it.each(['close', 'escape', 'backdrop'])('restores focus to the guide button after %s', method => {
+  render(<ChatMessage item={message()} onSpeak={() => {}} />)
+  const trigger = screen.getByRole('button', { name: /phóng to hình/i })
+  trigger.focus()
+  fireEvent.click(trigger)
+  const dialog = screen.getByRole('dialog')
+  expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Đóng hộp thoại' }))
+  if (method === 'close') fireEvent.click(screen.getByRole('button', { name: 'Đóng hộp thoại' }))
+  else if (method === 'escape') fireEvent(dialog, new Event('cancel', { bubbles: true, cancelable: true }))
+  else fireEvent.click(dialog)
+  expect(screen.queryByRole('dialog')).toBeNull()
+  expect(document.activeElement).toBe(trigger)
 })
 
 it('retains the answer and PDF source when an illustration cannot load', () => {
