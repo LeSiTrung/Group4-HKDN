@@ -115,7 +115,7 @@ export default function App() {
         <div className="global-error"><ErrorNotice>{error}</ErrorNotice>{error && <button className="text-button" onClick={() => setError('')}>Đóng thông báo</button>}</div>
         <div hidden={view !== 'chat'} className="chat-host"><ChatWindow key={`${user?.id || 'guest'}-${chatKey}`} user={user} conversationId={openedId} onCreated={id => { setActiveId(id); if (user) setHistoryVersion(current => current + 1) }} /></div>
         {view === 'catalog' && <Catalog />}
-        {view === 'loans' && <Loans key={user?.id || 'guest'} user={user} onLogin={() => setAuth(true)} />}
+        {view === 'loans' && <Loans key={user?.id || 'guest'} user={user} configured={Boolean(health?.capabilities?.library_loans_configured)} renewalConfigured={Boolean(health?.capabilities?.library_configured)} onLogin={() => setAuth(true)} />}
         {view === demoLink.id && <DemoLibrary key={user?.id || 'guest'} enabled={health ? Boolean(demoEnabled) : undefined} user={user} sessionLoading={sessionLoading} onLogin={() => setAuth(true)} />}
         {view === 'account' && user && <Account user={user} health={health} onLogout={() => logout().catch(() => {})} onDeleted={() => { resetSession(); navigate('chat') }} />}
         {view === 'admin' && user?.role === 'admin' && <Admin user={user} />}

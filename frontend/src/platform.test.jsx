@@ -34,6 +34,22 @@ describe('API security contract', () => {
 })
 
 describe('reader workflows', () => {
+  it('explains that loans are unavailable before asking for any access token', () => {
+    render(<Loans user={{ id: 1 }} configured={false} />)
+    expect(screen.getByText('Dịch vụ mượn trực tuyến chưa được kết nối')).toBeTruthy()
+    expect(screen.queryByLabelText('Mã truy cập thư viện')).toBeNull()
+    expect(screen.getByRole('link', { name: 'Mở tài khoản trên OPAC' }).href).toBe('https://opacthuvien.ut.edu.vn/opac/')
+    expect(fetch).not.toHaveBeenCalled()
+  })
+  it('allows viewing loans while explaining that renewal is not connected', async () => {
+    fetch.mockResolvedValueOnce(response({ loans: [{ id: 'loan-1', title: 'Khoản mượn thử' }] }))
+    render(<Loans user={{ id: 1 }} configured renewalConfigured={false} />)
+    fireEvent.change(screen.getByLabelText('Mã truy cập thư viện'), { target: { value: 'local-test-token' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Xem sách đang mượn' }))
+    await screen.findByText('Khoản mượn thử')
+    expect(screen.getByRole('button', { name: 'Gia hạn' }).disabled).toBe(true)
+    expect(screen.getByText(/Gia hạn trực tuyến chưa được kết nối/)).toBeTruthy()
+  })
   it('renders grounded answer and safe sources, sends conversation ID', async () => {
     fetch.mockResolvedValue(response({ answer: 'Hướng dẫn tìm tài liệu.', status: 'reviewed_public', sources: [{ title: 'Thư viện', url: 'https://lic.uth.edu.vn/', checked_at: '2026-10-28' }], suggestions: ['Tìm sách thế nào?'], mode: 'faq', conversation_id: 8 }))
     render(<ChatWindow user={null} conversationId={8} onCreated={() => {}} />)
@@ -80,6 +96,22 @@ describe('reader workflows', () => {
     expect(await screen.findByRole('alert')).toBeTruthy()
     expect(screen.getByRole('link', { name: /Tra cứu trực tiếp/ }).href).toContain('https://lic.uth.edu.vn/search')
     expect(screen.queryByText('Chưa tìm thấy tài liệu phù hợp')).toBeNull()
+  })
+  it('keeps the displayed book order as bounded IDs in guest follow-up context', async () => {
+    const books = [42, 17, 9, 8, 7, 6].map(id => ({ id, title: `Sách ${id}`, author: 'Tác giả', url: 'https://example.edu/', private_note: 'must not be sent' }))
+    fetch.mockResolvedValueOnce(response({ answer: 'Các sách phù hợp.', books, sources: [] }))
+      .mockResolvedValueOnce(response({ answer: 'Tác giả từ biểu ghi.', books: [], sources: [] }))
+    render(<ChatWindow user={null} />)
+    fireEvent.change(screen.getByLabelText('Câu hỏi của bạn'), { target: { value: 'Tìm sách Python' } })
+    fireEvent.submit(screen.getByRole('form', { name: 'Gửi câu hỏi' }))
+    await screen.findByText('Các sách phù hợp.')
+    fireEvent.change(screen.getByLabelText('Câu hỏi của bạn'), { target: { value: 'Cuốn thứ hai do ai viết?' } })
+    fireEvent.submit(screen.getByRole('form', { name: 'Gửi câu hỏi' }))
+    await screen.findByText('Tác giả từ biểu ghi.')
+    expect(JSON.parse(fetch.mock.calls[1][1].body).history).toEqual([
+      { role: 'user', content: 'Tìm sách Python' },
+      { role: 'assistant', content: 'Các sách phù hợp.', book_ids: [42, 17, 9, 8, 7] },
+    ])
   })
   it('registers a reader through the cookie API without browser storage', async () => {
     const onSuccess = vi.fn()

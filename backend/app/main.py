@@ -90,6 +90,7 @@ def create_app(data_dir=None, testing=False):
                 'capabilities':{'accounts':True,'history':True,'admin':True,'crawler':True,'demo_reservations':settings.demo_reservations,
                                 'vectors':app.state.vectors.status(),'llm_provider':provider_name(),
                                 'library_configured':bool(os.getenv('LIBRARY_RENEW_URL')),
+                                'library_loans_configured':bool(os.getenv('LIBRARY_LOANS_URL')),
                                 'messenger_configured':bool(os.getenv('MESSENGER_PAGE_ACCESS_TOKEN')),
                                 'zalo_configured':bool(os.getenv('ZALO_ACCESS_TOKEN'))}}
 
