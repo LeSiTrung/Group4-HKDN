@@ -7,7 +7,7 @@ from typing import Literal
 from urllib.parse import urlencode
 from .auth import require_user,ensure_current_account
 from ..services.integrations import IntegrationError, search_catalog, library_loans, library_renew
-from ..services.catalog import search_books
+from ..services.catalog import search_books_with_status, smart_catalog_search
 
 router = APIRouter(tags=['library'])
 
@@ -15,19 +15,24 @@ router = APIRouter(tags=['library'])
 @router.get('/catalog')
 def catalog(request:Request,q: str = Query(min_length=1,max_length=200),kind:Literal['all','books','digital']='all',
             source:Literal['auto','local','opac']='auto',page:int=Query(default=1,ge=1),page_size:int=Query(default=20,ge=1,le=50),
-            field:Literal['all','title','author']='all'):
+            field:Literal['all','title','author','smart']='all'):
     q=q.strip()
     if not q:
         raise HTTPException(422,'Vui lòng nhập từ khóa.')
     if source=='opac' and field!='all':
-        raise HTTPException(422,'Tìm theo nhan đề hoặc tác giả hiện hỗ trợ danh mục đã đối chiếu. Hãy đổi nguồn hoặc chọn tất cả nội dung.')
+        raise HTTPException(422,'Hãy chọn danh mục đã đối chiếu cho cách tìm này, hoặc chọn tất cả nội dung để tìm trên OPAC.')
     if source!='opac':
-        rows=search_books(request.app.state,q,kind,field)
-        if rows or source=='local' or field!='all':
+        if field=='smart':
+            rows,metadata=smart_catalog_search(request.app.state,q,kind)
+        else:
+            rows,status=search_books_with_status(request.app.state,q,kind,field)
+            metadata={'semantic_status':status} if status else {}
+        if rows or source=='local' or field!='all' or metadata or page>1:
+            page=min(page,max(1,(len(rows)+page_size-1)//page_size))
             start=(page-1)*page_size
             return {'items':rows[start:start+page_size],'total':len(rows),'page':page,'page_size':page_size,'source':'local',
                     'search_url':'https://opacthuvien.ut.edu.vn/opac/',
-                    'warning':'Thông tin tài liệu có ngày đối chiếu. Số bản còn và tình trạng mượn có thể thay đổi; hãy kiểm tra tại nguồn thư viện.'}
+                    'warning':'Thông tin tài liệu có ngày đối chiếu. Số bản còn và tình trạng mượn có thể thay đổi; hãy kiểm tra tại nguồn thư viện.',**metadata}
     if page!=1:
         raise HTTPException(422,'Bộ nối OPAC hiện chỉ trả trang đầu. Hãy mở trang mục lục gốc để xem trang tiếp theo.')
     try:
@@ -43,7 +48,7 @@ class LibraryAccess(BaseModel):
 
 
 class Renewal(LibraryAccess):
-    loan_id:str = Field(min_length=1,max_length=128)
+    loan_id:str = Field(min_length=1,max_length=200)
     idempotency_key:str = Field(min_length=12,max_length=128,pattern=r'^[a-zA-Z0-9_-]+$')
     confirmation:Literal[True]
 
