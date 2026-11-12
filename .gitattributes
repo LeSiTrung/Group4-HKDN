@@ -1,0 +1,2 @@
+# Keep the frozen evaluation dataset byte-for-byte for its recorded SHA-256.
+tests/evaluation/independent-library-2026-11-07.json -text
