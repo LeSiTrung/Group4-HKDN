@@ -1,7 +1,7 @@
 [
-  {"id":"borrow-preparation","message":"Tôi cần chuẩn bị gì để mượn sách?","status":"answered","mode":"faq","no_books":true,"source":"phuc-vu-muon-tra-tai-lieu","contains":"xuất trình thẻ"},
-  {"id":"borrow-preparation-no-accent","message":"Toi can chuan bi gi de muon sach?","status":"answered","mode":"faq","no_books":true,"source":"phuc-vu-muon-tra-tai-lieu","contains":"xuất trình thẻ"},
-  {"id":"borrow-paperwork","message":"Mượn sách cần mang những giấy tờ gì?","status":"answered","mode":"faq","no_books":true,"source":"phuc-vu-muon-tra-tai-lieu","contains":"xuất trình thẻ"},
+  {"id":"borrow-preparation","message":"Tôi cần chuẩn bị gì để mượn sách?","status":"answered","mode":"faq","no_books":true,"source":"phuc-vu-muon-tra-tai-lieu","contains":"thẻ bạn đọc"},
+  {"id":"borrow-preparation-no-accent","message":"Toi can chuan bi gi de muon sach?","status":"answered","mode":"faq","no_books":true,"source":"phuc-vu-muon-tra-tai-lieu","contains":"thẻ bạn đọc"},
+  {"id":"borrow-paperwork","message":"Mượn sách cần mang những giấy tờ gì?","status":"answered","mode":"faq","no_books":true,"source":"phuc-vu-muon-tra-tai-lieu","contains":"thẻ bạn đọc"},
   {"id":"borrow-after-search","message":"Tôi cần chuẩn bị gì để mượn sách?","history":[{"role":"user","content":"Tìm sách Python"}],"status":"answered","mode":"faq","no_books":true,"source":"phuc-vu-muon-tra-tai-lieu"},
   {"id":"natural-it","message":"hãy tìm cho tôi những sách để học IT tốt hơn","status":"answered","book":"Bài giảng","source":"opacthuvien.ut.edu.vn"},
   {"id":"natural-it-no-accent","message":"hay tim cho toi nhung sach de hoc CNTT tot hon","status":"answered","book":"Bài giảng","source":"opacthuvien.ut.edu.vn"},

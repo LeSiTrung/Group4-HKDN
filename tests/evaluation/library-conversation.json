@@ -69,7 +69,9 @@
         "content": "Còn hôm nay?"
       }
     ],
-    "status": "clarify"
+    "status": "answered",
+    "source": "2024/11/",
+    "contains": "08:30–16:30"
   },
   {
     "id": "oversize-context",

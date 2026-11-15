@@ -60,12 +60,14 @@
   {
     "id": "hours-branch",
     "message": "Giờ mở cửa hôm nay cơ sở 1",
-    "status": "needs_confirmation"
+    "status": "answered",
+    "source": "2024/11/"
   },
   {
     "id": "hours-missing-branch",
     "message": "Thư viện mở cửa lúc mấy giờ hôm nay?",
-    "status": "clarify"
+    "status": "answered",
+    "source": "2024/11/"
   },
   {
     "id": "opac-empty",
@@ -178,7 +180,8 @@
         "content": "Giờ mở cửa hôm nay?"
       }
     ],
-    "status": "needs_confirmation"
+    "status": "answered",
+    "source": "2024/11/"
   },
   {
     "id": "natural-book",
@@ -272,7 +275,9 @@
   {
     "id": "multiple-branches",
     "message": "Giờ mở cửa hôm nay cơ sở 1 và cơ sở 2",
-    "status": "clarify"
+    "status": "answered",
+    "source": "2024/11/",
+    "contains": "tại cơ sở 1 và 2"
   },
   {
     "id": "different-date",

@@ -1,7 +1,7 @@
 [
   {"id":"starter-search","message":"Làm thế nào để tra cứu sách tại thư viện?","status":"answered","mode":"faq","no_books":true,"source":"pdf#page=3","contains":"Nhập tên tài liệu hoặc từ khóa"},
-  {"id":"starter-borrow","message":"Tôi cần chuẩn bị gì để mượn sách?","status":"answered","mode":"faq","no_books":true,"source":"phuc-vu-muon-tra-tai-lieu","contains":"xuất trình thẻ"},
-  {"id":"starter-hours","message":"Tôi có thể kiểm tra giờ mở cửa ở đâu?","status":"needs_confirmation","mode":"faq","no_books":true,"contains":"khác nhau"},
+  {"id":"starter-borrow","message":"Tôi cần chuẩn bị gì để mượn sách?","status":"answered","mode":"faq","no_books":true,"source":"phuc-vu-muon-tra-tai-lieu","contains":"thẻ bạn đọc"},
+  {"id":"starter-hours","message":"Tôi có thể kiểm tra giờ mở cửa ở đâu?","status":"answered","mode":"faq","no_books":true,"source":"2024/11/","contains":"07:30–18:30"},
   {"id":"starter-digital","message":"Làm thế nào để truy cập tài liệu điện tử?","status":"answered","mode":"faq","no_books":true,"source":"opacthuvien.ut.edu.vn/opac/","contains":"điều kiện truy cập"},
   {"id":"unaccented","message":"Lam the nao de tra cuu sach tai thu vien???","status":"answered","mode":"faq","no_books":true,"source":"pdf#page=3","contains":"Chọn nhan đề"},
   {"id":"uppercase-whitespace","message":"  LÀM THẾ NÀO ĐỂ TRA CỨU SÁCH TẠI THƯ VIỆN?  ","status":"answered","mode":"faq","no_books":true,"source":"pdf#page=3","contains":"Nhập tên tài liệu hoặc từ khóa"},

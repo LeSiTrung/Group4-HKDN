@@ -13,7 +13,7 @@
     "status": "answered",
     "mode": "catalog",
     "book": "Thiết kế web với CSS",
-    "contains": "Theo biểu ghi OPAC",
+    "contains": "Tóm tắt nội dung",
     "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=100"
   },
   {
@@ -28,6 +28,23 @@
     "message": "Viết code trò chơi cho tôi",
     "status": "not_found",
     "no_books": true
+  },
+  {
+    "id": "year-by-unquoted-title-and-editor",
+    "message": "Giáo trình lập trình Python do Trần Đăng Hưng chủ biên xuất bản năm nào?",
+    "status": "answered",
+    "mode": "catalog",
+    "contains": "xuất bản năm 2024",
+    "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26521"
+  },
+  {
+    "id": "cancel-search-then-ask-renewal",
+    "message": "Đừng tìm sách nữa. Làm thế nào để gia hạn tài liệu?",
+    "status": "needs_confirmation",
+    "mode": "faq",
+    "no_books": true,
+    "contains": "Chưa có giao dịch nào",
+    "source_url": "https://lic.ut.edu.vn/dich-vu-thu-vien/ho-tro-nhanh/"
   },
   {
     "id": "guest-author-after-switching-to-direct-summary",
