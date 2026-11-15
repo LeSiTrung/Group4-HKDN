@@ -11,7 +11,7 @@ Ngày03/11/2026, nhóm xác nhận chưa có máy chủ/tên miền. Gói hiện
 - Docker image: `uth-library:2026-11-03`, chứa backend, frontend build, FAQ khởi tạo, công cụ restore và collector OPAC.
 - Image không chứa `.env`, tài khoản, lịch sử, database thực, snapshot, model weights hoặc giấy phép toàn văn. Chuyển dữ liệu bằng backup/restore đã kiểm tra, không đóng gói thư mục runtime đang mở.
 - Chạy UID10001, một worker; cấu hình [compose.yaml](../compose.yaml) giữ API/Ollama trong mạng nội bộ và đặt Caddy ở biên HTTPS. App chờ Ollama healthy; Ollama dùng tag0.40.13. Model được tải rõ ràng bằng lệnh vận hành, không tự phát sinh phí API.
-- `/ready` kiểm tra database có tri thức và model đã cấu hình có sẵn trong Ollama; trả200 hoặc503 với cờ kiểm tra, không chi tiết lỗi riêng tư. `LLM_PROVIDER=none` cho phép dịch vụ FAQ độc lập. Đây là readiness cho database/model, không phải phép đo độ chính xác, warm vector, tải đồng thời hoặc xác nhận các tích hợp ngoài.
+- `/ready` yêu cầu ít nhất một mục tri thức đã công bố và còn hiệu lực. Với Ollama, endpoint cũng kiểm tra model đã cấu hình có sẵn. Endpoint trả `200` hoặc `503` kèm cờ kiểm tra. `LLM_PROVIDER=none` cho phép chạy FAQ độc lập. Kiểm tra riêng chất lượng câu trả lời, chỉ mục vector và tích hợp ngoài khi nghiệm thu.
 - `/health` vẫn cung cấp trạng thái vận hành. Nhật ký/chẩn đoán quản trị được giữ để xử lý lỗi; giao diện bạn đọc không hiển thị phiên bản, nhãn FAQ/RAG hay định tuyến AI nội bộ.
 
 ## Dùng tại máy phát triển

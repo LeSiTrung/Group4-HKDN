@@ -15,6 +15,7 @@ services:
       - runtime:/var/lib/library
     networks:
       proxy:
+        ipv4_address: 172.30.47.3
       model:
     depends_on:
       ollama:
