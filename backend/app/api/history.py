@@ -13,7 +13,9 @@ def conversation(request, user, conversation_id):
         row = db.execute('SELECT * FROM conversations WHERE id=? AND user_id=?', (conversation_id, user['id'])).fetchone()
         if not row:
             raise HTTPException(404, 'Không tìm thấy hội thoại.')
-        messages = [dict(x) for x in db.execute('SELECT * FROM messages WHERE conversation_id=? ORDER BY id', (conversation_id,))]
+        messages = [dict(x) for x in db.execute('''SELECT m.*, f.rating AS feedback_rating, f.comment AS feedback_comment
+            FROM messages m LEFT JOIN feedback f ON f.message_id=m.id AND f.user_id=?
+            WHERE m.conversation_id=? ORDER BY m.id''', (user['id'], conversation_id))]
     for message in messages:
         message['sources'] = json.loads(message['sources'])
         message['books'] = json.loads(message['books'])

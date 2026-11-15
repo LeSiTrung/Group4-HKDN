@@ -54,12 +54,10 @@ it('shows loading, empty feedback and recoverable API errors', async () => {
   expect(await screen.findByRole('alert')).toHaveProperty('textContent', 'Feedback service unavailable')
 })
 
-it('discloses sharing before explicit rating and makes no automatic feedback request', async () => {
+it('sends feedback only after the reader selects a rating', async () => {
   render(<ChatMessage item={{ id: 7, role: 'assistant', content: 'An answer' }} user={{ name: 'Reader' }} onSpeak={() => {}} />)
   const positive = screen.getByRole('button', { name: 'Câu trả lời hữu ích' })
-  const disclosure = document.getElementById(positive.getAttribute('aria-describedby'))
-  expect(disclosure.textContent).toContain('câu hỏi liền trước')
-  expect(disclosure.textContent).toContain('quản trị viên')
+  expect(screen.queryByText(/Đánh giá là tùy chọn/)).toBeNull()
   expect(fetch).not.toHaveBeenCalled()
   fireEvent.click(positive)
   await screen.findByText('Đã gửi đánh giá')
@@ -72,4 +70,36 @@ it('does not solicit or log guest ratings', () => {
   render(<ChatMessage item={{ role: 'assistant', content: 'Guest answer' }} user={null} onSpeak={() => {}} />)
   expect(screen.queryByRole('button', { name: 'Câu trả lời hữu ích' })).toBeNull()
   expect(fetch).not.toHaveBeenCalled()
+})
+
+it('lets a reader cancel an initial negative rating and submit optional criticism', async () => {
+  render(<ChatMessage item={{ id: 7, role: 'assistant', content: 'An answer' }} user={{ name: 'Reader' }} onSpeak={() => {}} />)
+  const negative = screen.getByRole('button', { name: 'Câu trả lời chưa hữu ích' })
+  fireEvent.click(negative)
+  fireEvent.click(screen.getByRole('button', { name: 'Hủy' }))
+  expect(fetch).not.toHaveBeenCalled()
+  fireEvent.click(negative)
+  fireEvent.change(screen.getByLabelText('Góp ý (tùy chọn)'), { target: { value: '  Thiếu nguồn.  ' } })
+  expect(fetch).not.toHaveBeenCalled()
+  fireEvent.click(screen.getByRole('button', { name: 'Gửi đánh giá' }))
+  await waitFor(() => expect(negative.getAttribute('aria-pressed')).toBe('true'))
+  expect(JSON.parse(fetch.mock.calls[0][1].body)).toEqual({ message_id: 7, rating: -1, comment: 'Thiếu nguồn.' })
+})
+
+it('switches a saved rating in either direction with a single click', async () => {
+  render(<ChatMessage item={{ id: 7, role: 'assistant', content: 'An answer', feedback_rating: 1 }} user={{ name: 'Reader' }} onSpeak={() => {}} />)
+  const positive = screen.getByRole('button', { name: 'Câu trả lời hữu ích' })
+  const negative = screen.getByRole('button', { name: 'Câu trả lời chưa hữu ích' })
+  expect(positive.getAttribute('aria-pressed')).toBe('true')
+  fireEvent.click(negative)
+  await waitFor(() => expect(negative.getAttribute('aria-pressed')).toBe('true'))
+  expect(positive.getAttribute('aria-pressed')).toBe('false')
+  fireEvent.click(screen.getByRole('button', { name: 'Đóng' }))
+  expect(negative.getAttribute('aria-pressed')).toBe('true')
+  fireEvent.click(positive)
+  await waitFor(() => expect(positive.getAttribute('aria-pressed')).toBe('true'))
+  expect(negative.getAttribute('aria-pressed')).toBe('false')
+  expect(fetch.mock.calls.map(([, options]) => JSON.parse(options.body))).toEqual([
+    { message_id: 7, rating: -1 }, { message_id: 7, rating: 1 },
+  ])
 })

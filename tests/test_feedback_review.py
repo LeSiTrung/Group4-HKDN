@@ -38,6 +38,14 @@ def test_feedback_review_requires_admin(client):
     assert client.get('/api/admin/feedback').status_code == 401
 
 
+def test_saved_conversation_restores_its_own_feedback(client):
+    conversation_id, message_id = rated_answer(client, rating=-1, comment='Thiếu nguồn')
+    messages = client.get(f'/api/conversations/{conversation_id}').json()['messages']
+    answer = next(message for message in messages if message['id'] == message_id)
+    assert (answer['feedback_rating'], answer['feedback_comment']) == (-1, 'Thiếu nguồn')
+    assert all(message.get('feedback_rating') is None for message in messages if message['role'] == 'user')
+
+
 def test_review_only_exposes_rated_turn_and_immediate_question(client):
     _, first = rated_answer(client, question='<script>unsafe question</script>', comment='<img src=x onerror=alert(1)>')
     _, second = rated_answer(client, rating=-1)
