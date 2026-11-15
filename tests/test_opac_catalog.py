@@ -68,6 +68,18 @@ def test_integrity_count_duplicates_and_field_quarantine(tmp_path):
         stage_pack(path, manifest)
 
 
+def test_long_opac_keywords_keep_the_record_and_complete_terms(tmp_path):
+    row = listing()
+    first = 'Chủ đề ' + 'a' * 980
+    last = 'quá dài để đưa vào danh mục'
+    row['fields']['Từ khóa'] = [f'{first}; {last}']
+    books, report = stage_pack(*pack(tmp_path, [row]), published=True)
+    assert report['rejected'] == []
+    assert len(books) == 1
+    assert books[0].subjects == first
+    assert books[0].source_url == row['source_url']
+
+
 def test_import_is_idempotent_preserves_operator_edits_and_rolls_back(tmp_path):
     store = Store(tmp_path / 'db.sqlite3')
     book = normalize_listing(listing(), published=True)

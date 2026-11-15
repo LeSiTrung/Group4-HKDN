@@ -45,9 +45,13 @@ def normalize_listing(row, *, published=False):
     years = set(re.findall(r'\b\d{4}\b', publication))
     description = '\n'.join(key + ': ' + values(key) for key in
                             ('Thông tin xuất bản', 'Dạng tài liệu', 'Chỉ số Phân loại thập phân Dewey') if values(key))
+    subjects = values('Từ khóa')
+    subject_limit = BookInput.model_fields['subjects'].metadata[0].max_length
+    if len(subjects) > subject_limit:
+        subjects = subjects[:subject_limit + 1].rpartition(';')[0].rstrip()
     try:
         return BookInput(title=title, author=values('Tác giả'), year=next(iter(years)) if len(years) == 1 else '',
-                         subjects=values('Từ khóa'), description=description,
+                         subjects=subjects, description=description,
                          kind='digital' if {'32', '11-7'}.intersection(categories) else 'books',
                          source_url=row['source_url'], checked_at=checked_at, published=published)
     except ValidationError as error:
