@@ -20,6 +20,7 @@ def test_invalid_crawl_interval_fails_at_startup(tmp_path, monkeypatch, interval
     with pytest.raises(ValueError, match='CRAWL_INTERVAL_HOURS'):
         with TestClient(create_app(tmp_path)):
             pytest.fail('Invalid crawl configuration reached a running server')
+    assert not (tmp_path / 'library.sqlite3').exists()
 
 
 @pytest.mark.parametrize('ready',[False,True])

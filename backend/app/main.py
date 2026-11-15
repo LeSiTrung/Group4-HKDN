@@ -24,8 +24,8 @@ from app.api.catalog import router as catalog_router
 from app.services.catalog import seed_books, semantic_catalog
 from app.config import ROOT
 import asyncio
-import mimetypes
 import math
+import mimetypes
 import os
 import sqlite3
 from fastapi.staticfiles import StaticFiles
@@ -35,7 +35,6 @@ def create_app(data_dir=None, testing=False):
 
     @asynccontextmanager
     async def lifespan(app):
-        store = Store(settings.data_dir / 'library.sqlite3')
         interval = 0.0
         if not testing:
             try:
@@ -44,6 +43,7 @@ def create_app(data_dir=None, testing=False):
                 raise ValueError('CRAWL_INTERVAL_HOURS must be a finite number.') from error
             if not math.isfinite(interval * 3600):
                 raise ValueError('CRAWL_INTERVAL_HOURS must be a finite number of hours.')
+        store = Store(settings.data_dir / 'library.sqlite3')
         app.state.store = store
         app.state.db = store.connect
         seed(store.connect, ROOT.parent/'data'/'faq'/'library.json')
@@ -54,8 +54,8 @@ def create_app(data_dir=None, testing=False):
             db.execute("UPDATE jobs SET status='failed',error='Tiến trình đã dừng trước khi hoàn tất; cần chạy lại tác vụ.' WHERE status IN ('queued','running')")
         if not testing and os.getenv('ENABLE_VECTORS','true').lower()=='true':
             app.state.vectors.prepare_knowledge(lambda:published_rows(store.connect))
-
             app.state.vectors.prepare_books(lambda:semantic_catalog(store.connect)[1])
+
         async def scheduler():
             roots = [x.strip() for x in os.getenv('CRAWL_SEEDS','').split(',') if x.strip()]
             if interval<1 or not roots:
