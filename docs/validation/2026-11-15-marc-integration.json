@@ -1,0 +1,682 @@
+{
+  "recorded_at": "2026-11-15T11:15:49.281560+00:00",
+  "scope": "Local application and isolated Docker QA with frozen OPAC inventory.",
+  "collection": {
+    "pages": 1125,
+    "valid_snapshots": 22337,
+    "invalid_snapshots": [],
+    "outside_scope_snapshots": [],
+    "missing_marc_count": 64,
+    "snapshot_digest": "a60341650e79a5c937d3b5fd64f5881b16ed1ef6a07a0925aaf545a42609d658",
+    "pack_file_sha256": "99b543d717c846b6bebab9c5d37087df9c563419f5ad164ad038f0b21f53752a"
+  },
+  "sqlite": {
+    "imported": 5,
+    "marc_applied": 11756,
+    "published_catalog": 27969,
+    "published_frozen_opac": 22401,
+    "live_marc_summary": {
+      "total": 22334,
+      "subjects": 22334,
+      "summary": 11725,
+      "audience": 0
+    },
+    "unchanged_existing_data": true,
+    "manifest_missing": 64,
+    "integrity": "ok"
+  },
+  "staging": {
+    "eligible": 22401,
+    "staged": 22334,
+    "invalid": 0,
+    "missing": 64,
+    "empty": 3,
+    "pack_sha256": "99b543d717c846b6bebab9c5d37087df9c563419f5ad164ad038f0b21f53752a",
+    "applied": 11756
+  },
+  "reapply_changes": 0,
+  "vector_index": {
+    "status": {
+      "configured": true,
+      "ready": true,
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "error": null,
+      "namespaces": {
+        "knowledge": {
+          "sources": 34,
+          "chunks": 160,
+          "ready": true
+        },
+        "books": {
+          "sources": 27969,
+          "chunks": 136512,
+          "ready": true
+        }
+      }
+    },
+    "exact_index_membership": true,
+    "checked_marc_sample_source": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1895",
+    "nonsense_semantic_query_empty": true,
+    "progress": {
+      "elapsed_seconds": 1171,
+      "sources": 27969,
+      "expected": 136512,
+      "current": 136512,
+      "pending": 0,
+      "obsolete": 0,
+      "ready": true,
+      "error": null
+    }
+  },
+  "qa": {
+    "backend_tests_passed": 1389,
+    "frontend_tests_passed": 161,
+    "frontend_build": "passed",
+    "sqlite_restore": "passed",
+    "docker_build": "uth-library:2026-11-15-marc",
+    "docker_uid": 10001,
+    "browser": [
+      "Catalog detail displayed MARC 520 with OPAC source.",
+      "Chat summarized the exact quoted title with the same source."
+    ],
+    "ollama": "qwen3:1.7b returned grounded RAG answers",
+    "piper_wav_seconds": 2.32
+  },
+  "smoke": {
+    "native": [
+      {
+        "name": "frontend",
+        "status": 200,
+        "elapsed_ms": 432.8
+      },
+      {
+        "name": "readiness",
+        "status": 200,
+        "elapsed_ms": 525.1
+      },
+      {
+        "name": "health",
+        "status": 200,
+        "elapsed_ms": 791.0
+      },
+      {
+        "name": "detail_marc",
+        "status": 200,
+        "elapsed_ms": 472.1
+      },
+      {
+        "name": "marc_specific_search",
+        "status": 200,
+        "elapsed_ms": 517.3
+      },
+      {
+        "name": "missing_term",
+        "status": 200,
+        "elapsed_ms": 1166.5
+      },
+      {
+        "name": "chat_summary",
+        "status": 200,
+        "elapsed_ms": 271.3
+      },
+      {
+        "name": "chat_service",
+        "status": 200,
+        "elapsed_ms": 7.1
+      },
+      {
+        "name": "private_history",
+        "status": 401,
+        "elapsed_ms": 2.3
+      },
+      {
+        "name": "admin_book_access",
+        "status": 401,
+        "elapsed_ms": 2.4
+      }
+    ],
+    "docker": [
+      {
+        "name": "frontend",
+        "status": 200,
+        "elapsed_ms": 65.7
+      },
+      {
+        "name": "readiness",
+        "status": 200,
+        "elapsed_ms": 32.3
+      },
+      {
+        "name": "health",
+        "status": 200,
+        "elapsed_ms": 38.8
+      },
+      {
+        "name": "detail_marc",
+        "status": 200,
+        "elapsed_ms": 3596.5
+      },
+      {
+        "name": "marc_specific_search",
+        "status": 200,
+        "elapsed_ms": 2080.0
+      },
+      {
+        "name": "missing_term",
+        "status": 200,
+        "elapsed_ms": 1087.9
+      },
+      {
+        "name": "chat_summary",
+        "status": 200,
+        "elapsed_ms": 338.5
+      },
+      {
+        "name": "chat_service",
+        "status": 200,
+        "elapsed_ms": 66.4
+      },
+      {
+        "name": "private_history",
+        "status": 401,
+        "elapsed_ms": 3.9
+      },
+      {
+        "name": "admin_book_access",
+        "status": 401,
+        "elapsed_ms": 4.9
+      },
+      {
+        "name": "register",
+        "status": 201,
+        "elapsed_ms": 195.9
+      },
+      {
+        "name": "account_session",
+        "status": 200,
+        "elapsed_ms": 27.6
+      },
+      {
+        "name": "signed_in_chat",
+        "status": 200,
+        "elapsed_ms": 138.2
+      },
+      {
+        "name": "history_saved",
+        "status": 200,
+        "elapsed_ms": 50.5
+      },
+      {
+        "name": "reserve",
+        "status": 200,
+        "elapsed_ms": 75.2
+      },
+      {
+        "name": "checkout",
+        "status": 200,
+        "elapsed_ms": 83.6
+      },
+      {
+        "name": "renew",
+        "status": 200,
+        "elapsed_ms": 79.4
+      },
+      {
+        "name": "return",
+        "status": 200,
+        "elapsed_ms": 94.2
+      },
+      {
+        "name": "logout",
+        "status": 200,
+        "elapsed_ms": 54.9
+      },
+      {
+        "name": "history_after_logout",
+        "status": 401,
+        "elapsed_ms": 3.9
+      }
+    ]
+  },
+  "evaluations": {
+    "pilot-before": {
+      "hit_at1": 0.5,
+      "ndcg_at5": 0.6051549589285763,
+      "negative_correct": 2,
+      "negative_cases": 2,
+      "cases": [
+        {
+          "id": "warehouse-learning",
+          "query": {
+            "field": "all",
+            "query": "quan ly kho"
+          },
+          "total": 8,
+          "elapsed_ms": 2302.34,
+          "top5": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26946",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=5760",
+            "https://thuvienso.ut.edu.vn/items/29472591-2c63-4df4-8f4b-3dcd8b0c6b67",
+            "https://thuvienso.ut.edu.vn/items/374d7b18-4f4f-4b20-a01b-f65e851759c5",
+            "https://thuvienso.ut.edu.vn/items/e39c39d1-1fdd-4b41-b904-7622a104945e"
+          ],
+          "hit_at1": 1,
+          "hit_at5": 1,
+          "mrr_at5": 1.0,
+          "recall_at5": 1.0,
+          "ndcg_at5": 1.0
+        },
+        {
+          "id": "warehouse-inventory",
+          "query": {
+            "field": "all",
+            "query": "he thong kiem soat ton kho"
+          },
+          "total": 2,
+          "elapsed_ms": 321.84,
+          "top5": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26946",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=5760"
+          ],
+          "hit_at1": 1,
+          "hit_at5": 1,
+          "mrr_at5": 1.0,
+          "recall_at5": 1.0,
+          "ndcg_at5": 1.0
+        },
+        {
+          "id": "road-design",
+          "query": {
+            "field": "all",
+            "query": "thiet ke duong cong nam"
+          },
+          "total": 7,
+          "elapsed_ms": 493.65,
+          "top5": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=12295",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=8467",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=8469",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=8470",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=8806"
+          ],
+          "hit_at1": 0,
+          "hit_at5": 0,
+          "mrr_at5": 0,
+          "recall_at5": 0.0,
+          "ndcg_at5": 0.0
+        },
+        {
+          "id": "security",
+          "query": {
+            "field": "all",
+            "query": "he mat ma"
+          },
+          "total": 2,
+          "elapsed_ms": 298.85,
+          "top5": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26770",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26771"
+          ],
+          "hit_at1": 0,
+          "hit_at5": 1,
+          "mrr_at5": 0.5,
+          "recall_at5": 1.0,
+          "ndcg_at5": 0.6309297535714575
+        },
+        {
+          "id": "warehouse-title",
+          "query": {
+            "field": "title",
+            "query": "cam nang quan tri kho hang"
+          },
+          "total": 2,
+          "elapsed_ms": 161.28,
+          "top5": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26946",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=5760"
+          ],
+          "hit_at1": 1,
+          "hit_at5": 1,
+          "mrr_at5": 1.0,
+          "recall_at5": 1.0,
+          "ndcg_at5": 1.0
+        },
+        {
+          "id": "road-title",
+          "query": {
+            "field": "title",
+            "query": "thiet ke duong o to"
+          },
+          "total": 63,
+          "elapsed_ms": 71.71,
+          "top5": [
+            "https://thuvienso.ut.edu.vn/items/01f3d82f-e5c1-40fd-85fb-af8c6bc97b34",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=17111",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1037",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=8482",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=4021"
+          ],
+          "hit_at1": 0,
+          "hit_at5": 0,
+          "mrr_at5": 0,
+          "recall_at5": 0.0,
+          "ndcg_at5": 0.0
+        },
+        {
+          "id": "unknown",
+          "query": {
+            "field": "all",
+            "query": "zxqvutha92b7c"
+          },
+          "total": 0,
+          "elapsed_ms": 859.02,
+          "top5": [],
+          "empty_correct": true
+        },
+        {
+          "id": "procedure",
+          "query": {
+            "field": "all",
+            "query": ""
+          },
+          "total": 0,
+          "elapsed_ms": 0.39,
+          "top5": [],
+          "empty_correct": true
+        }
+      ]
+    },
+    "pilot-after": {
+      "hit_at1": 0.5,
+      "ndcg_at5": 0.6051549589285763,
+      "negative_correct": 2,
+      "negative_cases": 2,
+      "cases": [
+        {
+          "id": "warehouse-learning",
+          "query": {
+            "field": "all",
+            "query": "quan ly kho"
+          },
+          "total": 8,
+          "elapsed_ms": 2547.07,
+          "top5": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26946",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=5760",
+            "https://thuvienso.ut.edu.vn/items/29472591-2c63-4df4-8f4b-3dcd8b0c6b67",
+            "https://thuvienso.ut.edu.vn/items/374d7b18-4f4f-4b20-a01b-f65e851759c5",
+            "https://thuvienso.ut.edu.vn/items/e39c39d1-1fdd-4b41-b904-7622a104945e"
+          ],
+          "hit_at1": 1,
+          "hit_at5": 1,
+          "mrr_at5": 1.0,
+          "recall_at5": 1.0,
+          "ndcg_at5": 1.0
+        },
+        {
+          "id": "warehouse-inventory",
+          "query": {
+            "field": "all",
+            "query": "he thong kiem soat ton kho"
+          },
+          "total": 2,
+          "elapsed_ms": 324.95,
+          "top5": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26946",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=5760"
+          ],
+          "hit_at1": 1,
+          "hit_at5": 1,
+          "mrr_at5": 1.0,
+          "recall_at5": 1.0,
+          "ndcg_at5": 1.0
+        },
+        {
+          "id": "road-design",
+          "query": {
+            "field": "all",
+            "query": "thiet ke duong cong nam"
+          },
+          "total": 7,
+          "elapsed_ms": 552.0,
+          "top5": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=12295",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=8467",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=8469",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=8470",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=8806"
+          ],
+          "hit_at1": 0,
+          "hit_at5": 0,
+          "mrr_at5": 0,
+          "recall_at5": 0.0,
+          "ndcg_at5": 0.0
+        },
+        {
+          "id": "security",
+          "query": {
+            "field": "all",
+            "query": "he mat ma"
+          },
+          "total": 2,
+          "elapsed_ms": 361.62,
+          "top5": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26770",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26771"
+          ],
+          "hit_at1": 0,
+          "hit_at5": 1,
+          "mrr_at5": 0.5,
+          "recall_at5": 1.0,
+          "ndcg_at5": 0.6309297535714575
+        },
+        {
+          "id": "warehouse-title",
+          "query": {
+            "field": "title",
+            "query": "cam nang quan tri kho hang"
+          },
+          "total": 2,
+          "elapsed_ms": 185.27,
+          "top5": [
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=26946",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=5760"
+          ],
+          "hit_at1": 1,
+          "hit_at5": 1,
+          "mrr_at5": 1.0,
+          "recall_at5": 1.0,
+          "ndcg_at5": 1.0
+        },
+        {
+          "id": "road-title",
+          "query": {
+            "field": "title",
+            "query": "thiet ke duong o to"
+          },
+          "total": 63,
+          "elapsed_ms": 68.26,
+          "top5": [
+            "https://thuvienso.ut.edu.vn/items/01f3d82f-e5c1-40fd-85fb-af8c6bc97b34",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=17111",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1037",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=8482",
+            "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=4021"
+          ],
+          "hit_at1": 0,
+          "hit_at5": 0,
+          "mrr_at5": 0,
+          "recall_at5": 0.0,
+          "ndcg_at5": 0.0
+        },
+        {
+          "id": "unknown",
+          "query": {
+            "field": "all",
+            "query": "zxqvutha92b7c"
+          },
+          "total": 0,
+          "elapsed_ms": 928.75,
+          "top5": [],
+          "empty_correct": true
+        },
+        {
+          "id": "procedure",
+          "query": {
+            "field": "all",
+            "query": ""
+          },
+          "total": 0,
+          "elapsed_ms": 0.35,
+          "top5": [],
+          "empty_correct": true
+        }
+      ]
+    },
+    "offline-evaluation": {
+      "passed": 49,
+      "total": 49,
+      "failed": []
+    },
+    "docker-search-guidance": {
+      "passed": 33,
+      "total": 33,
+      "failed": []
+    },
+    "live-lic-services": {
+      "passed": 8,
+      "total": 8,
+      "failed": []
+    },
+    "live-edge-library-2026-11-03": {
+      "passed": 29,
+      "total": 31,
+      "failed": [
+        {
+          "id": "unknown-semantic",
+          "errors": [
+            "status: expected not_found, got needs_confirmation"
+          ]
+        },
+        {
+          "id": "unknown-recommendation",
+          "errors": [
+            "status: expected not_found, got needs_confirmation"
+          ]
+        }
+      ]
+    },
+    "live-edge-library-2026-11-03-ready": {
+      "passed": 31,
+      "total": 31,
+      "failed": []
+    },
+    "live-natural-library-2026-11-03": {
+      "passed": 12,
+      "total": 12,
+      "failed": []
+    },
+    "live-public-library": {
+      "passed": 10,
+      "total": 10,
+      "failed": []
+    },
+    "live-library-conversation": {
+      "passed": 10,
+      "total": 10,
+      "failed": []
+    },
+    "live-mixed-borrowing-2026-11-03": {
+      "passed": 7,
+      "total": 7,
+      "failed": []
+    },
+    "load-native": [
+      {
+        "concurrency": 4,
+        "elapsed_seconds": 1.861,
+        "requests": 12,
+        "successful": 12,
+        "failed": 0,
+        "p50_ms": 513.4,
+        "p95_ms": 953.35,
+        "max_ms": 953.92,
+        "requests_per_second": 6.45,
+        "http_statuses": {
+          "200": 12
+        },
+        "modes": {
+          "faq": 4,
+          "catalog": 4
+        }
+      },
+      {
+        "concurrency": 8,
+        "elapsed_seconds": 1.601,
+        "requests": 12,
+        "successful": 12,
+        "failed": 0,
+        "p50_ms": 943.29,
+        "p95_ms": 1588.58,
+        "max_ms": 1595.42,
+        "requests_per_second": 7.495,
+        "http_statuses": {
+          "200": 12
+        },
+        "modes": {
+          "faq": 4,
+          "catalog": 4
+        }
+      }
+    ],
+    "llm-native": [
+      {
+        "concurrency": 1,
+        "elapsed_seconds": 17.833,
+        "requests": 4,
+        "successful": 4,
+        "failed": 0,
+        "p50_ms": 4712.14,
+        "p95_ms": 6905.3,
+        "max_ms": 7215.83,
+        "requests_per_second": 0.224,
+        "http_statuses": {
+          "200": 4
+        },
+        "modes": {
+          "rag": 4
+        }
+      },
+      {
+        "concurrency": 2,
+        "elapsed_seconds": 0.427,
+        "requests": 4,
+        "successful": 4,
+        "failed": 0,
+        "p50_ms": 172.28,
+        "p95_ms": 247.06,
+        "max_ms": 259.15,
+        "requests_per_second": 9.373,
+        "http_statuses": {
+          "200": 4
+        },
+        "modes": {
+          "rag": 4
+        }
+      }
+    ]
+  },
+  "targeted_summary_lookup": {
+    "query": "kinh nghiệm thiết kế thi công",
+    "source_url": "https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=1895",
+    "before_hit_count": 302,
+    "before_target_present": false,
+    "after_hit_count": 1,
+    "after_target_rank": 1
+  },
+  "limits": [
+    "64 theses pending at source",
+    "Public bibliographic metadata and local smoke checks",
+    "No authenticated live library transaction or librarian-led acceptance"
+  ]
+}

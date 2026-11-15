@@ -1,5 +1,7 @@
 # Vận hành Chatbot thư viện
 
+Lịch chung của ba cơ sở dùng hướng dẫn LIC 2024/11, trang 12. Thứ Hai đến thứ Sáu phục vụ 07:30–18:30, thứ Bảy 08:30–16:30, Chủ nhật và Lễ, Tết nghỉ. Dùng Quản trị → Lịch phục vụ để nhập ngoại lệ có ngày hiệu lực và nguồn. Khi bạn đọc hỏi hôm nay hoặc ngày mai, chatbot ưu tiên ngoại lệ của cơ sở vào ngày đó. [Hướng dẫn LIC, trang 12](https://lic.ut.edu.vn/wp-content/uploads/2024/11/1.HD-su-dung-thu-vien-va-khai-thac-hieu-qua-cac-CSDL-tai-nguyen-thong-tin-thu-vien.pdf#page=12).
+
 Ngày03/11/2026: gói Docker `uth-library:2026-11-03` đã build và kiểm tra trên Linux với UID10001, model Qwen qua Ollama của máy hiện tại, readiness200 và tình huống thiếu model503. Giao diện bạn đọc bỏ nhãn định tuyến/phiên bản nội bộ. Xem [gói triển khai cục bộ](local-release.md); đây là bước chuẩn bị theo yêu cầu nhóm chưa có máy chủ/tên miền, không phải nghiệm thu publicHTTPS hay toàn bộ Compose/Ollama volume.
 
 Kiểm chứng ngày 01/11/2026: Docker Engine đã kết nối; image Linux build/chạy dưới UID10001, API/LLM, backup/restore và HTTPS nội bộ qua Caddy đã được kiểm tra thật. Main vẫn ở cổng8000; bản Docker dùng snapshot công khai riêng ở cổng8100. Xem [hướng dẫn và giới hạn Docker](docker-local-validation.md), [bằng chứng mới nhất](validation/2026-11-01-data-container.json). Đây chưa phải nghiệm thu tên miền/ACME công khai, sức tải hoặc toàn bộ Compose/Ollama trên máy đích.
@@ -8,7 +10,7 @@ Gói FAQ ngày01/11 bổ sung4 mục đã rà nguồn, nâng runtime đã nhập
 
 Pipeline LLM/RAG và cách xem nguồn/kiểm tra model: [rag-pipeline.md](rag-pipeline.md). CLI `ai-check` có thể chạy khi API phục vụ vì không mở database/Qdrant; CLI `index` cần dừng API local. Khi đang chạy, dùng quản trị để đồng bộ. Collection chunks_v1 mới giữ collection cũ; không cần migration SQLite. Không xóa volume/runtime khi đổi phiên bản.
 
-Gói nguồn công khai: sao lưu SQLite bằng CLI `backup`, rồi từ backend chạy `python -m app.cli import-knowledge ../data/faq/public-library-2026-10-31.json`. Lệnh validate toàn bộ pack trước khi mở database và ghi trong một transaction; cặp question/source_url đã có được bỏ qua để bảo toàn chỉnh sửa hoặc rút công bố. Các mục mới dùng published/status từ file đã rà soát. API đang chạy sẽ đồng bộ vector theo nội dung mới khi truy xuất; muốn CLI index phải dừng API trước. Lịch thường lệ nằm trong knowledge category `hours_reference`, luôn trả `needs_confirmation`; không chèn vào bảng schedules hay tạo ngày hiệu lực/người xác nhận giả. Lịch ngày cụ thể trong schedules vẫn ưu tiên cho câu hỏi hôm nay. Có nhiều mục hours_reference cùng hiệu lực thì ứng dụng không tự chọn một lịch. Ngày tương lai/ngày lễ chưa hỗ trợ vẫn yêu cầu làm rõ.
+Gói nguồn công khai: sao lưu SQLite bằng CLI `backup`, rồi từ backend chạy `python -m app.cli import-knowledge ../data/faq/public-library-2026-10-31.json`. Lệnh kiểm tra toàn bộ gói trước khi ghi. Cặp câu hỏi và URL đã có được bỏ qua để bảo toàn chỉnh sửa hoặc rút công bố. Các mục mới dùng trạng thái trong tệp đã rà soát. API đang chạy sẽ đồng bộ vector theo nội dung mới khi truy xuất. Dừng API trước khi chạy CLI index. Các mục `hours_reference` lưu tài liệu lịch cũ để đối chiếu.
 
 Chat chỉ phục vụ thư viện. Trần gateway1MiB dành cho tin nhắn dài; middleware vẫn chặn64KiB ở mutation khác. Giữ rate/auth/origin protections. LLM dùng context8.192, ngân sách assembled prompt6.144 byte UTF8 và capacity2. Prompt quá lớn không gọi model mà dùng FAQ có nguồn; input/context quá16.000 ký tự yêu cầu chia phần. Current message trong SQLite không bị cắt; lịch sử đưa vào model là trích đoạn rõ ràng. Không coi khả năng nhập dài là suy luận vô hạn hoặc tăng số user đồng thời đã nghiệm thu.
 
@@ -76,7 +78,7 @@ docker compose --env-file backend/.env ps
 
 Image app chứa frontend build cùng origin, chạy UID 10001, một worker. Compose ép Secure cookie, origin HTTPS chính xác, data path `/var/lib/library`, và Ollama URL nội bộ; không publish cổng 8000/11434. Chỉ Caddy publish cổng web. Caddy dùng hostname cụ thể, tự cấp/gia hạn TLS nếu DNS/cổng/CA hoạt động. Chứng chỉ và cấu hình Caddy có volume riêng. Image Ollama pin `0.40.13`, khớp phiên bản local đã chạy Qwen; manifest Linux amd64/arm64 đã xác minh. Caddy dùng tag `2-alpine`, Node/Python dùng tag dòng tương ứng trong Dockerfile: lưu image ID/digest đã nghiệm thu trước mỗi phát hành vì các tag dòng có thể đổi.
 
-Proxy network dùng `172.30.47.0/29`, IP Caddy cố định `172.30.47.2`. Uvicorn chỉ tin forwarded headers từ IP đó; Caddy ghi đè client IP/scheme từ kết nối thực, không tin X-Forwarded-For của khách. Không publish API trực tiếp hoặc đổi thành trust `*`. Nếu subnet trùng mạng có sẵn, sửa đồng thời subnet, IP Caddy và `--forwarded-allow-ips` trong Compose. Khi đặt thêm CDN/proxy trước Caddy, địa chỉ thực/rate limit cần cấu hình và nghiệm thu riêng; cấu hình này dành cho Caddy là biên trực tiếp.
+Proxy network dùng `172.30.47.0/29`, IP Caddy là `172.30.47.2` và IP app là `172.30.47.3`. Hai địa chỉ cố định để app khởi động trước vẫn dành đúng IP cho Caddy. Uvicorn chỉ tin forwarded headers từ IP của Caddy. Caddy lấy client IP và scheme từ kết nối thực. Chỉ publish cổng của Caddy và giữ danh sách IP tin cậy cụ thể. Nếu subnet trùng mạng có sẵn, sửa đồng thời subnet, hai IP và `--forwarded-allow-ips` trong Compose. Khi đặt CDN hoặc proxy trước Caddy, kiểm tra địa chỉ client và rate limit trên máy đích.
 
 Volume `runtime` giữ SQLite, Qdrant và cache embedding; `ollama` giữ LLM; `caddy_data`/`caddy_config` giữ TLS. `docker compose down` giữ volume. Không dùng `down -v`, `volume prune` hoặc xóa runtime để cập nhật. Runtime local trên Windows và volume Docker là hai kho độc lập; chuyển dữ liệu bằng backup/restore được kiểm tra.
 
@@ -92,6 +94,24 @@ Thay hostname trước khi chạy. Health 200 xác nhận API/SQLite khởi đ�
 
 Không bật access log chứa URL nhạy cảm: Uvicorn tắt access log trong cấu hình bàn giao; Caddy không bật access log. Log lỗi vẫn cần quyền truy cập, luân chuyển và kiểm tra trước khi chia sẻ. Volume/backup chứa thông tin người dùng và chat; dùng phân quyền hệ điều hành, mã hóa đĩa/backup và thời hạn lưu của đơn vị. Không có cơ chế mã hóa database ở cấp ứng dụng.
 
+## Giọng đọc tiếng Việt
+
+Ứng dụng dùng giọng tiếng Việt cài sẵn trên thiết bị khi có. Để hỗ trợ trình duyệt
+thiếu giọng Việt, cài Piper CLI trong môi trường Python của backend và tải model
+vào thư mục `tts` bên trong `DATA_DIR`. Ví dụ trên Linux, chạy từ `backend/` với
+môi trường ảo đã kích hoạt và `DATA_DIR` mặc định:
+
+```sh
+python -m pip install piper-tts==1.8.0
+python -m piper.download_voices --download-dir runtime/tts vi_VN-vais1000-medium
+```
+
+Piper chạy trên máy chủ khi bạn đọc bấm nút. Backend nhận tối đa 4.000 ký tự mỗi
+lượt và xử lý một yêu cầu tổng hợp giọng nói tại một thời điểm. Docker mặc định
+cần cài thêm Piper và đặt hai tệp model trong `DATA_DIR/tts` để bật phương án này.
+Xem [tài liệu Piper](https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/API_PYTHON.md)
+và [thẻ model VAIS1000](https://huggingface.co/rhasspy/piper-voices/blob/main/vi/vi_VN/vais1000/medium/MODEL_CARD).
+
 ## Kiến thức và crawl
 
 Nội dung thu thập là bản nháp, không tự trở thành bằng chứng đã được thư viện duyệt. Quản trị kiểm tra trang gốc, quyền sử dụng, đoạn văn đã trích, ngày kiểm tra, trạng thái và hiệu lực trước xuất bản. Quy định/phí/giờ cần người xác nhận nghiệp vụ và khoảng ngày hiệu lực. Không diễn giải 403/challenge/robots-denied thành kết quả trống thành công; không vượt chặn của nguồn. Sau thay đổi nguồn dùng reindex ở UI; khi lỗi vector, kiểm tra cache/kết nối từ trạng thái quản trị. Dữ liệu thu hồi/hết hạn được lọc lại từ SQLite ngay cả khi vector còn cũ.
@@ -103,6 +123,36 @@ Job crawl bị ngắt được đánh dấu failed khi khởi động lại; qu�
 Quản trị → Danh mục cho phép tạo/sửa/xóa và nhập mảng JSON metadata. Mỗi mục phải có nhan đề, URL HTTPS của biểu ghi/nguồn và ngày đối chiếu không ở tương lai; kiểm tra `published` trước nhập. Mặc định bản mới là nháp. URL đã có sẽ được cập nhật toàn bộ trường trong một transaction, không tự ghép giữ trường cũ. Tối đa 200 mục mỗi request, nhưng tổng body vẫn chỉ 64 KiB: mô tả dài cần lô nhỏ hơn. Không dùng import để đưa dữ liệu chưa được phép hoặc số lượng lưu thông suy đoán. Không có tác vụ đồng bộ catalog định kỳ; seed ban đầu chỉ chạy một lần.
 
 Tìm local dùng metadata đã xuất bản, phân trang và cảnh báo không phải tồn kho. OPAC chỉ đọc trang đầu; lỗi upstream/challenge cần mở nguồn gốc, không diễn giải là thư viện không có sách. Reindex UI/CLI tạo FAQ; chỉ mục ngữ nghĩa sách xây khi cần tìm semantic. Thay đổi sách/nội dung làm mất hiệu lực fingerprint; khi cập nhật nhiều metadata, lần truy xuất vector tiếp theo có thể chậm do rebuild.
+
+### Nhập biểu ghi MARC đã thu thập
+
+Chạy từ thư mục gốc trên Windows với dữ liệu cục bộ mặc định. Trước khi áp
+dụng, thử trên bản sao nội dung và kiểm tra số liệu nhập. Dừng API dùng chỉ
+mục Qdrant cục bộ trước khi chạy lệnh dựng chỉ mục thủ công.
+
+```powershell
+$python = './backend/.venv/Scripts/python.exe'
+$collection = 'backend/runtime/opac-public-20261101'
+& $python scripts/import_opac.py "$collection/catalog-listings.jsonl"
+& $python -m scripts.enrich_opac_marc $collection
+```
+
+Đối chiếu số biểu ghi thiếu với manifest. Sao lưu SQLite theo hướng dẫn bên
+dưới, rồi chạy hai bước nhập theo thứ tự. Chọn thư mục sao lưu mới cho mỗi
+lần cập nhật.
+
+```powershell
+& $python scripts/import_opac.py "$collection/catalog-listings.jsonl" --apply --publish
+if ($LASTEXITCODE -ne 0) { throw 'Kiểm tra báo cáo nhập OPAC trước khi tiếp tục.' }
+& $python -m scripts.enrich_opac_marc $collection --apply backend/runtime/library.sqlite3
+```
+
+Lệnh nhập giữ các nhan đề đã có. Khi từ khóa OPAC vượt giới hạn 1.000 ký tự,
+danh mục lấy phần đầu đến hết từ khóa hoàn chỉnh. Tệp nguồn giữ chuỗi đầy đủ.
+Lệnh làm giàu chỉ lấy chủ đề, tóm tắt và đối tượng đọc từ các trường MARC
+được hỗ trợ. Biểu ghi thiếu MARC vẫn tra cứu được theo danh mục đã thu thập.
+Khởi động API để đồng bộ chỉ mục sách và kiểm tra trạng thái
+`capabilities.vectors.namespaces.books` tại `/health`.
 
 Quản trị → Gia hạn hiển thị tối đa 100 yêu cầu mới nhất. Chỉ đánh succeeded/failed sau kiểm tra upstream hoặc đầu mối thư viện; nhập tham chiếu rõ ràng và hạn trả chính thức nếu thành công, xác nhận trách nhiệm. Thao tác chỉ ghi ledger/audit, không gọi gia hạn lần nữa. Chỉ pending/uncertain được đối soát; trạng thái đã kết thúc không được ghi đè. Người dùng còn pending/uncertain nhận 409 khi xóa tài khoản, nhưng vẫn có thể xóa hội thoại. Không sửa SQL/xóa ledger để vượt khóa này. Webhook chưa có giao diện đối soát/gửi lại tương tự; liên hệ vận hành kiểm tra delivery theo hợp đồng tích hợp.
 
