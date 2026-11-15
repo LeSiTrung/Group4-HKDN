@@ -19,9 +19,10 @@ export default function ChatWindow({ user, conversationId, onCreated }) {
   const [error, setError] = useState('')
   const [suggestions, setSuggestions] = useState([])
   const [listening, setListening] = useState(false)
-  const [speaking, setSpeaking] = useState(false)
+  const [speechView, setSpeechView] = useState(null)
   const activeId = useRef(conversationId)
   const recognition = useRef(null)
+  const speech = useRef(null)
   const end = useRef(null)
   const mounted = useRef(true)
   const sending = useRef(false)
@@ -29,12 +30,13 @@ export default function ChatWindow({ user, conversationId, onCreated }) {
 
   useEffect(() => {
     mounted.current = true
-    return () => { mounted.current = false; recognition.current?.abort(); window.speechSynthesis?.cancel() }
+    return () => { mounted.current = false; recognition.current?.abort(); clearSpeech() }
   }, [])
   useEffect(() => {
     const version = ++conversationVersion.current
     activeId.current = conversationId
     sending.current = false
+    stopSpeech()
     setMessages([]); setMessage(''); setSuggestions([]); setError(''); setBusy(false)
     setHistoryLoading(Boolean(user && conversationId))
     if (!user || !conversationId) return
@@ -78,12 +80,54 @@ export default function ChatWindow({ user, conversationId, onCreated }) {
     instance.onend = () => { if (mounted.current) setListening(false) }
     try { instance.start(); setListening(true) } catch { setError('Không thể mở micro. Hãy kiểm tra quyền truy cập và thử lại.') }
   }
-  function speak(text) {
-    if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) { setError('Trình duyệt chưa hỗ trợ đọc văn bản.'); return }
-    window.speechSynthesis.cancel()
-    const utterance = new SpeechSynthesisUtterance(text)
-    utterance.lang = 'vi-VN'; utterance.onend = () => setSpeaking(false); utterance.onerror = () => { setSpeaking(false); setError('Không thể đọc văn bản bằng giọng nói trên trình duyệt này.') }
-    window.speechSynthesis.speak(utterance); setSpeaking(true)
+  function clearSpeech() {
+    const current = speech.current
+    speech.current = null
+    if (current?.utterance) window.speechSynthesis.cancel()
+    if (current?.url) URL.revokeObjectURL(current.url)
+  }
+  function stopSpeech() {
+    clearSpeech()
+    setSpeechView(null)
+  }
+  function speechFailed(item, error) {
+    clearSpeech()
+    setSpeechView({ item, error })
+  }
+  function speak(item) {
+    const alreadySpeaking = speech.current?.item === item
+    stopSpeech()
+    if (alreadySpeaking) return
+    const text = item.content
+    const current = { item }
+    speech.current = current
+    async function playServerSpeech() {
+      if (speech.current !== current) return
+      delete current.utterance
+      setSpeechView({ item, loading: true })
+      try {
+        if ([...text].length > 4000) throw new Error('Giọng đọc của máy chủ hỗ trợ câu trả lời dài tối đa 4.000 ký tự.')
+        const audio = await api('/speech', { method: 'POST', body: { text }, responseType: 'audio' })
+        if (speech.current !== current) return
+        current.url = URL.createObjectURL(audio)
+        setSpeechView({ item, url: current.url })
+      } catch (error) {
+        if (speech.current !== current) return
+        speechFailed(item, error.message)
+      }
+    }
+    const synthesis = window.speechSynthesis
+    const voices = synthesis?.getVoices?.().filter(voice => voice.localService && /^vi(?:-|$)/i.test(voice.lang)) || []
+    const voice = voices.find(voice => voice.lang.toLowerCase() === 'vi-vn') || voices[0]
+    if (!voice || !window.SpeechSynthesisUtterance) { void playServerSpeech(); return }
+    const utterance = new window.SpeechSynthesisUtterance(text)
+    current.utterance = utterance
+    setSpeechView({ item })
+    utterance.voice = voice
+    utterance.lang = voice.lang
+    utterance.onend = () => { if (speech.current === current && current.utterance) stopSpeech() }
+    utterance.onerror = playServerSpeech
+    try { synthesis.speak(utterance) } catch { void playServerSpeech() }
   }
   return <section className="chat-workspace" aria-label="Trợ lý thư viện">
     <div className="chat-scroll">
@@ -93,12 +137,21 @@ export default function ChatWindow({ user, conversationId, onCreated }) {
         <h1>Xin chào{user ? `, ${user.name.split(' ').at(-1)}` : ' bạn'}.<br />Hôm nay bạn muốn<br /><em>khám phá điều gì?</em></h1>
         <p>Tra cứu tài liệu, tìm hiểu dịch vụ và nhận hướng dẫn<br className="desktop-break" /> từ những nguồn thông tin của thư viện UTH.</p>
         <div className="starter-grid">{starters.map(item => <button key={item.title} className="starter-card" onClick={() => send(item.text)} disabled={busy}><Icon name={item.icon} /><strong>{item.title}</strong><span>{item.text}</span><Icon className="card-arrow" name="arrow" size={16} /></button>)}</div>
-      </div> : <div className="messages" aria-live="polite" aria-relevant="additions">{messages.map((item, index) => <ChatMessage item={item} user={user} onSpeak={speak} key={item.id || `${item.role}-${index}`} />)}{busy && <div className="typing" role="status"><span /><span /><span /><span className="typing-label">Trợ lý đang trả lời…</span></div>}<div ref={end} /></div>}
+      </div> : <div className="messages" aria-live="polite" aria-relevant="additions">{messages.map((item, index) => {
+        const playback = speechView?.item === item ? speechView : null
+        return <ChatMessage item={item} user={user} onSpeak={speak} key={item.id || `${item.role}-${index}`}
+          isSpeaking={Boolean(playback && !playback.error)} speechControl={playback && <>
+            {playback.loading && <p className="feedback-note" role="status">Đang tạo giọng đọc tiếng Việt…</p>}
+            {playback.url && <audio key={playback.url} className="speech-player" controls autoPlay src={playback.url} aria-label="Phát giọng đọc tiếng Việt"
+              onEnded={() => { if (speech.current?.url === playback.url) stopSpeech() }}
+              onError={() => { if (speech.current?.url === playback.url) speechFailed(item, 'Trình duyệt không phát được âm thanh tiếng Việt.') }} />}
+            <ErrorNotice>{playback.error}</ErrorNotice>
+          </>} />
+      })}{busy && <div className="typing" role="status"><span /><span /><span /><span className="typing-label">Trợ lý đang trả lời…</span></div>}<div ref={end} /></div>}
     </div>
     <div className="chat-bottom">
       <ErrorNotice>{error}</ErrorNotice>
       {listening && <Notice>Đang nghe tiếng Việt… Nhấn dừng khi hoàn tất. Lời nói được chuyển thành chữ trước khi gửi; dịch vụ giọng nói phụ thuộc trình duyệt.</Notice>}
-      {speaking && <button className="text-button stop-speaking" onClick={() => { window.speechSynthesis.cancel(); setSpeaking(false) }}><Icon name="stop" size={16} /> Dừng đọc</button>}
       {suggestions.length > 0 && <div className="suggestions">{suggestions.map((text, index) => <button key={`${text}-${index}`} onClick={() => send(text)} disabled={busy}>{text}<Icon name="arrow" size={14} /></button>)}</div>}
       <ChatInput value={message} onChange={setMessage} onSend={send} busy={busy || historyLoading} onVoice={voice} listening={listening} />
       <p className="composer-note"><Icon name="shield" size={13} /> Bạn có thể xem nguồn bên dưới câu trả lời. {user ? 'Lịch sử được lưu trong tài khoản.' : 'Cuộc trò chuyện của khách chỉ được giữ khi trang này còn mở.'}</p>

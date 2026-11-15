@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.chat import router as chat_router
+from app.api.speech import router as speech_router
 from app.api.demo_reservations import router as demo_reservations_router
 from app.api.auth import router as auth_router
 from app.api.history import router as history_router
@@ -86,6 +87,7 @@ def create_app(data_dir=None, testing=False):
     app.include_router(auth_router, prefix='/api')
     app.include_router(history_router, prefix='/api')
     app.include_router(chat_router, prefix='/api')
+    app.include_router(speech_router, prefix='/api')
     app.include_router(admin_router, prefix='/api')
     app.include_router(feedback_review_router, prefix='/api')
     app.include_router(library_router, prefix='/api')
