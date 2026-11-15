@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { api } from '../services/chatApi.js'
 import { Empty, ErrorNotice, ExternalLink, Field, Icon, Modal, Notice, Status } from './UI.jsx'
 
-export default function Loans({ user, onLogin, configured = true, renewalConfigured = true }) {
+export default function Loans({ user, onLogin, configured = true, renewalConfigured = true, demoEnabled = false }) {
   const [token, setToken] = useState('')
   const [loans, setLoans] = useState(null)
   const [busy, setBusy] = useState(false)
@@ -37,7 +37,7 @@ export default function Loans({ user, onLogin, configured = true, renewalConfigu
     finally { pending.current = false; if (version === requestVersion.current) setConfirm(null); setBusy(false) }
   }
   return <div className="content-page"><div className="page-heading"><span className="eyebrow">DỊCH VỤ BẠN ĐỌC</span><h1>Sách đang mượn</h1><p>Theo dõi khoản mượn và gửi yêu cầu gia hạn có xác nhận.</p></div>
-    {!configured ? <div className="panel"><Empty title="Dịch vụ mượn trực tuyến chưa được kết nối">Bạn có thể xem sách đang mượn và hạn trả trong tài khoản OPAC do thư viện cấp.</Empty><ExternalLink className="secondary" href="https://opacthuvien.ut.edu.vn/opac/">Mở tài khoản trên OPAC</ExternalLink></div> : !user ? <div className="panel"><Empty icon="user" title="Đăng nhập để tiếp tục">Tài khoản chatbot giúp bảo vệ thông tin khoản mượn của bạn.</Empty><button className="primary center-button" onClick={onLogin}>Đăng nhập</button></div> : <>
+    {!configured ? <div className="panel"><Empty title="Dịch vụ mượn trực tuyến chưa được kết nối">Bạn có thể xem sách đang mượn và hạn trả trong tài khoản OPAC do thư viện cấp.</Empty><div className="inline-actions"><ExternalLink className="secondary" href="https://opacthuvien.ut.edu.vn/opac/">Mở tài khoản trên OPAC</ExternalLink>{demoEnabled && <a className="primary" href="#demo-library">Thử mượn sách mẫu</a>}</div></div> : !user ? <div className="panel"><Empty icon="user" title="Đăng nhập để tiếp tục">Tài khoản chatbot giúp bảo vệ thông tin khoản mượn của bạn.</Empty><button className="primary center-button" onClick={onLogin}>Đăng nhập</button></div> : <>
       <Notice>Kết nối chỉ hoạt động khi thư viện đã cấu hình dịch vụ tích hợp. Mã truy cập chỉ ở trong bộ nhớ của trang này và được xóa khi bạn rời trang. Không nhập mật khẩu thư viện.</Notice>
       {!renewalConfigured && <Notice>Gia hạn trực tuyến chưa được kết nối. Hãy kiểm tra quyền gia hạn trong tài khoản OPAC hoặc liên hệ thư viện.</Notice>}
       <form className="panel loan-connect" onSubmit={load}><Field label="Mã truy cập thư viện" hint="Dùng mã truy cập được hệ thống thư viện cấp."><input type="password" value={token} onChange={event => { requestVersion.current++; setToken(event.target.value); setLoans(null); setConfirm(null); setOutcome(null); setError('') }} autoComplete="off" required maxLength={4096} /></Field><button className="primary" disabled={busy || !token.trim()}><Icon name="link" size={18} />{busy ? 'Đang xử lý…' : 'Xem sách đang mượn'}</button></form>

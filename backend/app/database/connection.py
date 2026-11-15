@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS renewals (
  idempotency_key TEXT PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, loan_id TEXT NOT NULL, state TEXT NOT NULL, result TEXT);
 CREATE TABLE IF NOT EXISTS demo_reservations (
  book_id INTEGER NOT NULL, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+ due_date TEXT, renewed INTEGER NOT NULL DEFAULT 0,
  PRIMARY KEY(book_id, user_id));
 CREATE TABLE IF NOT EXISTS books (
  id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, author TEXT NOT NULL DEFAULT '', year TEXT NOT NULL DEFAULT '',
@@ -77,11 +78,17 @@ class Store:
             if db.execute('PRAGMA user_version').fetchone()[0]>2:
                 raise RuntimeError('Database was created by a newer application; refusing to downgrade it.')
             db.executescript(SCHEMA)
+            db.execute('BEGIN IMMEDIATE')
             columns={x[1] for x in db.execute('PRAGMA table_info(messages)')}
             if 'books' not in columns:
                 db.execute("ALTER TABLE messages ADD COLUMN books TEXT NOT NULL DEFAULT '[]'")
             if 'context_query' not in columns:
                 db.execute("ALTER TABLE messages ADD COLUMN context_query TEXT NOT NULL DEFAULT ''")
+            demo_columns={x[1] for x in db.execute('PRAGMA table_info(demo_reservations)')}
+            if 'due_date' not in demo_columns:
+                db.execute('ALTER TABLE demo_reservations ADD COLUMN due_date TEXT')
+            if 'renewed' not in demo_columns:
+                db.execute('ALTER TABLE demo_reservations ADD COLUMN renewed INTEGER NOT NULL DEFAULT 0')
             db.execute('PRAGMA user_version=2')
 
     @contextmanager
@@ -98,7 +105,3 @@ class Store:
             raise
         finally:
             db.close()
-
-
-def get_database_status():
-    return 'sqlite'
