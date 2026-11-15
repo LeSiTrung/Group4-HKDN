@@ -2,7 +2,7 @@ import sqlite3
 from typing import Annotated,Literal
 from fastapi import APIRouter,Depends,HTTPException,Path,Query,Request
 from pydantic import BaseModel,Field,model_validator
-from .auth import require_admin,ensure_current_account
+from .auth import admin_database, require_admin
 from .admin import audit
 from ..services.catalog import BookInput,item,save_book,public_book,search_local
 from ..services.catalog_indexing import indexing_preview
@@ -29,19 +29,16 @@ class IndexingApproval(BaseModel):
         return self
 
 
-@router.get('/admin/books/{row_id}/indexing',dependencies=[Depends(require_admin)])
-def preview_indexing(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],request:Request):
-    with request.app.state.db() as db:
+@router.get('/admin/books/{row_id}/indexing')
+def preview_indexing(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],request:Request,user=Depends(require_admin)):
+    with admin_database(request,user) as db:
         return indexing_preview(indexing_row(db,row_id))
 
 
 @router.post('/admin/books/{row_id}/indexing')
 def approve_indexing(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],body:IndexingApproval,
                      request:Request,user=Depends(require_admin)):
-    with request.app.state.db() as db:
-        ensure_current_account(db,user)
-        if db.execute('SELECT role FROM users WHERE id=?',(user['id'],)).fetchone()['role']!='admin':
-            raise HTTPException(403,'Chỉ quản trị viên được duyệt biên mục.')
+    with admin_database(request,user,write=True) as db:
         row=indexing_row(db,row_id)
         preview=indexing_preview(row)
         if body.revision!=preview['revision']:
@@ -66,9 +63,9 @@ def approve_indexing(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],bod
     return saved
 
 
-@router.get('/admin/books',dependencies=[Depends(require_admin)])
-def list_books(request:Request,q:str=Query('',max_length=500),page:int=Query(1,ge=1),page_size:int=Query(20,ge=1,le=50)):
-    with request.app.state.db() as db:
+@router.get('/admin/books')
+def list_books(request:Request,q:str=Query('',max_length=500),page:int=Query(1,ge=1),page_size:int=Query(20,ge=1,le=50),user=Depends(require_admin)):
+    with admin_database(request,user) as db:
         db.create_function('casefold',1,str.casefold,deterministic=True)
         where=" WHERE instr(casefold(title||' '||author||' '||subjects),?)>0" if q else ''
         params=(q.casefold(),) if q else ()
@@ -81,7 +78,7 @@ def list_books(request:Request,q:str=Query('',max_length=500),page:int=Query(1,g
 @router.post('/admin/books',status_code=201)
 def create_book(body:BookInput,request:Request,user=Depends(require_admin)):
     try:
-        with request.app.state.db() as db:
+        with admin_database(request,user,write=True) as db:
             row=save_book(db,body)
             audit(db,user['id'],'book.create',row['id'])
     except sqlite3.IntegrityError:
@@ -97,10 +94,7 @@ class BookEdit(BookInput):
 @router.put('/admin/books/{row_id}')
 def update_book(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],body:BookEdit,request:Request,user=Depends(require_admin)):
     try:
-        with request.app.state.db() as db:
-            ensure_current_account(db,user)
-            if not db.execute("SELECT 1 FROM users WHERE id=? AND role='admin'",(user['id'],)).fetchone():
-                raise HTTPException(403,'Chỉ quản trị viên được sửa biểu ghi.')
+        with admin_database(request,user,write=True) as db:
             current=db.execute('SELECT * FROM books WHERE id=?',(row_id,)).fetchone()
             if not current:
                 raise HTTPException(404,'Không tìm thấy biểu ghi.')
@@ -116,7 +110,7 @@ def update_book(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],body:Boo
 
 @router.delete('/admin/books/{row_id}')
 def delete_book(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],request:Request,user=Depends(require_admin)):
-    with request.app.state.db() as db:
+    with admin_database(request,user,write=True) as db:
         if not db.execute('DELETE FROM books WHERE id=?',(row_id,)).rowcount:
             raise HTTPException(404,'Không tìm thấy biểu ghi.')
         audit(db,user['id'],'book.delete',row_id)
@@ -136,8 +130,7 @@ class ImportBooks(BaseModel):
 
 @router.post('/admin/books/import',status_code=201)
 def import_books(body:ImportBooks,request:Request,user=Depends(require_admin)):
-    with request.app.state.db() as db:
-        db.execute('BEGIN IMMEDIATE')
+    with admin_database(request,user,write=True) as db:
         for book in body.items:
             existing=db.execute('SELECT id FROM books WHERE source_url=?',(book.source_url,)).fetchone()
             row=save_book(db,book,existing['id'] if existing else None)

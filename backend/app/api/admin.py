@@ -1,10 +1,10 @@
 import json
 import os
-from datetime import date, time
+from datetime import date
 from typing import Annotated, Literal
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Path, Request
 from pydantic import BaseModel, Field, field_validator, model_validator
-from .auth import require_admin
+from .auth import admin_database, require_admin
 from ..services.knowledge import KnowledgeInput, decode_row, insert_knowledge, published_rows, today
 from ..services.integrations import crawl_pages, IntegrationError
 from ..services.llm_service import provider_name
@@ -18,14 +18,14 @@ def audit(db, actor, action, target):
 
 
 @router.get('/knowledge')
-def list_knowledge(request: Request):
-    with request.app.state.db() as db:
+def list_knowledge(request: Request,user=Depends(require_admin)):
+    with admin_database(request,user) as db:
         return [decode_row(x) for x in db.execute('SELECT * FROM knowledge ORDER BY id DESC')]
 
 
 @router.post('/knowledge',status_code=201)
 def add_knowledge(body: KnowledgeInput,request: Request,user=Depends(require_admin)):
-    with request.app.state.db() as db:
+    with admin_database(request,user,write=True) as db:
         row = insert_knowledge(db,body)
         audit(db,user['id'],'knowledge.create',row['id'])
     request.app.state.vectors.invalidate()
@@ -34,7 +34,7 @@ def add_knowledge(body: KnowledgeInput,request: Request,user=Depends(require_adm
 
 @router.put('/knowledge/{row_id}')
 def update_knowledge(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],body:KnowledgeInput,request:Request,user=Depends(require_admin)):
-    with request.app.state.db() as db:
+    with admin_database(request,user,write=True) as db:
         if not db.execute('SELECT id FROM knowledge WHERE id=?',(row_id,)).fetchone():
             raise HTTPException(404,'Không tìm thấy nội dung.')
         row = insert_knowledge(db,body,row_id)
@@ -45,7 +45,7 @@ def update_knowledge(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],bod
 
 @router.delete('/knowledge/{row_id}')
 def remove_knowledge(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],request:Request,user=Depends(require_admin)):
-    with request.app.state.db() as db:
+    with admin_database(request,user,write=True) as db:
         if not db.execute('DELETE FROM knowledge WHERE id=?',(row_id,)).rowcount:
             raise HTTPException(404,'Không tìm thấy nội dung.')
         audit(db,user['id'],'knowledge.delete',row_id)
@@ -54,7 +54,9 @@ def remove_knowledge(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],req
 
 
 @router.post('/reindex')
-def reindex(request:Request):
+def reindex(request:Request,user=Depends(require_admin)):
+    with admin_database(request,user):
+        pass
     try:
         count = request.app.state.vectors.rebuild(published_rows(request.app.state.db))
         return {'status':'ready','count':count,**request.app.state.vectors.status()}
@@ -63,7 +65,9 @@ def reindex(request:Request):
 
 
 @router.post('/ai/check')
-def check_ai():
+def check_ai(request:Request,user=Depends(require_admin)):
+    with admin_database(request,user):
+        pass
     return llm_service.check_model()
 
 
@@ -79,10 +83,13 @@ class RetrievalInput(BaseModel):
 
 
 @router.post('/retrieval')
-def preview_retrieval(body:RetrievalInput,request:Request):
-    rows=[row for row in published_rows(request.app.state.db) if row['status'] in ('reviewed_public','verified')]
+def preview_retrieval(body:RetrievalInput,request:Request,user=Depends(require_admin)):
+    with admin_database(request,user):
+        pass
+    index_rows=published_rows(request.app.state.db)
+    rows=[row for row in index_rows if row['status'] in ('reviewed_public','verified')]
     vectors=request.app.state.vectors if os.getenv('ENABLE_VECTORS','true').lower()=='true' and not request.app.state.settings.testing else None
-    result=retrieval.retrieve_knowledge(body.query,rows,vectors)
+    result=retrieval.retrieve_knowledge(body.query,rows,vectors,index_rows=index_rows)
     excerpts={row['id']:[] for row,_ in result['ranked']}
     for item in result['evidence']:
         if item['source_id'] in excerpts:
@@ -121,7 +128,7 @@ class CrawlInput(BaseModel):
 
 @router.post('/crawl',status_code=202)
 def start_crawl(body:CrawlInput,request:Request,tasks:BackgroundTasks,user=Depends(require_admin)):
-    with request.app.state.db() as db:
+    with admin_database(request,user,write=True) as db:
         active = db.execute("SELECT count(*) FROM jobs WHERE status IN ('queued','running')").fetchone()[0]
         if active>=2:
             raise HTTPException(409,'Đang có tác vụ thu thập. Vui lòng đợi hoàn tất.')
@@ -132,14 +139,14 @@ def start_crawl(body:CrawlInput,request:Request,tasks:BackgroundTasks,user=Depen
 
 
 @router.get('/jobs')
-def jobs(request:Request):
-    with request.app.state.db() as db:
+def jobs(request:Request,user=Depends(require_admin)):
+    with admin_database(request,user) as db:
         return [dict(x) for x in db.execute('SELECT * FROM jobs ORDER BY id DESC LIMIT 100')]
 
 
 @router.get('/status')
-def status(request:Request):
-    with request.app.state.db() as db:
+def status(request:Request,user=Depends(require_admin)):
+    with admin_database(request,user) as db:
         counts = {name:db.execute(f'SELECT count(*) FROM {name}').fetchone()[0] for name in ('users','conversations','messages','knowledge','feedback')}
         pending = db.execute("SELECT count(*) FROM knowledge WHERE published=0").fetchone()[0]
         audit_rows = [dict(x) for x in db.execute('SELECT * FROM audit ORDER BY id DESC LIMIT 30')]
@@ -150,8 +157,8 @@ def status(request:Request):
 
 
 @router.get('/users')
-def users(request:Request):
-    with request.app.state.db() as db:
+def users(request:Request,user=Depends(require_admin)):
+    with admin_database(request,user) as db:
         return [dict(x) for x in db.execute('SELECT id,email,name,role,active,created_at FROM users ORDER BY id')]
 
 
@@ -163,7 +170,7 @@ class UserState(BaseModel):
 def user_state(user_id:Annotated[int,Path(gt=0,le=9223372036854775807)],body:UserState,request:Request,user=Depends(require_admin)):
     if user_id==user['id']:
         raise HTTPException(409,'Không thể tự khóa tài khoản quản trị.')
-    with request.app.state.db() as db:
+    with admin_database(request,user,write=True) as db:
         if not db.execute('UPDATE users SET active=? WHERE id=?',(body.active,user_id)).rowcount:
             raise HTTPException(404,'Không tìm thấy người dùng.')
         if not body.active:
@@ -203,15 +210,15 @@ def re_time(value):
 
 
 @router.get('/schedules')
-def schedules(request:Request):
-    with request.app.state.db() as db:
+def schedules(request:Request,user=Depends(require_admin)):
+    with admin_database(request,user) as db:
         return [dict(x) for x in db.execute('SELECT * FROM schedules ORDER BY branch,weekday,valid_from')]
 
 
 @router.post('/schedules',status_code=201)
 def add_schedule(body:ScheduleInput,request:Request,user=Depends(require_admin)):
     values=body.model_dump(mode='json')
-    with request.app.state.db() as db:
+    with admin_database(request,user,write=True) as db:
         row_id=db.execute(f"INSERT INTO schedules({','.join(values)}) VALUES ({','.join('?' for _ in values)})",tuple(values.values())).lastrowid
         audit(db,user['id'],'schedule.create',row_id)
         return dict(db.execute('SELECT * FROM schedules WHERE id=?',(row_id,)).fetchone())
@@ -219,7 +226,7 @@ def add_schedule(body:ScheduleInput,request:Request,user=Depends(require_admin))
 
 @router.delete('/schedules/{row_id}')
 def delete_schedule(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],request:Request,user=Depends(require_admin)):
-    with request.app.state.db() as db:
+    with admin_database(request,user,write=True) as db:
         if not db.execute('DELETE FROM schedules WHERE id=?',(row_id,)).rowcount:
             raise HTTPException(404,'Không tìm thấy lịch.')
         audit(db,user['id'],'schedule.delete',row_id)
@@ -227,8 +234,8 @@ def delete_schedule(row_id:Annotated[int,Path(gt=0,le=9223372036854775807)],requ
 
 
 @router.get('/renewals')
-def renewal_states(request:Request):
-    with request.app.state.db() as db:
+def renewal_states(request:Request,user=Depends(require_admin)):
+    with admin_database(request,user) as db:
         rows=[dict(r) for r in db.execute('SELECT * FROM renewals ORDER BY rowid DESC LIMIT 100')]
     for row in rows:
         row['result']=json.loads(row['result']) if row['result'] else None
@@ -250,8 +257,7 @@ class Reconciliation(BaseModel):
 
 @router.post('/renewals/{key}/reconcile')
 def reconcile_renewal(key:str,body:Reconciliation,request:Request,user=Depends(require_admin)):
-    with request.app.state.db() as db:
-        db.execute('BEGIN IMMEDIATE')
+    with admin_database(request,user,write=True) as db:
         row=db.execute('SELECT * FROM renewals WHERE idempotency_key=?',(key,)).fetchone()
         if not row:
             raise HTTPException(404,'Không tìm thấy yêu cầu gia hạn.')

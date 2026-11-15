@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from app.config import Settings
+from app.api.auth import optional_user
 from app.main import create_app
 from app.security import RequestGate
 
@@ -174,3 +175,35 @@ def test_rate_limit_peer_tracking_stays_bounded_during_address_rotation(tmp_path
             await gate({'type': 'http', 'method': 'GET', 'path': '/api/auth/me', 'client': (peer, 12345), 'headers': []}, receive, send)
     asyncio.run(rotate())
     assert len(gate.hits) <= 10000
+
+
+@pytest.mark.parametrize(('change','status'), [('revoke',401),('demote',403)])
+@pytest.mark.parametrize('path', ['/api/admin/books','/api/admin/knowledge','/api/admin/users','/api/admin/feedback'])
+def test_inflight_admin_request_requires_current_privileges(account_client, change, status, path):
+    user_id=register(account_client).json()['user']['id']
+    app=account_client.app
+    with app.state.db() as db:
+        db.execute("UPDATE users SET role='admin' WHERE id=?",(user_id,))
+
+    def change_after_authentication():
+        with app.state.db() as db:
+            user=dict(db.execute('SELECT * FROM users WHERE id=?',(user_id,)).fetchone())
+            user['_session_token_hash']=db.execute('SELECT token_hash FROM sessions WHERE user_id=?',(user_id,)).fetchone()[0]
+            if change=='revoke':
+                db.execute('DELETE FROM sessions WHERE user_id=?',(user_id,))
+            else:
+                db.execute("UPDATE users SET role='reader' WHERE id=?",(user_id,))
+        return user
+
+    app.dependency_overrides[optional_user]=change_after_authentication
+    url='https://lic.ut.edu.vn/synthetic-stale-admin/'
+    body={'title':'Synthetic administrative write','source_url':url,'checked_at':'2026-10-31','published':True}
+    if path.endswith('knowledge'):
+        body.update(question='Synthetic question',answer='Synthetic answer',source_title='Synthetic source',
+                    category='opac',status='reviewed_public')
+    response=(account_client.get(path) if path.endswith(('users','feedback')) else account_client.post(path,json=body))
+    assert response.status_code==status,response.text
+    with app.state.db() as db:
+        assert not db.execute('SELECT 1 FROM knowledge WHERE source_url=?',(url,)).fetchone()
+        assert not db.execute('SELECT 1 FROM books WHERE source_url=?',(url,)).fetchone()
+        assert db.execute('SELECT count(*) FROM audit').fetchone()[0]==0

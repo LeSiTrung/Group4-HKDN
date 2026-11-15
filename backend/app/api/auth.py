@@ -3,6 +3,7 @@ import re
 import secrets
 import sqlite3
 import time
+from contextlib import contextmanager
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from pydantic import BaseModel, Field, field_validator
 from pwdlib import PasswordHash
@@ -79,6 +80,16 @@ def ensure_current_account(db,user):
     if '_session_token_hash' in user and not db.execute('SELECT 1 FROM sessions WHERE token_hash=? AND user_id=? AND expires_at>?',
             (user['_session_token_hash'],user['id'],int(time.time()))).fetchone():
         raise expired_session()
+
+
+@contextmanager
+def admin_database(request, user, *, write=False):
+    with request.app.state.db() as db:
+        db.execute('BEGIN IMMEDIATE' if write else 'BEGIN')
+        ensure_current_account(db,user)
+        if not db.execute("SELECT 1 FROM users WHERE id=? AND role='admin'",(user['id'],)).fetchone():
+            raise HTTPException(403,'Chỉ quản trị viên được thực hiện thao tác này.')
+        yield db
 
 
 def start_session(request, response, user_id, expected_hash):

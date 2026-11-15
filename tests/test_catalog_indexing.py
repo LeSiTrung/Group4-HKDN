@@ -152,14 +152,14 @@ def test_overflow_rolls_back_all_selected_fields(client):
 
 
 def test_approval_revalidates_admin_role_inside_transaction(client,monkeypatch):
-    from app.api import catalog
+    from app.api import auth
     book=record(client)
     draft=preview(client,book)
-    ensure=catalog.ensure_current_account
+    ensure=auth.ensure_current_account
     def demote(db,user):
         ensure(db,user)
         db.execute("UPDATE users SET role='reader' WHERE id=?",(user['id'],))
-    monkeypatch.setattr(catalog,'ensure_current_account',demote)
+    monkeypatch.setattr(auth,'ensure_current_account',demote)
     assert client.post(f"/api/admin/books/{book['id']}/indexing",json={
         'revision':draft['revision'],'fields':['subjects']}).status_code==403
 
