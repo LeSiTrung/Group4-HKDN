@@ -12,6 +12,9 @@ def restore(source: Path, destination: Path):
     with closing(sqlite3.connect(source.resolve().as_uri() + '?mode=ro', uri=True)) as backup:
         if backup.execute('PRAGMA quick_check').fetchall() != [('ok',)]:
             raise ValueError('Source database integrity check failed.')
+        # Keep this limit aligned with Store; restore also runs as a standalone script.
+        if backup.execute('PRAGMA user_version').fetchone()[0] > 2:
+            raise ValueError('Source database was created by a newer application.')
         tables = {row[0] for row in backup.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         if not TABLES <= tables:
             raise ValueError('Source is not a library assistant application database.')

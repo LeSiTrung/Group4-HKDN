@@ -2,6 +2,7 @@ import sqlite3
 import pytest
 from app.config import ROOT, Settings
 from app.database.connection import Store
+from scripts.restore import restore
 
 
 def test_relative_runtime_is_independent_of_launch_directory(tmp_path,monkeypatch):
@@ -21,6 +22,17 @@ def test_unknown_newer_schema_is_not_downgraded(tmp_path):
     with sqlite3.connect(path) as db:
         assert db.execute('PRAGMA user_version').fetchone()[0]==999
         assert db.execute('SELECT value FROM future_data').fetchone()[0]=='preserve me'
+
+
+def test_restore_rejects_backup_newer_than_application_schema(tmp_path):
+    source = tmp_path / 'future.sqlite3'
+    store = Store(source)
+    with store.connect() as db:
+        db.execute('PRAGMA user_version=999')
+    target = tmp_path / 'restore' / 'library.sqlite3'
+    with pytest.raises(ValueError, match='newer'):
+        restore(source, target)
+    assert not target.parent.exists()
 
 
 def test_v1_message_migration_preserves_existing_history(tmp_path):
