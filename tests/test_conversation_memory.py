@@ -38,6 +38,57 @@ def turn(client,history,message,cid=None):
 
 
 @pytest.mark.parametrize('guest',[True,False])
+def test_recommendation_suggestions_ask_about_the_displayed_results(client,guest):
+    if not guest:
+        register(client)
+    history=[]
+    response=turn(client,history,'Gợi ý sách Java')
+    assert response['suggestions']==['Em mới học','Tóm tắt cuốn đầu tiên']
+    filtered=turn(client,history,response['suggestions'][0],response['conversation_id'])
+    assert [b['title'] for b in filtered['books']]==['Java nhập môn']
+    assert filtered['suggestions']==['Tóm tắt cuốn đầu tiên']
+    summary=turn(client,history,filtered['suggestions'][0],filtered['conversation_id'])
+    assert summary['status']=='answered' and 'Nội dung mẫu riêng 3.' in summary['answer']
+    assert not summary['suggestions']
+
+
+@pytest.mark.parametrize('guest',[True,False])
+def test_learning_level_followups_keep_subject_until_reader_changes_it(client,guest):
+    if not guest:
+        register(client)
+    with client.app.state.db() as db:
+        for number,title,subjects in [
+            (901,'Bài giảng xác suất thống kê cơ bản','Xác suất thống kê'),
+            (902,'Giáo trình xác suất thống kê nâng cao','Xác suất thống kê'),
+            (903,'Bài giảng cấu trúc dữ liệu','Công nghệ thông tin'),
+            (904,'Địa chất cơ sở','Địa chất'),
+            (905,'Giáo trình nhập môn công nghệ thông tin','Công nghệ thông tin'),
+        ]:
+            save_book(db,BookInput(title=title,subjects=subjects,published=True,checked_at=today(),
+                source_url=f'https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId={number}'))
+    history=[]
+    first=turn(client,history,'tìm giúp tôi những cuốn sách để học môn xác suất thống kê')
+    assert len(first['books'])==2
+    cid=first['conversation_id']
+    for question,expected in [
+        ('Em mới học',['Bài giảng xác suất thống kê cơ bản']),
+        ('Em mới học, có cuốn cơ bản không?',['Bài giảng xác suất thống kê cơ bản']),
+        ('Em muốn học nâng cao',['Giáo trình xác suất thống kê nâng cao']),
+        ('em học IT thì nên mượn quyển sách nào đây',['Giáo trình nhập môn công nghệ thông tin','Bài giảng cấu trúc dữ liệu']),
+        ('Em mới học',['Giáo trình nhập môn công nghệ thông tin']),
+    ]:
+        response=turn(client,history,question,cid)
+        assert sorted(book['title'] for book in response['books'])==sorted(expected),response
+        assert response['books'][0]['recommendation_reason'] and response['sources']
+
+
+def test_learning_level_without_previous_subject_asks_for_it(client):
+    response=turn(client,[],'Em mới học')
+    assert response['status']=='clarify' and not response['books']
+    assert 'chủ đề' in response['answer']
+
+
+@pytest.mark.parametrize('guest',[True,False])
 def test_selected_book_survives_consecutive_attributes_beyond_the_original_search_window(client,guest):
     if not guest:
         register(client)
@@ -81,6 +132,8 @@ def test_courtesy_turn_does_not_erase_the_selected_book(client,guest):
     ('Vậy nó xuất bản năm nào?','2022','answered'),
     ('Vậy cho mình biết năm xuất bản','2022','answered'),
     ('ISBN của nó là gì?','chưa xác nhận','needs_confirmation'),
+    ('Còn nhà xuất bản thì sao?','chưa xác nhận nhà xuất bản','needs_confirmation'),
+    ('Còn in năm mấy thì sao?','2022','answered'),
 ])
 def test_natural_pronouns_and_polite_attribute_followups_keep_the_selected_book(client,guest,question,fact,status):
     if not guest:
@@ -193,6 +246,55 @@ def test_explicit_quoted_book_overrides_a_previous_selection(client,guest,questi
     result=turn(client,history,question,result['conversation_id'])
     assert result['status']=='answered' and fact in result['answer'],result
     assert [book['title'] for book in result['books']]==['Java nhập môn']
+
+
+@pytest.mark.parametrize('guest',[True,False])
+def test_short_title_resolves_subtitle_and_keeps_selected_book(client,guest):
+    if not guest:
+        register(client)
+    history=[]
+    with client.app.state.db() as db:
+        db.execute("UPDATE books SET title='Java nhập môn : Từ cú pháp đến dự án' WHERE author='Tác giả mẫu 3'")
+        db.execute("UPDATE books SET title='Ôn tập Java nhập môn' WHERE author='Tác giả mẫu 2'")
+    previous=turn(client,history,'Tìm theo nhan đề Python thực hành A')
+    found=turn(client,history,'Tác giả của sách “Java nhập môn” là ai?',previous['conversation_id'])
+    assert found['status']=='answered' and 'Tác giả mẫu 3' in found['answer'],found
+    assert [s['url'] for s in found['sources']]==['https://opacthuvien.ut.edu.vn/opac/ODetail.aspx?intItemId=803']
+    for message,fact in [('Xuất bản năm nào?','2023'),('Nó nói về gì?','Nội dung mẫu riêng 3.')]:
+        followup=turn(client,history,message,found['conversation_id'])
+        assert followup['status']=='answered' and fact in followup['answer'],followup
+        assert [b['id'] for b in followup['books']]==[found['books'][0]['id']]
+
+
+@pytest.mark.parametrize('question',['Tác giả của sách “Python thực hành” là ai?', 'Sách “Python thực hành” còn bản không?'])
+def test_short_title_with_multiple_editions_asks_before_using_an_edition(client,monkeypatch,question):
+    monkeypatch.setattr('app.services.assistant.get_availability',lambda _:pytest.fail('Resolve the edition before checking availability'))
+    history=[]
+    found=turn(client,history,question)
+    assert found['status']=='clarify',found
+    assert [b['title'] for b in found['books']]==['Python thực hành A','Python thực hành B']
+    assert len(found['sources'])==2
+    chosen=turn(client,history,'Cuốn thứ hai xuất bản năm nào?',found['conversation_id'])
+    assert chosen['status']=='answered' and '2022' in chosen['answer'],chosen
+
+
+@pytest.mark.parametrize('title',['nhập môn','Java','Java nâng cao'])
+def test_quoted_metadata_does_not_guess_a_title_from_a_fragment(client,title):
+    found=turn(client,[],f'Tác giả của sách “{title}” là ai?')
+    assert found['status']=='not_found' and not found['books'],found
+
+
+def test_exact_title_wins_and_draft_subtitle_never_creates_ambiguity(client):
+    with client.app.state.db() as db:
+        db.execute("UPDATE books SET title='Java nhập môn : Bản nâng cao' WHERE author='Tác giả mẫu 2'")
+        db.execute("UPDATE books SET title='Java nhập môn : Bản nháp',published=0 WHERE author='Tác giả mẫu 1'")
+    question='Tác giả của sách “Java nhập môn” là ai?'
+    exact=turn(client,[],question)
+    assert exact['status']=='answered' and [b['author'] for b in exact['books']]==['Tác giả mẫu 3']
+    with client.app.state.db() as db:
+        db.execute("UPDATE books SET published=0 WHERE author='Tác giả mẫu 3'")
+    subtitle=turn(client,[],question)
+    assert subtitle['status']=='answered' and [b['author'] for b in subtitle['books']]==['Tác giả mẫu 2']
 
 
 @pytest.mark.parametrize('guest',[True,False])

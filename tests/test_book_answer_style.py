@@ -32,9 +32,24 @@ def ask(client,question):
     return response.json()
 
 
+@pytest.mark.parametrize('question,facts',[
+    (f'Tóm tắt ngắn gọn tài liệu “{TITLE}”.',['Học Python qua các dự án thực hành.']),
+    (f'Sách “{TITLE}” của ai và in năm mấy?',['Tác giả thử nghiệm','2024']),
+    (f'Sach “{TITLE}” cua ai va in nam nao?',['Tác giả thử nghiệm','2024']),
+])
+def test_colloquial_questions_about_a_quoted_title_stay_in_catalog(client,question,facts):
+    response=client.post('/api/chat',json={'message':question})
+    assert response.status_code==200,response.text
+    result=response.json()
+    assert result['status']=='answered' and result['mode']=='catalog',result
+    assert all(fact in result['answer'] for fact in facts),result
+    assert [source['url'] for source in result['sources']]==[URL]
+
+
 def test_author_and_year_are_one_readable_sentence_without_repeating_the_title(client):
     result=ask(client,'Cuốn đó do ai viết và xuất bản năm nào?')
     assert result['status']=='answered',result
+    assert result['answer'].startswith(f'“{TITLE}”'),result
     assert result['answer'].count(TITLE)==1,result
     assert any('Tác giả thử nghiệm' in paragraph and '2024' in paragraph for paragraph in result['answer'].split('\n\n')),result
     assert result['sources']==[{'title':TITLE,'url':URL,'checked_at':today().isoformat()}]
@@ -59,6 +74,7 @@ def test_multiple_missing_fields_share_one_clear_uncertainty_message(client):
 def test_summary_and_audience_share_title_but_preserve_both_source_texts(client):
     result=ask(client,'Tóm tắt và đối tượng đọc của cuốn đó?')
     assert result['status']=='answered',result
+    assert not result['answer'].startswith('Theo biểu ghi'),result
     assert result['answer'].count(TITLE)==1,result
     assert 'Học Python qua các dự án thực hành.' in result['answer'],result
     assert 'Người học đã biết cú pháp Python.' in result['answer'],result

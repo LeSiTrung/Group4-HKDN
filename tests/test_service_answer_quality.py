@@ -57,8 +57,8 @@ def test_comparing_historical_hours_does_not_mistake_weekdays_for_future_request
             answer='Thứ Hai đến thứ Sáu đến 18:30; chưa xác nhận lịch hiện hành.',category='hours_reference',
             source_title='Nguồn thử',source_url='https://lic.ut.edu.vn/synthetic-hours/',checked_at=today(),status='needs_confirmation',published=True))
     result=client.post('/api/chat',json={'message':'Hai nguồn khác nhau: bản hướng dẫn ghi thứ Hai đến thứ Sáu đến 18:30, em lấy làm giờ đóng cửa hiện nay được không, nguồn nào?'}).json()
-    assert result['status']=='needs_confirmation' and result['sources'],result
-    assert '18:30' in result['answer'],result
+    assert result['status']=='answered' and len(result['sources'])==1,result
+    assert '18:30' in result['answer'] and '/2024/11/' in result['sources'][0]['url'],result
 
 
 def test_room_booking_request_is_honest_about_unavailable_transactions(client):

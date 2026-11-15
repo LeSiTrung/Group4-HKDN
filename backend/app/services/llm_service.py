@@ -11,7 +11,7 @@ MAX_MODEL_PROMPT_BYTES = 6144
 _MODEL_CAPACITY = BoundedSemaphore(2)
 _EXCERPT_MARKER = '\n[Trích đoạn hội thoại; phần trước đã được rút gọn]'
 _TRANSACTION_CLAIM = (r'\bda (?:gia han|dat muon|dat sach|dang ky|huy dat|giu cho|giu (?:\w+ ){0,2}ban)\b'
-                      r'|\b(?:gia han|dat muon|dat sach|huy dat|giu cho) thanh cong\b'
+                      r'|\b(?:gia han|dat muon|dat sach|huy dat|giu cho)(?: (?:sach|tai lieu|cuon nay))? thanh cong\b'
                       r'|\b(?:i have|i ve|successfully) (?:renewed|reserved|cancelled|canceled|borrowed)\b')
 
 

@@ -27,7 +27,7 @@ def test_verified_schedule_and_closed_exception(client):
     body.update(valid_from=str(day),valid_until=str(day),closed=True,opens='',closes='')
     assert client.post('/api/admin/schedules',json=body).status_code==201
     result=client.post('/api/chat',json={'message':'Giờ mở cửa hôm nay cơ sở 1'}).json()
-    assert 'Nghỉ phục vụ' in result['answer'] and '08:00' not in result['answer']
+    assert 'nghỉ phục vụ' in result['answer'].lower() and '08:00' not in result['answer']
 
 
 def test_crawl_import_never_publishes(client,monkeypatch):

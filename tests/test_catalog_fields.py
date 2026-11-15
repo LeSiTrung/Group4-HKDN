@@ -63,7 +63,6 @@ def test_chat_author_requests_search_only_author_metadata(client,question):
 
 def test_author_filter_survives_persisted_context_without_old_user_turn(client):
     question='Tìm tài liệu của tác giả Nguyễn Văn Anh'
-    result=client.post('/api/chat',json={'message':question}).json()
     history=[{'role':'assistant','content':'Previous response','context_query':question}]
     # Server-loaded history carries context_query; use service directly for this internal field.
     from app.services.assistant import answer_question

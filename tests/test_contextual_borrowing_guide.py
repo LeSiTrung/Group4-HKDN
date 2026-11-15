@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -9,6 +11,27 @@ from app.services.knowledge import KnowledgeInput, insert_knowledge, today
 
 QUESTION = 'Vậy tôi muốn mượn sách ở thư viện để mang về trong 2 ngày thì phải làm sao, tôi muốn mượn sách ở cơ sở 3 trường mình'
 GUIDE = 'Xuất trình thẻ bạn đọc. Mang sách đến quầy thủ thư để ghi mượn. Kiểm tra hạn trả trước khi rời quầy.'
+
+
+@pytest.mark.parametrize('question,opening,required,source_path',[
+    ('Tôi cần chuẩn bị gì để mượn sách?', 'Mang thẻ', ('quầy thủ thư','Kiểm tra tình trạng','hạn trả'), 'phuc-vu-muon-tra-tai-lieu'),
+    ('Tôi có thể mượn sách tại thư viện không?', 'Mang thẻ', ('quầy thủ thư',), 'phuc-vu-muon-tra-tai-lieu'),
+    ('Tôi có thể mượn sách ở đâu?', 'Mang thẻ', ('quầy thủ thư',), 'phuc-vu-muon-tra-tai-lieu'),
+    ('Sách có thể mượn ở đâu?', 'Mang thẻ', ('quầy thủ thư',), 'phuc-vu-muon-tra-tai-lieu'),
+    ('Cần làm gì khi sử dụng phòng đọc của thư viện?', 'Xuất trình thẻ', ('phòng đọc','xếp ghế'), 'phuc-vu-phong-doc'),
+    ('Tôi có thể sử dụng máy tính và Internet tại thư viện thế nào?', 'Xuất trình thẻ', ('Báo thủ thư','tắt máy'), 'su-dung-may-tinh-internet'),
+])
+def test_imported_public_guides_start_with_the_reader_action(tmp_path, question, opening, required, source_path):
+    store = Store(tmp_path/'library.sqlite3')
+    pack = Path(__file__).resolve().parents[1]/'data/faq/public-library-2026-10-31.json'
+    with store.connect() as db:
+        for row in json.loads(pack.read_text(encoding='utf-8')):
+            insert_knowledge(db, KnowledgeInput.model_validate(row))
+    reply = assistant.answer_question(SimpleNamespace(db=store.connect, settings=SimpleNamespace(testing=True)), question)
+    assert reply['status']=='answered' and reply['mode']=='faq',reply
+    assert reply['answer'].startswith(opening),reply
+    assert all(value in reply['answer'] for value in required),reply
+    assert source_path in reply['sources'][0]['url'],reply
 
 
 @pytest.mark.parametrize('output,mode', [

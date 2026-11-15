@@ -1,6 +1,6 @@
 import os
 import re
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from zoneinfo import ZoneInfo
 from .knowledge import published_rows, today
 from .rag_service import keyword_search, normalize
@@ -8,11 +8,53 @@ from .retrieval import retrieve_knowledge
 from .llm_service import claims_completed_transaction, format_borrowing_guide, generate_answer, provider_name, MAX_MODEL_MESSAGE_CHARS
 from .catalog import contextual_question,is_book_request,is_borrowing_procedure,search_guidance,unquoted_text,book_query,search_books,book_attribute,book_followup,selected_title,author_query,structured_book_query,PENALTY_WORD
 from .catalog import direct_document_question, explicit_metadata_lookups, search_books_with_status, book_position, book_reference, public_book, normalize_catalog, book_attributes, search_correction
+from .catalog import edited_book_year_question, question_clause_ends
 from urllib.parse import urlencode
 from .opac_availability import get_availability
 from .recommendations import is_recommendation_request, recommend_books
 
 SUGGESTIONS = ['Hướng dẫn tra cứu OPAC','Thư viện mở cửa lúc mấy giờ hôm nay?','Tôi muốn gia hạn sách']
+CATALOG_SEARCH_EXAMPLES = (
+    ('Nhan đề', 'Tìm theo nhan đề 10 năm Olympic cơ học'),
+    ('Tác giả', 'Tìm theo tác giả Đào Huy Bích'),
+    ('Chủ đề', 'Tìm sách về Olympic cơ học'),
+)
+HOURS_INTENT = re.compile(r'\b(mo cua|dong cua|lich phuc vu|gio phuc vu|thoi gian phuc vu|mo tu may gio|mo may gio|may gio mo|dong may gio|mo den may gio)\b')
+HOURS_SOURCE = {
+    'title': 'LIC UTH — Hướng dẫn sử dụng thư viện, trang 12',
+    'url': 'https://lic.ut.edu.vn/wp-content/uploads/2024/11/1.HD-su-dung-thu-vien-va-khai-thac-hieu-qua-cac-CSDL-tai-nguyen-thong-tin-thu-vien.pdf#page=12',
+    'checked_at': '2026-11-12',
+}
+WEEKDAY_LABELS = ('Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy', 'Chủ nhật')
+WEEKDAY_HOURS = ('07:30–18:30',) * 5 + ('08:30–16:30', 'nghỉ phục vụ')
+LIBRARY_CAMPUSES = ('1','2','3')
+DAY_OFFSETS = {'hom nay': 0, 'bay gio': 0, 'luc nay': 0, 'mai': 1, 'ngay mai': 1, 'ngay mot': 2, 'ngay kia': 2}
+HOURS_DAY = r'thu (?:hai|ba|tu|nam|sau|bay|[2-7])|chu nhat'
+HOURS_FOLLOWUP = re.compile(r'(?:(?:con|vay|the) )?(?:'+HOURS_DAY+r'|hom nay|(?:ngay )?mai)(?: thi sao| a)?')
+LIBRARY_CAMPUS_NAMES = {'1':'thanh my tay|binh thanh|vo oanh','2':'an khanh|thu duc','3':'trung my tay|quan 12|to ky'}
+HOURS_CLOCK = (r'(?:luc|vao) (\d{1,2})\s*(?:h|gio)(?:\s*(\d{2})(?: phut)?)?\b'
+               r'(?: (?:buoi )?(sang|trua|chieu|toi|am|pm))?\b')
+HOURS_CAMPUS_FOLLOWUP = re.compile(
+    r'(?:(?:con|vay|the) )?(?:o )?(?:(?:co so|cs)\s*[123]|'+
+    '|'.join(LIBRARY_CAMPUS_NAMES.values())+r')(?: '+HOURS_CLOCK+r')?(?: thi sao| khong)?(?: a)?')
+HOURS_NOW = r'(?:con|dang) mo(?: cua)?'
+GROUP_ROOM = re.compile(r'\b(?:phong hoc nhom|phong doc nhom|hoc nhom)\b')
+LUNCH_HOURS = re.compile(r'\b(?:nghi trua|xuyen trua|thong trua|mo cua buoi trua|mo buoi trua)\b')
+COURTESY = ('cam on','cam on ban','thank you','thanks','ok')
+
+# Imported FAQ text can predate the current presentation of citations.
+FAQ_OPENINGS = (
+    ('Theo trang Phục vụ mượn–trả tài liệu, bạn đọc xuất trình thẻ, tra tìm tài liệu bằng máy tính hoặc trong kho, dùng sơ đồ và bảng chỉ dẫn kệ để xác định tài liệu, rồi mang sách ra quầy thủ thư làm thủ tục ghi mượn.',
+     'Mang thẻ bạn đọc và xuất trình khi làm thủ tục mượn. Tìm sách bằng máy tính hoặc trong kho. Dùng sơ đồ kho và bảng chỉ dẫn kệ để tìm đúng cuốn, rồi mang sách đến quầy thủ thư để ghi mượn.'),
+    ('Theo trang Phục vụ phòng đọc của LIC, bạn đọc xuất trình', 'Xuất trình'),
+    ('Trang Sử dụng máy tính & Internet hướng dẫn xuất trình', 'Xuất trình'),
+    ('Trang Hỗ trợ nhanh của LIC công bố email', 'Bạn có thể liên hệ qua email'),
+    ('Trang Hướng dẫn sử dụng tài nguyên thư viện tập hợp các hướng dẫn cho', 'Bạn có thể xem hướng dẫn sử dụng'),
+    ('Trang Xuất bản, phát hành tài liệu của LIC giới thiệu việc', 'Thư viện hỗ trợ'),
+    ('Trang Học tập cá nhân, học nhóm của LIC hiện chỉ có nội dung chờ cập nhật, chưa cung cấp quy trình đặt phòng hoặc lịch trống.',
+     'Mình chưa có quy trình đặt phòng học nhóm hoặc lịch phòng trống.'),
+    ('Theo mục Thư viện các cơ sở và phần địa chỉ trên trang chủ LIC:', 'Bạn có thể đến thư viện tại ba cơ sở sau.'),
+)
 
 
 def source(row):
@@ -24,7 +66,226 @@ def result(answer,status='answered',sources=None,suggestions=None,mode='faq'):
     for citation in sources or []:
         if citation not in references:
             references.append(citation)
+    if references and mode in ('faq','rag','fallback'):
+        paragraphs = answer.split('\n\n')
+        for index, paragraph in enumerate(paragraphs):
+            for prefix, replacement in FAQ_OPENINGS:
+                if paragraph.startswith(prefix):
+                    paragraphs[index] = replacement + paragraph[len(prefix):]
+                    break
+        answer = '\n\n'.join(paragraphs)
     return {'answer':answer,'status':status,'sources':references,'suggestions':suggestions or [],'mode':mode}
+
+
+def asks_library_hours(q):
+    return (HOURS_INTENT.search(q) or (LUNCH_HOURS.search(q) and re.search(r'\b(?:thu vien|(?:co so|cs)\s*[123])\b',q))
+            or (re.search(r'\b(?:thu vien|(?:co so|cs)\s*[123])\b',q) and
+                re.search(r'\bmo (?:(?:luc|vao|tu|den) \d{1,2}|(?:hom nay|ngay mai)\b)',q))
+            or ('thu vien' in q and re.search(
+                r'\b(?:co mo|'+HOURS_NOW+r'|co lam viec|co phuc vu|gio lam viec|co nghi|nghi khong|(?:mo|dong) (?:luc|tu|den) may gio)\b',q)))
+
+
+def campus_hours(default, overrides=None, campuses=LIBRARY_CAMPUSES):
+    overrides = overrides or {}
+    return '\n'.join(f'Cơ sở {campus} — {overrides.get(campus,default)}' for campus in campuses)
+
+
+def clock_service(clock, windows):
+    for opens,closes in re.findall(r'(\d{2}:\d{2})–(\d{2}:\d{2})',windows):
+        if opens<=clock<closes:
+            return 'trong khung giờ phục vụ'
+    return 'ngoài giờ phục vụ'
+
+
+def requested_campuses(query):
+    branches = set(re.findall(r'\b(?:co so|cs)\s*(\d+)\b',query))
+    for match in re.finditer(r'\b(?:co so|cs)\s*(\d+(?:(?: va)? \d+\b(?!\s*(?:gio|phut|thang)\b))+)',query):
+        branches.update(re.findall(r'\d+',match[1]))
+    named_branches=set()
+    for branch, place in LIBRARY_CAMPUS_NAMES.items():
+        if re.search(r'\b(?:'+place+r')\b',query):
+            named_branches.add(branch)
+    if not branches.issubset(LIBRARY_CAMPUSES) or (branches and named_branches and not named_branches.issubset(branches)):
+        return None
+    return branches | named_branches
+
+
+def answer_library_hours(state, question, q, history):
+    branch_query = q
+    clock_query=normalize(re.sub(r'(?<=\d):\s*(?=\d)','h',unquoted_text(question)))
+    clock_turn=HOURS_CAMPUS_FOLLOWUP.fullmatch(clock_query)
+    date_pattern = r'\b(?:'+ '|'.join(DAY_OFFSETS) +'|'+HOURS_DAY+r'|ngay le|nghi le|tet)\b'
+    if not asks_library_hours(q):
+        if not (HOURS_FOLLOWUP.fullmatch(q) or clock_turn):
+            return None
+        campus_turn = q if clock_turn else None
+        date_turn = q if HOURS_FOLLOWUP.fullmatch(q) else None
+        recent_hours = ''
+        for turn in reversed(history or []):
+            if turn['role'] != 'user':
+                displayed = normalize(re.sub(r'\b\d{1,2}:\d{2}\b', ' ', turn['content']))
+                if not recent_hours and re.match(r'^(?:lich phuc vu |thu vien uth ap dung lich chung |(?:'+HOURS_DAY+r') (?:lich chung|thu vien uth))',displayed):
+                    recent_hours = displayed
+                continue
+            previous = normalize(unquoted_text(turn['content']))
+            if asks_library_hours(previous):
+                branch_query = campus_turn or previous
+                q = date_turn or previous
+                break
+            if previous in COURTESY:
+                continue
+            previous_clock=normalize(re.sub(r'(?<=\d):\s*(?=\d)','h',unquoted_text(turn['content'])))
+            if HOURS_CAMPUS_FOLLOWUP.fullmatch(previous_clock):
+                campus_turn = campus_turn or previous
+            elif HOURS_FOLLOWUP.fullmatch(previous):
+                date_turn = date_turn or previous
+            else:
+                return None
+        else:
+            # A recent displayed schedule can outlast the original question in the six-message window.
+            if not recent_hours:
+                return None
+            branch_query = campus_turn or recent_hours
+            displayed_day = re.match(r'(?:lich phuc vu )?('+HOURS_DAY+r')\b',recent_hours)
+            q = date_turn or (displayed_day[1] if displayed_day else '')
+
+    branches = requested_campuses(branch_query)
+    if branches is None:
+        return result('Bạn muốn xem giờ phục vụ ở cơ sở 1, 2 hay 3?', 'clarify')
+    campuses = tuple(sorted(branches)) or LIBRARY_CAMPUSES
+    branch = next(iter(branches)) if len(branches)==1 else None
+    location = (f' tại cơ sở {branch}' if branch else ' tại cả ba cơ sở' if len(campuses)==3
+                else f' tại cơ sở {campuses[0]} và {campuses[1]}')
+    references = [HOURS_SOURCE]
+
+    lunch = LUNCH_HOURS.search(q)
+    contact = None
+    if lunch or re.search(r'\b(lien he|hoi) o dau\b',q):
+        contacts = [row for row in published_rows(state.db) if row['category']=='hours_contact']
+        contact = max(contacts,key=lambda row:row['checked_at'],default=None)
+    if lunch:
+        answer=f'Lịch chung của thư viện chưa ghi rõ giờ nghỉ trưa{location}. Bạn nên xác nhận trước khi đến vào buổi trưa.'
+        if contact:
+            answer+='\n\n'+contact['answer']
+            references.append(source(contact))
+        return result(answer,'needs_confirmation',references)
+    if contact:
+        return result(contact['answer'],sources=[source(contact)])
+
+    general = (f'Thư viện UTH áp dụng lịch chung{location}.\n'
+               f'• Thứ Hai đến thứ Sáu: {WEEKDAY_HOURS[0]}.\n'
+               f'• Thứ Bảy: {WEEKDAY_HOURS[5]}.\n'
+               '• Chủ nhật và ngày Lễ, Tết: nghỉ phục vụ.')
+    if not branch:
+        general = f'Thư viện UTH áp dụng lịch chung{location}.\n'+campus_hours(
+            f'Thứ Hai đến thứ Sáu {WEEKDAY_HOURS[0]} · Thứ Bảy {WEEKDAY_HOURS[5]} · Chủ nhật và ngày Lễ, Tết nghỉ phục vụ.',campuses=campuses)
+    if re.search(r'\b(?:hai (?:nguon|moc)|ban huong dan khac)\b',q) and '20:30' in unquoted_text(question):
+        older=next((row for row in published_rows(state.db) if row['category']=='hours_reference'
+                    and '/uploads/2022/10/' in row['source_url'] and '07:30–20:30' in row['answer']),None)
+        if older:
+            answer=('Mốc 20:30 nằm ở trang 12 của hướng dẫn LIC lưu trong thư mục 2022/10, '
+                    'ở phần giờ phục vụ từ thứ Hai đến thứ Sáu của cơ sở 1. Mốc 18:30 nằm ở trang 12 '
+                    'của hướng dẫn lưu trong thư mục 2024/11, ở phần lịch chung từ thứ Hai đến thứ Sáu. '
+                    'Bạn nên dùng mốc 18:30 theo lịch chung để lên kế hoạch. Nếu đi vào một ngày cụ thể, '
+                    'hãy kiểm tra thông báo của thư viện xem cơ sở đó có lịch riêng hay không.')
+            return result(answer,sources=[source(older),*references])
+    if re.search(r'\b(nguon nao|hai nguon|ban huong dan khac|thuong le|mac dinh)\b',q):
+        return result(general,sources=references)
+    if re.search(r'\b(ngay le|nghi le|tet)\b',q):
+        answer=f'Thư viện UTH nghỉ phục vụ{location} vào ngày Lễ, Tết theo lịch chung.'
+        if not branch:
+            answer+='\n'+campus_hours('nghỉ phục vụ',campuses=campuses)
+        return result(answer,sources=references)
+
+    offsets = {DAY_OFFSETS[match] for match in re.findall(r'\b(?:'+ '|'.join(DAY_OFFSETS) +r')\b',q)}
+    if not re.search(date_pattern,q) and re.search(r'\b'+HOURS_NOW+r'\b',q):
+        offsets={0}
+    day_matches = re.findall(r'\b(?:'+HOURS_DAY+r')\b',q)
+    weekdays = {normalize(label): i for i,label in enumerate(WEEKDAY_LABELS)}
+    weekdays.update({f'thu {i+2}': i for i in range(6)})
+    days = {weekdays[match] for match in day_matches}
+    clock_matches=re.findall(r'\b'+HOURS_CLOCK,clock_query)
+    clocks=set()
+    for hour,minute,part in clock_matches:
+        hours=int(hour)
+        if 1<=hours<12 and (part in ('chieu','toi','pm') or part=='trua' and hours<=2):
+            hours+=12
+        elif hours==12 and part in ('sang','am'):
+            hours=0
+        clocks.add((hours,int(minute or 0)))
+    if len(clocks)>1 or any(hour>23 or minute>59 for hour,minute in clocks):
+        return result('Bạn muốn xem giờ phục vụ vào mấy giờ? Hãy gửi một giờ cụ thể, ví dụ 15:30.', 'clarify')
+    clock=next((f'{hour:02d}:{minute:02d}' for hour,minute in clocks),None)
+    if not clock and offsets=={0} and re.search(r'\b(?:bay gio|luc nay|'+HOURS_NOW+r')\b',q):
+        clock=datetime.now(ZoneInfo('Asia/Ho_Chi_Minh')).strftime('%H:%M')
+    midday=clock is not None and '12:00'<=clock<'13:00'
+    if (len(offsets)>1 or len(days)>1 or (offsets and days)
+            or re.search(r'\b(hom qua|tuan sau|tuan truoc|ngay \d+|thang \d+)\b',q)
+            or re.search(r'\b\d{1,2}[/-]\d{1,2}\b',question)):
+        return result('Bạn muốn xem lịch cho hôm nay, ngày mai hay một thứ cụ thể trong tuần?', 'clarify')
+    midday_notice=f'Lịch chung chưa ghi rõ giờ nghỉ trưa{location}. Bạn nên xác nhận với thư viện trước khi đến lúc {clock}.'
+    if not offsets and not days:
+        if clock:
+            if midday:
+                return result(midday_notice,'needs_confirmation',references)
+            service_days=[label for label,window in zip(WEEKDAY_LABELS,WEEKDAY_HOURS)
+                          if clock_service(clock,window)=='trong khung giờ phục vụ']
+            if not service_days:
+                return result(f'{clock} nằm ngoài giờ phục vụ{location} theo lịch chung.\n\n'+general,sources=references)
+            return result(f'Theo lịch chung{location}, {clock} nằm trong khung giờ phục vụ vào {", ".join(service_days)}.\n\n'+general,
+                          sources=references)
+        return result(general,sources=references)
+    if not offsets:
+        weekday = next(iter(days))
+        hours = WEEKDAY_HOURS[weekday]
+        if clock:
+            if midday and weekday!=6:
+                return result(midday_notice,'needs_confirmation',references)
+            return result(f'{WEEKDAY_LABELS[weekday]}, {clock} nằm {clock_service(clock,hours)}{location} theo lịch chung.\n'
+                          +campus_hours(hours,campuses=campuses),sources=references)
+        if not branch:
+            return result(f'{WEEKDAY_LABELS[weekday]}, lịch chung{location}.\n'+campus_hours(hours,campuses=campuses),sources=references)
+        return result(f'{WEEKDAY_LABELS[weekday]}, thư viện UTH{location} {"nghỉ phục vụ" if weekday==6 else "phục vụ từ " + hours} theo lịch chung.',sources=references)
+
+    selected = today()+timedelta(days=next(iter(offsets)))
+    weekday = selected.weekday()
+    with state.db() as db:
+        rows = db.execute('''SELECT * FROM schedules WHERE weekday=? AND valid_from<=? AND valid_until>=?
+                             ORDER BY branch,opens,id''',(weekday,selected.isoformat(),selected.isoformat())).fetchall()
+    overrides = {}
+    clock_overrides = {}
+    for campus in campuses:
+        candidates = [row for row in rows if row['branch']==campus]
+        if not candidates:
+            continue
+        spans = [(date.fromisoformat(row['valid_until'])-date.fromisoformat(row['valid_from'])).days for row in candidates]
+        shortest = min(spans)
+        applicable = [row for row,span in zip(candidates,spans) if span==shortest]
+        window = 'nghỉ phục vụ' if any(row['closed'] for row in applicable) else '; '.join(f"{row['opens']}–{row['closes']}" for row in applicable)
+        if clock:
+            clock_overrides[campus]=f'{clock_service(clock,window)} ({window})'
+        notes = ' '.join(row['note'] for row in applicable if row['note'])
+        overrides[campus]=f'{window}. {notes}'.strip()
+        references.extend(source(row) for row in applicable)
+
+    label = f'{WEEKDAY_LABELS[weekday]} {selected:%d/%m/%Y}'
+    if clock:
+        hours=WEEKDAY_HOURS[weekday]
+        use_default=len(overrides)!=len(campuses)
+        uncertain=use_default and midday and weekday!=6
+        usual=('lịch chung chưa ghi rõ giờ nghỉ trưa' if uncertain else
+               f'{clock_service(clock,hours)} theo lịch chung ({hours})')
+        return result(f'{label}, lúc {clock}{location}.\n'+campus_hours(usual,clock_overrides,campuses),
+                      'needs_confirmation' if uncertain else 'answered',references if use_default else references[1:])
+    if branch and overrides:
+        return result(f'Lịch phục vụ {label}.\nCơ sở {branch} — {overrides[branch]}',sources=references[1:])
+    hours = WEEKDAY_HOURS[weekday]
+    if not branch:
+        opening=f'Lịch phục vụ {label}{location}.'
+        return result(opening+'\n'+campus_hours(hours+' (lịch chung)',overrides,campuses),
+                      sources=references[1:] if len(overrides)==len(campuses) else references)
+    window = 'nghỉ phục vụ' if weekday==6 else f'phục vụ từ {hours}'
+    return result(f'{label}, thư viện UTH{location} {window} theo lịch chung.',sources=references)
 
 
 def library_subject(question):
@@ -58,7 +319,7 @@ def library_redirect(question):
 
 def book_metadata(book,attributes):
     labels={'isbn':'ISBN','shelf':'vị trí kệ / ký hiệu xếp giá','publisher':'nhà xuất bản',
-            'author':'tác giả','year':'năm xuất bản','summary':'tóm tắt nội dung','audience':'đối tượng đọc'}
+            'author':'tác giả','year':'năm xuất bản','summary':'tóm tắt nội dung','audience':'đối tượng đọc','format':'dạng tài liệu'}
     lines=[]
     facts=[]
     missing=[]
@@ -68,19 +329,22 @@ def book_metadata(book,attributes):
         checked_at=book['checked_at']
         if field in ('author','year') and book[field].strip():
             facts.append(('có tác giả là ' if field=='author' else 'xuất bản năm ')+book[field])
+        elif field=='format' and book['kind']=='digital':
+            facts.append('là tài liệu số')
+        elif field=='format' and 'dang tai lieu sach truyen thong' in normalize(book['description']):
+            facts.append('là sách giấy')
         elif field in ('summary','audience') and book.get('marc',{}).get(field):
             lines.append(f"{label[0].upper()+label[1:]}:\n\n{book['marc'][field]}")
             checked_at=book['marc']['checked_at']
         elif field=='summary' and book['description'].strip():
-            lines.append(f"Theo mô tả công khai:\n\n{book['description']}\n\nĐây là mô tả trong biểu ghi; mình chưa đọc hoặc kiểm chứng toàn văn.")
+            lines.append(f"{book['description']}\n\nĐây là phần mô tả trong biểu ghi. Mình chưa kiểm chứng toàn văn.")
             missing.append(label)
         else:
             missing.append(label)
         citation={'title':book['title'],'url':book['url'],'checked_at':checked_at}
         if citation not in sources:
             sources.append(citation)
-    origin='OPAC' if book.get('marc') else 'thư viện'
-    opening=f"Theo biểu ghi {origin}, “{book['title']}”"+(' '+', '.join(facts)+'.' if facts else ':')
+    opening=f"“{book['title']}”"+(' '+', '.join(facts)+'.' if facts else '')
     if missing:
         lines.append('Biểu ghi đang có chưa xác nhận '+', '.join(missing)+'. Bạn hãy mở nguồn gốc hoặc hỏi thư viện; mình không tự suy đoán thông tin này.')
     return '\n\n'.join([opening,*lines]),'needs_confirmation' if missing else 'answered',sources
@@ -99,16 +363,23 @@ def answer_question(state, question, history=None):
         answer='Mình không thể xem hoặc tiết lộ lịch sử mượn, hạn trả hay tài khoản của người khác. Bạn chỉ có thể đăng nhập tài khoản của bạn để xem thông tin được phép truy cập; nếu cần hỗ trợ nghiệp vụ, hãy liên hệ thư viện.'
         return result(answer+''.join('\n\nVới sách của chính bạn: '+row['answer'] for row in own_loans),'not_found',[source(row) for row in own_loans])
     if re.match(r'^(?:(?:toi|minh|em) )?(?:dung|khong(?: muon)?) (?:tim|tra cuu)(?! (?:thay|duoc|ra)\b)\b',intent_q):
+        boundary=next(question_clause_ends(question),len(question))
+        followup=question[boundary:].strip()
+        if re.match(r'^(?:(?:vay|the) )?(?:lam the nao|lam sao|huong dan|cach)\b',normalize(followup)) and library_subject(followup):
+            return answer_question(state,followup)
         return result('Bạn không muốn tra cứu theo yêu cầu này. Bạn muốn đổi chủ đề sách hay cần hỗ trợ dịch vụ nào của thư viện?','clarify')
     clauses=map(normalize,re.split(r'[.!?;](?=\s|$)|\n',unquoted))
     asks_unverified_claim=any(
-        (re.match(r'^(?:hay )?(?:(?:noi|bao|ghi|xac nhan) rang|(?:noi|bao|ghi) da)\b',clause) or
+        (re.search(r'(?:^|\bva )(?:hay )?(?:(?:noi|bao|ghi) rang|xac nhan(?: rang)?|(?:noi|bao|ghi) da)\b',clause) or
+         re.search(r'\bgia vo\b',clause) or
          re.search(r'\bcoi (?:\w+ ){0,12}la lenh quan tri\b',clause)) and
         (claims_completed_transaction(clause) or re.search(r'\b(?:con|co) (?:dung )?\d+ ban (?:roi|trong)\b',clause))
         for clause in clauses
     )
     if asks_unverified_claim:
-        notice='Mình chưa kiểm tra số bản rỗi và chưa thực hiện giao dịch. Bạn có thể xem mục Thông tin xếp giá trên OPAC để đối chiếu.'
+        notice='Chatbot chưa thực hiện giao dịch. Bạn có thể vào Trang cá nhân trên OPAC để kiểm tra khoản mượn.'
+        if re.search(r'\b(?:con|co) (?:dung )?\d+ ban (?:roi|trong)\b',intent_q):
+            notice+=' Chatbot chưa kiểm tra số bản rỗi. Hãy xem mục Thông tin xếp giá để đối chiếu.'
         lookups=explicit_metadata_lookups(question)
         if len(lookups)==1:
             (field,query),attributes=next(iter(lookups.items()))
@@ -122,19 +393,68 @@ def answer_question(state, question, history=None):
                 answer,_,sources=book_metadata(book,sorted(attributes))
                 return {**result(answer+'\n\n'+notice,'needs_confirmation',sources,mode='catalog'),'books':[book],
                         'context_query':'Tìm theo nhan đề '+book['title']}
-        return result(notice+' Nếu muốn tra tác giả hoặc năm xuất bản, bạn hãy gửi một nhan đề cụ thể.','clarify')
+        return result(notice,'clarify')
+    if getattr(state.settings,'demo_reservations',False) and re.search(r'\b(?:sach mau|thu vien mau)\b',intent_q):
+        if re.search(r'\b(?:nhan sach|gia han|tra sach|han tra)\b',intent_q):
+            return result('Mở Thư viện mẫu và đăng nhập để xem khoản mượn. Sau khi đăng ký, chọn “Nhận sách” để có hạn trả 7 ngày. '
+                          'Bạn có thể gia hạn một lần thêm 7 ngày nếu chưa quá hạn, hoặc chọn “Trả sách” để trả bản mẫu.',mode='demo_reservation')
+    if re.search(r'\b(lien thu vien|mltv)\b',intent_q):
+        policies=[row for row in published_rows(state.db) if row['category']=='interlibrary']
+        if policies:
+            return result('\n\n'.join(row['answer'] for row in policies),'needs_confirmation',[source(row) for row in policies])
+        return result('Mình chưa có thông tin về dịch vụ mượn liên thư viện. Bạn có thể hỏi thư viện đã cấp tài khoản cho mình.','not_found')
     reservation_request = re.match(r'^(?:(?:vay|the|ban|toi|minh|em|co|the|muon|hay|giup|vui|long) )*(?:dang k[iy] (?:muon|sach)|dat cho (?:muon|sach)|dat muon)\b', intent_q)
     reservation_guidance = re.search(r'\b(?:khac|co phai|gia han|the nao|lam sao|opac)\b', intent_q)
-    if reservation_request and not reservation_guidance:
+    chat_borrow = re.fullmatch(
+        r'(?:(?:vay|the|toi|minh|em|ban) )*(?:(?:co(?: the)?|muon) )?(?:dang k[iy] )?muon '
+        r'(?:sach|tai lieu|(?:cuon|quyen)(?: sach)?)(?: (?:nay|do|ay))? '
+        r'(?:(?:ngay|truc tiep) )?(?:(?:tai|o) day|(?:qua|tren|trong) (?:chatbot|(?:(?:doan|khung|o) )?chat)(?: nay)?)'
+        r'(?: (?:duoc )?khong)?(?: a)?', intent_q)
+    if chat_borrow or (reservation_request and not reservation_guidance):
+        opening='Bạn chưa thể mượn sách thật ngay trong chatbot. ' if chat_borrow else ''
         if getattr(state.settings, 'demo_reservations', False):
-            return result('Bạn có thể đăng ký mượn tại Thư viện mẫu. Hãy đăng nhập, chọn sách mẫu và xác nhận yêu cầu. Yêu cầu được lưu trong kho giả lập.', mode='demo_reservation')
-        return result('Bạn có thể đăng ký mượn trực tiếp trên OPAC. Hãy mở biểu ghi, đăng nhập bằng tài khoản thư viện và chọn “Đăng ký mượn” nếu có.',
-                      sources=[{'title':'Tra cứu và đăng ký trên OPAC','url':'https://opacthuvien.ut.edu.vn/opac/','checked_at':None}])
+            return result(opening+'Bạn có thể đăng ký mượn tại Thư viện mẫu. Hãy đăng nhập, chọn sách mẫu và xác nhận yêu cầu. Yêu cầu được lưu trong kho giả lập.', mode='demo_reservation')
+        return result(opening+'Bạn có thể đăng ký mượn trên OPAC. Mở biểu ghi, đăng nhập bằng tài khoản thư viện và chọn “Đăng ký mượn” nếu có. Sau đó, kiểm tra yêu cầu trong Trang cá nhân.',
+                      sources=[{'title':'Mở OPAC thư viện','url':'https://opacthuvien.ut.edu.vn/opac/','checked_at':None},
+                               {'title':'Hướng dẫn đăng ký mượn trên OPAC','url':'https://opacthuvien.ut.edu.vn/opac/Upload/HDSD_TRACUU_OPAC.v1.1.pdf#page=7','checked_at':None}])
     for conjunction in re.finditer(r'\b(?:va|dong thoi|sau do)\b',intent_q):
         before,after=intent_q[:conjunction.start()].strip(),intent_q[conjunction.end():].strip()
         if (search_guidance(before) and is_book_request(after)) or (is_book_request(before) and re.match(r'^(?:huong dan|cach|lam the nao|lam sao)\b',after) and search_guidance(after)):
             return result('Bạn muốn tìm tài liệu cụ thể và hỏi cách tra cứu. Hãy gửi riêng từng yêu cầu để mình trả đúng sách và đúng hướng dẫn.', 'clarify',suggestions=SUGGESTIONS)
-    direct=direct_document_question(question)
+    for conjunction in re.finditer(r'\s+(?:và|va|rồi|roi)\s+',question,flags=re.I):
+        lookup=question[:conjunction.start()]
+        followup=question[conjunction.end():]
+        if unquoted != unquoted_text(lookup)+conjunction[0]+unquoted_text(followup):
+            continue
+        if is_borrowing_procedure(followup):
+            topic=re.fullmatch(r'(?:thu vien(?: uth)? )?co (?:nhung )?(?:sach|tai lieu) nao (?:ve|chu de) (.+)',
+                               normalize_catalog(lookup))
+            if topic or is_book_request(lookup):
+                listing=answer_question(state,'Tìm sách '+topic[1] if topic else lookup,history)
+                guide=answer_question(state,followup)
+                return {**listing,'answer':listing['answer']+'\n\n'+guide['answer'],
+                        'sources':result('',sources=listing['sources']+guide['sources'])['sources'],
+                        'status':guide['status'] if listing['status']=='answered' else listing['status']}
+        position=book_position(followup)
+        if position is None or not is_book_request(lookup):
+            continue
+        details=re.sub(r'\s+(?:cua )?(?:cuon|quyen|sach|tai lieu)(?: sach)? (?:dau tien|thu (?:nhat|mot|hai|ba|tu|bon|nam|\d{1,3}))(?: a)?$',
+                       '',normalize(followup))
+        attributes=book_attributes(details)
+        if not attributes or 'availability' in attributes or not book_reference(details):
+            continue
+        listing=answer_question(state,lookup,history)
+        books=listing.get('books',[])
+        if listing['status']!='answered' or not books:
+            return listing
+        if not 1<=position<=len(books):
+            return {**result(f'Mình tìm được {len(books)} tài liệu. Bạn hãy chọn một cuốn trong danh sách để mình tra thông tin.',
+                             'clarify',listing['sources'],mode='catalog'),'books':books,'context_query':listing.get('context_query','')}
+        book=books[position-1]
+        answer,status,sources=book_metadata(book,attributes)
+        return {**result(answer,status,sources,mode='catalog'),'books':[book],'context_query':'Tìm theo nhan đề '+book['title']}
+    edited_book=edited_book_year_question(question)
+    direct=('year',edited_book[0]) if edited_book else direct_document_question(question)
     if not direct and unquoted!=question and book_attributes(intent_q) and not search_guidance(question) and not is_borrowing_procedure(question):
         return result('Mình chưa xác định được một nhan đề duy nhất trong yêu cầu này. Bạn hãy hỏi riêng từng tài liệu và thông tin cần tra cứu để mình đối chiếu đúng biểu ghi.','clarify')
     reference_context=any(turn['role']=='assistant' and 'book_ids' in turn for turn in history or [])
@@ -143,12 +463,23 @@ def answer_question(state, question, history=None):
         if turn['role']=='assistant' and turn.get('book_ids'):
             ids=turn['book_ids']
             break
-        if turn['role']=='user' and normalize(turn['content']) not in ('cam on','cam on ban','thank you','thanks','ok'):
+        if turn['role']=='user' and normalize(turn['content']) not in COURTESY:
             if is_book_request(turn['content']) or direct_document_question(turn['content']) or book_position(turn['content']) is not None or not book_followup(turn['content']):
                 break
     position=book_position(question) if not direct and not is_book_request(question) else None
     relative=not direct and not is_book_request(question) and book_reference(question)
+    if edited_book:
+        # The title and editor are search data, not additional service requests.
+        intent_q='nam xuat ban'
     attributes=book_attributes(intent_q)
+    metadata_requested=re.search(r'\b(?:ban ghi (?:thu vien )?ghi|giup (?:toi|minh|em) xac dinh)\b',intent_q)
+    if metadata_requested:
+        if re.search(r'\b(?:nhung nguoi tham gia|tac gia)\b',intent_q) and 'author' not in attributes:
+            attributes.append('author')
+        if re.search(r'\btac gia va nam\b',intent_q) and 'year' not in attributes:
+            attributes.append('year')
+        if re.search(r'\b(?:sach giay hay tai lieu so|tai lieu so hay sach giay)\b',intent_q):
+            attributes.append('format')
     if position is None and relative and reference_context:
         if len(ids)==1:
             position=1
@@ -156,6 +487,7 @@ def answer_question(state, question, history=None):
             books=[book for row_id in ids if (book:=public_book(state.db,row_id))]
             return {**result('Bạn đang hỏi về tài liệu nào? Hãy chọn nhan đề hoặc thứ tự trong danh sách để mình đối chiếu đúng biểu ghi.','clarify'),'books':books}
     selected_book=None
+    lookup_text=question
     if position is not None:
         multiple_fields=relative and len(attributes)>1 and len(re.findall(r'\b(?:tai lieu|(?:cuon|quyen)(?: sach)?|sach)\b',intent_q))<=1 and 'hoac' not in intent_q.split()
         if 1<=position<=len(ids) and (multiple_fields or not re.search(r'\b(va|hoac)\b',intent_q)):
@@ -165,16 +497,34 @@ def answer_question(state, question, history=None):
         question='Tìm theo nhan đề '+selected_book['title']
     else:
         question='Tìm theo nhan đề '+direct[1] if direct else contextual_question(question,history)
-    guidance=search_guidance(question)
+    guidance=search_guidance(question,allow_bare=True)
     # Natural borrowing requests may also ask for instructions in the same turn.
     borrowing=bool(re.search(r'\b(muon|roi|tinh trang|so ban)\b',intent_q))
-    natural=re.search(r'\bco (?:nhung )?(?:sach|tai lieu) (.+?) (?:nao\b|co the\b|dang roi\b|con roi\b)',original_q) if borrowing and not guidance else None
+    natural=re.search(r'\bco (?:nhung )?(?:sach|tai lieu) (.+?) (?:nao\b|co the\b|dang roi\b|con roi\b)',normalize_catalog(lookup_text)) if borrowing and not guidance else None
     if natural:
         question='Tìm sách '+natural[1]
     if len(question)>MAX_MODEL_MESSAGE_CHARS:
         return result('Ngữ cảnh tài liệu trước quá dài cho một lượt xử lý. Bạn hãy gửi lại tên/chủ đề sách ngắn gọn hoặc chia nội dung thành các phần; mình không âm thầm cắt ngữ cảnh để tìm kiếm.', 'clarify')
     q = normalize(question)
-    if q==original_q and book_followup(original_q) and book_attribute(original_q):
+    ebook_topic=re.fullmatch(
+        r'(?:(?:toi|minh|em) )?(?:co the |muon |can )?(?:tim|kiem|tra cuu) (?:ebook|sach dien tu|tai lieu so)'
+        r'(?: (tieng viet|tieng anh))? (?:ve|chu de) (.+?)(?: (?:tai|o|trong) thu vien(?: uth)?)?(?: (?:duoc )?khong)?',q)
+    if ebook_topic and not guidance:
+        if len(ebook_topic[2])>200 or re.search(r'\b(?:khong phai|ngoai tru|loai tru|dung lay|khong can|bo qua|va (?:cach|gio|phi|han|thu tuc|huong dan))\b',ebook_topic[2]):
+            return result('Bạn hãy gửi riêng chủ đề tài liệu số cần tìm để mình kiểm tra đúng danh mục.', 'clarify')
+        books,semantic_status=search_books_with_status(state,ebook_topic[2],kind='digital')
+        if books:
+            books=books[:5]
+            answer='Mình tìm được các biểu ghi tài liệu số theo chủ đề bạn hỏi. Mở biểu ghi để kiểm tra quyền đọc hoặc tải.'
+            if ebook_topic[1]:
+                language='tiếng Việt' if ebook_topic[1]=='tieng viet' else 'tiếng Anh'
+                answer+=f' Danh mục chưa đủ thông tin để xác nhận tất cả tài liệu này bằng {language}.'
+            return {**result(answer,sources=[{'title':b['title'],'url':b['url'],'checked_at':b['checked_at']} for b in books],mode='catalog'),
+                    'books':books,'context_query':'Tìm sách '+ebook_topic[2]}
+        status='needs_confirmation' if semantic_status else 'not_found'
+        answer='Mình chưa tìm thấy biểu ghi tài liệu số phù hợp trong danh mục hiện có. Bạn có thể thử tra cứu trên OPAC.'
+        return result(answer,status,sources=[{'title':'Mở OPAC thư viện','url':'https://opacthuvien.ut.edu.vn/opac/','checked_at':None}],mode='catalog')
+    if q==original_q and book_followup(intent_q) and book_attribute(intent_q) and not is_book_request(question):
         return result('Bạn đang hỏi về tài liệu nào? Vui lòng cung cấp nhan đề hoặc tìm sách trước để mình đối chiếu đúng biểu ghi.', 'clarify',suggestions=['Tìm sách Olympic cơ học'])
     asks_return_date = bool(re.search(r'\b(?:bao gio|khi nao) (?:\w+ ){0,3}tra\b', intent_q))
     if 'muon sach' in intent_q and asks_return_date and not is_borrowing_procedure(question):
@@ -182,7 +532,7 @@ def answer_question(state, question, history=None):
         q=normalize(question)
     if re.fullmatch(r'(xin chao|chao|hello|hi|alo)( ban| thu vien| tro ly)?',q):
         return result('Chào bạn! Mình có thể hỗ trợ tra cứu OPAC, hướng dẫn tài nguyên điện tử và thông tin dịch vụ thư viện.',suggestions=SUGGESTIONS)
-    if q in ('cam on','cam on ban','thank you','thanks','ok'):
+    if q in COURTESY:
         return result('Rất vui được hỗ trợ bạn. Khi cần tìm tài liệu hoặc hỏi về dịch vụ thư viện, bạn cứ nhắn mình nhé.',suggestions=SUGGESTIONS)
     if is_book_request(question):
         if re.search(r'\b(khong phai|ngoai tru|loai tru|dung lay|khong can|bo qua|mo cua|gio phuc vu|gia han|phi|'+PENALTY_WORD+r'|qua han|han tra|thoi han|thoi gian muon|muon bao lau|bao nhieu ngay)\b',intent_q) or (natural and re.search(r'\bva (?:sach|tai lieu)\b',intent_q)):
@@ -201,7 +551,20 @@ def answer_question(state, question, history=None):
             elif structured:
                 books=search_books(state,query,field=structured[0])
                 if direct:
-                    books=[book for book in books if normalize_catalog(book['title'])==direct[1]]
+                    title=direct[1]
+                    exact=[book for book in books if normalize_catalog(book['title'])==title]
+                    if not exact and not edited_book and len(title.split())>=2:
+                        prefixes=[book for book in books if normalize_catalog(book['title']).startswith(title+' ')]
+                        if len(prefixes)>1:
+                            exact=prefixes
+                        elif prefixes:
+                            main,separator,_=prefixes[0]['title'].partition(':')
+                            if separator and normalize_catalog(main)==title:
+                                exact=prefixes
+                    books=exact
+                if edited_book:
+                    editor=edited_book[1]+' chu bien'
+                    books=[book for book in books if any(normalize_catalog(name)==editor for name in book['author'].split(';'))]
             elif is_recommendation_request(question) and not author_query(question) and book_attribute(intent_q) in (None,'availability'):
                 recommendation=recommend_books(state,question)
                 books=recommendation['books']
@@ -226,6 +589,11 @@ def answer_question(state, question, history=None):
             attribute=direct[0] if direct else book_attribute(intent_q)
             if direct and attribute not in attributes:
                 attributes=[attribute,*attributes]
+            if direct and not edited_book and len(books)>1:
+                choices=books[:5]
+                return {**result('Mình tìm thấy nhiều biểu ghi khớp nhan đề bạn hỏi. Hãy xem tác giả và năm xuất bản, rồi chọn theo thứ tự, ví dụ “Cuốn thứ hai”.',
+                                 'clarify',sources=[{'title':b['title'],'url':b['url'],'checked_at':b['checked_at']} for b in choices],
+                                 mode='catalog'),'books':choices,'context_query':question}
             if history and book_followup(original_q) and attribute:
                 selection=selected_title(history)
                 exact=[b for b in books if normalize_catalog(b['title'])==selection]
@@ -237,12 +605,10 @@ def answer_question(state, question, history=None):
                 status='answered'
                 answer_sources=[]
                 if recommendation:
-                    answer='Mình gợi ý các tài liệu dưới đây theo nhu cầu học tập của bạn. Mỗi cuốn có lý do lựa chọn từ nhan đề hoặc từ khóa của biểu ghi; bạn có thể mở nguồn để xem nội dung trước khi chọn.'
+                    answer=f'Mình gợi ý {len(books)} tài liệu dưới đây. Bạn có thể mở từng nhan đề để xem nội dung trước khi chọn.'
                     if recommendation['level_unconfirmed']:
                         answer+=' Thông tin hiện có chưa xác nhận mức độ bạn yêu cầu. Đây là các tài liệu cùng chủ đề; bạn nên xem mô tả để chọn cuốn phù hợp với kiến thức nền.'
                         status='clarify'
-                    elif not recommendation['level']:
-                        answer+=' Bạn đang muốn học mảng nào và đã có kiến thức nền đến đâu để mình chọn sát hơn?'
                 if attribute=='availability' or (borrowing and natural):
                     if len(attributes)>1:
                         return {**result('Bạn đang hỏi tình trạng còn sách và thông tin biểu ghi. Hãy hỏi riêng từng phần để mình kiểm tra đúng nguồn và thời điểm.','clarify'),'books':books,'context_query':question}
@@ -265,16 +631,29 @@ def answer_question(state, question, history=None):
                     status='answered' if checked and any(s['status']!='unknown' for _,s in checked) else 'needs_confirmation'
                     if re.search(r'\b(huong dan|qua trinh|quy trinh|cach)\b',original_q) and re.search(r'\bdang k[iy] muon\b',original_q):
                         answer+='\n\nĐăng ký mượn: mở liên kết biểu ghi gốc, xem Thông tin xếp giá và nút “Đăng ký mượn”. Nếu OPAC yêu cầu, đăng nhập trực tiếp tại OPAC bằng tài khoản thư viện của bạn rồi thực hiện các bước và kiểm tra thông báo kết quả trên màn hình. Nếu không có nút hoặc không gửi được yêu cầu, liên hệ thư viện. Không gửi mật khẩu vào chat; chatbot chưa gửi giao dịch thay bạn.'
-                elif (selected_book and attribute) or direct or attribute in ('summary','audience') or (history and book_followup(original_q) and attribute):
+                elif ((selected_book and attribute) or direct or attribute in ('summary','audience')
+                      or (history and book_followup(original_q) and attribute)
+                      or (len(books)==1 and attributes and metadata_requested)):
                     if len(books)>1:
+                        if edited_book:
+                            return {**result('Mình tìm thấy nhiều biểu ghi cùng nhan đề và chủ biên. Bạn có thể đối chiếu năm xuất bản của từng bản bên dưới.','clarify',mode='catalog'),'books':books,'context_query':question}
                         return {**result('Có nhiều tài liệu trong ngữ cảnh. Bạn vui lòng chọn nhan đề cụ thể.','clarify',suggestions=['Tìm sách '+b['title'] for b in books[:3]]),'books':books,'context_query':question}
                     answer,status,answer_sources=book_metadata(books[0],attributes)
+                suggestions=[]
+                if recommendation and not attribute and not (borrowing and natural):
+                    if not recommendation['level']:
+                        suggestions.append('Em mới học')
+                    if books[0].get('marc',{}).get('summary'):
+                        suggestions.append('Tóm tắt cuốn đầu tiên')
                 return {**result(answer,status,sources=answer_sources or [{'title':b['title'],'url':b['url'],
                                  'checked_at':b['checked_at']} for b in books],
-                                 suggestions=['Tìm sách '+b['title'] for b in books[:3]] if recommendation else [],
+                                 suggestions=suggestions,
                                  mode='catalog_ai' if recommendation and recommendation['used_model'] else 'catalog'),
                         'books':books,'context_query':question}
             url='https://opacthuvien.ut.edu.vn/opac/Oshow.aspx?'+urlencode({'rdSearchOption':0,'txtSearch':query})
+            if edited_book:
+                return result('Mình chưa tìm thấy biểu ghi khớp cả nhan đề và chủ biên. Bạn có thể mở OPAC để đối chiếu cách ghi tên hoặc ấn bản.','not_found',
+                              sources=[{'title':'Tìm trực tiếp trên OPAC','url':url,'checked_at':None}],mode='catalog')
             if semantic_status:
                 notice='Phần tìm theo nội dung đang chuẩn bị.' if semantic_status=='preparing' else 'Phần tìm theo nội dung tạm thời chưa sẵn sàng.'
                 return {**result('Chưa thấy kết quả theo từ khóa. '+notice+' Bạn có thể thử lại hoặc mở OPAC.',
@@ -282,43 +661,71 @@ def answer_question(state, question, history=None):
                                  suggestions=[original_question],mode='catalog'),'books':[],'context_query':question}
             return {**result('Chưa có biểu ghi phù hợp trong danh mục đã rà soát của chatbot. Điều này không chứng minh thư viện không có sách. Bạn có thể tìm tiếp trên OPAC hoặc nhập tên/tác giả cụ thể hơn.',
                             'not_found',sources=[{'title':'Tìm trực tiếp trên OPAC','url':url,'checked_at':None}]),'books':[],'context_query':question}
-    if re.search(r'\b(mo cua|dong cua|lich phuc vu|gio phuc vu|thoi gian phuc vu)\b',q):
-        branches=set(re.findall(r'\b(?:co so|cs)\s*(\d+)\b',q))
-        if branches and (len(branches)!=1 or not branches<={'1','2','3'}):
-            return result('Bạn muốn xem giờ phục vụ tại cơ sở nào? Vui lòng hỏi kèm cơ sở và ngày cần tra cứu.', 'clarify', suggestions=[f'Giờ mở cửa hôm nay cơ sở {i}' for i in (1,2,3)])
-        references=[row for row in published_rows(state.db) if row['category']=='hours_reference']
-        if references and re.search(r'\b(nguon nao|hai nguon|ban huong dan khac)\b',q):
-            return result('Các nguồn dưới đây là lịch tham khảo, chưa xác nhận giờ hiện hành; không tự chọn một mốc để áp dụng hôm nay.\n\n'+'\n\n'.join(row['source_title']+':\n'+row['answer'] for row in references),'needs_confirmation',[source(row) for row in references])
-        if re.search(r'\b(mai|ngay mot|ngay kia|hom qua|tuan sau|tuan truoc|ngay le|nghi le|tet|ngay \d+|thang \d+|thu hai|thu ba|thu tu|thu nam|thu sau|thu bay|chu nhat)\b',q) or re.search(r'\b\d{1,2}[/-]\d{1,2}\b',question):
-            return result('Mình chưa xác nhận lịch theo ngày hoặc ngày lễ bạn hỏi. Bạn có thể xem lịch thường lệ để tham khảo hoặc hỏi “Giờ mở cửa hôm nay” kèm một cơ sở.', 'clarify', suggestions=['Giờ mở cửa thường lệ của thư viện'])
-        references=[row for row in published_rows(state.db) if row['category']=='hours_reference']
-        reference_answer=references[0]['answer'] if len(references)==1 else (
-            'Các tài liệu tham khảo có nội dung giờ phục vụ khác nhau; chưa có căn cứ chọn lịch hiện hành cho từng cơ sở. '
-            'Hãy xác nhận với thư viện trước khi đến. Không tự áp dụng lịch dưới đây cho hôm nay:\n\n'+
-            '\n\n'.join(row['source_title']+':\n'+row['answer'] for row in references))
-        if 'hom nay' not in q and references:
-            return result(reference_answer,'needs_confirmation',[source(row) for row in references])
-        if not branches or 'hom nay' not in q:
-            return result('Bạn muốn xem giờ phục vụ tại cơ sở nào? Vui lòng hỏi kèm cơ sở và ngày cần tra cứu.', 'clarify', suggestions=[f'Giờ mở cửa hôm nay cơ sở {i}' for i in (1,2,3)])
-        branch=next(iter(branches))
-        now = datetime.now(ZoneInfo('Asia/Ho_Chi_Minh'))
-        with state.db() as db:
-            rows = db.execute('SELECT * FROM schedules WHERE branch=? AND weekday=? AND valid_from<=? AND valid_until>=?',
-                              (branch,now.weekday(),now.date().isoformat(),now.date().isoformat())).fetchall()
-        if rows:
-            # A short dated exception overrides the broader weekly schedule.
-            span = min((datetime.fromisoformat(r['valid_until'])-datetime.fromisoformat(r['valid_from'])).days for r in rows)
-            rows = [r for r in rows if (datetime.fromisoformat(r['valid_until'])-datetime.fromisoformat(r['valid_from'])).days==span]
-            windows = 'Nghỉ phục vụ' if any(r['closed'] for r in rows) else '; '.join(f"{r['opens']}–{r['closes']}" for r in rows)
-            notes = ' '.join(r['note'] for r in rows if r['note'])
-            return result(f"Lịch đã xác nhận cho cơ sở {branch} ngày {now:%d/%m/%Y}: {windows}. {notes}".strip(),
-                          sources=[{'title':r['source_title'],'url':r['source_url'],'checked_at':r['checked_at']} for r in rows])
-        if references:
-            return result('Mình chưa có lịch đã xác nhận cho hôm nay tại cơ sở này. Dưới đây là lịch thường lệ tham khảo, không xác nhận đang mở cửa:\n\n'+reference_answer, 'needs_confirmation',[source(row) for row in references])
+    hours_answer = answer_library_hours(state,question,q,history)
+    if hours_answer is not None:
+        if hours_answer['status']=='clarify':
+            return hours_answer
+        if re.search(r'\b(?:(?:dia chi|vi tri) (?:cua )?thu vien|thu vien(?: uth)? o dau)\b',q):
+            directory=[row for row in published_rows(state.db) if row['category']=='branch_directory' and row['status'] in ('reviewed_public','verified')]
+            if directory:
+                row=max(directory,key=lambda row:row['checked_at'])
+                campuses=requested_campuses(q)
+                addresses=[line for line in row['answer'].splitlines() if (match:=re.match(r'^• Cơ sở ([123])\b',line))
+                           and (not campuses or match[1] in campuses)]
+                if addresses:
+                    hours_answer=result('Địa chỉ thư viện\n'+'\n'.join(addresses)+'\n\n'+hours_answer['answer'],
+                                        hours_answer['status'],[source(row),*hours_answer['sources']])
+            if not directory or not addresses:
+                hours_answer=result('Mình chưa có địa chỉ đã đối chiếu cho cơ sở bạn hỏi.\n\n'+hours_answer['answer'],
+                                    'needs_confirmation',hours_answer['sources'])
+        if GROUP_ROOM.search(intent_q):
+            room=max((row for row in published_rows(state.db) if row['category']=='support'
+                      and GROUP_ROOM.search(normalize(row['question']))),key=lambda row:row['checked_at'],default=None)
+            notice='Mình chưa xác nhận được cơ sở bạn hỏi có phòng học nhóm hay không.'
+            if room:
+                notice+='\n\n'+room['answer']
+            else:
+                notice+=' Bạn có thể hỏi trực tiếp thư viện.'
+            return result(hours_answer['answer']+'\n\n'+notice,'needs_confirmation',
+                          hours_answer['sources']+([source(room)] if room else []))
+        return hours_answer
     if outside_definition(question) or re.search(r'\b(?:viet|tao|sinh) (?:giup (?:toi|minh) )?(?:code|ma nguon|bai van)\b',q):
         return library_redirect(question)
-    rows = published_rows(state.db)
-    if re.search(r'\b(phong hoc|dat phong|hoc nhom)\b',q) and re.search(r'\b(giu|dat|dang ky)\b',q):
+    index_rows = published_rows(state.db)
+    if re.search(r'\b(?:doab|doaj)\b',intent_q) and re.search(r'\b(?:dang lai|chia se|dung lai|tai su dung|giay phep|ban quyen)\b',intent_q):
+        guide=next((row for row in index_rows if row['category']=='resources'
+                    and {'doab','doaj'}<={normalize(word) for word in row['keywords']}
+                    and 'giay phep' in normalize(row['answer'])),None)
+        if guide:
+            status='needs_confirmation' if guide['status']=='needs_confirmation' else 'answered'
+            return result(guide['answer'],status,[source(guide)])
+        return result('Hãy xem giấy phép đi kèm tài liệu trước khi đăng lại. Mình chưa có hướng dẫn của thư viện để đối chiếu cho nguồn bạn hỏi.','needs_confirmation')
+    rows = [row for row in index_rows if row['category'] not in ('hours','hours_reference','hours_contact','interlibrary')]
+    loan_item=r'(?:sach|tai lieu|(?:cuon|quyen)(?: sach)? (?:nay|do|ay)|(?:cuon|quyen) sach)'
+    lost_book=re.search(r'\b(?:lam |danh )?mat '+loan_item+r'\b',intent_q)
+    damaged_book=re.search(r'\b(?:lam )?hong '+loan_item+r'\b',intent_q)
+    return_book=re.search(r'\btra '+loan_item+r'\b',intent_q)
+    late_return=return_book and re.search(r'\b(?:tre|muon|qua han)\b',intent_q[return_book.end():])
+    return_procedure=return_book and re.search(r'\b(?:quay|can lam gi|lam the nao|lam sao|thu tuc|quy trinh|cach tra|tra o dau|co so khac)\b',intent_q)
+    return_fee=return_procedure and re.search(r'\b(?:phi|'+PENALTY_WORD+r'|bao nhieu tien)\b',intent_q)
+    if lost_book or damaged_book or (return_book and (return_procedure or not re.search(r'\b(phi|'+PENALTY_WORD+r'|han tra|khi nao tra|bao gio tra|tra khi nao|tra bao gio|bao nhieu tien)\b',intent_q))):
+        categories=('fees',) if lost_book or damaged_book else ('borrowing_guide','fees') if late_return or return_fee else ('borrowing_guide',)
+        references=[source(row) for category in categories if (row:=next((r for r in rows if r['category']==category),None))]
+        if lost_book or damaged_book:
+            condition='bị mất' if lost_book else 'bị hỏng'
+            answer=f'Hãy báo thư viện về tài liệu {condition}. Gửi kèm nhan đề hoặc mã tài liệu nếu có để thủ thư kiểm tra khoản mượn và hướng dẫn cách xử lý, kể cả bồi hoàn nếu áp dụng.'
+        else:
+            answer='Hãy liên hệ quầy mượn–trả để xác nhận nơi nhận sách rồi mang theo tài liệu cần trả. Sau đó, kiểm tra khoản mượn trong Trang cá nhân OPAC hoặc nhờ thủ thư xác nhận đã ghi trả.'
+            if re.search(r'\b(?:co so khac|khac co so)\b',intent_q) or len(requested_campuses(intent_q) or ())>1:
+                answer='Mình chưa xác nhận được bạn có thể trả ở cơ sở khác. '+answer
+            if late_return or return_fee:
+                answer+=' Nếu sách đã quá hạn, hỏi thủ thư cách xử lý và mức phí áp dụng cho khoản mượn của bạn.'
+        return result(answer,'needs_confirmation',references)
+    if re.search(r'\b(?:mat|quen|khong co) the (?:sinh vien|ban doc|thu vien)\b',intent_q) and re.search(r'\bmuon '+loan_item+r'\b',intent_q):
+        guide=next((row for row in rows if row['category']=='borrowing_guide'),None)
+        return result('Khi mượn sách, thư viện yêu cầu xuất trình thẻ bạn đọc. Nếu bạn mất hoặc quên thẻ, hãy hỏi thủ thư trước khi đến xem có thể dùng giấy tờ thay thế hay cần cấp lại thẻ.',
+                      'needs_confirmation',[source(guide)] if guide else [])
+    if re.search(r'\b(phong hoc|phong doc nhom|dat phong|hoc nhom)\b',q) and re.search(r'\b(giu|dat|dang ky)\b',q):
         room=[row for row in rows if row['category']=='support' and re.search(r'\b(dat phong|hoc nhom)\b',normalize(row['question']+' '+row['answer']))]
         if room:
             return result('\n\n'.join(row['answer'] for row in room),'needs_confirmation',[source(row) for row in room])
@@ -327,7 +734,15 @@ def answer_question(state, question, history=None):
         if renewal:
             return result('\n\n'.join(row['answer'] for row in renewal),'needs_confirmation',[source(row) for row in renewal])
     procedure=is_borrowing_procedure(question)
+    renewal_guide=re.fullmatch(
+        r'(?:(?:lam sao de|lam the nao de|cach) |(?:(?:toi|minh|em|ban) )?(?:(?:muon|can|co the|co duoc) )?)'
+        r'gia han(?: (?:sach|tai lieu|(?:cuon|quyen)(?: sach)?)(?: dang muon| nay| do| ay)?)?'
+        r'(?: them (?:(?:\d{1,3}|mot|hai|ba|vai|may) )?(?:ngay|tuan|thang))?'
+        r'(?: (?:(?:thi )?(?:lam sao|lam the nao|nhu the nao)|(?:duoc )?khong))?(?: a)?',q)
     computer_service=bool(re.search(r'\b(?:su dung|dung) may tinh\b',q))
+    resources_overview=re.fullmatch(
+        r'(?:thu vien(?: uth)?|lic(?: uth)?) (?:co|gioi thieu|cung cap) (?:nhung |cac )?'
+        r'co so du lieu dien tu nao(?: cho (?:nguoi doc|ban doc|sinh vien))?(?: a)?',q)
     if guidance:
         rows=[r for r in rows if normalize(r['question'])==normalize(guidance)]
     elif procedure:
@@ -338,12 +753,18 @@ def answer_question(state, question, history=None):
             rows=[r for r in rows if r['category']=='borrowing_guide']
     elif computer_service:
         rows=[r for r in rows if r['category']=='computers']
+    elif renewal_guide:
+        rows=[r for r in rows if r['category']=='renewal']
     retrieval_question=guidance or question
+    if renewal_guide:
+        retrieval_question='Tôi muốn gia hạn sách'
+    elif resources_overview:
+        retrieval_question='Thư viện có những cơ sở dữ liệu điện tử nào?'
     ranked = keyword_search(retrieval_question, rows)
     lexical_ranked=ranked
-    if not ranked and not library_question(question,history):
+    if not ranked and not procedure and not library_question(question,history):
         return library_redirect(question)
-    if not ranked and not library_subject(question):
+    if not ranked and not procedure and not library_subject(question):
         return result('Bạn đang hỏi tiếp về dịch vụ thư viện nào, ở cơ sở và ngày nào? Mình cần thông tin cụ thể để đối chiếu nguồn, chưa thể xác nhận từ câu hỏi ngắn này.', 'clarify',suggestions=SUGGESTIONS)
     asks_fee = bool(re.search(r'\b(phi|'+PENALTY_WORD+r'|qua han|tre han|nop (?:chinh xac )?bao nhieu tien)\b',q))
     asks_loan_term = bool(re.search(r'\b(thoi han|han tra|thoi gian muon|muon bao lau|bao nhieu ngay|giu sach.*may ngay)\b',q))
@@ -361,7 +782,10 @@ def answer_question(state, question, history=None):
         # A reviewed service category is stronger than shared words about books/accounts.
         retrieval={'ranked':[(rows[0],1)],'method':'keyword'}
     else:
-        retrieval=retrieve_knowledge(retrieval_question,rows,None if procedure else vectors)
+        if vectors is None:
+            retrieval=retrieve_knowledge(retrieval_question,rows)
+        else:
+            retrieval=retrieve_knowledge(retrieval_question,rows,vectors,index_rows=index_rows)
     ranked=retrieval['ranked']
     semantic=retrieval['method'] in ('hybrid','semantic')
     if not ranked:
@@ -430,4 +854,14 @@ def answer_question(state, question, history=None):
     current = {r['id']:r for r in published_rows(state.db)}
     if any(current.get(r['id'])!=r for r in selected):
         return result('Nguồn vừa thay đổi hoặc không còn hiệu lực trong khi xử lý. Vui lòng hỏi lại để dùng dữ liệu mới nhất.', 'needs_confirmation',suggestions=SUGGESTIONS)
-    return result(answer, 'needs_confirmation' if unconfirmed else 'answered',[source(r) for r in selected],mode=mode)
+    suggestions = None
+    if guidance=='Hướng dẫn tra cứu OPAC' and not unconfirmed:
+        examples='\n'.join(f'• Theo {field.lower()}, hãy thử “{example}”.' for field,example in CATALOG_SEARCH_EXAMPLES)
+        chat_guide=('Tìm ngay trong chatbot\nNhập nhan đề, tên tác giả hoặc chủ đề vào ô chat rồi gửi.\n'
+                    +examples+'\n\nMở nhan đề trong kết quả để xem biểu ghi gốc. Bạn có thể hỏi tiếp “Cuốn thứ nhất xuất bản năm nào?”. '
+                    'Nếu chưa thấy tài liệu, thử rút ngắn nhan đề hoặc tìm theo tác giả.')
+        opac_guide='Tra cứu trên OPAC\n'+answer
+        sections=(opac_guide,chat_guide) if 'opac' in intent_q.split() and 'chatbot' not in intent_q.split() else (chat_guide,opac_guide)
+        answer='\n\n'.join(sections)
+        suggestions=[example for _,example in CATALOG_SEARCH_EXAMPLES]
+    return result(answer, 'needs_confirmation' if unconfirmed else 'answered',[source(r) for r in selected],suggestions=suggestions,mode=mode)

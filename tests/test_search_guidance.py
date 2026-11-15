@@ -62,6 +62,43 @@ def test_lookup_instructions_return_reviewed_steps_not_books(state, question, hi
     assert response['sources'][0]['url'].endswith('HDSD_TRACUU_OPAC.v1.1.pdf#page=3')
 
 
+@pytest.mark.parametrize('question',[
+    'Làm thế nào để tra cứu sách tại thư viện?',
+    'Tìm tài liệu',
+    'Làm sao tìm theo tác giả trong chatbot?',
+    'Chatbot tìm được tài liệu theo tác giả không?',
+    'Có thể tìm tài liệu theo tên tác giả ngay trong chatbot không?',
+    'Cach tim tai lieu trong chatbot?',
+])
+def test_lookup_help_explains_chat_search_and_offers_examples(state, question):
+    response = assistant.answer_question(state, question)
+    assert response['status'] == 'answered' and response['mode'] == 'faq'
+    assert 'ô chat' in response['answer'] and 'nhan đề' in response['answer']
+    assert 'tác giả' in response['answer'] and 'chủ đề' in response['answer']
+    assert 'Cuốn thứ nhất xuất bản năm nào?' in response['answer']
+    assert len(response['suggestions']) == 3
+    assert response['sources'][0]['url'].endswith('pdf#page=3')
+
+
+def test_lookup_help_examples_run_real_catalog_searches(state):
+    catalog.seed_books(state.db, Path(__file__).resolve().parents[1]/'data/faq/catalog.json')
+    guidance = assistant.answer_question(state, 'Cách tìm tài liệu trong chatbot?')
+    assert guidance['suggestions']
+    for question in guidance['suggestions']:
+        response = assistant.answer_question(state, question)
+        assert response['mode'] == 'catalog' and response['status'] == 'answered', response
+        assert any(book['url'].endswith('intItemId=1967') for book in response['books']), response
+
+
+def test_repeated_opac_help_still_uses_the_reviewed_guide(state):
+    question = ('Mình cần hỗ trợ tra cứu OPAC.\n'
+                + 'Tôi muốn tìm tài liệu trên cổng tra cứu OPAC. '*100
+                + '\nHãy hướng dẫn cách tra cứu sách trên OPAC.')
+    response = assistant.answer_question(state, question)
+    assert response['status'] == 'answered' and response['mode'] == 'faq'
+    assert response['sources'][0]['url'].endswith('pdf#page=3')
+
+
 @pytest.mark.parametrize('question,content,url', [
     ('Làm thế nào để truy cập tài liệu điện tử?', 'điều kiện truy cập', '/opac/'),
     ('Lam the nao de truy cap tai lieu dien tu?', 'điều kiện truy cập', '/opac/'),

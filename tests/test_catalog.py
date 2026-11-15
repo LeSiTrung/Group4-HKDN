@@ -230,6 +230,8 @@ def test_chat_distinguishes_an_incomplete_semantic_search_from_no_results(client
 
 @pytest.mark.parametrize('question',[
     'Tóm tắt tài liệu “Kiểm kê chu kỳ”',
+    'Tóm tắt nội dung cuốn “Kiểm kê chu kỳ”',
+    'Tóm tắt ngắn gọn nội dung của cuốn sách “Kiểm kê chu kỳ”',
     'Tóm tắt sách "Kiem ke chu ky"',
     'Nội dung của tài liệu “Kiểm kê chu kỳ”',
     'Tài liệu “Kiểm kê chu kỳ” nói về gì?',

@@ -44,6 +44,7 @@ def test_natural_learning_requests_recommend_real_books(state, question):
     assert response.get('books'), response
     assert response['books'][0]['title'] != 'Luận văn ứng dụng CNTT trong quản lý'
     assert all(b['published'] and b.get('recommendation_reason') for b in response['books'])
+    assert all(b['title'] not in b['recommendation_reason'] for b in response['books'])
     assert response['sources'] and 'OPAC' not in response['answer'].split('\n')[0]
     assert all('logistics' not in b['title'].lower() for b in response['books'])
     assert not any('availability_snapshot' in b for b in response['books'])
@@ -54,6 +55,7 @@ def test_explicit_beginner_preference_uses_metadata_and_avoids_advanced(state):
     assert response['status'] == 'answered'
     assert [b['title'] for b in response['books']] == ['Giáo trình lập trình Python cơ bản']
     assert 'cơ bản' in response['books'][0]['recommendation_reason']
+    assert not response['suggestions']
 
 
 def test_learning_followup_retains_topic_for_guest_history(state):

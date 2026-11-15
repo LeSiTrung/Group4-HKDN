@@ -18,13 +18,20 @@ def client(tmp_path,monkeypatch):
 
 @pytest.mark.parametrize('question',[
     'Giờ mở cửa hôm nay cơ sở 12',
-    'Giờ mở cửa hôm nay cơ sở 1 và cơ sở 2',
     'Ngày mai cơ sở 1 mở cửa giống hôm nay không?',
 ])
 def test_ambiguous_branch_or_different_date_cannot_use_today_schedule(client,question):
     result=client.post('/api/chat',json={'message':question}).json()
     assert result['status']=='clarify'
     assert '08:00' not in result['answer']
+
+
+def test_explicit_pair_uses_the_verified_schedule_only_for_its_campus(client):
+    result=client.post('/api/chat',json={'message':'Giờ mở cửa hôm nay cơ sở 1 và cơ sở 2'}).json()
+    assert result['status']=='answered'
+    assert 'Cơ sở 1 — 08:00–17:00' in result['answer']
+    assert any(line.startswith('Cơ sở 2 — ') and 'lịch chung' in line for line in result['answer'].splitlines())
+    assert 'Cơ sở 3' not in result['answer']
 
 
 def test_return_deadline_is_not_mistaken_for_opening_hours(client):

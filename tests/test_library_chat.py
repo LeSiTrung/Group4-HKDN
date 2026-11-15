@@ -29,6 +29,15 @@ def test_social_messages_are_library_focused(client,question):
     assert 'thư viện' in result['answer'] and not result['sources']
 
 
+@pytest.mark.parametrize('question',['Tôi muốn gia hạn sách đang mượn thì làm sao?',
+    'Làm sao để gia hạn tài liệu đang mượn?'])
+def test_renewal_instructions_use_the_renewal_source(client,question):
+    reply=client.post('/api/chat',json={'message':question}).json()
+    assert reply['status']=='needs_confirmation' and not reply['books'],reply
+    assert 'gia hạn' in reply['answer'] and 'OPAC' in reply['answer']
+    assert any('ho-tro-nhanh' in source['url'] for source in reply['sources'])
+
+
 def register(client,email):
     assert client.post('/api/auth/register',json={'name':'Long reader','email':email,'password':'synthetic-long-password-2026'}).status_code==201
 
@@ -55,14 +64,14 @@ def test_large_utf8_payload_is_stored_whole_with_explicit_context_notice(client,
     assert client.get(f"/api/conversations/{result['conversation_id']}").json()['messages'][0]['content']==question
 
 
-@pytest.mark.parametrize('question,history',[
-    ('Có phục vụ sau 20h không?',[{'role':'user','content':'Giờ mở cửa hôm nay cơ sở 1'}]),
-    ('Thứ bảy?',[{'role':'user','content':'Giờ mở cửa hôm nay cơ sở 1'},{'role':'assistant','content':'Cần xác nhận.'},{'role':'user','content':'Còn hôm nay?'}]),
+@pytest.mark.parametrize('question,history,status',[
+    ('Có phục vụ sau 20h không?',[{'role':'user','content':'Giờ mở cửa hôm nay cơ sở 1'}],'clarify'),
+    ('Thứ bảy?',[{'role':'user','content':'Giờ mở cửa hôm nay cơ sở 1'},{'role':'assistant','content':'Lịch hôm nay.'},{'role':'user','content':'Còn hôm nay?'}],'answered'),
 ])
-def test_followup_retains_library_evidence_boundary(client,monkeypatch,question,history):
+def test_followup_retains_library_evidence_boundary(client,monkeypatch,question,history,status):
     monkeypatch.setattr(assistant,'generate_answer',lambda *args: pytest.fail('Unknown hours cannot be generated'))
     result=client.post('/api/chat',json={'message':question,'history':history}).json()
-    assert result['status']=='clarify' and result['mode']!='general'
+    assert result['status']==status and result['mode']!='general'
     assert '21' not in result['answer']
 
 

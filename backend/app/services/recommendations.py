@@ -8,17 +8,19 @@ from .llm_service import extract_book_topic
 BEGINNER=r'nguoi moi(?: bat dau)?|moi(?: bat dau)? hoc|tu dau|nhap mon|co ban|beginner|introduction|introductory|fundamentals'
 ADVANCED=r'nang cao|chuyen sau|advanced'
 TEACHING=r'giao trinh|bai giang|tu hoc|textbook'
+BORROWING_CHOICE=r'(?:thi )?nen muon (?:sach|tai lieu|(?:cuon|quyen)(?: sach)?) (?:nao|gi)(?: day| a)?'
 
 
 def is_recommendation_request(question):
-    return bool(re.search(r'\b(?:goi y|de xuat|tu van|gioi thieu|tu hoc|de hoc|muon hoc|moi hoc|dang hoc|hoc.+nen doc|sach nao hoc|giup.+hieu|tim hieu|ky nang|kien thuc|cai thien|nen doc|'+BEGINNER+'|'+ADVANCED+r')\b',normalize(question)))
+    return bool(re.search(r'\b(?:goi y|de xuat|tu van|gioi thieu|tu hoc|de hoc|muon hoc|moi hoc|dang hoc|hoc.+nen doc|sach nao hoc|giup.+hieu|tim hieu|ky nang|kien thuc|cai thien|nen doc|'+BORROWING_CHOICE+'|'+BEGINNER+'|'+ADVANCED+r')\b',normalize(question)))
 
 
 def recommendation_topic(question):
     q=normalize_catalog(question)
     level='beginner' if re.search(r'\b(?:'+BEGINNER+r')\b',q) else 'advanced' if re.search(r'\b(?:'+ADVANCED+r')\b',q) else None
+    q=re.sub(r'\b'+BORROWING_CHOICE+r'$','',q).strip()
     q=re.sub(r'\b(?:(?:danh )?cho )?(?:hoc )?(?:'+BEGINNER+'|'+ADVANCED+r')\b',' ',q)
-    q=re.sub(r'\b(?:(?:de|muon|can|nen|dang|toi|minh|em) hoc|sach nao hoc|tu hoc)\b',' ',q)
+    q=re.sub(r'\b(?:(?:de|muon|can|nen|dang|toi|minh|em) hoc(?: mon)?|sach nao hoc|tu hoc)\b',' ',q)
     q=book_query(q)
     q=re.sub(r'^hoc\b',' ',q)
     q=re.sub(r'\b(?:tot hon|de lam do an|cho de hieu|nen doc|nen hoc|bat dau|mot so|tim hieu|ky nang|kien thuc|cai thien)\b',' ',q)
@@ -66,14 +68,16 @@ def recommend_books(state,question):
             continue
         seen.add(key)
         title=book['title']
-        reason='Nhan đề: “'+title+'”.'
+        reasons=[]
         if not words&catalog_tokens(title) and book['subjects']:
-            reason+=' Từ khóa trong biểu ghi: '+book['subjects'][:240]+'.'
+            subjects=[subject.strip() for subject in book['subjects'].split(';') if words&catalog_tokens(subject)]
+            if subjects:
+                reasons.append('Biểu ghi có từ khóa: '+', '.join(subjects[:2])+'.')
         if re.search(r'\b(?:'+TEACHING+r')\b',normalize(title)):
-            reason+=' Ưu tiên tài liệu học tập vì nhan đề ghi giáo trình/bài giảng hoặc tự học.'
+            reasons.append('Nhan đề cho biết đây là tài liệu học tập.')
         if level and book['id'] in preferred:
-            reason+=' Nhan đề hoặc mô tả có dấu hiệu '+('nhập môn/cơ bản' if level=='beginner' else 'nâng cao/chuyên sâu')+'; mức phù hợp dựa trên metadata này.'
-        selected.append({**book,'recommendation_reason':reason})
+            reasons.append('Nhan đề hoặc mô tả có dấu hiệu '+('nhập môn, cơ bản.' if level=='beginner' else 'nâng cao, chuyên sâu.'))
+        selected.append({**book,'recommendation_reason':' '.join(reasons) or 'Có từ khóa liên quan đến chủ đề trong biểu ghi.'})
         if len(selected)==limit:
             break
     return {'books':selected, 'query':query, 'level':level, 'level_unconfirmed':bool(level and not preferred),
