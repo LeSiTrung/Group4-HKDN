@@ -37,3 +37,28 @@ def test_snapshot_refuses_missing_source_or_existing_target(tmp_path):
     with pytest.raises(ValueError):
         prepare_snapshot(source.path,target)
     assert marker.read_text()=='preserve'
+
+
+def test_candidate_keeps_marc_only_for_current_public_sources(tmp_path):
+    source=Store(tmp_path/'main'/'library.sqlite3')
+    with source.connect() as db:
+        for number,published,matching in [(1,True,True),(2,False,True),(3,True,False)]:
+            url=f'https://lic.ut.edu.vn/snapshot-{number}'
+            db.execute('INSERT INTO books(id,title,source_url,checked_at,published) VALUES (?,?,?,?,?)',
+                       (number,f'Book {number}',url,'2026-10-31',published))
+            db.execute('INSERT INTO book_marc VALUES (?,?,?,?,?,?,?)',
+                       (number,url if matching else url+'-old','2026-10-31','a'*64,'Logistics','Source summary','Readers'))
+    target=tmp_path/'candidate'
+    report=prepare_snapshot(source.path,target)
+    with Store(target/'library.sqlite3').connect() as db:
+        assert [tuple(row) for row in db.execute('SELECT id,marc_summary FROM books_discovery ORDER BY id')]==[(1,'Source summary'),(3,None)]
+    assert report['counts']['book_marc']==1
+
+
+def test_candidate_accepts_version_two_database_before_marc(tmp_path):
+    source=Store(tmp_path/'main'/'library.sqlite3')
+    with source.connect() as db:
+        db.execute('DROP VIEW books_discovery')
+        db.execute('DROP TABLE book_marc')
+    report=prepare_snapshot(source.path,tmp_path/'candidate')
+    assert report['counts']['book_marc']==0

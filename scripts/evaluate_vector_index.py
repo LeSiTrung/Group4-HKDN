@@ -33,7 +33,7 @@ def main():
     args=parser.parse_args()
     from app.config import Settings
     from app.database.connection import Store
-    from app.services.catalog import book_documents,item
+    from app.services.catalog import book_documents,published_book_rows
     from app.services.rag_service import VectorIndex,row_fingerprint
     from training.prepare_data import load_frozen_dataset
     settings=Settings.load(args.data_dir.resolve() if args.data_dir else None)
@@ -43,10 +43,7 @@ def main():
         parser.error('Existing public catalog snapshot required')
     manifest,_,splits=load_frozen_dataset(args.dataset)
     store=Store(settings.data_dir/'library.sqlite3')
-    def catalog():
-        with store.connect() as db:
-            return [item(r) for r in db.execute('SELECT * FROM books WHERE published=1 ORDER BY id')]
-    books=catalog()
+    books=published_book_rows(store.connect)
     corpus_hash=row_fingerprint(books)
     documents=book_documents(books)
     sources={row['id']:row['source_url'] for row in books}
@@ -64,7 +61,7 @@ def main():
             returned=[sources[row['id']] for row,_ in index.search(case['query'],documents,namespace='books')] if bounded else []
             results.append({'id':case['group_id'],'within_query_budget':bounded,'returned':returned[:5],
                 'elapsed_ms':round((perf_counter()-start)*1000,2),**retrieval_metrics(relevant,returned)})
-        if row_fingerprint(catalog())!=corpus_hash:
+        if row_fingerprint(published_book_rows(store.connect))!=corpus_hash:
             raise RuntimeError('Catalog changed during measurement; refuse a mixed snapshot result')
         eligible=[row for row in results if row['within_query_budget']]
         def summary(rows):

@@ -10,7 +10,7 @@ The model name and collection identity depend on model **and tokenizer/config** 
 
 ## Reproduce on Windows
 
-Use a new trial directory. The snapshot command opens the source DB read-only and copies only published books/knowledge and public schedule records, with original IDs and seed markers. Accounts, sessions, chats, jobs and audit are never copied. An existing target is refused. Do not restore a private full database into a demonstration environment.
+Use a new trial directory. The snapshot command opens the source DB read-only and copies published books and knowledge, public schedule records, and MARC data whose source still matches a published book. It preserves original IDs and seed markers. Accounts, sessions, chats, jobs and audit are never copied. An existing target is refused. Do not restore a private full database into a demonstration environment.
 
 ```powershell
 $ErrorActionPreference = 'Stop'

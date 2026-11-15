@@ -3,6 +3,7 @@ import argparse
 import json
 import sqlite3
 import sys
+from contextlib import closing
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -15,7 +16,7 @@ def prepare_snapshot(source,target):
     source,target=Path(source).resolve(),Path(target).resolve()
     if not source.is_file() or target.exists():
         raise ValueError('An existing source and a new, empty target path are required; nothing was overwritten')
-    with sqlite3.connect(source.as_uri()+'?mode=ro',uri=True) as db:
+    with closing(sqlite3.connect(source.as_uri()+'?mode=ro',uri=True)) as db:
         db.row_factory=sqlite3.Row
         if db.execute('PRAGMA user_version').fetchone()[0]!=2:
             raise ValueError('Unsupported source database version')
@@ -23,6 +24,12 @@ def prepare_snapshot(source,target):
         snapshot={table:[dict(row) for row in db.execute('SELECT * FROM '+table+
             (' WHERE published=1' if table!='schedules' else '')+' ORDER BY id')]
             for table in ('books','knowledge','schedules')}
+        snapshot['book_marc']=[]
+        if db.execute("SELECT 1 FROM sqlite_schema WHERE type='table' AND name='book_marc'").fetchone():
+            snapshot['book_marc']=[dict(row) for row in db.execute('''
+                SELECT m.* FROM book_marc m JOIN books b
+                  ON b.id=m.book_id AND b.source_url=m.source_url
+                WHERE b.published=1 ORDER BY m.book_id''')]
     target.mkdir(parents=True)
     store=Store(target/'library.sqlite3')
     with store.connect() as db:
