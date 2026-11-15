@@ -3,9 +3,10 @@ import { api, sendMessage } from '../services/chatApi.js'
 import ChatInput from './ChatInput.jsx'
 import ChatMessage from './ChatMessage.jsx'
 import { ErrorNotice, Icon, Notice } from './UI.jsx'
+import readingRoom from '../assets/reading-room.jpg'
 
 const starters = [
-  { icon: 'search', title: 'Tìm tài liệu', text: 'Làm thế nào để tra cứu sách tại thư viện?' },
+  { icon: 'search', title: 'Cách tra cứu tài liệu', text: 'Làm thế nào để tra cứu sách tại thư viện?' },
   { icon: 'book', title: 'Mượn & trả sách', text: 'Tôi cần chuẩn bị gì để mượn sách?' },
   { icon: 'clock', title: 'Giờ phục vụ', text: 'Tôi có thể kiểm tra giờ mở cửa ở đâu?' },
   { icon: 'globe', title: 'Thư viện số', text: 'Làm thế nào để truy cập tài liệu điện tử?' },
@@ -132,11 +133,20 @@ export default function ChatWindow({ user, conversationId, onCreated }) {
   return <section className="chat-workspace" aria-label="Trợ lý thư viện">
     <div className="chat-scroll">
       {historyLoading ? <div className="loading-state" role="status">Đang mở cuộc trò chuyện…</div> : messages.length === 0 ? <div className="welcome">
-        <span className="eyebrow">KHÔNG GIAN TRI THỨC CỦA BẠN</span>
-        <div className="welcome-symbol"><Icon name="book" size={42} /><span className="orbit-dot" /></div>
-        <h1>Xin chào{user ? `, ${user.name.split(' ').at(-1)}` : ' bạn'}.<br />Hôm nay bạn muốn<br /><em>khám phá điều gì?</em></h1>
-        <p>Tra cứu tài liệu, tìm hiểu dịch vụ và nhận hướng dẫn<br className="desktop-break" /> từ những nguồn thông tin của thư viện UTH.</p>
-        <div className="starter-grid">{starters.map(item => <button key={item.title} className="starter-card" onClick={() => send(item.text)} disabled={busy}><Icon name={item.icon} /><strong>{item.title}</strong><span>{item.text}</span><Icon className="card-arrow" name="arrow" size={16} /></button>)}</div>
+        <div className="welcome-banner">
+          <div className="welcome-copy">
+            <h1>Hỏi đáp<br />thư viện UTH</h1>
+            <p>Tra cứu tài liệu, tìm hiểu dịch vụ và nhận hướng dẫn từ thư viện UTH.</p>
+            <a href="#catalog" className="welcome-search">Mở mục tra cứu <Icon name="arrow" size={17} /></a>
+          </div>
+          <div className="welcome-media"><img className="welcome-photo" src={readingRoom} alt="" /></div>
+        </div>
+        <h2 className="starter-heading">Bạn muốn hỏi gì?</h2>
+        <div className="starter-grid">{starters.map(item => <button key={item.title} className="starter-card" onClick={() => send(item.text)} disabled={busy}>
+          <span className="starter-icon"><Icon name={item.icon} size={19} /></span>
+          <span className="starter-copy"><strong>{item.title}</strong><span>{item.text}</span></span>
+          <Icon className="card-arrow" name="arrow" size={16} />
+        </button>)}</div>
       </div> : <div className="messages" aria-live="polite" aria-relevant="additions">{messages.map((item, index) => {
         const playback = speechView?.item === item ? speechView : null
         return <ChatMessage item={item} user={user} onSpeak={speak} key={item.id || `${item.role}-${index}`}
@@ -154,7 +164,7 @@ export default function ChatWindow({ user, conversationId, onCreated }) {
       {listening && <Notice>Đang nghe tiếng Việt… Nhấn dừng khi hoàn tất. Lời nói được chuyển thành chữ trước khi gửi; dịch vụ giọng nói phụ thuộc trình duyệt.</Notice>}
       {suggestions.length > 0 && <div className="suggestions">{suggestions.map((text, index) => <button key={`${text}-${index}`} onClick={() => send(text)} disabled={busy}>{text}<Icon name="arrow" size={14} /></button>)}</div>}
       <ChatInput value={message} onChange={setMessage} onSend={send} busy={busy || historyLoading} onVoice={voice} listening={listening} />
-      <p className="composer-note"><Icon name="shield" size={13} /> Bạn có thể xem nguồn bên dưới câu trả lời. {user ? 'Lịch sử được lưu trong tài khoản.' : 'Cuộc trò chuyện của khách chỉ được giữ khi trang này còn mở.'}</p>
+      <p className="composer-note">{user ? 'Lịch sử được lưu trong tài khoản.' : 'Phiên khách chỉ lưu trò chuyện khi trang này còn mở.'}</p>
     </div>
   </section>
 }

@@ -94,7 +94,7 @@ it.each([
 it('shows the illustration after submitting the actual search starter', async () => {
   fetch.mockResolvedValue({ ok: true, status: 200, json: async () => ({ ...message(), answer: message().content, conversation_id: null }) })
   render(<ChatWindow user={null} />)
-  fireEvent.click(screen.getByRole('button', { name: /Tìm tài liệu/ }))
+  fireEvent.click(screen.getByRole('button', { name: /Cách tra cứu tài liệu/ }))
   expect(await screen.findByRole('img', { name: /nhập từ khóa/i })).toBeTruthy()
   expect(JSON.parse(fetch.mock.calls[0][1].body).message).toBe('Làm thế nào để tra cứu sách tại thư viện?')
 })

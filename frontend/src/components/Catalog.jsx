@@ -54,7 +54,10 @@ export default function Catalog() {
   const page = result?.page || 1
   const pages = Math.max(1, Math.ceil(total / (result?.page_size || 20)))
   return <div className="content-page">
-    <div className="page-heading"><span className="eyebrow">KHÁM PHÁ BỘ SƯU TẬP</span><h1>Tra cứu OPAC thông minh</h1><p>Tìm tài liệu theo tên, tác giả, chủ đề hoặc câu hỏi tự nhiên. Mỗi kết quả có liên kết về nguồn thư viện.</p></div>
+    <div className="page-heading">
+      <h1>Tra cứu tài liệu</h1>
+      <p>Tìm theo nhan đề, tác giả, chủ đề hoặc mô tả tài liệu bạn cần.</p>
+    </div>
     <form className="panel catalog-search" onSubmit={submit}>
       <Field label="Từ khóa tìm kiếm"><div className="input-with-icon"><Icon name="search" /><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Tên sách, tác giả hoặc chủ đề…" required maxLength={200} /></div></Field>
       <Field label="Tìm theo"><select value={field} onChange={event => { setField(event.target.value); if (event.target.value !== 'all') setSource('local') }}>{Object.entries(fieldLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></Field>
@@ -68,7 +71,6 @@ export default function Catalog() {
     {local && !result.warning && <Notice>Thông tin được lưu từ mục lục thư viện, không phản ánh tình trạng mượn hiện tại hoặc số bản còn trên kệ.</Notice>}
     {result?.warning && <Notice>{result.warning}</Notice>}
     {busy && <div className="loading-state" role="status">Đang tra cứu tài liệu…</div>}
-    {!result && !busy && !error && <Empty icon="search" title="Tri thức bắt đầu từ một câu hỏi">Nhập tên tài liệu, tác giả hoặc một chủ đề bạn đang quan tâm.</Empty>}
     {result?.guidance && <Empty icon="chat" title="Bạn đang hỏi cách sử dụng thư viện">Trợ lý có thể hướng dẫn quy trình tra cứu và mượn sách. <a href="#chat">Hỏi Trợ lý thư viện</a></Empty>}
     {result && !result.guidance && <>
       {interpretation?.query && <Notice>{fieldLabels[interpretation.field]} · “{interpretation.query}”</Notice>}
@@ -77,14 +79,15 @@ export default function Catalog() {
       <div className="section-heading"><h2>{semanticMessage && !total ? 'Danh mục đã đối chiếu' : `${total} tài liệu · ${local ? 'Danh mục đã đối chiếu' : 'Mục lục trực tuyến'}`}</h2><ExternalLink className="text-button" href={result.search_url}>Mở mục lục gốc <Icon name="link" size={16} /></ExternalLink></div>
       {semanticMessage && <div role="status"><Notice>{semanticMessage} Danh mục chưa có kết quả khớp từ khóa.</Notice><button type="button" className="secondary" onClick={retrySearch}>Thử lại lượt tra cứu</button></div>}
       <div className="results-list">{result.items?.length ? result.items.map((item, index) => <article className="panel catalog-card" key={item.id || `${item.url}-${index}`}>
-        <div className={`book-cover cover-${index % 3}`} aria-hidden="true"><Icon name="book" size={31} /><span>UTH<br />LIBRARY</span></div>
-        <div className="catalog-detail"><span className="eyebrow">TÀI LIỆU THƯ VIỆN</span><h3><ExternalLink href={item.url || item.source_url}>{item.title}</ExternalLink></h3><p>{item.author || 'Chưa có tác giả'}{item.year ? ` · ${item.year}` : ''}</p>
+        <div className="book-cover" aria-hidden="true"><Icon name="book" size={25} /></div>
+        <div className="catalog-detail"><h3><ExternalLink href={item.url || item.source_url}>{item.title}</ExternalLink></h3><p>{item.author || 'Chưa có tác giả'}{item.year ? ` · ${item.year}` : ''}</p>
           {item.description && <p className="catalog-description">{item.description}</p>}
           {item.marc_match && <small className="subtle block">{item.marc_match === 'subjects' ? 'Khớp chủ đề OPAC' : 'Khớp mô tả nội dung OPAC'} · {displayDate(item.marc?.checked_at)}</small>}
-          {!local && item.availability && <span className="badge">{item.availability}</span>}
           {item.checked_at && <small className="subtle block">Đối chiếu: {displayDate(item.checked_at)}</small>}
-          {local && item.id && <button className="text-button" onClick={() => setDetailId(item.id)}>Xem chi tiết <Icon name="arrow" size={16} /></button>}
-          <ExternalLink className="text-button record-link" href={item.url || item.source_url}>Xem thông tin gốc <Icon name="arrow" size={16} /></ExternalLink>
+          <div className="inline-actions catalog-actions">
+            {local && item.id && <button className="text-button" onClick={() => setDetailId(item.id)}>Xem chi tiết <Icon name="arrow" size={16} /></button>}
+            <ExternalLink className="text-button" href={item.url || item.source_url}>Xem thông tin gốc <Icon name="link" size={16} /></ExternalLink>
+          </div>
         </div>
       </article>) : !semanticMessage && <Empty icon="search" title="Chưa tìm thấy tài liệu phù hợp">Thử từ khóa ngắn hơn, đổi nguồn tra cứu hoặc tìm trực tiếp trên mục lục gốc.</Empty>}</div>
       {pages > 1 && <nav className="pagination" aria-label="Phân trang tài liệu"><button className="secondary" disabled={busy || page <= 1} onClick={() => search(submitted, page - 1)}>Trang trước</button><span>Trang {page} / {pages}</span><button className="secondary" disabled={busy || page >= pages} onClick={() => search(submitted, page + 1)}>Trang sau</button></nav>}
