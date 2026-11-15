@@ -1,4 +1,4 @@
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, suppress
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
@@ -15,18 +15,18 @@ from app.security import RequestGate, validation_error
 from app.api.admin import router as admin_router, crawl_job
 from app.api.library import router as library_router
 from app.api.channels import router as channels_router
-from app.services.knowledge import seed, published_rows
+from app.services.knowledge import has_published_knowledge, seed, published_rows
 from app.services.rag_service import VectorIndex
 from app.services.assistant import answer_question
 from app.services.llm_service import provider_name,check_model
 from app.api.catalog import router as catalog_router
-from app.services.catalog import seed_books
+from app.services.catalog import seed_books, semantic_catalog
 from app.config import ROOT
 import asyncio
 import mimetypes
+import math
 import os
 import sqlite3
-from pathlib import Path
 from fastapi.staticfiles import StaticFiles
 
 def create_app(data_dir=None, testing=False):
@@ -35,6 +35,14 @@ def create_app(data_dir=None, testing=False):
     @asynccontextmanager
     async def lifespan(app):
         store = Store(settings.data_dir / 'library.sqlite3')
+        interval = 0.0
+        if not testing:
+            try:
+                interval = float(os.getenv('CRAWL_INTERVAL_HOURS', '').strip() or '0')
+            except ValueError as error:
+                raise ValueError('CRAWL_INTERVAL_HOURS must be a finite number.') from error
+            if not math.isfinite(interval * 3600):
+                raise ValueError('CRAWL_INTERVAL_HOURS must be a finite number of hours.')
         app.state.store = store
         app.state.db = store.connect
         seed(store.connect, ROOT.parent/'data'/'faq'/'library.json')
@@ -46,8 +54,8 @@ def create_app(data_dir=None, testing=False):
         if not testing and os.getenv('ENABLE_VECTORS','true').lower()=='true':
             app.state.vectors.prepare_knowledge(lambda:published_rows(store.connect))
 
+            app.state.vectors.prepare_books(lambda:semantic_catalog(store.connect)[1])
         async def scheduler():
-            interval = float(os.getenv('CRAWL_INTERVAL_HOURS','0'))
             roots = [x.strip() for x in os.getenv('CRAWL_SEEDS','').split(',') if x.strip()]
             if interval<1 or not roots:
                 return
@@ -58,14 +66,16 @@ def create_app(data_dir=None, testing=False):
                         job_id=db.execute('INSERT INTO jobs(url) VALUES (?)',(url,)).lastrowid
                     await asyncio.to_thread(crawl_job,app.state,job_id,url,3)
         task=asyncio.create_task(scheduler()) if not testing else None
-        yield
-        if task:
-            task.cancel()
+        try:
+            yield
+        finally:
             try:
-                await task
-            except asyncio.CancelledError:
-                pass
-        await asyncio.to_thread(app.state.vectors.close)
+                if task:
+                    task.cancel()
+                    with suppress(asyncio.CancelledError):
+                        await task
+            finally:
+                await asyncio.to_thread(app.state.vectors.close)
 
     app = FastAPI(title='UTH Library Assistant', version='1.0.0', lifespan=lifespan)
     app.add_exception_handler(RequestValidationError, validation_error)
@@ -98,8 +108,7 @@ def create_app(data_dir=None, testing=False):
     def ready():
         database=False
         try:
-            with app.state.db() as db:
-                database=db.execute('SELECT 1 FROM knowledge LIMIT 1').fetchone() is not None
+            database=has_published_knowledge(app.state.db)
         except (OSError,sqlite3.Error):
             pass
         model=provider_name()=='none' or check_model()['ready']

@@ -137,6 +137,24 @@ def test_book_documents_match_query_time_index_projection():
         {'id':5,'question':'Thiết kế cầu','aliases':['Trần B','Xây dựng'],'answer':'Thiết kế cầu'}]
 
 
+def test_semantic_catalog_snapshot_is_reused_until_metadata_changes(store,monkeypatch):
+    book=add(store,'Python cơ bản')
+    monkeypatch.setenv('ENABLE_VECTORS','true')
+    calls=[]
+    def search(query,documents,**kwargs):
+        calls.append(documents)
+        return []
+    vectors=SimpleNamespace(prepare_books=lambda load:'ready',search=search)
+    state=SimpleNamespace(db=store.connect,settings=SimpleNamespace(testing=False),vectors=vectors)
+    for _ in range(2):
+        assert catalog.search_books_with_status(state,'zzzzz xxxxx')==([],None)
+    assert calls[0] is calls[1]
+    with store.connect() as db:
+        db.execute("UPDATE books SET title='Python nâng cao' WHERE id=?",(book['id'],))
+    assert catalog.search_books_with_status(state,'zzzzz xxxxx')==([],None)
+    assert calls[2] is not calls[1] and calls[2][0]['question']=='Python nâng cao'
+
+
 @pytest.mark.parametrize('document_type',['luận văn','luận án','khóa luận','đồ án','giáo trình','bài giảng'])
 @pytest.mark.parametrize('command',['Tìm','Tra cứu'])
 def test_institutional_document_search_strips_type_prefix(document_type,command):

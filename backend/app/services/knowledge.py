@@ -82,10 +82,19 @@ def insert_knowledge(db, body, row_id=None):
     return decode_row(db.execute('SELECT * FROM knowledge WHERE id=?', (row_id,)).fetchone())
 
 
+_PUBLISHED_NOW = 'FROM knowledge WHERE published=1 AND (valid_from IS NULL OR valid_from<=?) AND (valid_until IS NULL OR valid_until>=?)'
+
+
+def has_published_knowledge(db_factory):
+    now = today().isoformat()
+    with db_factory() as db:
+        return db.execute(f'SELECT 1 {_PUBLISHED_NOW} LIMIT 1', (now,now)).fetchone() is not None
+
+
 def published_rows(db_factory):
     now = today().isoformat()
     with db_factory() as db:
-        rows = db.execute('SELECT * FROM knowledge WHERE published=1 AND (valid_from IS NULL OR valid_from<=?) AND (valid_until IS NULL OR valid_until>=?) ORDER BY id', (now,now)).fetchall()
+        rows = db.execute(f'SELECT * {_PUBLISHED_NOW} ORDER BY id', (now,now)).fetchall()
     return [decode_row(x) for x in rows]
 
 

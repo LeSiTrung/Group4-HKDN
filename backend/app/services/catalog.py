@@ -220,6 +220,18 @@ def published_book_rows(db_factory):
 
 
 def search_books(state,query,kind='all',field='all'):
+@lru_cache(maxsize=2)
+def _semantic_catalog(db_factory, revision):
+    rows=published_book_rows(db_factory)
+    return rows,book_documents(rows)
+
+
+def semantic_catalog(db_factory):
+    with db_factory() as db:
+        revision=db.execute('SELECT value FROM catalog_revision WHERE id=1').fetchone()[0]
+    return _semantic_catalog(db_factory,revision)
+
+
     return search_books_with_status(state,query,kind,field)[0]
 
 
@@ -242,12 +254,11 @@ def search_books_with_status(state,query,kind='all',field='all'):
     except UnicodeEncodeError:
         return [],None
     def load_documents():
-        return book_documents(published_book_rows(state.db))
+        return semantic_catalog(state.db)[1]
     status=state.vectors.prepare_books(load_documents)
     if status!='ready':
         return [],status
-    rows=published_book_rows(state.db)
-    documents=book_documents(rows)
+    rows,documents=semantic_catalog(state.db)
     if not documents:
         return [],None
     try:

@@ -44,6 +44,18 @@ def test_large_rebuild_bounds_each_embedding_and_upsert_batch(tmp_path,monkeypat
         index.close()
 
 
+def test_rebuild_embeds_shared_text_once_but_keeps_distinct_source_points(tmp_path):
+    index=index_at(tmp_path)
+    sources=[row(i,question='TAILMARKER',answer=f'Nội dung riêng {i}') for i in range(100)]
+    try:
+        index.rebuild(sources,'books')
+        assert index.model.documents.count('TAILMARKER')==1
+        shared=[point for point in points(index,'books') if point.payload['text']=='TAILMARKER']
+        assert {point.payload['source_id'] for point in shared}=={source['id'] for source in sources}
+    finally:
+        index.close()
+
+
 def test_late_embedding_failure_preserves_old_points_and_resumes_completed_batches(tmp_path,monkeypatch):
     index=index_at(tmp_path)
     old=row(999,answer='Old source')
@@ -57,7 +69,7 @@ def test_late_embedding_failure_preserves_old_points_and_resumes_completed_batch
             raise RuntimeError('second batch failed')
         return embed(documents)
     monkeypatch.setattr(index.model,'embed',fail_second_batch)
-    sources=[row(i,answer=f'Replacement source {i}') for i in range(100)]
+    sources=[row(i,question=f'Replacement source {i}',answer=f'Replacement source {i}') for i in range(100)]
     try:
         with pytest.raises(RuntimeError,match='second batch'):
             index.rebuild(sources)
@@ -118,6 +130,31 @@ def test_book_index_preparation_is_single_flight_and_search_never_waits(tmp_path
         assert index.prepare_books(lambda:[source])=='ready'
         assert index.search('TAILMARKER',[source],namespace='books',ready_only=True)[0][0]==source
         assert calls==['books','books']
+    finally:
+        release.set()
+        index.close()
+
+
+def test_book_warmup_and_invalidated_revision_are_visible_in_status(tmp_path,monkeypatch):
+    index=index_at(tmp_path)
+    source=row(answer='TAILMARKER')
+    index.rebuild([source])
+    started,release=Event(),Event()
+    def load():
+        started.set()
+        assert release.wait(5)
+        return [source]
+    try:
+        assert index.prepare_books(load)=='preparing'
+        assert started.wait(5)
+        status=index.status()
+        assert not status['ready'] and not status['namespaces']['books']['ready']
+        assert status['namespaces']['knowledge']['ready']
+        release.set()
+        index.book_job.result(timeout=5)
+        assert index.status()['ready']
+        index.invalidate_books()
+        assert not index.status()['namespaces']['books']['ready']
     finally:
         release.set()
         index.close()
@@ -392,6 +429,24 @@ def test_knowledge_warmup_is_single_flight_and_requests_do_not_wait(tmp_path,mon
         assert index.search('TAILMARKER',[source])[0][0]==source
     finally:
         release.set()
+        index.close()
+
+
+def test_retrieval_filters_before_top_k_without_rewriting_knowledge(tmp_path):
+    from app.services.retrieval import retrieve_knowledge
+
+    index=index_at(tmp_path)
+    allowed=row(7,answer='TAILMARKER',keywords=[])
+    rows=[row(number,answer='TAILMARKER',keywords=[]) for number in range(1,7)]+[allowed]
+    try:
+        index.rebuild(rows)
+        index.model.documents.clear()
+        found=retrieve_knowledge('TAILMARKER',[allowed],index,index_rows=rows)
+        assert [source['id'] for source,_ in found['ranked']]==[7]
+        assert index.status()['namespaces']['knowledge']['sources']==7
+        assert index.model.documents==[]
+        assert len(points(index))==sum(len(rag.knowledge_chunks(source)) for source in rows)
+    finally:
         index.close()
 
 

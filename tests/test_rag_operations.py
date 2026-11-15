@@ -92,8 +92,9 @@ def test_preview_obeys_vector_configuration(client, monkeypatch, enabled, testin
     from app.services import retrieval
     monkeypatch.setenv('ENABLE_VECTORS', enabled)
     client.app.state.settings.testing = testing
-    def retrieve(question, rows, vectors=None):
+    def retrieve(question, rows, vectors=None, *, index_rows=None):
         assert (vectors is client.app.state.vectors) is uses_vectors
+        assert index_rows == []
         return {'ranked': [], 'evidence': [], 'method': 'none', 'degraded': False}
     monkeypatch.setattr(retrieval, 'retrieve_knowledge', retrieve)
     assert client.post('/api/admin/retrieval', json={'query': 'OPAC'}).status_code == 200
@@ -203,14 +204,17 @@ def test_index_cli_can_prebuild_only_published_book_metadata(tmp_path,monkeypatc
 
 
 @pytest.mark.parametrize('testing,enabled,expected',[(False,'true',True),(False,'false',False),(True,'true',False)])
-def test_only_enabled_runtime_prepares_knowledge_in_background(tmp_path,monkeypatch,testing,enabled,expected):
+def test_only_enabled_runtime_prepares_both_indexes_in_background(tmp_path,monkeypatch,testing,enabled,expected):
     from app.services.rag_service import VectorIndex
     monkeypatch.setenv('ENABLE_VECTORS',enabled)
     monkeypatch.setenv('LLM_PROVIDER','none')
     calls=[]
-    monkeypatch.setattr(VectorIndex,'prepare_knowledge',lambda self,load:calls.append(load()) or 'preparing',raising=False)
+    monkeypatch.setattr(VectorIndex,'prepare_knowledge',lambda self,load:calls.append(('knowledge',load())) or 'preparing')
+    monkeypatch.setattr(VectorIndex,'prepare_books',lambda self,load:calls.append(('books',load())) or 'preparing')
     with TestClient(create_app(tmp_path,testing=testing)) as client:
         assert client.get('/health').status_code==200
     assert bool(calls) is expected
     if expected:
-        assert calls[0] and all(row['published'] for row in calls[0])
+        assert [name for name,_ in calls]==['knowledge','books']
+        assert calls[0][1] and all(row['published'] for row in calls[0][1])
+        assert calls[1][1] and all(row['id'] and row['question'] for row in calls[1][1])

@@ -6,6 +6,7 @@ import re
 import threading
 import unicodedata
 from bisect import bisect_left, bisect_right
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from time import monotonic
 from uuid import NAMESPACE_URL, uuid5
@@ -215,18 +216,25 @@ class VectorIndex:
                            if existing.get(chunk_id) != payload]
                 if changed:
                     self._init()
+                    counts=Counter(payload['text'] for _,payload in changed)
+                    shared={}
                     for start in range(0,len(changed),64):
                         if self.closing.is_set():
                             raise RuntimeError('Index is shutting down')
                         batch=changed[start:start+64]
-                        vectors = list(self.model.embed([payload['text'] for _, payload in batch]))
-                        if len(vectors) != len(batch):
+                        texts=list(dict.fromkeys(payload['text'] for _,payload in batch if payload['text'] not in shared))
+                        vectors=list(self.model.embed(texts)) if texts else []
+                        if len(vectors) != len(texts):
                             raise ValueError('Incomplete embedding batch')
+                        by_text=dict(zip(texts,vectors))
+                        shared.update((text,vector) for text,vector in by_text.items() if counts[text]>1)
+                        batch_vectors=[shared[text] if text in shared else by_text[text]
+                                       for text in (payload['text'] for _,payload in batch)]
                         if not exists:
-                            self.client.create_collection(collection, vectors_config=VectorParams(size=len(vectors[0]), distance=Distance.COSINE))
+                            self.client.create_collection(collection, vectors_config=VectorParams(size=len(batch_vectors[0]), distance=Distance.COSINE))
                             exists=True
                         self.client.upsert(collection, points=[PointStruct(id=chunk_id, vector=vector.tolist(), payload=payload)
-                                           for (chunk_id, payload), vector in zip(batch, vectors)], wait=True)
+                                           for (chunk_id, payload), vector in zip(batch, batch_vectors)], wait=True)
                 obsolete = list(existing.keys() - documents.keys())
                 if obsolete:
                     self.client.delete(collection, points_selector=PointIdsList(points=obsolete), wait=True)
@@ -301,7 +309,13 @@ class VectorIndex:
                 self.client = None
 
     def status(self):
+        namespaces={name:dict(value) for name,value in self.namespaces.copy().items()}
+        with self.book_lock:
+            if self.book_job is not None:
+                books=namespaces.setdefault('books',{'sources':0,'chunks':0,'ready':False})
+                if not self.book_job.done() or self.book_ready_revision!=self.book_revision:
+                    books['ready']=False
         return {'configured': os.getenv('ENABLE_VECTORS','true').lower()=='true',
-                'ready': self.fingerprint is not None and self.error is None and all(value['ready'] for value in self.namespaces.values()),
+                'ready': self.fingerprint is not None and self.error is None and all(value['ready'] for value in namespaces.values()),
                 'model': self.model_name, 'error': self.error,
-                'namespaces': {name: dict(value) for name, value in self.namespaces.items()}}
+                'namespaces': namespaces}

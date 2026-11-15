@@ -6,7 +6,7 @@ from collections import Counter
 from .rag_service import chunk_text, keyword_search, tokens
 
 
-def retrieve_knowledge(question, rows, vectors=None):
+def retrieve_knowledge(question, rows, vectors=None, *, index_rows=None):
     ranked = keyword_search(question, rows)
     current = {row['id']:row for row in rows}
     query_tokens = tokens(question)
@@ -38,7 +38,8 @@ def retrieve_knowledge(question, rows, vectors=None):
     semantic, degraded = [], bool(vectors is not None and not strong and not query_fits)
     if vectors is not None and not strong and query_fits:
         try:
-            hits = vectors.search_chunks(question,rows)
+            hits = (vectors.search_chunks(question,rows) if index_rows is None else
+                    vectors.search_chunks(question,index_rows,source_ids=set(current)))
             for hit in hits:
                 row = current.get(hit['row']['id'])
                 if row is not None and row==hit['row']:

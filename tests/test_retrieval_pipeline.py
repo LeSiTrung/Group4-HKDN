@@ -48,6 +48,21 @@ def test_semantic_excerpts_keep_best_hit_first_in_model_evidence():
     assert found['evidence'][0]['text']==best
 
 
+def test_filtered_knowledge_queries_reuse_the_published_index():
+    from app.services.retrieval import retrieve_knowledge
+    row=document()
+    other=document(2)
+    calls=[]
+    def search(question,rows,*,source_ids):
+        calls.append((rows,source_ids))
+        return [{'row':row,'text':row['answer'],'score':.9,'chunk_id':'allowed'},
+                {'row':other,'text':other['answer'],'score':.95,'chunk_id':'excluded'}]
+    found=retrieve_knowledge('Thư viện tra cứu hướng dẫn chuyên sâu',[row],
+                             SimpleNamespace(search_chunks=search),index_rows=[row,other])
+    assert calls==[([row,other],{row['id']})]
+    assert [candidate['id'] for candidate,_ in found['ranked']]==[row['id']]
+
+
 def test_strong_faq_avoids_model_and_vector_work():
     from app.services.retrieval import retrieve_knowledge
     row=document(); row['question']='Tra cứu OPAC'
