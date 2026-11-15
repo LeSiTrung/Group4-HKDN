@@ -1,0 +1,41 @@
+[
+  {
+    "title": "Xác nhận giờ phục vụ với LIC UTH",
+    "question": "Liên hệ ở đâu để xác nhận giờ mở cửa của thư viện UTH?",
+    "aliases": ["Hỏi lịch mở cửa ở đâu?", "Xác nhận giờ phục vụ với thư viện"],
+    "keywords": ["giờ mở cửa", "liên hệ", "xác nhận lịch"],
+    "answer": "Bạn có thể hỏi LIC qua (028) 35.126.169 hoặc lic@ut.edu.vn. Khi liên hệ, hãy cho biết cơ sở và ngày bạn dự định đến.",
+    "category": "hours_contact",
+    "source_url": "https://lic.ut.edu.vn/lien-he/",
+    "source_title": "LIC UTH — Liên hệ",
+    "checked_at": "2026-11-12",
+    "status": "reviewed_public",
+    "published": true
+  },
+  {
+    "title": "Địa chỉ thư viện tại ba cơ sở UTH",
+    "question": "Thư viện UTH ở đâu?",
+    "aliases": ["Địa chỉ thư viện UTH", "Thư viện cơ sở 1 ở đâu?", "Thư viện cơ sở 2 ở đâu?", "Thư viện cơ sở 3 ở đâu?"],
+    "keywords": ["địa chỉ thư viện", "vị trí thư viện"],
+    "answer": "Theo mục Thư viện các cơ sở và phần địa chỉ trên trang chủ LIC:\n• Cơ sở 1: B301A, lầu 3, khu B, số 2 Võ Oanh, phường Thạnh Mỹ Tây.\n• Cơ sở 2: P003, khu P, số 10 đường số 12, phường An Khánh.\n• Cơ sở 3: lầu 1, khu K, số 70 Tô Ký, phường Trung Mỹ Tây.",
+    "category": "branch_directory",
+    "source_url": "https://lic.ut.edu.vn/",
+    "source_title": "LIC UTH — Thư viện các cơ sở",
+    "checked_at": "2026-11-12",
+    "status": "reviewed_public",
+    "published": true
+  },
+  {
+    "title": "Chính sách mượn liên thư viện UTH và Đại học Bách khoa",
+    "question": "Mượn liên thư viện giữa UTH và Đại học Bách khoa được thực hiện thế nào?",
+    "aliases": ["Chính sách mượn liên thư viện", "Mượn liên thư viện có mất phí không?"],
+    "keywords": ["mượn liên thư viện", "gia hạn liên thư viện", "MLTV"],
+    "answer": "Văn bản LIC công bố cho dịch vụ mượn liên thư viện giữa UTH và Đại học Bách khoa, ĐHQG-HCM ghi áp dụng từ 01/07/2025. Bạn đọc đăng ký tại thư viện đã cấp tài khoản cho mình.\n\nTheo văn bản, mỗi lần có thể mượn tối đa 5 cuốn trong tối đa 30 ngày kể từ lúc nhận. Có thể đề nghị gia hạn 7 ngày qua email hoặc trực tiếp tại thư viện chủ quản nếu tài liệu chưa có người đặt trước. Dịch vụ miễn phí mượn, người mượn trả phí vận chuyển.\n\nHãy xác nhận tình trạng áp dụng và cách đăng ký với thư viện cấp tài khoản trước khi gửi yêu cầu.",
+    "category": "interlibrary",
+    "source_url": "https://lic.ut.edu.vn/wp-content/uploads/2025/08/2025.07.08_Chinhsachmuonlienthuvien.pdf",
+    "source_title": "LIC UTH — Chính sách mượn liên thư viện với Đại học Bách khoa",
+    "checked_at": "2026-11-12",
+    "status": "needs_confirmation",
+    "published": true
+  }
+]
