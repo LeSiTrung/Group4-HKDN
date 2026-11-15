@@ -124,3 +124,20 @@ def test_cli_dry_run_does_not_create_database(tmp_path,monkeypatch,capsys):
     report=json.loads(capsys.readouterr().out)
     assert report['accepted']==1 and report['applied'] is False
     assert not runtime.exists()
+
+
+@pytest.mark.parametrize('suffix', ['', '-wal', '-shm', '-journal'])
+def test_cli_report_preserves_database_files(tmp_path, monkeypatch, suffix):
+    records = tmp_path / 'records'
+    records.mkdir()
+    runtime = tmp_path / 'runtime'
+    runtime.mkdir()
+    target = runtime / ('library.sqlite3' + suffix)
+    target.write_bytes(b'existing database data')
+    monkeypatch.setenv('DATA_DIR', str(runtime))
+    monkeypatch.setattr(sys, 'argv', ['import_dspace.py', str(records), '--report', str(target)])
+    script = run_path(str(Path(__file__).resolve().parents[1] / 'scripts/import_dspace.py'))
+    with pytest.raises(SystemExit) as error:
+        script['main']()
+    assert error.value.code == 2
+    assert target.read_bytes() == b'existing database data'

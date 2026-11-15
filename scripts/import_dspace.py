@@ -22,12 +22,16 @@ def main():
     if not args.records.is_dir():
         parser.error('Records directory does not exist.')
     target=args.report or args.records.parent/'dspace-import-report.json'
-    if target.resolve().parent==args.records.resolve():
+    report_path=target.resolve()
+    if args.records.resolve() in report_path.parents:
         parser.error('Report must be outside the raw records directory.')
+    database=Settings.load().data_dir/'library.sqlite3'
+    if report_path in {Path(str(database)+suffix).resolve() for suffix in ('','-wal','-shm','-journal')}:
+        parser.error('Report must not overwrite the SQLite database or its companion files.')
     books,report=stage_snapshots(args.records,published=args.publish)
     report.update(applied=args.apply,publish_new=args.publish,imported=0,skipped_existing=0)
     if args.apply and books:
-        store=Store(Settings.load().data_dir/'library.sqlite3')
+        store=Store(database)
         report.update(import_books(store.connect,books))
     target.parent.mkdir(parents=True,exist_ok=True)
     target.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
