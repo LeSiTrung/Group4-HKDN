@@ -7,6 +7,7 @@ import Account, { AuthModal } from './components/Account.jsx'
 import BookDetails from './components/BookDetails.jsx'
 import Catalog from './components/Catalog.jsx'
 import ChatWindow from './components/ChatWindow.jsx'
+import { displayDate } from './components/UI.jsx'
 import { api } from './services/chatApi.js'
 
 const response = (value, status = 200) => ({ ok: status < 400, status, json: async () => value })
@@ -36,6 +37,25 @@ beforeEach(() => {
   location.hash = ''
 })
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals() })
+
+it('keeps a source calendar date while showing timestamps in the reader timezone', () => {
+  const format = Date.prototype.toLocaleDateString
+  vi.spyOn(Date.prototype, 'toLocaleDateString').mockImplementation(function (locale, options) {
+    return format.call(this, locale, { timeZone: 'America/Los_Angeles', ...options })
+  })
+  expect(displayDate('2026-11-12')).toBe('12/11/2026')
+  expect(displayDate('2026-11-12T00:00:00Z')).toBe('11/11/2026')
+})
+
+it.each([[true, false, 'Sẵn sàng'], [false, true, 'Chưa cấu hình']])(
+  'reports loan access (%s) independently of renewal (%s)', (loans, renewals, expected) => {
+    render(<Account user={{ ...reader, role: 'admin' }} health={{ capabilities: {
+      library_loans_configured: loans,
+      library_configured: renewals,
+    } }} />)
+    expect(screen.getByText('Kết nối khoản mượn').nextElementSibling.textContent).toBe(expected)
+  },
+)
 
 describe('chat recovery and request isolation', () => {
   it('retries a failed guest turn without duplicating it in the conversation or context', async () => {

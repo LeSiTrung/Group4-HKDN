@@ -72,7 +72,7 @@ export default function Account({ user, onLogout, onDeleted, health }) {
     ['Tài khoản và lịch sử', capabilities?.accounts && capabilities?.history, 'Sẵn sàng'],
     ['Tìm kiếm ngữ nghĩa', capabilities?.vectors?.ready, capabilities?.vectors?.ready ? 'Sẵn sàng' : capabilities?.vectors?.configured ? 'Chưa nạp mô hình' : 'Chưa cấu hình'],
     ['Sinh câu trả lời bằng AI', Boolean(capabilities?.llm_provider && capabilities.llm_provider !== 'none'), 'Sẵn sàng'],
-    ['Kết nối khoản mượn', capabilities?.library_configured, 'Sẵn sàng'],
+    ['Kết nối khoản mượn', capabilities?.library_loans_configured, 'Sẵn sàng'],
     ['Kênh Messenger', capabilities?.messenger_configured, 'Sẵn sàng'],
     ['Kênh Zalo', capabilities?.zalo_configured, 'Sẵn sàng'],
   ]
