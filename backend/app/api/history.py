@@ -7,18 +7,14 @@ from .auth import require_user, public_user, ensure_current_account
 router = APIRouter(tags=['history'])
 
 
-def conversation(request, user, conversation_id):
-    with request.app.state.db() as db:
-        ensure_current_account(db,user)
-        row = db.execute('SELECT * FROM conversations WHERE id=? AND user_id=?', (conversation_id, user['id'])).fetchone()
-        if not row:
-            raise HTTPException(404, 'Không tìm thấy hội thoại.')
-        messages = [dict(x) for x in db.execute('''SELECT m.*, f.rating AS feedback_rating, f.comment AS feedback_comment
-            FROM messages m LEFT JOIN feedback f ON f.message_id=m.id AND f.user_id=?
-            WHERE m.conversation_id=? ORDER BY m.id''', (user['id'], conversation_id))]
+def conversation(db, user_id, row):
+    messages = [dict(x) for x in db.execute('''SELECT m.*, f.rating AS feedback_rating, f.comment AS feedback_comment
+        FROM messages m LEFT JOIN feedback f ON f.message_id=m.id AND f.user_id=?
+        WHERE m.conversation_id=? ORDER BY m.id''', (user_id, row['id']))]
     for message in messages:
         message['sources'] = json.loads(message['sources'])
         message['books'] = json.loads(message['books'])
+        message['list_book_ids'] = json.loads(message['list_book_ids'])
     return {**dict(row), 'messages': messages}
 
 
@@ -31,7 +27,13 @@ def conversations(request: Request, user=Depends(require_user)):
 
 @router.get('/conversations/{conversation_id}')
 def get_conversation(conversation_id: Annotated[int, Path(gt=0, le=9223372036854775807)], request: Request, user=Depends(require_user)):
-    return conversation(request, user, conversation_id)
+    with request.app.state.db() as db:
+        db.execute('BEGIN')
+        ensure_current_account(db,user)
+        row = db.execute('SELECT * FROM conversations WHERE id=? AND user_id=?', (conversation_id, user['id'])).fetchone()
+        if not row:
+            raise HTTPException(404, 'Không tìm thấy hội thoại.')
+        return conversation(db, user['id'], row)
 
 
 @router.delete('/conversations/{conversation_id}')
@@ -47,9 +49,10 @@ def remove_conversation(conversation_id: Annotated[int, Path(gt=0, le=9223372036
 @router.get('/export')
 def export(request: Request, user=Depends(require_user)):
     with request.app.state.db() as db:
+        db.execute('BEGIN')
         ensure_current_account(db,user)
-        ids = [x['id'] for x in db.execute('SELECT id FROM conversations WHERE user_id=? ORDER BY id', (user['id'],))]
-    return {'user': public_user(user), 'conversations': [conversation(request, user, i) for i in ids]}
+        rows = db.execute('SELECT * FROM conversations WHERE user_id=? ORDER BY id', (user['id'],))
+        return {'user': public_user(user), 'conversations': [conversation(db, user['id'], row) for row in rows]}
 
 
 class Feedback(BaseModel):

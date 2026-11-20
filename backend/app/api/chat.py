@@ -6,11 +6,13 @@ from typing import Annotated, Literal
 
 router = APIRouter(tags=["chat"])
 
+BookId = Annotated[int, Field(strict=True, gt=0, le=9223372036854775807)]
 
 class HistoryTurn(BaseModel):
     role:Literal['user','assistant']
     content:str
-    book_ids:list[Annotated[int,Field(strict=True,gt=0,le=9223372036854775807)]]=Field(default_factory=list,max_length=5)
+    book_ids:list[BookId]=Field(default_factory=list,max_length=5)
+    list_book_ids:list[BookId]=Field(default_factory=list,max_length=5)
 
 
 class ChatRequest(BaseModel):
@@ -35,20 +37,31 @@ class ChatResponse(BaseModel):
     conversation_id: int | None = None
     message_id: int | None = None
     books:list[dict]=Field(default_factory=list)
+    list_book_ids:list[BookId]=Field(default_factory=list,max_length=5)
 
 
 @router.post("/chat", response_model=ChatResponse)
 def chat(payload: ChatRequest,request:Request,user=Depends(optional_user)):
     cid = payload.conversation_id
+    last_message_id = None
     history=[] if user else [turn.model_dump(exclude_defaults=True) for turn in payload.history]
     if cid:
+        if not user:
+            raise HTTPException(404,'Không tìm thấy hội thoại.')
         with request.app.state.db() as db:
-            if not user or not db.execute('SELECT id FROM conversations WHERE id=? AND user_id=?',(cid,user['id'])).fetchone():
-                raise HTTPException(404,'Không tìm thấy hội thoại.')
+            db.execute('BEGIN')
             ensure_current_account(db,user)
-            history = [dict(x) for x in db.execute('SELECT role,content,context_query,books FROM messages WHERE conversation_id=? ORDER BY id DESC LIMIT 6',(cid,))][::-1]
-            for turn in history:
-                turn['book_ids']=[book['id'] for book in json.loads(turn.pop('books'))[:5]]
+            if not db.execute('SELECT id FROM conversations WHERE id=? AND user_id=?',(cid,user['id'])).fetchone():
+                raise HTTPException(404,'Không tìm thấy hội thoại.')
+            turns = db.execute('SELECT id,role,content,context_query,books,list_book_ids FROM messages WHERE conversation_id=? ORDER BY id DESC LIMIT 6',(cid,)).fetchall()
+        if turns:
+            last_message_id = turns[0]['id']
+        for row in reversed(turns):
+            turn = dict(row)
+            turn.pop('id')
+            turn['book_ids']=[book['id'] for book in json.loads(turn.pop('books'))[:5]]
+            turn['list_book_ids']=json.loads(turn['list_book_ids'])
+            history.append(turn)
     result = request.app.state.answer(payload.message,history)
     mid = None
     if user:
@@ -57,10 +70,18 @@ def chat(payload: ChatRequest,request:Request,user=Depends(optional_user)):
             if cid:
                 if not db.execute('SELECT id FROM conversations WHERE id=? AND user_id=?',(cid,user['id'])).fetchone():
                     raise HTTPException(409,'Hội thoại đã được xóa. Hãy bắt đầu cuộc trò chuyện mới.')
+                current_last_id = db.execute('SELECT max(id) FROM messages WHERE conversation_id=?',(cid,)).fetchone()[0]
+                if current_last_id != last_message_id:
+                    raise HTTPException(409, {
+                        'code': 'chat_history_changed',
+                        'message': 'Hội thoại vừa có tin nhắn mới ở tab khác. Kiểm tra lịch sử trước khi gửi lại.',
+                    })
             else:
                 cid = db.execute('INSERT INTO conversations(user_id,title) VALUES (?,?)',(user['id'],payload.message.strip()[:80])).lastrowid
             db.execute("INSERT INTO messages(conversation_id,role,content) VALUES (?,'user',?)",(cid,payload.message))
-            mid = db.execute("INSERT INTO messages(conversation_id,role,content,sources,status,mode,books,context_query) VALUES (?,'assistant',?,?,?,?,?,?)",
-                (cid,result['answer'],json.dumps(result['sources'],ensure_ascii=False),result['status'],result['mode'],json.dumps(result.get('books',[]),ensure_ascii=False),result.get('context_query',''))).lastrowid
+            mid = db.execute("INSERT INTO messages(conversation_id,role,content,sources,status,mode,books,context_query,list_book_ids) VALUES (?,'assistant',?,?,?,?,?,?,?)",
+                (cid,result['answer'],json.dumps(result['sources'],ensure_ascii=False),result['status'],result['mode'],
+                 json.dumps(result.get('books',[]),ensure_ascii=False),result.get('context_query',''),
+                 json.dumps(result.get('list_book_ids',[])))).lastrowid
             db.execute("UPDATE conversations SET updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id=?",(cid,))
     return {**result,'conversation_id':cid,'message_id':mid}

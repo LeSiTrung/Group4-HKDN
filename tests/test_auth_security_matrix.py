@@ -3,6 +3,7 @@
 import json
 import time
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import contextmanager
 from threading import Barrier
 
 import pytest
@@ -40,6 +41,78 @@ def add_history(client, user_id, marker):
         question = db.execute("INSERT INTO messages(conversation_id,role,content) VALUES (?,'user',?)", (cid, marker)).lastrowid
         answer = db.execute("INSERT INTO messages(conversation_id,role,content) VALUES (?,'assistant',?)", (cid, marker)).lastrowid
     return cid, question, answer
+
+
+def test_deleted_history_links_cannot_modify_a_replacement_chat(reader):
+    first = reader.post('/api/chat', json={'message': 'Hỏi lần đầu'}).json()
+    old_chat = f"/api/conversations/{first['conversation_id']}"
+    assert reader.delete(old_chat).status_code == 200
+    second = reader.post('/api/chat', json={'message':'Hỏi trong cuộc trò chuyện mới'}).json()
+    assert reader.post('/api/feedback', json={'message_id': first['message_id'], 'rating': -1}).status_code == 404
+    assert reader.delete(old_chat).status_code == 404
+    assert reader.get(f"/api/conversations/{second['conversation_id']}").status_code == 200
+
+
+def test_simultaneous_turns_in_one_chat_cannot_save_answers_from_the_same_context(reader):
+    first = reader.post('/api/chat', json={'message': 'Một câu hỏi ban đầu'}).json()
+    url = '/api/chat'
+    payload = {'conversation_id': first['conversation_id']}
+    barrier = Barrier(2)
+    answer = reader.app.state.answer
+
+    def simultaneous_answer(question, history):
+        barrier.wait(timeout=5)
+        return answer(question, history)
+
+    reader.app.state.answer = simultaneous_answer
+    other_tab = TestClient(reader.app, headers=HEADERS, cookies=reader.cookies)
+    try:
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            pending = [
+                pool.submit(tab.post, url, json={**payload, 'message': question})
+                for tab, question in [(reader, 'Câu hỏi tab một'), (other_tab, 'Câu hỏi tab hai')]
+            ]
+            replies = [future.result(timeout=10) for future in pending]
+    finally:
+        other_tab.close()
+    assert sorted(response.status_code for response in replies) == [200, 409]
+    conflict = next(response for response in replies if response.status_code == 409)
+    assert conflict.json()['detail']['code'] == 'chat_history_changed'
+    stored = reader.get(f"/api/conversations/{first['conversation_id']}").json()['messages']
+    assert len(stored) == 4
+    winner = next(response.json()['message_id'] for response in replies if response.status_code == 200)
+    assert stored[-1]['id'] == winner
+
+    reader.app.state.answer = answer
+    retry = reader.post(url, json={**payload, 'message': 'Gửi lại sau khi đồng bộ'})
+    assert retry.status_code == 200
+
+
+def test_export_stays_consistent_when_one_conversation_is_deleted(reader, monkeypatch):
+    user_id = reader.get('/api/auth/me').json()['user']['id']
+    kept_id, _, _ = add_history(reader, user_id, 'Giữ hội thoại')
+    removed_id, _, _ = add_history(reader, user_id, 'Xóa đồng thời')
+    connect = reader.app.state.db
+    connections = 0
+
+    @contextmanager
+    def delete_after_first_export_read():
+        nonlocal connections
+        connections += 1
+        current = connections
+        with connect() as db:
+            yield db
+        if current == 2:  # Authentication used the first connection.
+            with connect() as writer:
+                writer.execute('DELETE FROM conversations WHERE id=?', (removed_id,))
+
+    monkeypatch.setattr(reader.app.state, 'db', delete_after_first_export_read)
+    response = reader.get('/api/export')
+    assert response.status_code == 200
+    exported = response.json()['conversations']
+    assert [item['id'] for item in exported] == [kept_id, removed_id]
+    assert [item['messages'][-1]['content'] for item in exported] == ['Giữ hội thoại', 'Xóa đồng thời']
+    assert reader.get(f'/api/conversations/{removed_id}').status_code == 404
 
 
 def test_export_delete_and_feedback_cannot_cross_reader_boundary(reader):
