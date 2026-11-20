@@ -107,6 +107,8 @@ def test_repeated_opac_help_still_uses_the_reviewed_guide(state):
     ('Tìm sách truyền thống trên OPAC thế nào?', 'Sách truyền thống', 'pdf#page=4'),
     ('Tôi muốn biết cách tìm giáo trình theo tên', 'Chọn trường phù hợp', 'pdf#page=6'),
     ('Làm thế nào để tìm sách theo tác giả?', 'Chọn trường phù hợp', 'pdf#page=6'),
+    ('Tôi muốn tìm sách theo người viết', 'Chọn trường phù hợp', 'pdf#page=6'),
+    ('Em muốn tra cứu tài liệu theo tên người viết', 'Chọn trường phù hợp', 'pdf#page=6'),
     ('Hướng dẫn tìm kiếm nâng cao trên OPAC', 'AND', '/OSearchAdvanced.aspx'),
     ('OPAC không có kết quả thì làm sao?', 'Thử từ khóa ngắn hơn', '/opac/'),
     ('Tôi tìm sách trên OPAC không ra kết quả', 'Thử từ khóa ngắn hơn', '/opac/'),

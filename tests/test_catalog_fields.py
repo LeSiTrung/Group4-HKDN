@@ -53,7 +53,13 @@ def test_api_enforces_fields_and_does_not_silently_fallback_to_opac(client,monke
     assert client.get('/api/catalog',params={'q':'Python','field':'title','source':'opac'}).status_code==422
 
 
-@pytest.mark.parametrize('question',['Tìm sách của Nguyễn Văn An','Tìm tài liệu theo tác giả Nguyễn Văn An','Sách của Nguyễn Văn An'])
+@pytest.mark.parametrize('question',[
+    'Tìm sách của Nguyễn Văn An',
+    'Tìm tài liệu theo tác giả Nguyễn Văn An',
+    'Sách của Nguyễn Văn An',
+    'Tìm sách theo người viết Nguyễn Văn An',
+    'Tra cứu tài liệu theo tên người viết Nguyễn Văn An',
+])
 def test_chat_author_requests_search_only_author_metadata(client,question):
     result=client.post('/api/chat',json={'message':question}).json()
     assert result['status']=='answered'

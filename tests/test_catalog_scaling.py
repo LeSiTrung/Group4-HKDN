@@ -23,6 +23,28 @@ def add(store, title, **changes):
             source_url=f'https://lic.ut.edu.vn/synthetic-scaling-{count}/',checked_at=today(),published=True,**changes))
 
 
+@pytest.mark.parametrize('query',[
+    'logistics bố trí vị trí lấy hàng giảm thời gian di chuyển',
+    'bo tri mat bang kho',
+])
+def test_warehouse_search_finds_bilingual_operation_in_metadata(store,query):
+    book=add(store,'World-Class Warehousing',description='Warehouse layout and order picking.')
+    add(store,'Dịch vụ logistics cảng',description='Khách hàng giảm thời gian di chuyển đến vị trí nhận container.')
+    add(store,'Sửa máy tàu để vào cảng lấy hàng')
+    state=SimpleNamespace(db=store.connect,settings=SimpleNamespace(testing=True))
+    assert [row['id'] for row in catalog.search_books(state,query)]==[book['id']]
+    assert not catalog.search_books(state,query,field='title')
+
+
+def test_warehouse_lookup_uses_marc_subjects_when_summary_is_missing(store):
+    book=add(store,'Operations handbook')
+    with store.connect() as db:
+        db.execute('INSERT INTO book_marc VALUES (?,?,?,?,?,?,?)',
+                   (book['id'],book['source_url'],today(),'a'*64,'Warehouse layout','',''))
+    state=SimpleNamespace(db=store.connect,settings=SimpleNamespace(testing=True))
+    assert [row['id'] for row in catalog.search_books(state,'bố trí mặt bằng kho')]==[book['id']]
+
+
 def test_impossible_character_matches_do_not_compute_full_similarity(store,monkeypatch):
     add(store,'aaaaaa bbbbbb cccccc')
     comparisons=[]
@@ -55,6 +77,65 @@ def test_precise_fast_path_keeps_typo_fallback_and_publication_changes(store):
     assert catalog.search_books(state,'Python')==[]
     current=add(store,'Python thực hành')
     assert [row['id'] for row in catalog.search_books(state,'Python')]==[current['id']]
+
+
+def test_complete_keyword_evidence_skips_approximate_matches(store,monkeypatch):
+    add(store,'Logistix quản lý kho')
+    exact=add(store,'Sổ tay kho',subjects='Logistics; quản lý kho')
+    state=SimpleNamespace(db=store.connect,settings=SimpleNamespace(testing=True))
+
+    def unexpected(*args):
+        pytest.fail('A record matches all keywords, so typo correction is unnecessary')
+
+    monkeypatch.setattr(catalog,'_similar_words',unexpected)
+    assert [row['id'] for row in catalog.search_books(state,'logistics kho quản lý')]==[exact['id']]
+
+
+def test_typo_match_in_title_ranks_ahead_of_a_passive_mention(store):
+    mention=add(store,'Thống kê ngành',description='Có ví dụ dùng Python.')
+    exact_topic=add(store,'Nhập môn Python')
+    state=SimpleNamespace(db=store.connect,settings=SimpleNamespace(testing=True))
+    assert [row['id'] for row in catalog.search_books(state,'pyhton')]==[exact_topic['id'],mention['id']]
+
+
+@pytest.mark.parametrize('query', [
+    'hải đồ nhận diện luồng hàng hải bằng tín hiệu vệ tinh',
+    'hai do nhan dien luong hang hai bang tin hieu ve tinh',
+])
+def test_long_search_prefers_a_title_with_the_leading_topic_phrase(store,query):
+    add(store,'Đồ họa máy tính bằng hình ảnh dễ hiểu',
+        description='Nhận dạng hàng loạt bằng tín hiệu vệ tinh và nhận biết luồng chuyển động.')
+    topical=add(store,'Ứng dụng hải đồ điện tử trên tuyến luồng hàng hải',
+        description='Nhận diện luồng hàng hải bằng tín hiệu số.')
+    state=SimpleNamespace(db=store.connect,settings=SimpleNamespace(testing=True))
+    assert [row['id'] for row in catalog.search_books(state,query)]==[topical['id']]
+
+
+def test_long_search_avoids_fuzzy_work_outside_a_credible_topic(store,monkeypatch):
+    add(store,'Unrelated material spuriousmarker',
+        description='Nhận diện luồng hàng hải bằng tín hiệu vệ tinh và nhận biết chuyển động.')
+    topical=add(store,'Ứng dụng hải đồ điện tử trên tuyến luồng hàng hải',
+        description='Nhận diện luồng hàng hải bằng tín hiệu số.')
+    matches_topic=catalog._matches_programming_topic
+
+    def checked(row,languages):
+        assert 'spuriousmarker' not in row['title']
+        return matches_topic(row,languages)
+
+    monkeypatch.setattr(catalog,'_matches_programming_topic',checked)
+    state=SimpleNamespace(db=store.connect,settings=SimpleNamespace(testing=True))
+    rows=catalog.search_books(state,'hải đồ nhận diện luồng hàng hải bằng tín hiệu vệ tinh')
+    assert [row['id'] for row in rows]==[topical['id']]
+
+
+def test_long_search_keeps_a_distinctive_topic_word_when_the_phrase_is_absent(store):
+    add(store,'Tài liệu tài chính về cách bố trí và giảm thời gian',
+        description='Vị trí lấy hàng và phân bổ tài nguyên.',subjects='TV Chuyên ngành Logistics')
+    topical=add(store,'Quản lý kho Logistics',
+        description='Bố trí vị trí lấy hàng để giảm thời gian và công sức.')
+    state=SimpleNamespace(db=store.connect,settings=SimpleNamespace(testing=True))
+    rows=catalog.search_books(state,'logistics bố trí vị trí lấy hàng giảm thời gian di chuyển')
+    assert [row['id'] for row in rows]==[topical['id']]
 
 
 def test_catalog_projection_is_reused_until_another_connection_changes_books(store):

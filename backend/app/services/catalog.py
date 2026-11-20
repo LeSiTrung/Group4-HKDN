@@ -16,6 +16,8 @@ _BOOK_PREFIX=r'(?:(?:tim|tra cuu) '+_DOCUMENT_TYPES+r'|sach)'
 _FIND_DOCUMENT=r'(?:tim|tra cuu|kiem|goi y|de xuat|tu van|gioi thieu)(?: (?:cho|giup|toi|minh|ban|nhung|cac|vai|mot|so|em|0*[1-9][0-9]*))* '+_DOCUMENT_TYPES
 _SEARCH_LEAD=r'(?:(?:hay|vui long|lam on) )?(?:(?:toi|minh|em|ban) )?'
 _QUOTED_TEXT=r'"[^"]*"|“[^”]*”|\'[^\']*\'|‘[^’]*’|«[^»]*»'
+_SPACED_SEARCH_TERM=re.compile(_QUOTED_TEXT+r'|(?P<term>(?<![\w+#])(?:p\s+y\s+t\s+h\s+o\s+n|'
+    r'o\s+p\s+a\s+c|h\s+t\s+m\s+l|c\s+s\s+s|j\s+a\s+v\s+a|c\s*\+\s*\+|c\s+#)(?![\w+#]))',re.I)
 _QUESTION_CLAUSE=re.compile(_QUOTED_TEXT+r'|(?P<end>[.!?;](?=\s|$)|\n)')
 _TOPIC_REFINEMENT=r'^(?:(?:toi|minh|em) )?(?:muon )?tap trung (?:vao|ve) (.+)$'
 _SEARCH_NOISE={'tim','sach','tai','lieu','theo','quyen','cuon','tac','gia','chu','de','nguoi'}
@@ -119,6 +121,10 @@ def catalog_tokens(text):
     return set(_normalized_metadata(text).split())-STOP
 
 
+def repair_search_spacing(text):
+    return _SPACED_SEARCH_TERM.sub(lambda match: re.sub(r'\s+','',match['term']) if match['term'] else match[0],text)
+
+
 def _programming_languages(query):
     words=catalog_tokens(query)-_SEARCH_NOISE
     languages=words&{'c','c++','c#'}
@@ -154,6 +160,7 @@ def _discovery_rows(db_factory,kind,revision):
 def search_local(db_factory,query,kind='all',field='all',*,fuzzy=True):
     if field not in ('all','title','author'):
         raise ValueError('Unsupported catalog field')
+    query=repair_search_spacing(query)
     with db_factory() as db:
         revision=db.execute('SELECT value FROM catalog_revision WHERE id=1').fetchone()[0]
     rows=_discovery_rows(db_factory,kind,revision)
@@ -172,28 +179,70 @@ def search_local(db_factory,query,kind='all',field='all',*,fuzzy=True):
         matched.sort(key=lambda pair:(not pair[1],pair[0]['id']))
         return [row for row,_ in matched]
     words=catalog_tokens(query)-_SEARCH_NOISE
-    required={word for word in words if word=='c' or '+' in word or '#' in word}
     if not words:
         return [item(row) for row in rows if _normalized_metadata(row['title'])==normalized]
+    leading_words=normalized.split(maxsplit=2)[:2]
+    if fuzzy and len(words)>=6 and set(leading_words)<=words:
+        # Resolve a strong topic in title/subjects before comparing typos in full descriptions.
+        prefix=' '+' '.join(leading_words)+' '
+        first=leading_words[0]
+        term=f' {first} ' if len(first)>=5 else None
+        by_phrase,by_word=[],[]
+        for row in rows:
+            fields=[' '+_normalized_metadata(row[key] or '')+' ' for key in ('title','subjects','marc_subjects')]
+            if any(prefix in value for value in fields):
+                by_phrase.append(row)
+            elif term and any(term in value for value in fields):
+                if term in fields[0]:
+                    by_word.append(row)
+                    continue
+                # A curriculum tag alone gives weak evidence of the book's subject.
+                topics=[_normalized_metadata(value).strip() for key in ('subjects','marc_subjects')
+                        for value in (row[key] or '').split(';')]
+                if (any(term in ' '+value+' ' and not value.startswith(('tv ','ta ','ebook ','kl ','lv '))
+                        for value in topics)
+                        or any(term in ' '+_normalized_metadata(row[key] or '')+' '
+                               for key in ('marc_summary','description'))):
+                    by_word.append(row)
+        for candidates in (by_phrase,by_word):
+            if candidates:
+                focused=_rank_keyword_rows(candidates,normalized,words,languages,fuzzy=True)
+                if focused:
+                    return focused
+        if by_word:
+            return []
+    return _rank_keyword_rows(rows,normalized,words,languages,fuzzy=fuzzy)
+
+
+def _rank_keyword_rows(rows,normalized,words,languages,*,fuzzy):
+    required={word for word in words if word=='c' or '+' in word or '#' in word}
+    exact_needles=tuple(f' {word} ' for word in words) if not fuzzy else ()
     fuzzy_matchers={word:partial(_similar_words,word) for word in words if len(word)>=4} if fuzzy else {}
     ranked=[]
     complete=[]
     for row in rows:
         text=_normalized_metadata(' '.join(row[k] or '' for k in
                                            ('title','author','year','subjects','description','marc_subjects','marc_summary')))
-        corpus=set(text.split())
+        if exact_needles:
+            padded=f' {text} '
+            if not all(needle in padded for needle in exact_needles):
+                continue
+        corpus=set(text.split()) if fuzzy else words
         if not required<=corpus:
             continue
         if not _matches_programming_topic(row,languages):
             continue
         matched=len(words&corpus)
+        typo_matches=[]
         for word,matches in fuzzy_matchers.items():
             if word not in corpus and any(map(matches,corpus)):
                 matched+=1
+                typo_matches.append(matches)
         coverage=matched/len(words)
         if coverage<0.6:
             continue
-        title_hits=len(words&catalog_tokens(row['title']))
+        title_words=catalog_tokens(row['title'])
+        title_hits=len(words&title_words)+sum(any(map(matches,title_words)) for matches in typo_matches)
         author_hits=len(words&catalog_tokens(row['author']))
         ranked.append((item(row),coverage+title_hits*0.15+author_hits*0.1))
         if coverage==1:
@@ -236,13 +285,43 @@ def search_books(state,query,kind='all',field='all'):
     return search_books_with_status(state,query,kind,field)[0]
 
 
+def _warehouse_topic_matches(db_factory,query,kind):
+    q=' '+normalize_catalog(query)+' '
+    if ' kho ' not in q and ' logistics ' not in q:
+        return []
+    operations=[]
+    if any(term in q for term in (' lay hang ',' soan hang ')):
+        operations.append(('order picking','vi tri lay hang','soan hang','lay hang trong kho'))
+    if any(term in q for term in (' bo tri kho ',' bo tri mat bang kho ')):
+        operations.append(('warehouse layout','bo tri kho','bo tri mat bang kho'))
+    if not operations or _programming_languages(query):
+        return []
+    with db_factory() as db:
+        revision=db.execute('SELECT value FROM catalog_revision WHERE id=1').fetchone()[0]
+    matches=[]
+    for row in _discovery_rows(db_factory,kind,revision):
+        fields=[' '+_normalized_metadata(row[key] or '')+' ' for key in ('title','marc_summary','description')]
+        for key in ('subjects','marc_subjects'):
+            for subject in (row[key] or '').split(';'):
+                topic=_normalized_metadata(subject)
+                if topic and not topic.startswith(('tv ','ta ','ebook ','kl ','lv ')):
+                    fields.append(' '+topic+' ')
+        if not any(re.search(r'\b(?:logistics|warehous(?:e|ing)|kho hang|quan ly kho|bo tri (?:mat bang )?kho)\b',field)
+                   for field in fields):
+            continue
+        if all(any(' '+term+' ' in field for field in fields for term in group) for group in operations):
+            matches.append(item(row))
+    return matches
+
+
 def search_books_with_status(state,query,kind='all',field='all'):
+    query=repair_search_spacing(query)
     matched=search_local(state.db,query,kind,field,fuzzy=False)
     if field=='all':
         phrase=re.compile(r'(?<![\w+#])'+re.escape(normalize_catalog(query))+r'(?![\w+#])')
         precise=[b for b in matched if phrase.search(_normalized_metadata(' '.join(
             (b['title'],b['subjects'],b.get('marc',{}).get('subjects',''),b.get('marc',{}).get('summary','')))))]
-        matched=precise or search_local(state.db,query,kind,field)
+        matched=precise or _warehouse_topic_matches(state.db,query,kind) or matched or search_local(state.db,query,kind,field)
     # Single-term identifiers need a lexical match, not an unrelated vector suggestion.
     words=catalog_tokens(query)-_SEARCH_NOISE
     languages=_programming_languages(query)
@@ -327,6 +406,9 @@ def search_guidance(question, *, allow_bare=False):
         return None
     if allow_bare and re.fullmatch(_SEARCH_LEAD+r'(?:tim|tra cuu|kiem) '+_DOCUMENT_TYPES,q):
         return 'Hướng dẫn tra cứu OPAC'
+    if re.fullmatch(_SEARCH_LEAD+r'(?:muon )?(?:tim|tra cuu|kiem) '+_DOCUMENT_TYPES+
+                    r' theo (?:ten )?(?:tac gia|nguoi viet)(?: (?:a|voi))?',q):
+        return 'Tìm theo tác giả hoặc nhan đề như thế nào?'
     if 'opac' not in q.split() and re.search(r'\b(?:'+_RESOURCE_NAMES+r')\b',q):
         return None
     if 'opac' in q.split() and re.search(r'\bra (?:so )?0\b',q):
@@ -351,7 +433,7 @@ def search_guidance(question, *, allow_bare=False):
         return 'Tìm tài liệu số và tải ebook thế nào?'
     if re.search(r'\b(nang cao|and|or|not)\b',q):
         return 'Dùng tìm kiếm nâng cao AND OR NOT thế nào?'
-    if re.search(r'\b(tac gia|nhan de|theo ten|nha xuat ban|nam xuat ban)\b',q):
+    if re.search(r'\b(tac gia|nguoi viet|nhan de|theo ten|nha xuat ban|nam xuat ban)\b',q):
         return 'Tìm theo tác giả hoặc nhan đề như thế nào?'
     if re.search(r'\bsach (?:truyen thong|giay|in)\b',q):
         return 'Tìm sách truyền thống trên OPAC thế nào?'
@@ -368,6 +450,8 @@ def is_book_request(question):
         return False
     if structured_book_query(question):
         return True
+    if re.search(r'\bla (?:cuon|quyen|sach|tai lieu) nao(?: a)?$',q) and book_position(question) is not None:
+        return False
     explicit=re.match(r'^'+_SEARCH_LEAD+_FIND_DOCUMENT+r'\b',q)
     if not explicit and re.search(r'\b(?:dem|mang) sach ve\b',q):
         return False
@@ -380,7 +464,8 @@ _BOOK_ATTRIBUTES=(
         ('availability',r'con ban|con sach|co san|con khong|tinh trang|con muon|muon duoc|bao nhieu ban|so ban'),
         ('isbn',r'isbn'),('shelf',r'o ke|ke nao|xep gia|vi tri(?: ke)?'),
         ('publisher',r'nha xuat ban'),('author',r'tac gia|ai viet|nguoi viet|cua ai'),
-        ('year',r'(?<!nha )xuat ban|in nam (?:nao|may)|nam nao'),
+        ('year',r'(?<!nha )xuat ban|in nam (?:nao|may)|nam nao|(?<=tac gia va )nam'),
+        ('format',r'(?:co phai|la) (?:sach (?:in|giay)|ban in|tai lieu so|ebook)(?: khong)?'),
         ('summary',r'noi ve gi|tom tat(?: ngan gon)?(?: noi dung)?|noi dung (?:la )?gi'),
         ('audience',r'danh cho ai|doi tuong doc'),
 )
@@ -397,8 +482,11 @@ def book_attribute(question):
 
 def _attribute_phrase(question):
     q=normalize(question)
-    if not book_attributes(q):
+    attributes=book_attributes(q)
+    if not attributes:
         return False
+    if 'availability' in attributes:
+        q=re.sub(r'\bde muon(?: duoc)?\b',' ',q)
     q=re.sub(r'^(?:(?:vui long|lam on) )?(?:ban )?(?:co the )?cho (?:toi|minh|em) biet\b','',q).strip()
     q=re.sub(r'\s+(?:duoc )?khong(?: a)?$','',q)
     q=re.sub(r'\s+thi sao$','',q)
@@ -418,11 +506,20 @@ def book_reference(question):
 
 
 def book_position(question):
-    match=re.search(r'\b(?:cuon|quyen|sach|tai lieu)(?: sach)? (?:thu (nhat|mot|hai|ba|tu|bon|nam|\d{1,3})|(dau tien))\b',normalize(unquoted_text(question)))
+    match=re.search(r'\b(?:cuon|quyen|sach|tai lieu)(?: sach)? (?:thu (nhat|mot|hai|ba|tu|bon|nam|\d{1,3})'
+                    r'|(dau tien|dau(?= (?:thi sao|do ai viet|xuat ban)\b|$)))\b',normalize(unquoted_text(question)))
     if not match:
         return None
     value=match[1] or match[2]
-    return int(value) if value.isdigit() else {'dau tien':1,'nhat':1,'mot':1,'hai':2,'ba':3,'tu':4,'bon':4,'nam':5}[value]
+    return int(value) if value.isdigit() else {'dau':1,'dau tien':1,'nhat':1,'mot':1,'hai':2,'ba':3,'tu':4,'bon':4,'nam':5}[value]
+
+
+def book_format_filter(question):
+    match=re.fullmatch(r'(?:(?:con|vay) )?(ebook|tai lieu so|sach dien tu|loai giay|ban in|sach giay)'
+                       r' (?:thi sao|(?:co |con |duoc )?khong)(?: a)?',normalize(question))
+    if match:
+        return 'digital' if match[1] in ('ebook','tai lieu so','sach dien tu') else 'books'
+    return None
 
 
 def learning_level_followup(question):
@@ -438,7 +535,7 @@ def book_followup(question):
     if unquoted_text(question)!=question:
         return False
     q=normalize(question)
-    return bool(learning_level_followup(question) or book_position(question) is not None or book_reference(question) or re.search(r'^(co (?:cuon|quyen|sach)|cuon nao|sach nay|sach do|cuon nay|cuon do|tai lieu (?:nay|do)|noi ve gi|tom tat|noi dung|doi tuong doc|con khong|con ban|con sach|con muon|co san|danh cho|cho nguoi moi|nguoi moi|nang cao|tuong tu|tac gia|ai viet|nam xuat ban|xuat ban|isbn|o ke|co bao nhieu ban)',q) or re.fullmatch(_TOPIC_REFINEMENT,q)) and not any(x in q for x in ('huong dan','cach tim','nhu the nao'))
+    return bool(book_format_filter(question) or learning_level_followup(question) or book_position(question) is not None or book_reference(question) or re.search(r'^(co (?:cuon|quyen|sach)|cuon nao|sach nay|sach do|cuon nay|cuon do|tai lieu (?:nay|do)|noi ve gi|tom tat|noi dung|doi tuong doc|con khong|con ban|con sach|con muon|co san|danh cho|cho nguoi moi|nguoi moi|nang cao|tuong tu|tac gia|ai viet|nam xuat ban|xuat ban|isbn|o ke|co bao nhieu ban)',q) or re.fullmatch(_TOPIC_REFINEMENT,q)) and not any(x in q for x in ('huong dan','cach tim','nhu the nao'))
 
 
 def author_query(question):
@@ -452,9 +549,10 @@ def structured_book_query(question):
         title=normalize_catalog(quoted[1][1:-1])
         if title:
             return 'title',title
-    match=re.fullmatch(_SEARCH_LEAD+r'(?:tim|tra cuu|kiem)(?: '+_DOCUMENT_TYPES+r')? theo (nhan de|ten|tac gia) (.+)',normalize_catalog(question))
+    match=re.fullmatch(_SEARCH_LEAD+r'(?:tim|tra cuu|kiem)(?: '+_DOCUMENT_TYPES+r')? theo '
+                       r'(nhan de|(?:ten )?(?:tac gia|nguoi viet)|ten) (.+)',normalize_catalog(question))
     if match:
-        return ('author' if match[1]=='tac gia' else 'title'),match[2]
+        return ('title' if match[1] in ('nhan de','ten') else 'author'),match[2]
     viewed=re.fullmatch(r'(?:(?:em|toi|minh) )?dang (?:xem|doc) (?:cuon(?: sach)?|quyen(?: sach)?|sach|tai lieu) (.+?) (?:trong|tren) danh muc(?: thu vien)?',normalize_catalog(question))
     if viewed:
         return 'title',viewed[1]
@@ -524,6 +622,7 @@ def explicit_metadata_lookups(question):
 
 
 def search_correction(question):
+    question=repair_search_spacing(question)
     prefix=re.match(r'^\s*(?:ý tôi là|y toi la|ý mình là|y minh la|tôi hỏi nhầm|toi hoi nham|mình hỏi nhầm|minh hoi nham|không,|khong,)\s*[,;:]?\s*',question,re.I)
     corrected=question[prefix.end():] if prefix else question
     return corrected if prefix and is_book_request(corrected) else question
@@ -621,7 +720,7 @@ def contextual_question(question,history):
         return question
     attribute=book_attribute(question)
     refinement=re.fullmatch(_TOPIC_REFINEMENT,q)
-    suffix='' if attribute else ' '+(level or question)
+    suffix='' if attribute or book_format_filter(question) else ' '+(level or question)
     for turn in reversed(history or []):
         if turn.get('context_query'):
             if refinement:
