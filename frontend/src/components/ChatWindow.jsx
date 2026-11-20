@@ -57,15 +57,33 @@ export default function ChatWindow({ user, conversationId, onCreated }) {
     setMessage('')
     try {
       const history = user ? undefined : messages.filter(item => ['user', 'assistant'].includes(item.role)).slice(-6).map(item => ({ role: item.role, content: item.content.length > 2000 ? `${item.content.slice(0, 2000 - contextExcerptMarker.length)}${contextExcerptMarker}` : item.content,
-        ...(item.role === 'assistant' && item.books?.length ? { book_ids: item.books.filter(book => Number.isSafeInteger(book.id) && book.id > 0).slice(0, 5).map(book => book.id) } : {}) }))
+        ...(item.role === 'assistant' && item.books?.length ? { book_ids: item.books.filter(book => Number.isSafeInteger(book.id) && book.id > 0).slice(0, 5).map(book => book.id) } : {}),
+        ...(item.role === 'assistant' && item.list_book_ids?.length
+          ? { list_book_ids: item.list_book_ids.filter(id => Number.isSafeInteger(id) && id > 0).slice(0, 5) } : {}) }))
       const result = await sendMessage(question, activeId.current, history)
       if (!mounted.current || version !== conversationVersion.current) return
       activeId.current = result.conversation_id
-      setMessages(current => [...current, { role: 'assistant', content: result.answer, id: result.message_id, sources: result.sources, status: result.status, mode: result.mode, books: result.books }])
+      setMessages(current => [...current, { role: 'assistant', content: result.answer, id: result.message_id, sources: result.sources, status: result.status, mode: result.mode, books: result.books, list_book_ids: result.list_book_ids }])
       setSuggestions(result.suggestions || [])
       onCreated?.(result.conversation_id)
     } catch (err) {
-      if (mounted.current && version === conversationVersion.current) { setMessages(current => current.filter(item => item !== turn)); setError(err.message); setMessage(current => current || question) }
+      if (mounted.current && version === conversationVersion.current) {
+        setMessages(current => current.filter(item => item !== turn))
+        setError(err.message)
+        setMessage(current => current || question)
+        if (err.code === 'chat_history_changed') {
+          try {
+            const updated = await api(`/conversations/${activeId.current}`)
+            if (mounted.current && version === conversationVersion.current) {
+              setMessages(updated.messages)
+            }
+          } catch {
+            if (mounted.current && version === conversationVersion.current) {
+              setError('Chưa tải được tin nhắn mới. Bạn có thể sao chép câu hỏi rồi mở lại hội thoại.')
+            }
+          }
+        }
+      }
     } finally { if (mounted.current && version === conversationVersion.current) { sending.current = false; setBusy(false) } }
   }
   function voice() {

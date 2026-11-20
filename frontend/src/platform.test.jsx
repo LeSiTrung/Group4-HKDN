@@ -115,7 +115,7 @@ describe('reader workflows', () => {
   })
   it('registers a reader through the cookie API without browser storage', async () => {
     const onSuccess = vi.fn()
-    fetch.mockResolvedValue(response({ user: { id: 3, name: 'Bạn đọc', role: 'reader' } }))
+    fetch.mockResolvedValue({ ...response({ user: { id: 3, name: 'Bạn đọc', role: 'reader' } }), headers: new Headers({ 'X-Library-Session': 'registered' }) })
     render(<AuthModal onClose={() => {}} onSuccess={onSuccess} />)
     fireEvent.click(screen.getByRole('button', { name: 'Đăng ký', exact: true }))
     fireEvent.change(screen.getByLabelText('Họ và tên'), { target: { value: 'Bạn đọc' } })
@@ -124,7 +124,7 @@ describe('reader workflows', () => {
     expect(password.minLength).toBe(12)
     fireEvent.change(password, { target: { value: 'long-test-only-password' } })
     fireEvent.click(screen.getByRole('button', { name: 'Tạo tài khoản', exact: true }))
-    await waitFor(() => expect(onSuccess).toHaveBeenCalledWith(expect.objectContaining({ role: 'reader' })))
+    await waitFor(() => expect(onSuccess).toHaveBeenCalledWith(expect.objectContaining({ role: 'reader' }), 'registered'))
     expect(fetch.mock.calls[0][0]).toBe('/api/auth/register')
     expect(localStorage.length + sessionStorage.length).toBe(0)
   })

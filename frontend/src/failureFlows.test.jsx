@@ -8,7 +8,7 @@ import BookDetails from './components/BookDetails.jsx'
 import Catalog from './components/Catalog.jsx'
 import ChatWindow from './components/ChatWindow.jsx'
 import { displayDate } from './components/UI.jsx'
-import { api } from './services/chatApi.js'
+import { api, resetApiSession } from './services/chatApi.js'
 
 const response = (value, status = 200) => ({ ok: status < 400, status, json: async () => value })
 const answer = (text, id = null) => ({ answer: text, conversation_id: id, message_id: null, status: 'answered', sources: [], suggestions: [], mode: 'faq', books: [] })
@@ -29,6 +29,7 @@ function search(text) {
 }
 
 beforeEach(() => {
+  resetApiSession()
   vi.stubGlobal('fetch', vi.fn())
   vi.stubGlobal('matchMedia', () => ({ matches: false, addEventListener() {}, removeEventListener() {} }))
   Element.prototype.scrollIntoView = vi.fn()
@@ -58,6 +59,24 @@ it.each([[true, false, 'Sẵn sàng'], [false, true, 'Chưa cấu hình']])(
 )
 
 describe('chat recovery and request isolation', () => {
+  it('reloads the latest saved turns after a same-conversation conflict and retains the draft', async () => {
+    fetch.mockResolvedValueOnce(response(saved('Lượt đã lưu')))
+      .mockResolvedValueOnce(response({ detail: {
+        code: 'chat_history_changed', message: 'Hội thoại vừa có tin nhắn mới.',
+      } }, 409))
+      .mockResolvedValueOnce(response(saved('Câu trả lời từ tab khác')))
+      .mockResolvedValueOnce(response(answer('Đã trả lời theo lịch sử mới.', 21)))
+    render(<ChatWindow user={reader} conversationId={21} />)
+    await screen.findByText('Lượt đã lưu')
+    send('Còn cuốn tiếp theo?')
+    await screen.findByText('Câu trả lời từ tab khác')
+    expect(screen.getByLabelText('Câu hỏi của bạn').value).toBe('Còn cuốn tiếp theo?')
+    expect(fetch.mock.calls[2][0]).toBe('/api/conversations/21')
+    fireEvent.submit(screen.getByRole('form', { name: 'Gửi câu hỏi' }))
+    await screen.findByText('Đã trả lời theo lịch sử mới.')
+    expect(screen.getAllByText('Còn cuốn tiếp theo?')).toHaveLength(1)
+  })
+
   it('retries a failed guest turn without duplicating it in the conversation or context', async () => {
     fetch.mockRejectedValueOnce(new TypeError('offline')).mockResolvedValueOnce(response(answer('Đã kết nối lại.')))
     render(<ChatWindow user={null} />)
@@ -251,6 +270,68 @@ describe('catalog and detail recovery', () => {
 })
 
 describe('session expiry', () => {
+  it('binds private requests to the verified tab session and rotates it after a password change', async () => {
+    fetch.mockImplementation(async url => {
+      const marker = { '/api/auth/me': 'initial', '/api/auth/password': 'rotated' }[url]
+      return { ...response({ user: reader }), headers: new Headers(marker ? { 'X-Library-Session': marker } : {}) }
+    })
+    const session = await api('/auth/me')
+    resetApiSession(session.sessionMarker)
+    await api('/conversations')
+    await api('/auth/password', { method: 'POST', body: {} })
+    await api('/auth/logout', { method: 'POST' })
+    const markers = fetch.mock.calls.map(([, options]) => options.headers['X-Library-Session'])
+    expect(markers).toEqual([undefined, 'initial', 'initial', 'rotated'])
+  })
+
+  it('waits for the session before offering the chat composer and starter questions', async () => {
+    const session = deferred()
+    fetch.mockImplementation(async url => {
+      if (url === '/api/auth/me') return session.promise
+      if (url === '/health') return response({ capabilities: {} })
+      if (url === '/api/conversations') return response([])
+      throw new Error(`Unexpected request: ${url}`)
+    })
+    render(<App />)
+    expect(screen.queryByRole('form', { name: 'Gửi câu hỏi' })).toBeNull()
+    expect(screen.queryByRole('button', { name: /Mượn & trả sách/ })).toBeNull()
+    await act(async () => session.resolve(response({ user: reader })))
+    expect(screen.getByRole('form', { name: 'Gửi câu hỏi' })).toBeTruthy()
+    expect(screen.getByText('Lịch sử được lưu trong tài khoản.')).toBeTruthy()
+  })
+
+  it('keeps the session marker of the accepted bootstrap response when an earlier effect resolves late', async () => {
+    const abandoned = deferred()
+    let bootstraps = 0
+    fetch.mockImplementation(async url => {
+      if (url === '/api/auth/me') return ++bootstraps === 1 ? abandoned.promise : { ...response({ user: reader }), headers: new Headers({ 'X-Library-Session': 'active' }) }
+      if (url === '/health') return response({ capabilities: {} })
+      if (url === '/api/conversations') return response([])
+      throw new Error(`Unexpected request: ${url}`)
+    })
+    render(<React.StrictMode><App /></React.StrictMode>)
+    await screen.findByRole('button', { name: /Bạn đọc A/ })
+    await act(async () => abandoned.resolve({ ...response({ user: { ...reader, id: 4 } }), headers: new Headers({ 'X-Library-Session': 'abandoned' }) }))
+    await api('/conversations')
+    expect(fetch.mock.calls.at(-1)[1].headers['X-Library-Session']).toBe('active')
+  })
+
+  it('keeps guest turns anonymous even when a different tab has set a login cookie', async () => {
+    fetch.mockImplementation(async (url, options) => {
+      if (url === '/api/chat') return response(answer(options.credentials === 'omit' ? 'Lượt khách.' : 'Lượt lưu vào tài khoản.'))
+      throw new Error(`Unexpected request: ${url}`)
+    })
+    const { rerender } = render(<ChatWindow user={null} />)
+    send('Tìm sách Python')
+    await screen.findByText('Lượt khách.')
+    send('Cuốn đầu tiên do ai viết?')
+    await waitFor(() => expect(screen.getAllByText('Lượt khách.')).toHaveLength(2))
+    expect(JSON.parse(fetch.mock.calls[1][1].body).history).toHaveLength(2)
+    rerender(<ChatWindow user={reader} />)
+    send('Lưu lượt này')
+    await screen.findByText('Lượt lưu vào tài khoản.')
+  })
+
   it('clears private history and pending deletion after a protected API reports an expired session', async () => {
     const expired = deferred()
     fetch.mockImplementation(async url => {
@@ -565,7 +646,7 @@ describe('account action lifecycle', () => {
       if (url === '/api/auth/me') return response({ detail: 'Vui lòng đăng nhập.' }, 401)
       if (url === '/health') return response({ capabilities: {} })
       if (url === '/api/conversations') return response([])
-      if (url === '/api/auth/login') return ++logins === 1 ? previousLogin.promise : response({ user: nextReader })
+      if (url === '/api/auth/login') return ++logins === 1 ? previousLogin.promise : { ...response({ user: nextReader }), headers: new Headers({ 'X-Library-Session': 'current' }) }
       throw new Error(`Unexpected request: ${url}`)
     })
     render(<App />)
@@ -578,8 +659,10 @@ describe('account action lifecycle', () => {
       if (name === 'reader-a@example.test') fireEvent.click(screen.getByRole('button', { name: 'Đóng hộp thoại' }))
     }
     await screen.findByRole('button', { name: /Bạn đọc B/ })
-    await act(async () => previousLogin.resolve(response({ user: reader })))
+    await act(async () => previousLogin.resolve({ ...response({ user: reader }), headers: new Headers({ 'X-Library-Session': 'outdated' }) }))
     expect(screen.getByRole('button', { name: /Bạn đọc B/ })).toBeTruthy()
     expect(screen.queryByRole('button', { name: /Bạn đọc A/ })).toBeNull()
+    await api('/conversations')
+    expect(fetch.mock.calls.at(-1)[1].headers['X-Library-Session']).toBe('current')
   })
 })

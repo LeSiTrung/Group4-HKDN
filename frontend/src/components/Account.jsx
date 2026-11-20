@@ -16,7 +16,7 @@ export function AuthModal({ onClose, onSuccess }) {
     event.preventDefault(); setBusy(true); setError('')
     const form = event.currentTarget
     const data = Object.fromEntries(new FormData(form))
-    try { const result = await api(`/auth/${register ? 'register' : 'login'}`, { method: 'POST', body: data }); if (version !== dialogVersion.current) return; form.reset(); onSuccess(result.user) }
+    try { const result = await api(`/auth/${register ? 'register' : 'login'}`, { method: 'POST', body: data }); if (version !== dialogVersion.current) return; form.reset(); onSuccess(result.user, result.sessionMarker) }
     catch (err) { if (version === dialogVersion.current) setError(err.message) }
     finally { if (version === dialogVersion.current) setBusy(false) }
   }

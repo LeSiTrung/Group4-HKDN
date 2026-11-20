@@ -50,7 +50,7 @@ export default function App() {
 
   useEffect(() => {
     let ignore = false
-    api('/auth/me').then(data => { if (!ignore) setUser(data.user) }).catch(err => { if (!ignore && err.status !== 401) setError(err.message) }).finally(() => { if (!ignore) setSessionLoading(false) })
+    api('/auth/me').then(data => { if (!ignore) { resetApiSession(data.sessionMarker); setUser(data.user) } }).catch(err => { if (!ignore && err.status !== 401) setError(err.message) }).finally(() => { if (!ignore) setSessionLoading(false) })
     api('/health').then(data => { if (!ignore) { setHealth(data); setConnected(true) } }).catch(() => { if (!ignore) setConnected(false) })
     const hashChanged = () => { setView(route()); setDrawer(false) }
     window.addEventListener('hashchange', hashChanged)
@@ -81,7 +81,7 @@ export default function App() {
 
   function navigate(next) { location.hash = next; setView(next); setDrawer(false) }
   function openChat(id = null) { setOpenedId(id); setActiveId(id); setChatKey(current => current + 1); navigate('chat') }
-  function resetSession(nextUser = null) { sessionVersion.current++; resetApiSession(); setUser(nextUser); setOpenedId(null); setActiveId(null); setChatKey(current => current + 1); setAuth(false); setDeleting(null); setBusy(false); setError(''); setHistory([]); setHistoryError(''); setHistoryLoading(false) }
+  function resetSession(nextUser = null, marker = null) { sessionVersion.current++; resetApiSession(marker); setUser(nextUser); setOpenedId(null); setActiveId(null); setChatKey(current => current + 1); setAuth(false); setDeleting(null); setBusy(false); setError(''); setHistory([]); setHistoryError(''); setHistoryLoading(false) }
   async function logout() {
     const version = sessionVersion.current
     setError('')
@@ -116,16 +116,17 @@ export default function App() {
     <div className="main-shell" inert={isMobile && drawer}><header className="topbar"><div className="inline-actions"><button ref={menuButton} className="icon-button mobile-menu" aria-label="Mở điều hướng" aria-expanded={drawer} aria-controls="app-navigation" onClick={() => setDrawer(!drawer)}><Icon name="menu" /></button><strong className="topbar-title">{title}</strong></div><div className={`connection ${connected ? 'online' : ''}`} role="status" title={connected ? 'Đã kết nối dịch vụ thư viện' : 'Chưa kết nối được dịch vụ thư viện'}><span />{connected ? 'Đã kết nối' : 'Chưa kết nối'}</div></header>
       <main id="main-content" tabIndex={-1} className={`main-content ${view === 'chat' ? 'chat-page' : ''}`}>
         <div className="global-error"><ErrorNotice>{error}</ErrorNotice>{error && <button className="text-button" onClick={() => setError('')}>Đóng thông báo</button>}</div>
-        <div hidden={view !== 'chat'} className="chat-host"><ChatWindow key={`${user?.id || 'guest'}-${chatKey}`} user={user} conversationId={openedId} onCreated={id => { setActiveId(id); if (user) setHistoryVersion(current => current + 1) }} /></div>
+        {sessionLoading && ['chat', 'loans'].includes(view) && <div className="loading-state" role="status">Đang kiểm tra phiên…</div>}
+        <div hidden={view !== 'chat'} className="chat-host">{!sessionLoading && <ChatWindow key={`${user?.id || 'guest'}-${chatKey}`} user={user} conversationId={openedId} onCreated={id => { setActiveId(id); if (user) setHistoryVersion(current => current + 1) }} />}</div>
         {view === 'catalog' && <Catalog />}
-        {view === 'loans' && <Loans key={user?.id || 'guest'} user={user} configured={Boolean(health?.capabilities?.library_loans_configured)} renewalConfigured={Boolean(health?.capabilities?.library_configured)} demoEnabled={demoEnabled} onLogin={() => setAuth(true)} />}
+        {view === 'loans' && !sessionLoading && <Loans key={user?.id || 'guest'} user={user} configured={Boolean(health?.capabilities?.library_loans_configured)} renewalConfigured={Boolean(health?.capabilities?.library_configured)} demoEnabled={demoEnabled} onLogin={() => setAuth(true)} />}
         {view === demoLink.id && <DemoLibrary key={user?.id || 'guest'} enabled={health ? Boolean(demoEnabled) : undefined} user={user} sessionLoading={sessionLoading} onLogin={() => setAuth(true)} />}
         {view === 'account' && user && <Account user={user} health={health} onLogout={() => logout().catch(() => {})} onDeleted={() => { resetSession(); navigate('chat') }} />}
         {view === 'admin' && user?.role === 'admin' && <Admin user={user} />}
         {(['account', 'admin'].includes(view) && (!user || (view === 'admin' && user.role !== 'admin'))) && <div className="content-page"><Empty icon="shield" title={sessionLoading ? 'Đang kiểm tra phiên…' : user ? 'Chỉ dành cho quản trị viên' : 'Vui lòng đăng nhập'}>{user ? 'Tài khoản của bạn không có quyền truy cập trang này.' : 'Đăng nhập để mở không gian của bạn.'}</Empty>{!user && !sessionLoading && <button className="primary center-button" onClick={() => setAuth(true)}>Đăng nhập</button>}</div>}
       </main>
     </div>
-    {auth && <AuthModal onClose={() => setAuth(false)} onSuccess={nextUser => { resetSession(nextUser) }} />}
+    {auth && <AuthModal onClose={() => setAuth(false)} onSuccess={resetSession} />}
     {deleting && <Modal title="Xóa cuộc trò chuyện?" onClose={() => { if (!busy) setDeleting(null) }}><p><strong>{deleting.title}</strong></p><p>Cuộc trò chuyện này sẽ bị xóa vĩnh viễn khỏi lịch sử tài khoản.</p><ErrorNotice>{error}</ErrorNotice><div className="form-actions"><button className="secondary" disabled={busy} onClick={() => setDeleting(null)}>Giữ lại</button><button className="danger" disabled={busy} onClick={deleteConversation}>{busy ? 'Đang xóa…' : 'Xóa cuộc trò chuyện'}</button></div></Modal>}
   </div>
 }
