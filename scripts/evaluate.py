@@ -7,7 +7,7 @@ import tempfile
 from contextlib import ExitStack
 from datetime import datetime, timezone
 from pathlib import Path
-from time import perf_counter
+from time import perf_counter, sleep
 from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -70,7 +70,14 @@ def main():
         results = []
         for case in cases:
             start = perf_counter()
-            response = client.post('/api/chat', json={k: case[k] for k in ('message', 'history') if k in case})
+            payload = {k: case[k] for k in ('message', 'history') if k in case}
+            response = client.post('/api/chat', json=payload)
+            delay = response.headers.get('Retry-After', '')
+            if args.base_url and response.status_code == 429 and delay.isascii() and delay.isdecimal() and len(delay) <= 2:
+                print(f"Rate limited on {case['id']}, retrying once after {delay}s", flush=True)
+                sleep(int(delay))
+                start = perf_counter()
+                response = client.post('/api/chat', json=payload)
             elapsed = round((perf_counter() - start) * 1000, 2)
             data = response.json()
             errors = failures(case, data) if response.status_code == 200 else [f'HTTP {response.status_code}']

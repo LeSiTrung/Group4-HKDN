@@ -22,6 +22,27 @@ def test_evaluation_can_require_the_exact_source_record():
     assert not check(case,{**response,'sources':[{'url':url}]})
 
 
+def test_live_evaluation_observes_retry_after(tmp_path, monkeypatch):
+    import httpx
+    responses=iter([httpx.Response(429,headers={'Retry-After':'1'}),
+                    httpx.Response(200,json={'status':'answered','answer':'OK'})])
+    def handle(request):
+        if request.url.path=='/health':
+            return httpx.Response(200,json={'capabilities':{'llm_provider':'none'}})
+        return next(responses)
+    client=httpx.Client(base_url='http://localhost',transport=httpx.MockTransport(handle))
+    monkeypatch.setattr(httpx,'Client',lambda **kwargs:client)
+    cases=tmp_path/'cases.json'
+    cases.write_text(json.dumps([{'id':'test','status':'answered','message':'Hello'}]))
+    monkeypatch.setattr('sys.argv',['evaluate','--base-url','http://localhost','--cases',str(cases),
+                                    '--output',str(tmp_path/'report.json')])
+    waits=[]
+    monkeypatch.setattr('time.sleep',waits.append)
+    main=run_path(str(Path(__file__).resolve().parents[1]/'scripts/evaluate.py'))['main']
+    assert main()==0
+    assert waits==[1]
+
+
 def test_offline_evaluation_never_contacts_live_opac(tmp_path, monkeypatch):
     from app.services import opac_availability
     monkeypatch.setenv('LLM_PROVIDER', 'none')
