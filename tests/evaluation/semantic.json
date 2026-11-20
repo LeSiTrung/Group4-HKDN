@@ -1,4 +1,5 @@
 [
-  {"id":"semantic-author","message":"Tôi muốn tìm sách theo người viết","status":"answered","source":"#page=6","contains":"Tác giả","mode":"rag"},
+  {"id":"semantic-author","message":"Tôi muốn tìm sách theo người viết","status":"answered","source":"#page=6","contains":"Tác giả","mode":"faq","no_books":true},
+  {"id":"semantic-training","message":"Thư viện tổ chức lớp hướng dẫn sử dụng và khai thác cơ sở dữ liệu cho bạn đọc như thế nào?","status":"answered","source_url":"https://lic.ut.edu.vn/dich-vu-thu-vien/photo-scan-tai-lieu/","contains":"sinh viên đầu khóa","mode":"rag","no_books":true},
   {"id":"semantic-outside","message":"Cho tôi công thức nướng bánh chocolate","status":"not_found"}
 ]
