@@ -2,7 +2,20 @@
 import sqlite3
 from contextlib import contextmanager
 
-SCHEMA = """
+SCHEMA_VERSION = 3
+HISTORY_TABLES = {
+    'conversations': """(
+ id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, title TEXT NOT NULL,
+ created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+ updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))""",
+    'messages': """(
+ id INTEGER PRIMARY KEY AUTOINCREMENT, conversation_id INTEGER NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
+ role TEXT NOT NULL, content TEXT NOT NULL, sources TEXT NOT NULL DEFAULT '[]', status TEXT NOT NULL DEFAULT '', mode TEXT NOT NULL DEFAULT '',
+ books TEXT NOT NULL DEFAULT '[]', context_query TEXT NOT NULL DEFAULT '', list_book_ids TEXT NOT NULL DEFAULT '[]',
+ created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))""",
+}
+
+SCHEMA = f"""
 PRAGMA journal_mode=WAL;
 CREATE TABLE IF NOT EXISTS users (
  id INTEGER PRIMARY KEY, email TEXT NOT NULL UNIQUE, name TEXT NOT NULL,
@@ -10,15 +23,8 @@ CREATE TABLE IF NOT EXISTS users (
  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')));
 CREATE TABLE IF NOT EXISTS sessions (
  token_hash TEXT PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, expires_at INTEGER NOT NULL);
-CREATE TABLE IF NOT EXISTS conversations (
- id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, title TEXT NOT NULL,
- created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
- updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')));
-CREATE TABLE IF NOT EXISTS messages (
- id INTEGER PRIMARY KEY, conversation_id INTEGER NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
- role TEXT NOT NULL, content TEXT NOT NULL, sources TEXT NOT NULL DEFAULT '[]', status TEXT NOT NULL DEFAULT '', mode TEXT NOT NULL DEFAULT '',
- books TEXT NOT NULL DEFAULT '[]', context_query TEXT NOT NULL DEFAULT '',
- created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')));
+CREATE TABLE IF NOT EXISTS conversations {HISTORY_TABLES['conversations']};
+CREATE TABLE IF NOT EXISTS messages {HISTORY_TABLES['messages']};
 CREATE TABLE IF NOT EXISTS feedback (
  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, message_id INTEGER NOT NULL REFERENCES messages(id) ON DELETE CASCADE,
  rating INTEGER NOT NULL CHECK(rating IN (-1,1)), comment TEXT NOT NULL DEFAULT '', PRIMARY KEY(user_id,message_id));
@@ -70,26 +76,49 @@ BEGIN UPDATE catalog_revision SET value=value+1 WHERE id=1; END;
 """
 
 
+def migrate_history_ids(db):
+    for table, definition in HISTORY_TABLES.items():
+        ddl = db.execute("SELECT sql FROM sqlite_schema WHERE type='table' AND name=?", (table,)).fetchone()[0]
+        if 'AUTOINCREMENT' in ddl.upper():
+            continue
+        objects = db.execute("SELECT sql FROM sqlite_schema WHERE tbl_name=? AND type IN ('index','trigger') AND sql IS NOT NULL", (table,)).fetchall()
+        db.execute(f'CREATE TABLE new_{table} {definition}')
+        columns = ','.join(row['name'] for row in db.execute(f'PRAGMA table_info({table})'))
+        db.execute(f'INSERT INTO new_{table} ({columns}) SELECT {columns} FROM {table}')
+        db.execute(f'DROP TABLE {table}')
+        db.execute(f'ALTER TABLE new_{table} RENAME TO {table}')
+        for obj in objects:
+            db.execute(obj['sql'])
+    if db.execute('PRAGMA foreign_key_check').fetchone():
+        raise RuntimeError('History migration found broken references; changes were rolled back.')
+
+
 class Store:
     def __init__(self, path):
         self.path = path
         path.parent.mkdir(parents=True, exist_ok=True)
         with self.connect() as db:
-            if db.execute('PRAGMA user_version').fetchone()[0]>2:
+            if db.execute('PRAGMA user_version').fetchone()[0]>SCHEMA_VERSION:
                 raise RuntimeError('Database was created by a newer application; refusing to downgrade it.')
             db.executescript(SCHEMA)
+            # Rebuilding parent tables must not cascade-delete messages or feedback.
+            db.execute('PRAGMA foreign_keys=OFF')
             db.execute('BEGIN IMMEDIATE')
             columns={x[1] for x in db.execute('PRAGMA table_info(messages)')}
             if 'books' not in columns:
                 db.execute("ALTER TABLE messages ADD COLUMN books TEXT NOT NULL DEFAULT '[]'")
             if 'context_query' not in columns:
                 db.execute("ALTER TABLE messages ADD COLUMN context_query TEXT NOT NULL DEFAULT ''")
+            if 'list_book_ids' not in columns:
+                db.execute("ALTER TABLE messages ADD COLUMN list_book_ids TEXT NOT NULL DEFAULT '[]'")
             demo_columns={x[1] for x in db.execute('PRAGMA table_info(demo_reservations)')}
             if 'due_date' not in demo_columns:
                 db.execute('ALTER TABLE demo_reservations ADD COLUMN due_date TEXT')
             if 'renewed' not in demo_columns:
                 db.execute('ALTER TABLE demo_reservations ADD COLUMN renewed INTEGER NOT NULL DEFAULT 0')
-            db.execute('PRAGMA user_version=2')
+            if db.execute('PRAGMA user_version').fetchone()[0] < SCHEMA_VERSION:
+                migrate_history_ids(db)
+                db.execute(f'PRAGMA user_version={SCHEMA_VERSION}')
 
     @contextmanager
     def connect(self):

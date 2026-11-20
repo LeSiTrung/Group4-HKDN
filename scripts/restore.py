@@ -13,7 +13,7 @@ def restore(source: Path, destination: Path):
         if backup.execute('PRAGMA quick_check').fetchall() != [('ok',)]:
             raise ValueError('Source database integrity check failed.')
         # Keep this limit aligned with Store; restore also runs as a standalone script.
-        if backup.execute('PRAGMA user_version').fetchone()[0] > 2:
+        if backup.execute('PRAGMA user_version').fetchone()[0] > 3:
             raise ValueError('Source database was created by a newer application.')
         tables = {row[0] for row in backup.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         if not TABLES <= tables:
@@ -24,6 +24,8 @@ def restore(source: Path, destination: Path):
         try:
             with closing(sqlite3.connect(destination)) as target, target:
                 backup.backup(target)
+                if target.execute('PRAGMA foreign_key_check').fetchone() is not None:
+                    raise ValueError('Restored database has a foreign key violation.')
                 target.execute('DELETE FROM sessions')
                 if target.execute('PRAGMA quick_check').fetchall() != [('ok',)]:
                     raise ValueError('Restored database integrity check failed.')
