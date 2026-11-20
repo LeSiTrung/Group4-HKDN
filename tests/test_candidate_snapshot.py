@@ -58,6 +58,7 @@ def test_candidate_keeps_marc_only_for_current_public_sources(tmp_path):
 def test_candidate_accepts_version_two_database_before_marc(tmp_path):
     source=Store(tmp_path/'main'/'library.sqlite3')
     with source.connect() as db:
+        db.execute('PRAGMA user_version=2')
         db.execute('DROP VIEW books_discovery')
         db.execute('DROP TABLE book_marc')
     report=prepare_snapshot(source.path,tmp_path/'candidate')

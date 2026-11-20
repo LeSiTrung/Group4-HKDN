@@ -11,14 +11,14 @@ sys.path.insert(0,str(ROOT/'backend'))
 
 
 def prepare_snapshot(source,target):
-    from app.database.connection import Store
+    from app.database.connection import SCHEMA_VERSION, Store
     from app.services.rag_service import row_fingerprint
     source,target=Path(source).resolve(),Path(target).resolve()
     if not source.is_file() or target.exists():
         raise ValueError('An existing source and a new, empty target path are required; nothing was overwritten')
     with closing(sqlite3.connect(source.as_uri()+'?mode=ro',uri=True)) as db:
         db.row_factory=sqlite3.Row
-        if db.execute('PRAGMA user_version').fetchone()[0]!=2:
+        if db.execute('PRAGMA user_version').fetchone()[0] not in (2, SCHEMA_VERSION):
             raise ValueError('Unsupported source database version')
         db.execute('BEGIN')
         snapshot={table:[dict(row) for row in db.execute('SELECT * FROM '+table+
@@ -44,7 +44,7 @@ def prepare_snapshot(source,target):
         db.executemany('INSERT INTO meta VALUES (?,?)',[('seeded','1'),('books_seeded','1')])
         assert not db.execute('SELECT 1 FROM users').fetchone()
         assert not db.execute('SELECT 1 FROM messages').fetchone()
-    report={'schema_version':2,'counts':{table:len(rows) for table,rows in snapshot.items()},
+    report={'schema_version':SCHEMA_VERSION,'counts':{table:len(rows) for table,rows in snapshot.items()},
         'source_hashes':{table:row_fingerprint(rows) for table,rows in snapshot.items()},
         'private_tables_copied':False,'copied_tables':list(snapshot)}
     (target/'public-snapshot.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
