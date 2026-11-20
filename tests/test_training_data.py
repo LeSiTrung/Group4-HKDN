@@ -105,6 +105,25 @@ def test_changed_evaluation_pairs_are_rejected_before_training(tmp_path):
         load_frozen_dataset(output)
 
 
+def test_dataset_fingerprint_identifies_the_bytes_used_to_build_pairs(tmp_path,monkeypatch):
+    from training import prepare_data
+
+    source=tmp_path/'records'
+    source.mkdir()
+    path=source/'record.json'
+    raw=json.dumps(snapshot('00000000-0000-0000-0000-000000000001','Original title')).encode()
+    path.write_bytes(raw)
+    def refresh_after_read(snapshots):
+        data=prepare_records(snapshots)
+        path.write_text('{}',encoding='utf-8')
+        return data
+    monkeypatch.setattr(prepare_data,'prepare_records',refresh_after_read)
+    report=build_dataset(source,tmp_path/'dataset')
+    assert report['documents']==1
+    expected=hashlib.sha256(path.name.encode()+hashlib.sha256(raw).digest()).hexdigest()
+    assert report['source_sha256']==expected
+
+
 @pytest.mark.parametrize('smoke,verdict,delta',[(True,'WIN',0.1),(False,'MARGINAL',0.001),(False,'REGRESSION',-0.1)])
 def test_unqualified_candidate_is_not_exported(tmp_path,smoke,verdict,delta):
     from training.export_onnx import check_candidate

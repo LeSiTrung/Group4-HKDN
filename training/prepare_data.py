@@ -118,7 +118,13 @@ def build_dataset(source,output):
     files=sorted(source.glob('*.json'))
     if not files:
         raise ValueError('No source snapshots found')
-    snapshots=[json.loads(path.read_text(encoding='utf-8')) for path in files]
+    source_hash=hashlib.sha256()
+    snapshots=[]
+    for path in files:
+        raw=path.read_bytes()
+        snapshots.append(json.loads(raw.decode('utf-8')))
+        source_hash.update(path.name.encode())
+        source_hash.update(hashlib.sha256(raw).digest())
     data=prepare_records(snapshots)
     output.mkdir(parents=True,exist_ok=True)
     hashes={}
@@ -126,9 +132,6 @@ def build_dataset(source,output):
         raw=(json.dumps(data[name],ensure_ascii=False,indent=2)+'\n').encode('utf-8')
         (output/f'{name}.json').write_bytes(raw)
         hashes[f'{name}.json']=hashlib.sha256(raw).hexdigest()
-    source_hash=hashlib.sha256()
-    for path in files:
-        source_hash.update(path.name.encode()); source_hash.update(hashlib.sha256(path.read_bytes()).digest())
     report={'kind':'weak supervision from public metadata; synthetic development evaluation, not library acceptance',
         'seed':SEED,'source_files':len(files),'source_sha256':source_hash.hexdigest(),'documents':len(data['documents']),
         'work_groups':len(data['groups']),'rejected':len(data['rejected']),
