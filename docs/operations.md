@@ -59,6 +59,8 @@ Trên máy local `ollama serve` khởi động dịch vụ nếu chưa có; `oll
 
 Khi chuyển sang Qwen3-1.7B, cập nhật `LLM_MODEL=qwen3:1.7b` trong `.env` hiện có rồi khởi động lại API. Có thể đặt `LLM_NUM_GPU=-1` để Ollama tự chọn số lớp GPU khi có bộ nhớ phù hợp; `0` tiếp tục chạy CPU. Không cần xóa hay tạo lại Qdrant khi chỉ đổi LLM. Giữ timeout/fallback hiện có; lượt khởi động lạnh có thể vượt timeout dù model đã được cài. API model catalog chỉ xác nhận model hiện diện, cần kiểm tra thêm phản hồi có nguồn qua chat.
 
+Sau một câu hỏi dùng Qwen, chạy `ollama ps` và xem cột `PROCESSOR`. Trên Windows có GPU AMD tích hợp và RTX 3060 rời, nếu Ollama vẫn chọn CPU, đặt `CUDA_VISIBLE_DEVICES` bằng UUID của RTX từ `nvidia-smi -L` và `OLLAMA_VULKAN=false` trong terminal chạy `ollama serve`. Cách này đã được kiểm chứng với Ollama 0.40.16. Khởi động API với `OLLAMA_URL` trỏ tới tiến trình Ollama đang dùng CUDA.
+
 Nhóm tự chuẩn bị Docker Engine/Compose v2, DNS hostname về máy, và quyền cổng 80/443 TCP; 443 UDP tùy mạng cho HTTP/3. Chỉ chạy công khai khi có quyền triển khai. Không cần đăng ký dịch vụ AI trả phí cho cấu hình Ollama.
 
 1. Copy `.env.example` nếu chưa có, thay `SITE_DOMAIN` bằng hostname thực của nhóm (không `https://`, path hoặc port). Secret thật chỉ ở file riêng của máy chủ. `SITE_DOMAIN` trống khiến Compose dừng rõ ràng. Chọn `LIBRARY_IMAGE` là tag duy nhất cho từng bản, ví dụ `uth-library:2026-10-29`.
@@ -198,7 +200,7 @@ docker compose --env-file backend/.env run --rm --no-deps -v "${PWD}/backups:/re
 
 Sửa `environment.DATA_DIR` của service app trong Compose thành `/var/lib/library/recovered-2026-10-29` (chỉ đổi `.env` không đủ vì Compose đang override), chạy `run --rm --no-deps app python -m app.cli index`, rồi `up -d`. Thư mục mới vẫn nằm trong volume bền vững. Xác nhận số lượng dữ liệu, đăng nhập mới, nguồn và lịch sử thử trước khi tiếp tục phục vụ. Giữ bản runtime cũ và tệp cấu hình trước restore.
 
-Trước nâng cấp, tag image hiện tại để giữ lại, ví dụ `docker image tag uth-library:local uth-library:before-update-2026-10-29`, rồi backup. Rollback phần mềm bằng đặt `LIBRARY_IMAGE` về tag đã giữ và chạy `docker compose --env-file backend/.env up -d --no-build app proxy`. Database mới không được mặc định coi là tương thích phiên bản cũ: nếu schema đã đổi, restore backup trước nâng cấp vào thư mục mới và trỏ DATA_DIR tương ứng. Bản hiện tại dùng schema version 2, bổ sung bảng books và cột books/context_query của messages; ứng dụng từ chối schema mới hơn 2. Xem [schema dữ liệu](database-design.md). Không hạ schema bằng cách xóa bảng/cột.
+Trước nâng cấp, tag image hiện tại để giữ lại, ví dụ `docker image tag uth-library:local uth-library:before-update-2026-10-29`, rồi backup. Rollback phần mềm bằng đặt `LIBRARY_IMAGE` về tag đã giữ và chạy `docker compose --env-file backend/.env up -d --no-build app proxy`. Database mới không được mặc định coi là tương thích phiên bản cũ: nếu schema đã đổi, restore backup trước nâng cấp vào thư mục mới và trỏ DATA_DIR tương ứng. Bản hiện tại dùng schema 3. Lần mở đầu tiên sau nâng cấp sẽ chuyển mã hội thoại và tin nhắn sang AUTOINCREMENT. Sao lưu trước khi mở kho bằng bản mới. Xem [schema dữ liệu](database-design.md). Không hạ schema bằng cách xóa bảng/cột.
 
 ## Nguồn cấu hình
 
