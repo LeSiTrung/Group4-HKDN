@@ -83,7 +83,8 @@ def create_app(data_dir=None, testing=False):
     app.state.settings = settings
     app.add_middleware(RequestGate, settings=settings)
     app.add_middleware(CORSMiddleware, allow_origins=list(settings.origins), allow_credentials=True,
-                       allow_methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], allow_headers=['Content-Type', 'X-Requested-With'])
+                       allow_methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+                       allow_headers=['Content-Type', 'X-Requested-With', 'X-Library-Session'], expose_headers=['X-Library-Session'])
     app.include_router(auth_router, prefix='/api')
     app.include_router(history_router, prefix='/api')
     app.include_router(chat_router, prefix='/api')

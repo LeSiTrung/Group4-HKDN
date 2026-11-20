@@ -42,6 +42,26 @@ def end_request_session(client, state):
             db.execute('UPDATE sessions SET expires_at=? WHERE token_hash=?', (int(time.time()) - 1, token_hash))
 
 
+def test_old_tab_cannot_use_new_login_or_write_a_guest_turn(reader):
+    client, _, _, _ = reader
+    header = 'X-Library-Session'
+    old = client.get('/api/auth/me').headers[header]
+    current = client.post('/api/auth/register', json={
+        'name': 'Other', 'email': 'other-tab@example.test', 'password': PASSWORD,
+    }).headers[header]
+    assert old != current
+    assert client.get('/api/auth/me').headers[header] == current
+    stale = {header: old}
+    client.app.state.answer = lambda *args: pytest.fail('stale tab reached the assistant')
+    assert client.get('/api/export', headers=stale).status_code == 401
+    assert client.post('/api/chat', headers=stale, json={'message':'Tin của tab cũ'}).status_code == 401
+    rejected = client.post('/api/auth/logout', headers=stale)
+    assert rejected.status_code == 401 and 'set-cookie' not in rejected.headers
+    assert client.get('/api/conversations', headers={header: current}).json() == []
+    client.cookies.clear()
+    assert client.post('/api/chat', headers=stale, json={'message':'Phiên đã đóng'}).status_code == 401
+
+
 def test_public_account_surfaces_do_not_expose_session_proof(reader):
     client, _, _, _ = reader
     token = client.cookies.get('library_session')

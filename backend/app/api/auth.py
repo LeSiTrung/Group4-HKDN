@@ -48,8 +48,21 @@ def expired_session():
                          headers={'Set-Cookie': expired_cookie.headers['set-cookie']})
 
 
-def optional_user(request: Request):
+def tab_session(token):
+    return hashlib.sha256(b'library-tab:' + token.encode()).hexdigest()
+
+
+def request_token(request):
     token = request.cookies.get('library_session')
+    expected = request.headers.get('X-Library-Session')
+    if expected is not None and (not token or expected != tab_session(token)):
+        # The cookie can now belong to another tab. Leave that login intact.
+        raise HTTPException(401, 'Phiên của tab này đã thay đổi. Vui lòng tải lại trang.')
+    return token
+
+
+def optional_user(request: Request):
+    token = request_token(request)
     if token is None:
         return None
     with request.app.state.db() as db:
@@ -100,6 +113,7 @@ def start_session(request, response, user_id, expected_hash):
         db.execute('INSERT INTO sessions VALUES (?,?,?)', (hashlib.sha256(token.encode()).hexdigest(), user_id, int(time.time())+86400*7))
     response.set_cookie('library_session', token, httponly=True, secure=request.app.state.settings.secure_cookies,
                         samesite='strict', max_age=86400*7, path='/')
+    response.headers['X-Library-Session'] = tab_session(token)
 
 
 @router.post('/register', status_code=201)
@@ -127,13 +141,14 @@ def login(body: Login, request: Request, response: Response):
 
 
 @router.get('/me')
-def me(user=Depends(require_user)):
+def me(request: Request, response: Response, user=Depends(require_user)):
+    response.headers['X-Library-Session'] = tab_session(request.cookies['library_session'])
     return {'user': public_user(user)}
 
 
 @router.post('/logout')
 def logout(request: Request, response: Response):
-    token = request.cookies.get('library_session', '')
+    token = request_token(request) or ''
     with request.app.state.db() as db:
         db.execute('DELETE FROM sessions WHERE token_hash=?', (hashlib.sha256(token.encode()).hexdigest(),))
     response.delete_cookie('library_session', path='/')
