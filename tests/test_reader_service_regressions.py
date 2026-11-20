@@ -87,6 +87,49 @@ def test_clock_followup_keeps_the_preceding_weekday(client):
     assert reply['status']=='answered' and all(value in reply['answer'] for value in ('cơ sở 2','Thứ Bảy','17:00','ngoài giờ phục vụ')),reply
 
 
+def test_hours_followups_change_only_the_requested_part(client):
+    history=[]
+    for question, expected in [
+        ('Thứ Bảy thư viện cơ sở 1 có mở cửa lúc 17:15 không?', ('Thứ Bảy','cơ sở 1','17:15','ngoài giờ phục vụ')),
+        ('Còn An Khánh thì sao?', ('Thứ Bảy','cơ sở 2','17:15','ngoài giờ phục vụ')),
+        ('Còn lúc 15:45 thì sao?', ('Thứ Bảy','cơ sở 2','15:45','trong khung giờ phục vụ')),
+        ('Còn Chủ nhật?', ('Chủ nhật','cơ sở 2','15:45','ngoài giờ phục vụ')),
+        ('Còn cơ sở 3?', ('Chủ nhật','cơ sở 3','15:45','ngoài giờ phục vụ')),
+        ('Còn cơ sở 1?', ('Chủ nhật','cơ sở 1','15:45','ngoài giờ phục vụ')),
+        ('Còn thứ Hai?', ('Thứ Hai','cơ sở 1','15:45','trong khung giờ phục vụ')),
+    ]:
+        reply=client.post('/api/chat',json={'message':question,'history':history[-6:]}).json()
+        assert reply['status']=='answered' and all(value in reply['answer'] for value in expected),reply
+        history.extend([{'role':'user','content':question},{'role':'assistant','content':reply['answer']}])
+
+
+def test_clock_followup_does_not_revive_hours_after_a_topic_change(client):
+    history=[{'role':'user','content':'Thứ Bảy thư viện cơ sở 1 có mở cửa lúc 17h không?'},
+             {'role':'user','content':'Tìm sách Python'}]
+    reply=client.post('/api/chat',json={'message':'Còn lúc 15h thì sao?','history':history}).json()
+    assert not any('HD-su-dung-thu-vien' in row['url'] for row in reply['sources']),reply
+
+
+def test_clock_followup_keeps_the_verified_date_after_original_turn_expires(client,monkeypatch):
+    day=date(2026,11,16)
+    monkeypatch.setattr('app.services.assistant.today',lambda:day)
+    with client.app.state.db() as db:
+        db.execute('INSERT INTO schedules(branch,weekday,opens,closes,valid_from,valid_until,verified_by,source_url,source_title,checked_at) VALUES (?,?,?,?,?,?,?,?,?,?)',
+            ('2',day.weekday(),'09:00','15:00',str(day),str(day),'Synthetic operator','https://lic.ut.edu.vn/synthetic-hours','Test',str(day)))
+    reply=client.post('/api/chat',json={'message':'Hôm nay thư viện cơ sở 2 mở cửa mấy giờ?'}).json()
+    for question, expected in [('Còn lúc 17h thì sao?', 'ngoài giờ phục vụ'),('Còn lúc 14h thì sao?', 'trong khung giờ phục vụ')]:
+        reply=client.post('/api/chat',json={'message':question,'history':[{'role':'assistant','content':reply['answer']}]}).json()
+        assert reply['status']=='answered' and '16/11/2026' in reply['answer'] and expected in reply['answer'],reply
+        assert [source['url'] for source in reply['sources']]==['https://lic.ut.edu.vn/synthetic-hours']
+
+
+def test_clock_followup_with_an_old_dated_schedule_asks_which_day(client,monkeypatch):
+    monkeypatch.setattr('app.services.assistant.today',lambda:date(2026,11,18))
+    history=[{'role':'assistant','content':'Lịch phục vụ Thứ Hai 16/11/2026.\nCơ sở 2 — 09:00–15:00.'}]
+    reply=client.post('/api/chat',json={'message':'Còn lúc 17h?','history':history}).json()
+    assert reply['status']=='clarify' and not reply['sources'],reply
+
+
 @pytest.mark.parametrize(('hour','status','expected'),[(17,'answered','ngoài giờ phục vụ'),
                                                       (12,'needs_confirmation','giờ nghỉ trưa')])
 def test_now_question_compares_local_time_with_opening_window(client,monkeypatch,hour,status,expected):
@@ -183,6 +226,18 @@ def test_availability_lookup_keeps_the_exact_programming_language(client,monkeyp
     reply=client.post('/api/chat',json={'message':'Thư viện có sách lập trình C# nào đang rỗi không?'}).json()
     assert [book['title'] for book in reply['books']]==['Giáo trình lập trình C#'],reply
     assert checked==[reply['books'][0]['url']]
+
+
+@pytest.mark.parametrize('language',['C','C++','C#'])
+def test_ebook_topic_preserves_the_programming_language_and_format(client,language):
+    with client.app.state.db() as db:
+        for number,lang in enumerate(['C','C++','C#']):
+            save_book(db,BookInput(title=f'Lập trình {lang}',kind='digital',published=True,checked_at=today(),
+                source_url=f'https://lic.ut.edu.vn/digital-test-{number}'))
+        save_book(db,BookInput(title=f'Lập trình {language}',kind='books',published=True,checked_at=today(),
+            source_url='https://lic.ut.edu.vn/printed-test'))
+    reply=client.post('/api/chat',json={'message':f'Tìm sách điện tử về lập trình {language}'}).json()
+    assert [(book['title'],book['kind']) for book in reply['books']]==[(f'Lập trình {language}','digital')],reply
 
 
 @pytest.mark.parametrize('question',['Thư viện mấy giờ nghỉ trưa?', 'Thư viện có mở xuyên trưa không?', 'Cơ sở 2 có nghỉ trưa không?'])

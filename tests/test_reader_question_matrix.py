@@ -41,6 +41,21 @@ def test_chat_keeps_symbols_in_lookup_summary_and_recommendations(client,languag
         assert f'Nội dung thử riêng {language}.' in response['answer']
 
 
+@pytest.mark.parametrize('spaced,topic',[('P y t h o n','Python'),('C + +','C++'),('C #','C#')])
+def test_spaced_known_identifiers_match_the_same_results_in_chat_and_catalog(client,spaced,topic):
+    wanted=f'Giáo trình lập trình {topic} căn bản'
+    response=client.post('/api/chat',json={'message':f'Tìm sách về lập trình {spaced}'}).json()
+    assert [book['title'] for book in response['books']]==[wanted]
+    response=client.get('/api/catalog',params={'q':spaced,'source':'local'}).json()
+    assert [book['title'] for book in response['items']]==[wanted]
+
+
+def test_spaced_opac_acronym_uses_reviewed_guide(client):
+    spaced=client.post('/api/chat',json={'message':'Hướng dẫn tra cứu O P A C'}).json()
+    canonical=client.post('/api/chat',json={'message':'Hướng dẫn tra cứu OPAC'}).json()
+    assert spaced['answer']==canonical['answer'] and spaced['sources']==canonical['sources']
+
+
 @pytest.mark.parametrize('message,facts,status',[
     ('Tác giả và năm xuất bản của cuốn đó?',['Tác giả thử 4','2024'],'answered'),
     ('Tóm tắt và đối tượng đọc của cuốn đó?',['Nội dung thử riêng Python.','Người học Python.'],'answered'),

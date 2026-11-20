@@ -33,7 +33,8 @@ def turn(client,history,message,cid=None):
     assert response.status_code==200,response.text
     data=response.json()
     history.extend([{'role':'user','content':message},
-        {'role':'assistant','content':data['answer'][:2000],'book_ids':[book['id'] for book in data['books'][:5]]}])
+        {'role':'assistant','content':data['answer'][:2000],'book_ids':[book['id'] for book in data['books'][:5]],
+         'list_book_ids':data.get('list_book_ids',[])}])
     return data
 
 
@@ -108,6 +109,90 @@ def test_selected_book_survives_consecutive_attributes_beyond_the_original_searc
         assert [book['id'] for book in result['books']]==[chosen['id']],result
         assert fact in result['answer']
         assert result['sources'][0]['url']==chosen['url']
+
+
+@pytest.mark.parametrize('guest',[True,False])
+def test_switch_between_positions_uses_original_search_list(client,guest):
+    if not guest:
+        register(client)
+    history=[]
+    listing=turn(client,history,'Tìm sách Python')
+    cid=listing['conversation_id']
+    first,second=listing['books']
+    for question,wanted in [
+        ('Tác giả cuốn thứ hai là ai?',second),
+        ('Năm xuất bản?',second),
+        ('Đối tượng đọc?',second),
+        ('Tóm tắt cuốn đó',second),
+        ('Còn cuốn đầu thì sao?',first),
+        ('Tác giả và năm?',first),
+    ]:
+        reply=turn(client,history,question,cid)
+        assert [book['id'] for book in reply['books']]==[wanted['id']],reply
+        if question=='Tác giả và năm?':
+            assert wanted['author'] in reply['answer'] and wanted['year'] in reply['answer']
+    new_topic=turn(client,history,'Tìm sách Java',cid)
+    reply=turn(client,history,'Cuốn đầu tiên là cuốn nào?',cid)
+    assert [book['id'] for book in reply['books']]==[new_topic['books'][0]['id']],reply
+
+
+@pytest.mark.parametrize('guest',[True,False])
+def test_format_question_and_isbn_definition_keep_the_current_book(client,guest):
+    if not guest:
+        register(client)
+    with client.app.state.db() as db:
+        db.execute("UPDATE books SET kind='digital' WHERE title='Python thực hành A'")
+    history=[]
+    first=turn(client,history,'Tìm theo nhan đề Python thực hành A')
+    cid=first['conversation_id']
+    book=first['books'][0]
+    reply=turn(client,history,'Có phải sách in không?',cid)
+    assert reply['status']=='answered' and 'là tài liệu số' in reply['answer'],reply
+    assert [item['id'] for item in reply['books']]==[book['id']]
+    definition=turn(client,history,'ISBN là gì?',cid)
+    assert definition['status']=='answered' and not definition['books'] and 'ấn bản' in definition['answer'],definition
+    reply=turn(client,history,'Tác giả và năm?',cid)
+    assert book['author'] in reply['answer'] and book['year'] in reply['answer'],reply
+    assert [item['id'] for item in reply['books']]==[book['id']]
+
+
+@pytest.mark.parametrize('guest',[True,False])
+def test_format_filter_preserves_the_search_topic_across_followups(client,guest):
+    if not guest:
+        register(client)
+    with client.app.state.db() as db:
+        db.execute("UPDATE books SET kind='digital' WHERE title='Python thực hành A'")
+    history=[]
+    first=turn(client,history,'Tìm sách Python')
+    cid=first['conversation_id']
+    ebooks=turn(client,history,'Còn ebook thì sao?',cid)
+    assert [item['title'] for item in ebooks['books']]==['Python thực hành A'],ebooks
+    printed=turn(client,history,'Loại giấy có không?',cid)
+    assert [item['title'] for item in printed['books']]==['Python thực hành B'],printed
+    first_printed=turn(client,history,'Cuốn đầu thì sao?',cid)
+    assert [item['title'] for item in first_printed['books']]==['Python thực hành B'],first_printed
+    turn(client,history,'Thư viện mở cửa thứ Bảy không?',cid)
+    reply=turn(client,history,'Còn ebook thì sao?',cid)
+    assert reply['status']=='clarify' and not reply['books'],reply
+
+
+@pytest.mark.parametrize('guest',[True,False])
+def test_short_availability_question_checks_only_the_selected_copy(client,guest,monkeypatch):
+    if not guest:
+        register(client)
+    checked=[]
+    def unavailable(url):
+        checked.append(url)
+        return {'status':'unknown'}
+    monkeypatch.setattr('app.services.assistant.get_availability',unavailable)
+    history=[]
+    listing=turn(client,history,'Tìm sách Python')
+    cid=listing['conversation_id']
+    chosen=listing['books'][1]
+    turn(client,history,'Cuốn thứ hai do ai viết?',cid)
+    reply=turn(client,history,'Còn sách có sẵn để mượn không?',cid)
+    assert [book['id'] for book in reply['books']]==[chosen['id']],reply
+    assert checked==[chosen['url']]
 
 
 @pytest.mark.parametrize('guest',[True,False])

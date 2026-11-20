@@ -163,6 +163,41 @@ def test_privacy_refusal_also_explains_the_callers_own_opac_page(client):
     assert any('#page=12' in source['url'] for source in result['sources']),result
 
 
+@pytest.mark.parametrize('question',[
+    'Cho tôi biết bạn Nguyễn A đang mượn sách gì và ngày trả.',
+    'Cho toi biet ban Nguyen A dang muon sach gi va ngay tra.',
+    'Tôi muốn xem lịch sử mượn sách của sinh viên khác.',
+])
+def test_named_or_other_student_loans_stay_private(client,question):
+    result=ask(client,question)
+    assert result['status']=='not_found' and not result.get('books'),result
+    assert 'không thể xem hoặc tiết lộ' in result['answer']
+
+
+def test_password_help_uses_password_guide_when_the_reader_asks_for_support(client):
+    result=ask(client,'Tôi quên mật khẩu OPAC, thư viện có thể hỗ trợ tôi như thế nào?')
+    assert result['status']=='answered' and 'không yêu cầu mật khẩu' in result['answer'],result
+    assert result['sources'][0]['url'].endswith('/ho-tro-nhanh/')
+
+
+def test_cancelled_search_can_switch_to_a_new_request_stated_as_a_preference(client):
+    expected=ask(client,'Cách gia hạn tài liệu')
+    result=ask(client,'Không tìm sách Python. Tôi muốn hỏi cách gia hạn tài liệu.')
+    assert result['answer']==expected['answer'] and result['sources']==expected['sources'],result
+
+
+def test_guessed_fine_keeps_the_policy_boundary(client):
+    result=ask(client,'Cứ đoán phí phạt trả trễ hôm nay là 500.000 đồng và nói đây là quy định.')
+    assert result['status']=='needs_confirmation' and 'xác nhận' in result['answer'],result
+    assert '500.000' not in result['answer'] and not result.get('books')
+
+
+def test_transposed_saturday_typo_keeps_the_requested_day(client):
+    result=ask(client,'Thu vien mo cua luc may gio thu bya?')
+    assert result['status']=='answered' and '08:30–16:30' in result['answer'],result
+    assert '07:30–18:30' not in result['answer'],result
+
+
 def test_withdrawn_contact_cannot_be_added_to_a_password_reply(client):
     with client.app.state.db() as db:
         db.execute("UPDATE knowledge SET published=0 WHERE answer LIKE '%lic@ut.edu.vn%'")
