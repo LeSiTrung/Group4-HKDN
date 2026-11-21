@@ -12,10 +12,16 @@ const starters = [
   { icon: 'globe', title: 'Thư viện số', text: 'Làm thế nào để truy cập tài liệu điện tử?' },
 ]
 const contextExcerptMarker = '\n[Trích đoạn ngữ cảnh; phần còn lại không được gửi.]'
+const waitingLabels = [
+  'Trợ lý đang trả lời…',
+  'Đang đối chiếu danh mục và nguồn tài liệu…',
+  'Đang tổng hợp câu trả lời từ nguồn thư viện, vui lòng đợi thêm giây lát…',
+]
 export default function ChatWindow({ user, conversationId, onCreated }) {
   const [messages, setMessages] = useState([])
   const [message, setMessage] = useState('')
   const [busy, setBusy] = useState(false)
+  const [waitStage, setWaitStage] = useState(0)
   const [historyLoading, setHistoryLoading] = useState(Boolean(user && conversationId))
   const [error, setError] = useState('')
   const [suggestions, setSuggestions] = useState([])
@@ -45,6 +51,12 @@ export default function ChatWindow({ user, conversationId, onCreated }) {
     return () => { conversationVersion.current++ }
   }, [user?.id, conversationId])
   useEffect(() => { end.current?.scrollIntoView({ behavior: 'instant', block: 'end' }) }, [messages, busy])
+  useEffect(() => {
+    if (!busy) { setWaitStage(0); return }
+    const first = setTimeout(() => setWaitStage(1), 2500)
+    const second = setTimeout(() => setWaitStage(2), 8000)
+    return () => { clearTimeout(first); clearTimeout(second) }
+  }, [busy])
 
   async function send(text) {
     const question = text
@@ -175,7 +187,7 @@ export default function ChatWindow({ user, conversationId, onCreated }) {
               onError={() => { if (speech.current?.url === playback.url) speechFailed(item, 'Trình duyệt không phát được âm thanh tiếng Việt.') }} />}
             <ErrorNotice>{playback.error}</ErrorNotice>
           </>} />
-      })}{busy && <div className="typing" role="status"><span /><span /><span /><span className="typing-label">Trợ lý đang trả lời…</span></div>}<div ref={end} /></div>}
+      })}{busy && <div className="typing" role="status"><span /><span /><span /><span className="typing-label">{waitingLabels[waitStage]}</span></div>}<div ref={end} /></div>}
     </div>
     <div className="chat-bottom">
       <ErrorNotice>{error}</ErrorNotice>

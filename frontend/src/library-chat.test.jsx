@@ -163,3 +163,22 @@ it('uses saved authenticated history without uploading it as guest context', asy
   expect(document.querySelector('.user-message .message-content').textContent).toBe(saved)
   expect(fetch.mock.calls[1][1]).toMatchObject({ credentials: 'include', headers: { 'X-Requested-With': 'LibraryAssistant', 'Content-Type': 'application/json' } })
 })
+
+it('shows progressive waiting messages while waiting for a slow reply', async () => {
+  vi.useFakeTimers()
+  try {
+    let resolveReply
+    fetch.mockImplementationOnce(() => new Promise(resolve => { resolveReply = resolve }))
+    render(<ChatWindow user={null} />)
+    send('Tìm sách Python')
+    expect(screen.getByRole('status').textContent).toContain('Trợ lý đang trả lời…')
+    await act(async () => { vi.advanceTimersByTime(2600) })
+    expect(screen.getByRole('status').textContent).toContain('Đang đối chiếu danh mục và nguồn tài liệu…')
+    await act(async () => { vi.advanceTimersByTime(5500) })
+    expect(screen.getByRole('status').textContent).toContain('Đang tổng hợp câu trả lời từ nguồn thư viện')
+    await act(async () => { resolveReply(response(answer)) })
+    expect(screen.getByText(answer.answer)).toBeTruthy()
+  } finally {
+    vi.useRealTimers()
+  }
+})
