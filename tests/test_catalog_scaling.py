@@ -45,6 +45,21 @@ def test_warehouse_lookup_uses_marc_subjects_when_summary_is_missing(store):
     assert [row['id'] for row in catalog.search_books(state,'bố trí mặt bằng kho')]==[book['id']]
 
 
+@pytest.mark.parametrize('query',[
+    'bố trí kho',
+    'bo tri kho',
+    'logistics bố trí vị trí lấy hàng giảm thời gian di chuyển',
+])
+def test_warehouse_search_requires_evidence_of_the_requested_operation(store,query):
+    add(store,'Dịch vụ giao nhận container tại ICD',subjects='TV Chuyên ngành Logistics',
+        description='Bố trí lịch xe vào kho theo vị trí nhận container để giảm thời gian di chuyển.')
+    state=SimpleNamespace(db=store.connect,settings=SimpleNamespace(testing=True))
+    assert catalog.search_books(state,query)==[]
+
+    book=add(store,'World-Class Warehousing',description='Warehouse layout and order picking.')
+    assert [row['id'] for row in catalog.search_books(state,query)]==[book['id']]
+
+
 def test_impossible_character_matches_do_not_compute_full_similarity(store,monkeypatch):
     add(store,'aaaaaa bbbbbb cccccc')
     comparisons=[]

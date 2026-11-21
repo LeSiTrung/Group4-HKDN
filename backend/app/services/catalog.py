@@ -285,17 +285,17 @@ def search_books(state,query,kind='all',field='all'):
     return search_books_with_status(state,query,kind,field)[0]
 
 
-def _warehouse_topic_matches(db_factory,query,kind):
-    q=' '+normalize_catalog(query)+' '
+def _warehouse_topic_matches(db_factory,normalized,kind):
+    q=' '+normalized+' '
     if ' kho ' not in q and ' logistics ' not in q:
-        return []
+        return None
     operations=[]
     if any(term in q for term in (' lay hang ',' soan hang ')):
         operations.append(('order picking','vi tri lay hang','soan hang','lay hang trong kho'))
     if any(term in q for term in (' bo tri kho ',' bo tri mat bang kho ')):
         operations.append(('warehouse layout','bo tri kho','bo tri mat bang kho'))
-    if not operations or _programming_languages(query):
-        return []
+    if not operations or _programming_languages(normalized):
+        return None
     with db_factory() as db:
         revision=db.execute('SELECT value FROM catalog_revision WHERE id=1').fetchone()[0]
     matches=[]
@@ -306,22 +306,27 @@ def _warehouse_topic_matches(db_factory,query,kind):
                 topic=_normalized_metadata(subject)
                 if topic and not topic.startswith(('tv ','ta ','ebook ','kl ','lv ')):
                     fields.append(' '+topic+' ')
-        if not any(re.search(r'\b(?:logistics|warehous(?:e|ing)|kho hang|quan ly kho|bo tri (?:mat bang )?kho)\b',field)
-                   for field in fields):
+        if not all(any(' '+term+' ' in field for field in fields for term in group) for group in operations):
             continue
-        if all(any(' '+term+' ' in field for field in fields for term in group) for group in operations):
+        if any(re.search(r'\b(?:logistics|warehous(?:e|ing)|kho hang|quan ly kho|bo tri (?:mat bang )?kho)\b',field)
+               for field in fields):
             matches.append(item(row))
     return matches
 
 
 def search_books_with_status(state,query,kind='all',field='all'):
     query=repair_search_spacing(query)
+    if field=='all':
+        normalized=normalize_catalog(query)
+        warehouse_matches=_warehouse_topic_matches(state.db,normalized,kind)
+        if warehouse_matches is not None:
+            return warehouse_matches,None
     matched=search_local(state.db,query,kind,field,fuzzy=False)
     if field=='all':
-        phrase=re.compile(r'(?<![\w+#])'+re.escape(normalize_catalog(query))+r'(?![\w+#])')
+        phrase=re.compile(r'(?<![\w+#])'+re.escape(normalized)+r'(?![\w+#])')
         precise=[b for b in matched if phrase.search(_normalized_metadata(' '.join(
             (b['title'],b['subjects'],b.get('marc',{}).get('subjects',''),b.get('marc',{}).get('summary','')))))]
-        matched=precise or _warehouse_topic_matches(state.db,query,kind) or matched or search_local(state.db,query,kind,field)
+        matched=precise or matched or search_local(state.db,query,kind,field)
     # Single-term identifiers need a lexical match, not an unrelated vector suggestion.
     words=catalog_tokens(query)-_SEARCH_NOISE
     languages=_programming_languages(query)
