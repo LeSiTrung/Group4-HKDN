@@ -59,6 +59,14 @@ def test_api_enforces_fields_and_does_not_silently_fallback_to_opac(client,monke
     'Sách của Nguyễn Văn An',
     'Tìm sách theo người viết Nguyễn Văn An',
     'Tra cứu tài liệu theo tên người viết Nguyễn Văn An',
+    'Tìm sách theo tác giả “Nguyễn Văn An”',
+    'Tìm sách của tác giả "Nguyễn Văn An"',
+    'Tìm sách do Nguyễn Văn An viết',
+    'Tìm sách do tác giả Nguyễn Văn An viết',
+    'Tìm sách của Nguyễn Văn An nhé',
+    'Tim sach cua Nguyen Van An nhe',
+    'Tìm sách theo tên tác giả Nguyễn Văn An nhé',
+    'Tìm sách do tác giả “Nguyễn Văn An” viết',
 ])
 def test_chat_author_requests_search_only_author_metadata(client,question):
     result=client.post('/api/chat',json={'message':question}).json()
@@ -76,6 +84,13 @@ def test_author_filter_survives_persisted_context_without_old_user_turn(client):
     assert follow['status']=='answered'
     assert [r['title'] for r in follow['books']]==['Python nâng cao']
     assert '2020' in follow['answer']
+
+
+def test_new_author_search_after_another_book_list(client):
+    history=[{'role':'user','content':'Tìm sách Python'}]
+    result=client.post('/api/chat',json={'message':'Tìm sách do tác giả Nguyễn Văn An viết','history':history}).json()
+    assert result['status']=='answered'
+    assert {book['title'] for book in result['books']}=={'Python cơ bản','Học Python'}
 
 
 def test_exact_title_ranks_above_other_fields_even_when_author_terms_boost_other_record(client):

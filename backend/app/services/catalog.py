@@ -537,14 +537,17 @@ def learning_level_followup(question):
 
 
 def book_followup(question):
-    if unquoted_text(question)!=question:
+    if unquoted_text(question)!=question or author_query(question):
         return False
     q=normalize(question)
     return bool(book_format_filter(question) or learning_level_followup(question) or book_position(question) is not None or book_reference(question) or re.search(r'^(co (?:cuon|quyen|sach)|cuon nao|sach nay|sach do|cuon nay|cuon do|tai lieu (?:nay|do)|noi ve gi|tom tat|noi dung|doi tuong doc|con khong|con ban|con sach|con muon|co san|danh cho|cho nguoi moi|nguoi moi|nang cao|tuong tu|tac gia|ai viet|nam xuat ban|xuat ban|isbn|o ke|co bao nhieu ban)',q) or re.fullmatch(_TOPIC_REFINEMENT,q)) and not any(x in q for x in ('huong dan','cach tim','nhu the nao'))
 
 
 def author_query(question):
-    match=re.fullmatch(_BOOK_PREFIX+r' (?:cua(?: tac gia)?|(?:theo )?tac gia) (.+)',normalize_catalog(question))
+    q=normalize_catalog(re.sub(r'\s+(?:nhé|nhe)[.!?]?\s*$','',question,flags=re.I))
+    match=re.fullmatch(_SEARCH_LEAD+_BOOK_PREFIX+r' do (?:tac gia )?(.+) viet',q)
+    if not match:
+        match=re.fullmatch(_SEARCH_LEAD+_BOOK_PREFIX+r' (?:cua(?: tac gia)?|theo (?:ten )?(?:tac gia|nguoi viet)|tac gia) (.+)',q)
     return match[1] if match else None
 
 
@@ -554,6 +557,9 @@ def structured_book_query(question):
         title=normalize_catalog(quoted[1][1:-1])
         if title:
             return 'title',title
+    author=author_query(question)
+    if author and not re.match(_SEARCH_LEAD+_BOOK_PREFIX+r' cua (?!tac gia\b)',normalize_catalog(question)):
+        return 'author',author
     match=re.fullmatch(_SEARCH_LEAD+r'(?:tim|tra cuu|kiem)(?: '+_DOCUMENT_TYPES+r')? theo '
                        r'(nhan de|(?:ten )?(?:tac gia|nguoi viet)|ten) (.+)',normalize_catalog(question))
     if match:

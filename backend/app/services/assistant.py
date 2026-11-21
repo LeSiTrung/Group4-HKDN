@@ -491,7 +491,9 @@ def answer_question(state, question, history=None):
     edited_book=edited_book_year_question(question)
     direct=('year',edited_book[0]) if edited_book else direct_document_question(question)
     if not direct and unquoted!=question and book_attributes(intent_q) and not search_guidance(question) and not is_borrowing_procedure(question):
-        return result('Mình chưa xác định được một nhan đề duy nhất trong yêu cầu này. Bạn hãy hỏi riêng từng tài liệu và thông tin cần tra cứu để mình đối chiếu đúng biểu ghi.','clarify')
+        lookup=structured_book_query(question)
+        if not lookup or lookup[0]!='author':
+            return result('Mình chưa xác định được một nhan đề duy nhất trong yêu cầu này. Bạn hãy hỏi riêng từng tài liệu và thông tin cần tra cứu để mình đối chiếu đúng biểu ghi.','clarify')
     reference_context=any(turn['role']=='assistant' and 'book_ids' in turn for turn in history or [])
     ids=[]
     list_book_ids=[]
