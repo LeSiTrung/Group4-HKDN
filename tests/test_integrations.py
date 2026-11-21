@@ -399,6 +399,42 @@ def test_zalo_signature_and_replay(webhook):
     assert answers == ['Sách'] and len(sends) == 1
 
 
+def test_zalo_acknowledges_before_generating_reply(webhook):
+    client, answers, sends = webhook
+    sent_response = False
+    events = []
+    original_answer = client.app.state.answer
+
+    def answer(text):
+        events.append(sent_response)
+        result = original_answer(text)
+        return {**result, 'answer': result['answer'] + ' x' * 2000,
+                'sources': [{'url': 'https://lic.ut.edu.vn/'}]}
+
+    async def observe(scope, receive, send):
+        async def track(message):
+            nonlocal sent_response
+            await send(message)
+            if message['type'] == 'http.response.body' and not message.get('more_body'):
+                sent_response = True
+        await client.app(scope, receive, track)
+
+    client.app.state.answer = answer
+    stamp = str(int(time.time() * 1000))
+    raw = json.dumps({'app_id': 'app', 'event_name': 'user_send_text', 'timestamp': stamp,
+                      'sender': {'id': 'reader'}, 'recipient': {'id': 'oa'},
+                      'message': {'msg_id': 'ack-first', 'text': 'Tra cứu OPAC'}}).encode()
+    signature = hashlib.sha256(b'app' + raw + stamp.encode() + b'zalo-secret').hexdigest()
+    response = TestClient(observe).post('/api/webhooks/zalo', content=raw,
+                                       headers={'x-zevent-signature': 'mac=' + signature})
+    assert response.status_code == 200
+    assert events == [True]
+    assert answers == ['Tra cứu OPAC'] and len(sends) == 1
+    assert sends[0].url.path == '/v3.0/oa/message/cs'
+    text = json.loads(sends[0].content)['message']['text']
+    assert len(text) <= 2000 and text.endswith('\nNguồn thư viện:\nhttps://lic.ut.edu.vn/')
+
+
 def test_channel_timeout_is_held_and_never_retried(webhook, monkeypatch):
     client, answers, _ = webhook
     sends = []

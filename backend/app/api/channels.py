@@ -8,7 +8,7 @@ import re
 import time
 
 import httpx
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request
 from fastapi.responses import PlainTextResponse
 from starlette.concurrency import run_in_threadpool
 
@@ -82,6 +82,20 @@ def _send(channel, recipient, answer):
         return response.status_code == 200 and isinstance(data, dict) and data.get('error') == 0 and isinstance(data.get('data'), dict) and bool(data['data'].get('message_id'))
 
 
+def _zalo_reply(answer, sources):
+    links = []
+    for source in sources:
+        url = source.get('url', '') if isinstance(source, dict) else ''
+        if isinstance(url, str) and re.fullmatch(r'https://[^\s]{1,380}', url) and url not in links:
+            links.append(url)
+        if len(links) == 3:
+            break
+    if not links:
+        return answer
+    references = '\n\nNguồn thư viện:\n' + '\n'.join(links)
+    return answer[:2000 - len(references)].rstrip() + references
+
+
 def _process(request, channel, events):
     processed = 0
     for recipient, message_id, text in events:
@@ -107,6 +121,8 @@ def _process(request, channel, events):
         # Mark before the network call: a crash/timeout must never trigger an automatic duplicate send.
         _status(request, event_key, 'uncertain')
         try:
+            if channel == 'zalo':
+                answer = _zalo_reply(answer, result.get('sources') or [])
             acknowledged = _send(channel, recipient, answer)
             _status(request, event_key, 'sent' if acknowledged else 'uncertain')
             processed += int(acknowledged)
@@ -152,7 +168,7 @@ async def messenger_webhook(request: Request):
 
 
 @router.post('/webhooks/zalo')
-async def zalo_webhook(request: Request):
+async def zalo_webhook(request: Request, background_tasks: BackgroundTasks):
     app_id, secret, oa_id, _ = _config('ZALO_APP_ID', 'ZALO_OA_SECRET_KEY', 'ZALO_OA_ID', 'ZALO_ACCESS_TOKEN')
     raw = await _body(request)
     payload = _json(raw)
@@ -164,7 +180,8 @@ async def zalo_webhook(request: Request):
     if not hmac.compare_digest(signature.encode(), expected.encode()):
         raise HTTPException(403, 'Chữ ký webhook không hợp lệ.')
     message, sender, target = payload.get('message'), payload.get('sender'), payload.get('recipient')
-    events = []
     if payload.get('event_name') == 'user_send_text' and isinstance(message, dict) and isinstance(sender, dict) and isinstance(target, dict) and str(target.get('id')) == oa_id:
-        events.append((sender.get('id'), message.get('msg_id'), message.get('text')))
-    return await run_in_threadpool(_process, request, 'zalo', events)
+        event = (sender.get('id'), message.get('msg_id'), message.get('text'))
+        # shortcut: in-process delivery is for pilot use, use a durable queue before unattended deployment.
+        background_tasks.add_task(_process, request, 'zalo', [event])
+    return {'status': 'received'}
