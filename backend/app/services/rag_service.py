@@ -183,7 +183,7 @@ class VectorIndex:
                 self.book_retry_at=0
 
     def rebuild(self, rows, namespace='knowledge'):
-        from qdrant_client.models import Distance, PointIdsList, PointStruct, VectorParams
+        from qdrant_client.models import Distance, PayloadSchemaType, PointIdsList, PointStruct, VectorParams
         with self.lock:
             try:
                 collection = self._collection(namespace)
@@ -232,6 +232,8 @@ class VectorIndex:
                                        for text in (payload['text'] for _,payload in batch)]
                         if not exists:
                             self.client.create_collection(collection, vectors_config=VectorParams(size=len(batch_vectors[0]), distance=Distance.COSINE))
+                            if os.getenv('QDRANT_URL'):
+                                self.client.create_payload_index(collection, field_name='source_id', field_schema=PayloadSchemaType.INTEGER)
                             exists=True
                         self.client.upsert(collection, points=[PointStruct(id=chunk_id, vector=vector.tolist(), payload=payload)
                                            for (chunk_id, payload), vector in zip(batch, batch_vectors)], wait=True)

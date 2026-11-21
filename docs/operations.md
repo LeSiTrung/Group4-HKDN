@@ -82,7 +82,9 @@ Image app chứa frontend build cùng origin, chạy UID 10001, một worker. Co
 
 Proxy network dùng `172.30.47.0/29`, IP Caddy là `172.30.47.2` và IP app là `172.30.47.3`. Hai địa chỉ cố định để app khởi động trước vẫn dành đúng IP cho Caddy. Uvicorn chỉ tin forwarded headers từ IP của Caddy. Caddy lấy client IP và scheme từ kết nối thực. Chỉ publish cổng của Caddy và giữ danh sách IP tin cậy cụ thể. Nếu subnet trùng mạng có sẵn, sửa đồng thời subnet, hai IP và `--forwarded-allow-ips` trong Compose. Khi đặt CDN hoặc proxy trước Caddy, kiểm tra địa chỉ client và rate limit trên máy đích.
 
-Volume `runtime` giữ SQLite, Qdrant và cache embedding; `ollama` giữ LLM; `caddy_data`/`caddy_config` giữ TLS. `docker compose down` giữ volume. Không dùng `down -v`, `volume prune` hoặc xóa runtime để cập nhật. Runtime local trên Windows và volume Docker là hai kho độc lập; chuyển dữ liệu bằng backup/restore được kiểm tra.
+Volume `runtime` giữ SQLite, Qdrant local và cache embedding; `ollama` giữ LLM; `qdrant_data` giữ chỉ mục Qdrant độc lập khi bật profile `qdrant`; `caddy_data`/`caddy_config` giữ TLS. `docker compose down` giữ volume. Không dùng `down -v`, `volume prune` hoặc xóa runtime để cập nhật. Runtime local trên Windows và volume Docker là hai kho độc lập; chuyển dữ liệu bằng backup/restore được kiểm tra.
+
+Khi danh mục vượt 100.000 đoạn vector, có thể bật dịch vụ Qdrant độc lập trên mạng nội bộ `model` (không mở cổng công khai) bằng cách đặt `QDRANT_URL=http://qdrant:6333` trong `backend/.env` và chạy `docker compose --env-file backend/.env --profile qdrant up -d`. Khi tạo collection mới trên Qdrant server, ứng dụng tự tạo payload index cho trường `source_id`.
 
 ## Kiểm tra sau khởi động
 

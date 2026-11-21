@@ -494,3 +494,17 @@ def test_busy_query_does_not_wait_for_vector_module_import(tmp_path,monkeypatch)
         release.set()
         worker.join(timeout=5)
         index.close()
+
+
+def test_remote_qdrant_creates_source_id_payload_index(tmp_path, monkeypatch):
+    index = index_at(tmp_path)
+    monkeypatch.setenv('QDRANT_URL', 'http://qdrant:6333')
+    created = []
+    monkeypatch.setattr(index.client, 'create_payload_index', lambda collection, **kwargs: created.append((collection, kwargs)))
+    try:
+        index.rebuild([row(1, answer='TAILMARKER')], 'books')
+        assert len(created) == 1
+        assert created[0][0] == index._collection('books')
+        assert created[0][1]['field_name'] == 'source_id'
+    finally:
+        index.close()
