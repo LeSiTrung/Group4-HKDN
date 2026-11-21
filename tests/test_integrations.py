@@ -388,6 +388,39 @@ def test_messenger_ignores_echo_old_and_wrong_page(webhook):
     assert not answers and not sends
 
 
+def test_messenger_acknowledges_before_generating_reply(webhook):
+    client, answers, sends = webhook
+    sent_response = False
+    events = []
+    original_answer = client.app.state.answer
+
+    def answer(text):
+        events.append(sent_response)
+        result = original_answer(text)
+        return {**result, 'answer': result['answer'] + ' x' * 2000,
+                'sources': [{'url': 'https://lic.ut.edu.vn/'}]}
+
+    async def observe(scope, receive, send):
+        async def track(message):
+            nonlocal sent_response
+            await send(message)
+            if message['type'] == 'http.response.body' and not message.get('more_body'):
+                sent_response = True
+        await client.app(scope, receive, track)
+
+    client.app.state.answer = answer
+    raw = messenger_body()
+    signature = 'sha256=' + hmac.new(b'test-secret', raw, hashlib.sha256).hexdigest()
+    response = TestClient(observe).post('/api/webhooks/messenger', content=raw,
+                                       headers={'x-hub-signature-256': signature})
+    assert response.status_code == 200 and response.json() == {'status': 'received'}
+    assert events == [True]
+    assert answers == ['Tra cứu'] and len(sends) == 1
+    assert sends[0].url.host == 'graph.facebook.com'
+    text = json.loads(sends[0].content)['message']['text']
+    assert len(text) <= 2000 and text.endswith('\nNguồn thư viện:\nhttps://lic.ut.edu.vn/')
+
+
 def test_zalo_signature_and_replay(webhook):
     client, answers, sends = webhook
     stamp = str(int(time.time() * 1000))

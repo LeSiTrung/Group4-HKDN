@@ -10,7 +10,6 @@ import time
 import httpx
 from fastapi import APIRouter, BackgroundTasks, HTTPException, Request
 from fastapi.responses import PlainTextResponse
-from starlette.concurrency import run_in_threadpool
 
 router = APIRouter(tags=['channels'])
 MAX_BODY = 262144
@@ -82,7 +81,7 @@ def _send(channel, recipient, answer):
         return response.status_code == 200 and isinstance(data, dict) and data.get('error') == 0 and isinstance(data.get('data'), dict) and bool(data['data'].get('message_id'))
 
 
-def _zalo_reply(answer, sources):
+def _channel_reply(answer, sources):
     links = []
     for source in sources:
         url = source.get('url', '') if isinstance(source, dict) else ''
@@ -121,8 +120,7 @@ def _process(request, channel, events):
         # Mark before the network call: a crash/timeout must never trigger an automatic duplicate send.
         _status(request, event_key, 'uncertain')
         try:
-            if channel == 'zalo':
-                answer = _zalo_reply(answer, result.get('sources') or [])
+            answer = _channel_reply(answer, result.get('sources') or [])
             acknowledged = _send(channel, recipient, answer)
             _status(request, event_key, 'sent' if acknowledged else 'uncertain')
             processed += int(acknowledged)
@@ -144,7 +142,7 @@ def messenger_verify(request: Request):
 
 
 @router.post('/webhooks/messenger')
-async def messenger_webhook(request: Request):
+async def messenger_webhook(request: Request, background_tasks: BackgroundTasks):
     secret, page, _, _ = _config('MESSENGER_APP_SECRET', 'MESSENGER_PAGE_ID', 'MESSENGER_PAGE_ACCESS_TOKEN', 'MESSENGER_GRAPH_VERSION')
     raw = await _body(request)
     expected = 'sha256=' + hmac.new(secret.encode(), raw, hashlib.sha256).hexdigest()
@@ -164,7 +162,10 @@ async def messenger_webhook(request: Request):
             if not isinstance(message, dict) or not isinstance(sender, dict) or not isinstance(target, dict) or message.get('is_echo') or str(target.get('id')) != page or not _fresh(event.get('timestamp')):
                 continue
             events.append((sender.get('id'), message.get('mid'), message.get('text')))
-    return await run_in_threadpool(_process, request, 'messenger', events[:100])
+    if events:
+        # shortcut: in-process delivery is for pilot use, use a durable queue before unattended deployment.
+        background_tasks.add_task(_process, request, 'messenger', events[:100])
+    return {'status': 'received'}
 
 
 @router.post('/webhooks/zalo')

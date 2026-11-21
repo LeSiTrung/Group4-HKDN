@@ -51,11 +51,7 @@ def test_signed_malformed_unicode_is_ignored_without_claiming_or_sending(client,
     event={'recipient':'reader','message_id':'incoming','text':'Tìm tài liệu'}
     event[field]='invalid\ud800'
     response=send(client,channel,event)
-    assert response.status_code==200
-    if channel=='messenger':
-        assert response.json()['processed']==0
-    else:
-        assert response.json()=={'status':'received'}
+    assert response.status_code==200 and response.json()=={'status':'received'}
     with client.app.state.db() as db:
         exists=db.execute("SELECT 1 FROM sqlite_master WHERE name='channel_events'").fetchone()
         assert not exists or db.execute('SELECT COUNT(*) FROM channel_events').fetchone()[0]==0
@@ -67,9 +63,6 @@ def test_valid_vietnamese_emoji_message_is_delivered_and_deduplicated(client,cha
     first=send(client,channel,event)
     second=send(client,channel,event)
     assert first.status_code==second.status_code==200
-    if channel=='messenger':
-        assert first.json()['processed']==1 and second.json()['processed']==0
-    else:
-        assert first.json()==second.json()=={'status':'received'}
+    assert first.json()==second.json()=={'status':'received'}
     with client.app.state.db() as db:
         assert [row['status'] for row in db.execute('SELECT status FROM channel_events')]==['sent']
