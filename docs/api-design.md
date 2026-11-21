@@ -55,7 +55,7 @@ Lỗi chuẩn `{detail: string}`; Pydantic có thể trả `detail` là danh sá
 | `GET/POST /api/admin/schedules` | Admin | Liệt kê/tạo lịch có nguồn xác nhận |
 | `DELETE /api/admin/schedules/{id}` | Admin | Xóa lịch |
 | `GET/POST /api/webhooks/messenger` | Chữ ký/verify token | Xác minh webhook, tiếp nhận text và chống trùng |
-| `POST /api/webhooks/zalo` | Chữ ký | Tiếp nhận text và chống trùng |
+| `POST /api/webhooks/zalo` | Chữ ký | Trả `{"status":"received"}` sau khi xác minh sự kiện. Xử lý tin nhắn và chống trùng sau khi phản hồi HTTP. |
 
 ## Chat và nguồn
 
