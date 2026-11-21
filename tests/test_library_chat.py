@@ -84,3 +84,12 @@ def test_large_history_is_bounded_before_catalog_search(client,monkeypatch):
 def test_transport_bound_remains_for_chat_and_other_routes(client):
     assert client.post('/api/chat',content=b'x'*(1048576+1)).status_code==413
     assert client.post('/api/auth/logout',content=b'x'*65537).status_code==413
+
+
+def test_short_topic_clarify_offers_clickable_book_search_suggestion(client):
+    reply = client.post('/api/chat', json={'message': 'bố trí kho'}).json()
+    assert reply['status'] == 'clarify'
+    assert reply['suggestions'][0] == 'Tìm sách bố trí kho'
+    url_reply = client.post('/api/chat', json={'message': 'https://example.test'}).json()
+    assert url_reply['status'] == 'clarify'
+    assert all('https://' not in item for item in url_reply['suggestions'])

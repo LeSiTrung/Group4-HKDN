@@ -334,7 +334,11 @@ def library_question(question,history=None):
 
 def library_redirect(question):
     if not outside_definition(question) and len(normalize(question).split())<=3:
-        return result('Bạn muốn tìm sách hoặc tài liệu về chủ đề này, hay cần hỗ trợ dịch vụ nào của thư viện? Hãy cho mình thêm tên tài liệu, tác giả hoặc nhu cầu tra cứu nhé.', 'clarify',suggestions=SUGGESTIONS)
+        topic=' '.join(question.split()).strip(' ?!.,;:"\'()[]')
+        suggestions=SUGGESTIONS
+        if topic and len(topic)<=60 and '://' not in topic and not normalize(topic).startswith(('tim ','tra cuu ')):
+            suggestions=[f'Tìm sách {topic}',*SUGGESTIONS[:2]]
+        return result('Bạn muốn tìm sách hoặc tài liệu về chủ đề này, hay cần hỗ trợ dịch vụ nào của thư viện? Hãy cho mình thêm tên tài liệu, tác giả hoặc nhu cầu tra cứu nhé.', 'clarify',suggestions=suggestions)
     return result('Mình là chatbot dành riêng cho thư viện UTH, hỗ trợ tìm tài liệu, tra cứu OPAC, mượn/gia hạn, giờ phục vụ và tài nguyên điện tử. Mình không trả lời kiến thức chung ngoài phạm vi này. Nếu bạn muốn tìm tài liệu về chủ đề đang hỏi, hãy cho mình tên sách hoặc chủ đề cần tra cứu.', 'not_found',suggestions=SUGGESTIONS)
 
 
