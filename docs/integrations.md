@@ -72,7 +72,7 @@ Missing required configuration returns 503. Set a currently supported Graph vers
 - Payloads are capped at 256 KiB; input text at 4,000 characters; outgoing text at 2,000 characters. Signed event timestamps must be within 48 hours of the server clock; NTP and provider delivery windows must be checked during acceptance.
 - `channel_events` stores a SHA256 event key (channel/recipient/message ID), channel, state and creation time. SQLite's primary key prevents concurrent duplicate processing and survives restarts. Message text, reader identifiers and tokens are not stored in this ledger.
 - Claims are committed before answering; `uncertain` is committed before sending. Duplicate events are acknowledged without re-answering or re-sending. Timeout, rejected/malformed acknowledgement or a crash can leave `processing`, `failed` or `uncertain` records. An operator must reconcile such events with the provider before changing their state. This deliberately favors no duplicate sends; it cannot promise exactly-once delivery or recovery of an interrupted response. No automatic network retries are performed.
-- Zalo acknowledges signed events before generating and sending the reply. HTTP 200 confirms receipt. The in-process task can be interrupted by a restart, and an unattended deployment needs a durable queue and delivery monitoring. Messenger still waits for the answer/send work. Keep the ledger with database backups.
+- Zalo and Messenger acknowledge signed events before generating and sending replies. HTTP 200 confirms receipt. The in-process task can be interrupted by a restart, and an unattended deployment needs a durable queue and delivery monitoring. Keep the ledger with database backups.
 
 ### Kết nối Zalo OA cho buổi demo
 
