@@ -1,6 +1,6 @@
 # Gói chạy và triển khai
 
-Cập nhật kiểm thử biên03/11: image mới nhất `uth-library:2026-11-03-edge` có các bản sửa session, validation, hội thoại và UI bất đồng bộ.783kiểm thử backend/101frontend,31hội thoại thật và19kiểm tra biênAPI đạt. Kiểm thử container dùng dữ liệu riêng và được dọn sau kiểm tra; [phạm vi/bằng chứng](edge-case-validation.md). `uth-library:2026-11-03` bên dưới là mốc trước của cùng ngày.
+Đợt kiểm thử biên ngày 03/11/2026 dùng image `uth-library:2026-11-03-edge` và dữ liệu riêng. Image `uth-library:2026-11-03` bên dưới là mốc trước của cùng ngày. [Kết quả kiểm thử biên](validation/2026-11-03-edge-cases.json)
 
 MARC hiện có retry cho lỗi transport của GET đọc metadata: tối đa3lượt, chờ30/60giây và vẫn qua clock chung. HTTP401/403/429/5xx, POST/giao dịch, URL/DNS và lỗi giới hạn phản hồi không được thử lại. Retry không thay thế checkpoint hoặc xác nhận quyền thu thập.
 

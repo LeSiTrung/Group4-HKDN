@@ -4,7 +4,7 @@ Lịch chung của ba cơ sở dùng hướng dẫn LIC 2024/11, trang 12. Thứ
 
 Ngày03/11/2026: gói Docker `uth-library:2026-11-03` đã build và kiểm tra trên Linux với UID10001, model Qwen qua Ollama của máy hiện tại, readiness200 và tình huống thiếu model503. Giao diện bạn đọc bỏ nhãn định tuyến/phiên bản nội bộ. Xem [gói triển khai cục bộ](local-release.md); đây là bước chuẩn bị theo yêu cầu nhóm chưa có máy chủ/tên miền, không phải nghiệm thu publicHTTPS hay toàn bộ Compose/Ollama volume.
 
-Kiểm chứng ngày 01/11/2026: Docker Engine đã kết nối; image Linux build/chạy dưới UID10001, API/LLM, backup/restore và HTTPS nội bộ qua Caddy đã được kiểm tra thật. Main vẫn ở cổng8000; bản Docker dùng snapshot công khai riêng ở cổng8100. Xem [hướng dẫn và giới hạn Docker](docker-local-validation.md), [bằng chứng mới nhất](validation/2026-11-01-data-container.json). Đây chưa phải nghiệm thu tên miền/ACME công khai, sức tải hoặc toàn bộ Compose/Ollama trên máy đích.
+Đợt kiểm thử Docker ngày 01/11/2026 dùng snapshot công khai riêng để kiểm tra API/LLM, backup/restore và HTTPS cục bộ qua Caddy. Phạm vi triển khai trên máy đích vẫn cần kiểm tra riêng, gồm tên miền, ACME, sức tải và toàn bộ Compose. [Kết quả Docker ngày 01/11](validation/2026-11-01-data-container.json)
 
 Gói FAQ ngày01/11 bổ sung4 mục đã rà nguồn, nâng runtime đã nhập gói lên31 mục/145 đoạn. Sau backup, dùng `python -m app.cli import-knowledge ../data/faq/public-library-2026-11-01.json`. Hai tài liệu giờ phục vụ2022/2024 đang khác nhau: giữ cả hai với `needs_confirmation`, không tạo lịch hiện hành hoặc tự chọn theo tên thư mục mới hơn. Lịch theo ngày/cơ sở được cán bộ xác nhận vẫn ưu tiên. [Collector LIC](lic-collection.md) chỉ lưu staging, không tự nhập/công bố HTML thô.
 

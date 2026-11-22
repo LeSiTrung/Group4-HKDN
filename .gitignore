@@ -29,6 +29,7 @@ Thumbs.db
 /docs/bao-cao-hkdn/
 /docs/*.docx
 /Bao-cao-daily.docx
+/Bao-cao-daily-*.docx
 /KNOWN_ISSUES.md
 /NEXT_STEPS.md
 /PROGRESS.md
