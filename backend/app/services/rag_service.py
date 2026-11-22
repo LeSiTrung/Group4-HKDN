@@ -119,7 +119,6 @@ class VectorIndex:
             from .embedding_model import verified_export
             self.local_export=verified_export(os.environ['EMBEDDING_EXPORT'])
             self.model_name=self.local_export['name']
-        self.collection = self._collection('knowledge')
 
     def _collection(self, namespace):
         if namespace not in ('knowledge', 'books'):

@@ -30,7 +30,7 @@ def test_default_model_identity_and_collection_are_preserved(tmp_path,monkeypatc
     monkeypatch.delenv('EMBEDDING_MODEL',raising=False)
     index=VectorIndex(SimpleNamespace(data_dir=tmp_path))
     assert index.model_name=='sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'
-    assert index.collection=='knowledge_chunks_v1_39897b1e723b'
+    assert index._collection('knowledge')=='knowledge_chunks_v1_39897b1e723b'
 
 
 @pytest.mark.parametrize('asset',['model.onnx','tokenizer.json'])
@@ -44,7 +44,7 @@ def test_local_export_identity_is_content_bound_and_does_not_expose_paths(export
     report['artifact_sha256'][asset]=hashlib.sha256((directory/asset).read_bytes()).hexdigest()
     path.write_text(json.dumps(report),encoding='utf-8')
     second=VectorIndex(SimpleNamespace(data_dir=tmp_path/'runtime'))
-    assert first.collection!=second.collection
+    assert first._collection('knowledge')!=second._collection('knowledge')
 
 
 @pytest.mark.parametrize('change',['weights','tokenizer','unverified','bad_parity','bad_settings','missing','extra_tokens'])

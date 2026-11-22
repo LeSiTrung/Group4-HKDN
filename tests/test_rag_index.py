@@ -175,7 +175,7 @@ def test_oversized_query_is_rejected_before_embedding_or_index_work(tmp_path,que
 
 
 def points(index, namespace='knowledge'):
-    collection = index.collection if namespace == 'knowledge' else index._collection(namespace)
+    collection = index._collection(namespace)
     if not index.client.collection_exists(collection):
         return []
     return index.client.scroll(collection, limit=1000, with_payload=True, with_vectors=False)[0]
