@@ -565,7 +565,9 @@ def answer_question(state, question, history=None):
                         break
         if ordinal and list_book_ids:
             ids=list_book_ids
-        multiple_fields=relative and len(attributes)>1 and len(re.findall(r'\b(?:tai lieu|(?:cuon|quyen)(?: sach)?|sach)\b',intent_q))<=1 and 'hoac' not in intent_q.split()
+        multiple_fields=(len(attributes)>1 and (book_reference(intent_q, ordinal=True) if ordinal else relative)
+                         and len(re.findall(r'\b(?:tai lieu|(?:cuon|quyen)(?: sach)?|sach)\b',intent_q))<=1
+                         and 'hoac' not in intent_q.split())
         if 1<=position<=len(ids) and (multiple_fields or not re.search(r'\b(va|hoac)\b',intent_q)):
             selected_book=public_book(state.db,ids[position-1])
         if not selected_book:

@@ -506,18 +506,23 @@ def _attribute_phrase(question):
     return not q.split()
 
 
-def book_reference(question):
+_BOOK_POSITION = re.compile(r'\b(?:cuon|quyen|sach|tai lieu)(?: sach)? (?:thu (nhat|mot|hai|ba|tu|bon|nam|\d{1,3})'
+                            r'|(dau tien|dau(?= (?:thi sao|do ai viet|xuat ban)\b|$)))\b')
+
+
+def book_reference(question, *, ordinal=False):
     if search_guidance(question) or is_borrowing_procedure(question):
         return False
     q=normalize(unquoted_text(question))
+    if ordinal:
+        return _attribute_phrase(_BOOK_POSITION.sub('', q, count=1))
     return bool(book_attribute(q) and (
         re.search(r'\b(?:(?:cuon|quyen|sach|tai lieu)(?: sach)? (?:nay|do|ay)|no)\b',q) or
         _attribute_phrase(q)))
 
 
 def book_position(question):
-    match=re.search(r'\b(?:cuon|quyen|sach|tai lieu)(?: sach)? (?:thu (nhat|mot|hai|ba|tu|bon|nam|\d{1,3})'
-                    r'|(dau tien|dau(?= (?:thi sao|do ai viet|xuat ban)\b|$)))\b',normalize(unquoted_text(question)))
+    match=_BOOK_POSITION.search(normalize(unquoted_text(question)))
     if not match:
         return None
     value=match[1] or match[2]

@@ -112,6 +112,24 @@ def test_selected_book_survives_consecutive_attributes_beyond_the_original_searc
 
 
 @pytest.mark.parametrize('guest',[True,False])
+def test_a_position_can_request_two_fields_for_the_same_book(client, guest):
+    if not guest:
+        register(client)
+    history = []
+    listing = turn(client, history, 'Tìm sách Python')
+    cid = listing['conversation_id']
+    chosen = listing['books'][0]
+    ambiguous = turn(client, history, 'Cuốn đó của tác giả nào?', cid)
+    assert ambiguous['status'] == 'clarify'
+    answer = turn(client, history, 'Cuốn thứ nhất của tác giả nào và xuất bản năm nào?', cid)
+    assert answer['status'] == 'answered', answer
+    assert [item['id'] for item in answer['books']] == [chosen['id']]
+    assert chosen['author'] in answer['answer'] and chosen['year'] in answer['answer']
+    multiple = turn(client, history, 'Tác giả và năm xuất bản của cuốn thứ nhất và thứ hai?', cid)
+    assert multiple['status'] == 'clarify' and not multiple['books']
+
+
+@pytest.mark.parametrize('guest',[True,False])
 def test_switch_between_positions_uses_original_search_list(client,guest):
     if not guest:
         register(client)
