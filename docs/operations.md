@@ -84,7 +84,7 @@ Proxy network dùng `172.30.47.0/29`, IP Caddy là `172.30.47.2` và IP app là 
 
 Volume `runtime` giữ SQLite, Qdrant local và cache embedding; `ollama` giữ LLM; `qdrant_data` giữ chỉ mục Qdrant độc lập khi bật profile `qdrant`; `caddy_data`/`caddy_config` giữ TLS. `docker compose down` giữ volume. Không dùng `down -v`, `volume prune` hoặc xóa runtime để cập nhật. Runtime local trên Windows và volume Docker là hai kho độc lập; chuyển dữ liệu bằng backup/restore được kiểm tra.
 
-Khi danh mục vượt 100.000 đoạn vector, có thể bật dịch vụ Qdrant độc lập trên mạng nội bộ `model` (không mở cổng công khai) bằng cách đặt `QDRANT_URL=http://qdrant:6333` trong `backend/.env` và chạy `docker compose --env-file backend/.env --profile qdrant up -d`. Khi tạo collection mới trên Qdrant server, ứng dụng tự tạo payload index cho trường `source_id`.
+Khi danh mục vượt 100.000 đoạn vector, có thể bật dịch vụ Qdrant độc lập trên mạng nội bộ `model` (không mở cổng công khai) bằng cách đặt `QDRANT_URL=http://qdrant:6333` trong `backend/.env` và chạy `docker compose --env-file backend/.env --profile qdrant up -d`. Cấu hình mặc định dùng Qdrant 1.20.0 cùng phiên bản với Python client. Khi tạo collection mới trên Qdrant server, ứng dụng tự tạo payload index cho trường `source_id`. Nếu đang có volume từ phiên bản Qdrant cũ hơn, sao lưu và áp dụng lộ trình nâng cấp của Qdrant cho volume đó hoặc dựng lại chỉ mục trong volume mới từ SQLite.
 
 ## Kiểm tra sau khởi động
 
