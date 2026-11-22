@@ -1,11 +1,13 @@
 from types import SimpleNamespace
+from concurrent.futures import ThreadPoolExecutor
 
 import numpy as np
-from threading import Event
+from threading import Event, Semaphore
 import pytest
 from qdrant_client import QdrantClient
 
 from app.services import rag_service as rag
+from app.services import catalog
 
 
 class Embedding:
@@ -389,6 +391,58 @@ def test_success_in_other_namespace_does_not_hide_index_failure(tmp_path, monkey
         index.close()
 
 
+def test_catalog_queries_reuse_hashes_after_snapshot_load(tmp_path, monkeypatch):
+    index = index_at(tmp_path)
+    books = [{'id': i, 'title': 'TAILMARKER' if i == 1 else f'Book {i}',
+              'author': '', 'subjects': '', 'description': ''} for i in range(1, 30)]
+    monkeypatch.setattr(catalog, 'published_book_rows', lambda db_factory: books)
+    try:
+        _, documents = catalog._semantic_catalog(lambda: None, 1)
+        index.rebuild(documents, 'books')
+        fingerprint = rag.row_fingerprint
+        hashed = []
+
+        def count(value):
+            hashed.append(value)
+            return fingerprint(value)
+
+        monkeypatch.setattr(rag, 'row_fingerprint', count)
+        for _ in range(2):
+            hits = index.search('TAILMARKER', documents, 'books', ready_only=True)
+            assert [source['id'] for source, _ in hits] == [1]
+        assert not hashed
+
+        books[0] = {**books[0], 'title': 'New title'}
+        _, updated = catalog._semantic_catalog(lambda: None, 2)
+        with pytest.raises(rag.IndexBusy):
+            index.search('TAILMARKER', updated, 'books', ready_only=True)
+    finally:
+        index.close()
+
+
+def test_book_readiness_recovers_after_transient_query_failure(tmp_path, monkeypatch):
+    index = index_at(tmp_path)
+    documents = [row(answer='TAILMARKER')]
+
+    def fail(*args, **kwargs):
+        raise TimeoutError('query timed out')
+
+    try:
+        assert index.prepare_books(lambda: documents) == 'preparing'
+        index.book_job.result(timeout=5)
+        with monkeypatch.context() as patch:
+            patch.setattr(index.client, 'query_points', fail)
+            with pytest.raises(TimeoutError):
+                index.search('TAILMARKER', documents, 'books', ready_only=True)
+        assert not index.status()['ready']
+        assert index.prepare_books(lambda: documents) == 'preparing'
+        index.book_job.result(timeout=5)
+        assert index.search('TAILMARKER', documents, 'books', ready_only=True)
+        assert index.status()['ready'] and index.status()['error'] is None
+    finally:
+        index.close()
+
+
 def test_source_filter_applies_before_limit_and_preserves_full_inventory(tmp_path, monkeypatch):
     index = index_at(tmp_path)
     sources = [row(number, answer='TAILMARKER source ' + str(number)) for number in range(1, 10)]
@@ -401,6 +455,80 @@ def test_source_filter_applies_before_limit_and_preserves_full_inventory(tmp_pat
         assert index.search_chunks('TAILMARKER', sources, namespace='books', source_ids=[]) == []
     finally:
         index.close()
+
+
+@pytest.mark.parametrize('paragraphs', [10, 32])
+def test_book_vector_search_reserves_result_slots_for_distinct_sources(tmp_path, paragraphs):
+    index = index_at(tmp_path)
+    sources = [row(1, question='TAILMARKER title', answer=' '.join(
+        'TAILMARKER paragraph '+str(n)+' '+('words '*40) for n in range(paragraphs))),
+        row(2, question='TAILMARKER another book', answer='TAILMARKER similar exercises')]
+    try:
+        # Every chunk from the first book outranks those from the second book.
+        index.model.embed = lambda texts: (np.array([0.8, 0.6]) if 'another book' in text
+                                            or 'similar exercises' in text else np.array([1., 0.]) for text in texts)
+        matches = index.search_chunks('TAILMARKER', sources, namespace='books')
+        assert [match['row']['id'] for match in matches] == [1, 2]
+    finally:
+        index.close()
+
+
+@pytest.mark.parametrize(('remote', 'slots'), [(False, 1), (True, 4)])
+def test_ready_book_reads_are_bounded_and_rebuild_waits(tmp_path, monkeypatch, request, remote, slots):
+    monkeypatch.delenv('QDRANT_URL', raising=False)
+    index = index_at(tmp_path)
+    request.addfinalizer(index.close)
+    source = row(1, answer='TAILMARKER')
+    index.rebuild([source], 'books')
+    if remote:
+        monkeypatch.setenv('QDRANT_URL', 'http://qdrant:6333')
+    entered, release = Semaphore(0), Event()
+    writer_waiting, writing, finish_write = Event(), Event(), Event()
+    query_points = index.client.query_points
+    collection_exists = index.client.collection_exists
+
+    def query(*args, **kwargs):
+        entered.release()
+        assert release.wait(5)
+        return query_points(*args, **kwargs)
+
+    def observe_write(*args, **kwargs):
+        writing.set()
+        assert finish_write.wait(5)
+        return collection_exists(*args, **kwargs)
+
+    def read():
+        return index.search_chunks('TAILMARKER', [source], 'books', ready_only=True)
+
+    def rebuild():
+        with index.lock:
+            writer_waiting.set()
+            return index.rebuild([source], 'books')
+
+    monkeypatch.setattr(index.client, 'query_points', query)
+    monkeypatch.setattr(index.client, 'collection_exists', observe_write)
+    with ThreadPoolExecutor(max_workers=slots+1) as pool:
+        try:
+            readers = [pool.submit(read) for _ in range(slots)]
+            assert all(entered.acquire(timeout=2) for _ in readers)
+            with pytest.raises(rag.IndexBusy):
+                read()
+            writer = pool.submit(rebuild)
+            assert writer_waiting.wait(2)
+            assert not writing.wait(0.1)
+            with pytest.raises(rag.IndexBusy):
+                read()
+            release.set()
+            assert writing.wait(2)
+            with pytest.raises(rag.IndexBusy):
+                read()
+            finish_write.set()
+            assert all(future.result(timeout=2) for future in readers)
+            assert writer.result(timeout=2) == 1
+            assert read()
+        finally:
+            release.set()
+            finish_write.set()
 
 
 def test_knowledge_warmup_is_single_flight_and_requests_do_not_wait(tmp_path,monkeypatch):

@@ -18,7 +18,13 @@ Các kiểm tra nguồn/số/URL không phải kiểm chứng ngữ nghĩa hình
 
 Collection mới: `knowledge_chunks_v1_<model hash>`, `books_chunks_v1_<model hash>`. Collection cũ được giữ; không tự xóa collection hay dữ liệu nghiệp vụ. ID điểm ổn định theo nguồn/hash/thứ tự. Đồng bộ đọc payload đã lưu, nhúng/upsert phần mới trước, chờ hoàn tất rồi xóa điểm lỗi thời trong collection đang quản lý. Khởi động lại với nguồn không đổi không nhúng lại. Lỗi ghi không được đánh dấu sẵn sàng; lượt sau có thể tiếp tục.
 
+Tra cứu ngữ nghĩa cho danh mục lấy tối đa 18 đoạn từ Qdrant, giữ đoạn có điểm cao nhất cho mỗi biểu ghi và trả tối đa sáu biểu ghi vượt ngưỡng 0,45. Nếu cả 18 đoạn chỉ đến từ dưới sáu biểu ghi, hệ thống truy vấn lại theo nhóm `source_id` để tìm thêm tài liệu. Truy xuất kho tri thức vẫn có thể dùng nhiều đoạn từ cùng một nguồn để trả lời.
+
 Tìm kiếm đối chiếu payload hash với nguồn hiện tại. Chỉ mục sách chứa toàn bộ sách đã xuất bản, lọc loại bằng source ID trước giới hạn kết quả. Tra cứu sách một từ/mã dùng lexical/fuzzy; chỉ chuyển sang vector cho mô tả có ít nhất2 từ có nghĩa để tránh mã không tồn tại trở thành đề xuất không liên quan. Qdrant local dùng một tiến trình ứng dụng. Chỉ mục tái tạo được; SQLite vẫn là nguồn nghiệp vụ.
+
+Mỗi tiến trình ứng dụng cho tối đa bốn lượt đọc chỉ mục đã sẵn sàng khi kết nối Qdrant độc lập và một lượt khi dùng Qdrant local. Khi dựng lại hoặc đóng chỉ mục, hệ thống ngừng nhận lượt đọc mới rồi chờ các lượt đang chạy hoàn tất. Lượt tra cứu vượt giới hạn nhận trạng thái `busy` để có thể thử lại.
+
+Ứng dụng tính hash của tài liệu vector một lần cho mỗi phiên bản danh mục SQLite. Trước khi trả kết quả ngữ nghĩa, ứng dụng đọc lại biểu ghi công khai và loại kết quả nếu nhan đề, tác giả, chủ đề hoặc nội dung dùng để tạo vector đã thay đổi trong lúc tra cứu.
 
 Vào **Quản trị → Hệ thống**:
 

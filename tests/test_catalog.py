@@ -43,6 +43,27 @@ def test_semantic_kind_filter_keeps_complete_index_inventory(client,monkeypatch)
         assert calls[-1][1]==expected
 
 
+def test_catalog_omits_a_semantic_match_edited_during_search(client, monkeypatch):
+    from app.services.catalog import search_books
+
+    record = client.post('/api/admin/books', json=book()).json()
+    state = client.app.state
+    state.settings.testing = False
+    monkeypatch.setenv('ENABLE_VECTORS', 'true')
+    monkeypatch.setattr(state.vectors, 'prepare_books', lambda load: 'ready')
+
+    def search(query, documents, **kwargs):
+        match = next(document for document in documents if document['id'] == record['id'])
+        with state.db() as db:
+            db.execute('UPDATE books SET title=?, subjects=? WHERE id=?',
+                       ('Python ecosystems for experts', 'Python; ecosystem', record['id']))
+        return [(match, .9)]
+
+    monkeypatch.setattr(state.vectors, 'search', search)
+    results = search_books(state, 'Python practical exercises')
+    assert record['id'] not in {result['id'] for result in results}
+
+
 def test_single_identifier_does_not_become_an_unrelated_semantic_recommendation(client,monkeypatch):
     from app.services.catalog import search_books
     state=client.app.state

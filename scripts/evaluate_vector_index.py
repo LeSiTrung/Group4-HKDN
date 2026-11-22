@@ -74,7 +74,7 @@ def main():
             'corpus_sha256':corpus_hash,'catalog_records':len(books),'training_manifest':manifest,
             'index':index.status(),'summary_all':summary(results),'summary_within_query_budget':summary(eligible),
             'query_budget_fallbacks':len(results)-len(eligible),'results':results,
-            'limits':['Vector subpath only: six chunk hits,0.45 threshold,source deduplication and384-byte query guard unchanged',
+            'limits':['Vector subpath only: up to six distinct book sources, 0.45 threshold, 384-byte query guard',
                 'Over-budget queries remain in all-case denominator with zero vector hits; normal app lexical fallback is separate',
                 'No model training/threshold tuning or LLM invocation; full-text training scores are not directly comparable',
                 'Existing index prep excluded; first lazy model load included in query timing; not a latency SLA']}

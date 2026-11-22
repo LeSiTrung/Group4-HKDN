@@ -9,7 +9,7 @@ from functools import lru_cache, partial
 from typing import Literal
 from pydantic import BaseModel, Field, field_validator
 from .knowledge import KnowledgeInput, today
-from .rag_service import IndexBusy, normalize, STOP, NONSPACING_MARKS
+from .rag_service import IndexBusy, VectorDocuments, normalize, STOP, NONSPACING_MARKS
 
 _DOCUMENT_TYPES=r'(?:sach|tai lieu|(?:cuon|quyen)(?: (?:sach|tai lieu))?|luan van|luan an|khoa luan|do an|giao trinh|bai giang)'
 _BOOK_PREFIX=r'(?:(?:tim|tra cuu) '+_DOCUMENT_TYPES+r'|sach)'
@@ -258,10 +258,15 @@ def public_book(db_factory,row_id):
     return item(row) if row else None
 
 
+def book_document(row):
+    marc = row.get('marc', {})
+    return {'id': row['id'], 'question': row['title'],
+            'aliases': [row['author'], row['subjects']] + ([marc['subjects']] if marc.get('subjects') else []),
+            'answer': '\n'.join(filter(None, (row['description'], marc.get('summary')))) or row['title']}
+
+
 def book_documents(rows):
-    return [{'id':r['id'],'question':r['title'],
-             'aliases':[r['author'],r['subjects']]+([r['marc']['subjects']] if r.get('marc',{}).get('subjects') else []),
-             'answer':'\n'.join(filter(None,(r['description'],r.get('marc',{}).get('summary')))) or r['title']} for r in rows]
+    return [book_document(row) for row in rows]
 
 
 def published_book_rows(db_factory):
@@ -272,7 +277,7 @@ def published_book_rows(db_factory):
 @lru_cache(maxsize=2)
 def _semantic_catalog(db_factory, revision):
     rows=published_book_rows(db_factory)
-    return rows,book_documents(rows)
+    return rows,VectorDocuments(book_documents(rows))
 
 
 def semantic_catalog(db_factory):
@@ -356,9 +361,9 @@ def search_books_with_status(state,query,kind='all',field='all'):
     except Exception:
         return [],'unavailable'
     results=[]
-    for row,_ in hits:
-        current=public_book(state.db,row['id'])
-        if current and (kind=='all' or current['kind']==kind):
+    for document,_ in hits:
+        current=public_book(state.db,document['id'])
+        if current and (kind=='all' or current['kind']==kind) and book_document(current)==document:
             marc=current.get('marc',{})
             corpus=set(_normalized_metadata(' '.join((current['title'],current['subjects'],current['description'],
                                                       marc.get('subjects',''),marc.get('summary','')))).split())

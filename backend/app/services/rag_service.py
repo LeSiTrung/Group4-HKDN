@@ -7,7 +7,9 @@ import threading
 import unicodedata
 from bisect import bisect_left, bisect_right
 from collections import Counter
+from collections.abc import Sequence
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import contextmanager
 from time import monotonic
 from uuid import NAMESPACE_URL, uuid5
 
@@ -73,6 +75,22 @@ def row_fingerprint(row):
     return hashlib.sha256(json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')).hexdigest()
 
 
+class VectorDocuments(Sequence):
+    """Catalog documents projected once per SQLite revision and treated as read-only."""
+
+    def __init__(self, rows):
+        self._rows = tuple(rows)
+        self.by_id = {row['id']: row for row in self._rows}
+        self.row_hashes = {source_id: row_fingerprint(row) for source_id, row in self.by_id.items()}
+        self.fingerprint = row_fingerprint(self.row_hashes)
+
+    def __getitem__(self, index):
+        return self._rows[index]
+
+    def __len__(self):
+        return len(self._rows)
+
+
 class IndexBusy(RuntimeError):
     pass
 
@@ -80,6 +98,8 @@ class IndexBusy(RuntimeError):
 class VectorIndex:
     def __init__(self, settings):
         self.settings, self.lock = settings, threading.RLock()
+        self.reader_state = threading.Condition()
+        self.active_readers = 0
         self.client = self.model = None
         self.fingerprint = None
         self.fingerprints = {}
@@ -119,8 +139,42 @@ class VectorIndex:
                 from fastembed import TextEmbedding
                 self.model = TextEmbedding(model_name=self.model_name, cache_dir=str(self.settings.data_dir/'models'), threads=2)
 
+    @contextmanager
+    def _read_access(self):
+        if not self.lock.acquire(blocking=False):
+            raise IndexBusy('Vector index is busy')
+        try:
+            limit = 4 if os.getenv('QDRANT_URL') else 1
+            with self.reader_state:
+                if self.closing.is_set() or self.active_readers >= limit:
+                    raise IndexBusy('Vector index is busy')
+                self.active_readers += 1
+        finally:
+            self.lock.release()
+        try:
+            yield
+        finally:
+            with self.reader_state:
+                self.active_readers -= 1
+                if self.active_readers == 0:
+                    self.reader_state.notify_all()
+
+    @contextmanager
+    def _write_access(self, *, blocking=True):
+        if not self.lock.acquire(blocking=blocking):
+            raise IndexBusy('Vector index is busy')
+        try:
+            # Holding the writer lock stops new admissions while existing reads drain.
+            with self.reader_state:
+                if not blocking and self.active_readers:
+                    raise IndexBusy('Vector index is busy')
+                self.reader_state.wait_for(lambda: self.active_readers == 0)
+            yield
+        finally:
+            self.lock.release()
+
     def invalidate(self):
-        with self.lock:
+        with self._write_access():
             self.fingerprints.clear()
             self.fingerprint=None
             for status in self.namespaces.values():
@@ -142,7 +196,7 @@ class VectorIndex:
             return 'preparing'
 
     def _prepare_knowledge(self, load_rows):
-        with self.lock:
+        with self._write_access():
             try:
                 if self.closing.is_set():
                     return
@@ -168,7 +222,7 @@ class VectorIndex:
     def _prepare_books(self, load_rows, revision):
         try:
             rows=load_rows()
-            with self.lock:
+            with self._write_access():
                 self.rebuild(rows,'books')
                 if rows and not self.closing.is_set():
                     self._init()
@@ -184,14 +238,15 @@ class VectorIndex:
 
     def rebuild(self, rows, namespace='knowledge'):
         from qdrant_client.models import Distance, PayloadSchemaType, PointIdsList, PointStruct, VectorParams
-        with self.lock:
+        with self._write_access():
             try:
                 collection = self._collection(namespace)
                 self._init(model=False)
-                row_hashes = {row['id']: row_fingerprint(row) for row in rows}
-                fingerprint = row_fingerprint(row_hashes)
+                corpus = rows if isinstance(rows, VectorDocuments) else VectorDocuments(rows)
+                row_hashes, fingerprint = corpus.row_hashes, corpus.fingerprint
                 exists = self.client.collection_exists(collection)
                 if exists and fingerprint == self.fingerprints.get(collection):
+                    self.error = None
                     self.namespaces[namespace]['ready']=True
                     return len(rows)
                 documents = {}
@@ -253,35 +308,54 @@ class VectorIndex:
     def search_chunks(self, question, rows, namespace='knowledge', source_ids=None, *, ready_only=False):
         if len(question.encode('utf-8'))>384:
             raise ValueError('Embedding query exceeds 384 UTF-8 bytes')
-        if not self.lock.acquire(blocking=False):
-            raise IndexBusy('Vector index is busy')
-        try:
+        access = self._read_access() if ready_only else self._write_access(blocking=False)
+        with access:
             try:
                 from qdrant_client.models import FieldCondition, Filter, MatchAny
+                if self.closing.is_set():
+                    raise IndexBusy('Vector index is shutting down')
+                corpus = rows if isinstance(rows, VectorDocuments) else VectorDocuments(rows)
                 if ready_only:
-                    fingerprint=row_fingerprint({row['id']:row_fingerprint(row) for row in rows})
-                    if fingerprint!=self.fingerprints.get(self._collection(namespace)):
+                    if corpus.fingerprint!=self.fingerprints.get(self._collection(namespace)):
                         self.namespaces.setdefault(namespace,{'sources':0,'chunks':0})['ready']=False
                         raise IndexBusy('Book metadata changed since indexing')
                 else:
-                    self.rebuild(rows,namespace)
+                    self.rebuild(corpus,namespace)
                 if not rows or (source_ids is not None and not source_ids):
                     return []
-                self._init()
+                if ready_only:
+                    if self.client is None or self.model is None:
+                        raise IndexBusy('Vector index is still preparing')
+                else:
+                    self._init()
                 vector = next(self.model.query_embed(question)).tolist()
                 query_filter = None if source_ids is None else Filter(must=[FieldCondition(key='source_id', match=MatchAny(any=list(source_ids)))])
-                hits = self.client.query_points(self._collection(namespace), query=vector, query_filter=query_filter,
-                                                limit=6, score_threshold=0.45).points
-                current = {row['id']: row for row in rows}
+                collection = self._collection(namespace)
+                query_options = {'query': vector, 'query_filter': query_filter, 'limit': 6, 'score_threshold': 0.45}
+                if namespace == 'books':
+                    # A slightly larger chunk pool usually gives six sources in one query.
+                    candidates = self.client.query_points(collection, **{**query_options, 'limit': 18}).points
+                    by_source = {}
+                    for point in candidates:
+                        by_source.setdefault((point.payload or {}).get('source_id'), point)
+                    if len(by_source) < 6 and len(candidates) == 18:
+                        groups = self.client.query_points_groups(collection, group_by='source_id', group_size=1,
+                                                                 **query_options).groups
+                        hits = [group.hits[0] for group in groups if group.hits]
+                    else:
+                        hits = list(by_source.values())[:6]
+                else:
+                    hits = self.client.query_points(collection, **query_options).points
                 matches = []
                 for hit in hits:
                     payload = hit.payload or {}
                     source_id = payload.get('source_id')
-                    if source_id in current and payload.get('row_hash') == row_fingerprint(current[source_id]):
-                        matches.append({'row': current[source_id], 'text': payload['text'],
+                    if source_id in corpus.by_id and payload.get('row_hash') == corpus.row_hashes[source_id]:
+                        matches.append({'row': corpus.by_id[source_id], 'text': payload['text'],
                                         'score': float(hit.score), 'chunk_id': str(hit.id)})
-                self.error = None
-                self.namespaces[namespace]['ready'] = True
+                if not ready_only:
+                    self.error = None
+                    self.namespaces[namespace]['ready'] = True
                 return matches
             except IndexBusy:
                 raise
@@ -289,8 +363,6 @@ class VectorIndex:
                 self.error = type(exc).__name__
                 self.namespaces.setdefault(namespace, {'sources': 0, 'chunks': 0})['ready'] = False
                 raise
-        finally:
-            self.lock.release()
 
     def search(self, question, rows, namespace='knowledge', source_ids=None, *, ready_only=False):
         results, seen = [], set()
@@ -305,7 +377,7 @@ class VectorIndex:
         with self.book_lock:
             self.closing.set()
         self.book_pool.shutdown(wait=True,cancel_futures=True)
-        with self.lock:
+        with self._write_access():
             if self.client:
                 self.client.close()
                 self.client = None
